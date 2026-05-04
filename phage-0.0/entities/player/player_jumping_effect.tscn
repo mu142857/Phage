@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://4j1065j0avtu"]
+
+[sub_resource type="Gradient" id="Gradient_dwve6"]
+offsets = PackedFloat32Array(0, 0.38114753, 0.6967213, 0.852459, 1)
+colors = PackedColorArray(0.6, 0.2, 1, 1, 1, 1, 1, 1, 0.6, 0.6, 1, 1, 1, 1, 1, 1, 0.5176471, 0.8392157, 0.6784314, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wx1h7"]
+gradient = SubResource("Gradient_dwve6")
+
+[sub_resource type="Gradient" id="Gradient_m20an"]
+offsets = PackedFloat32Array(0, 0.07786885, 0.52459013, 0.9918033)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_svia4"]
+gradient = SubResource("Gradient_m20an")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dwve6"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(2, 1, 1)
+emission_shape = 3
+emission_box_extents = Vector3(2, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 50.0
+initial_velocity_min = 50.0
+initial_velocity_max = 70.0
+gravity = Vector3(0, 150, 0)
+color_ramp = SubResource("GradientTexture1D_svia4")
+color_initial_ramp = SubResource("GradientTexture1D_wx1h7")
+
+[node name="PlayerJumpingEffect" type="GPUParticles2D" unique_id=1580968959]
+emitting = false
+amount = 10
+lifetime = 0.5
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_dwve6")

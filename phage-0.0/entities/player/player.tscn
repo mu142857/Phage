@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://c2ejyda6u6hut"]
 
+[ext_resource type="Script" uid="uid://se0it66ckryj" path="res://entities/player/player.gd" id="1_abrql"]
 [ext_resource type="Texture2D" uid="uid://25alwc8gnnbv" path="res://entities/player/player-Sheet.png" id="1_symyc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_abrql"]
@@ -434,13 +435,17 @@ animations = [{
 size = Vector2(4, 7)
 
 [node name="Player" type="CharacterBody2D" unique_id=949587783]
+script = ExtResource("1_abrql")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2023249808]
 sprite_frames = SubResource("SpriteFrames_akixf")
-frame = 55
-frame_progress = 0.051509056
+frame = 32
+frame_progress = 0.7861313
 offset = Vector2(30, -24)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1544803397]
+visibility_layer = 2
 position = Vector2(0, -3.5)
 shape = SubResource("RectangleShape2D_symyc")
+
+[node name="StateMachine" type="Node" parent="." unique_id=2121067113]

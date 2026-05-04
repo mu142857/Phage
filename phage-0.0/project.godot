@@ -23,6 +23,15 @@ window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/dpi/allow_hidpi=false
 
+[layer_names]
+
+2d_render/layer_1="world"
+2d_render/layer_2="player"
+2d_render/layer_3="enemy"
+2d_render/layer_4="player_hitbox"
+2d_render/layer_5="enemy_hitbox"
+2d_render/layer_6="pickup"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

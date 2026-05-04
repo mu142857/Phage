@@ -14,12 +14,22 @@ config/name="Phage 0.0"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=160
+window/size/viewport_height=90
+window/size/mode=3
+window/size/resizable=false
+window/stretch/mode="canvas_items"
+window/dpi/allow_hidpi=false
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"

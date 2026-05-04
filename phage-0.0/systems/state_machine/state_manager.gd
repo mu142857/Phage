@@ -1,20 +1,61 @@
-# res://systems/State Machine/state_manager.gd
+# res://systems/state_machine/state_manager.gd
 class_name StateManager
 extends Node
 
-var states_array: Array = []
-@onready var current: BasicState # 初始状态
+@export var initial_state_id: StringName = &""
+
+var states_by_id: Dictionary = {}
+var current_state: BasicState = null
+var current_state_id: StringName = &""
+var host: Node = null
 
 func _ready() -> void:
-	states_array = get_children() # 获取状态列表
-	current = states_array[0]
-	current.enter() #进入默认状态
+	host = get_parent()
+	_register_states()
+	_start_initial_state()
 
-@warning_ignore("unused_parameter")
+func _register_states() -> void:
+	states_by_id.clear()
+	for child in get_children():
+		if not child is BasicState:
+			continue
+		var state: BasicState = child
+		state.host = host
+		var state_key: StringName = state.state_id
+		if state_key == &"":
+			state_key = StringName(state.name)
+		states_by_id[state_key] = state
+
+func _start_initial_state() -> void:
+	if states_by_id.is_empty():
+		return
+	var start_state_id: StringName = initial_state_id
+	if start_state_id == &"" or not states_by_id.has(start_state_id):
+		start_state_id = &"idle"
+	if not states_by_id.has(start_state_id):
+		start_state_id = states_by_id.keys()[0]
+	current_state_id = start_state_id
+	current_state = states_by_id[current_state_id]
+	current_state.enter()
+
 func _physics_process(delta: float) -> void:
-	current.process() #执行状态中的程序
+	if current_state != null:
+		current_state.process(delta)
 
-func change_state(id: int) -> void: #切换状态
-	current.exit()
-	current = states_array[id]
-	current.enter()
+func change_state(id: StringName) -> void:
+	if current_state_id == id:
+		return
+	var next_state: BasicState = states_by_id.get(id, null)
+	if next_state == null:
+		return
+	if current_state != null:
+		current_state.exit()
+	current_state = next_state
+	current_state_id = id
+	current_state.enter()
+
+func has_state(id: StringName) -> bool:
+	return states_by_id.has(id)
+
+func get_current_state_id() -> StringName:
+	return current_state_id

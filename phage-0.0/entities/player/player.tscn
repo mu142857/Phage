@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://se0it66ckryj" path="res://entities/player/player.gd" id="1_abrql"]
 [ext_resource type="Texture2D" uid="uid://25alwc8gnnbv" path="res://entities/player/player-Sheet.png" id="1_symyc"]
+[ext_resource type="Script" uid="uid://bg8dd0jdo67rm" path="res://systems/state_machine/state_manager.gd" id="3_sglur"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_abrql"]
 atlas = ExtResource("1_symyc")
@@ -434,7 +435,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_symyc"]
 size = Vector2(4, 7)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sglur"]
+size = Vector2(4, 4)
+
 [node name="Player" type="CharacterBody2D" unique_id=949587783]
+collision_mask = 5
 script = ExtResource("1_abrql")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2023249808]
@@ -443,9 +448,36 @@ frame = 32
 frame_progress = 0.7861313
 offset = Vector2(30, -24)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1544803397]
-visibility_layer = 2
+[node name="CollisionNormal" type="CollisionShape2D" parent="." unique_id=1544803397]
 position = Vector2(0, -3.5)
 shape = SubResource("RectangleShape2D_symyc")
 
+[node name="CollisionBall" type="CollisionShape2D" parent="." unique_id=1328285130]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_sglur")
+debug_color = Color(0.93920135, 1.3476611e-05, 0.6225539, 0.41960785)
+
 [node name="StateMachine" type="Node" parent="." unique_id=2121067113]
+script = ExtResource("3_sglur")
+
+[node name="Null(0)" type="Node" parent="StateMachine" unique_id=248712671]
+
+[node name="Idle(1)" type="Node" parent="StateMachine" unique_id=1851771524]
+
+[node name="Run(2)" type="Node" parent="StateMachine" unique_id=621308808]
+
+[node name="Fall(3)" type="Node" parent="StateMachine" unique_id=419605641]
+
+[node name="Jump(4)" type="Node" parent="StateMachine" unique_id=739070305]
+
+[node name="Sprint(5)" type="Node" parent="StateMachine" unique_id=733928160]
+
+[node name="Contract(6)" type="Node" parent="StateMachine" unique_id=992770841]
+
+[node name="Ball(7)" type="Node" parent="StateMachine" unique_id=1848989614]
+
+[node name="Uncontract(8)" type="Node" parent="StateMachine" unique_id=1398536373]
+
+[node name="Attack1(9)" type="Node" parent="StateMachine" unique_id=487556908]
+
+[node name="Attack2(10)" type="Node" parent="StateMachine" unique_id=446000273]

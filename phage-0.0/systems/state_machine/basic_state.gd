@@ -1,12 +1,19 @@
-# res://systems/State Machine/basic_state.gd
+# res://systems/state_machine/basic_state.gd
 class_name BasicState
 extends Node
 
-func enter():
+@export var state_id: StringName = &""
+var host: Node = null
+
+func enter() -> void:
 	pass
 
-func process():
+func process(_delta: float) -> void:
 	pass
-	
-func exit():
+
+func exit() -> void:
 	pass
+
+func change_state(next_state_id: StringName) -> void:
+	if host != null and host.has_method("change_state"):
+		host.change_state(next_state_id)

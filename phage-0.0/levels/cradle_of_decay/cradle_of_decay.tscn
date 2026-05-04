@@ -2,9 +2,25 @@
 
 [ext_resource type="Texture2D" uid="uid://bi2ftxkp0w4ig" path="res://levels/cradle_of_decay/ground.png" id="1_ckbcp"]
 [ext_resource type="Texture2D" uid="uid://6s5ig1kn3pi8" path="res://levels/cradle_of_decay/wall.png" id="2_hklc7"]
+[ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="3_4iulq"]
 [ext_resource type="Texture2D" uid="uid://cdjfx1qn2rjnr" path="res://levels/cradle_of_decay/tree1.png" id="3_pgmxn"]
 [ext_resource type="Texture2D" uid="uid://dhmb2fbwnqnoa" path="res://levels/cradle_of_decay/tree2.png" id="4_4iulq"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="5_hklc7"]
+[ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="5_lqaxi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0ul3c"]
+shader = ExtResource("3_4iulq")
+shader_parameter/WindStrength = 10.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x206n"]
+shader = ExtResource("5_lqaxi")
+shader_parameter/Strength = 2.0
+shader_parameter/Speed = 2.0000000475
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8lj5i"]
+shader = ExtResource("5_lqaxi")
+shader_parameter/Strength = 1.0
+shader_parameter/Speed = 3.000000095
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ckbcp"]
 
@@ -26,14 +42,19 @@ position = Vector2(80, 45)
 texture = ExtResource("2_hklc7")
 
 [node name="Tree1" type="Sprite2D" parent="Environment" unique_id=201105919]
-position = Vector2(80, 45)
+material = SubResource("ShaderMaterial_0ul3c")
+position = Vector2(46, 40)
 texture = ExtResource("3_pgmxn")
+region_enabled = true
+region_rect = Rect2(0, 0, 88.40883, 80.31976)
 
 [node name="Tree2" type="Sprite2D" parent="Environment" unique_id=926540661]
+material = SubResource("ShaderMaterial_x206n")
 position = Vector2(80, 45)
 texture = ExtResource("4_4iulq")
 
 [node name="Tree3" type="Sprite2D" parent="Environment" unique_id=2088473829]
+material = SubResource("ShaderMaterial_8lj5i")
 position = Vector2(106, 45)
 rotation = 3.1415925
 scale = Vector2(1, -1)

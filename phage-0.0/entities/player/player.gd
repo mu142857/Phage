@@ -10,9 +10,12 @@ const MAX_HEALTH: int = 100
 const IDLE_TO_CONTRACT_TIME: float = 2.0  # seconds before auto-contract
 const INVINCIBLE_DURATION: float = 0.3
 const RUN_SPEED: float = 100.0
+const SPRINT_SPEED: float = 220.0
+const SPRINT_COOLDOWN: float = 0.75
 const JUMP_SPEED: float = -200.0
 const MAX_JUMP_HOLD_TIME: float = 0.14
 const JUMP_HOLD_GRAVITY_MULTIPLIER: float = 0.35
+const LANDING_EFFECT_SCENE: PackedScene = preload("res://entities/player/player_jumping_effect.tscn")
 
 const STATE_NULL: int = 0
 const STATE_IDLE: int = 1
@@ -26,6 +29,7 @@ const STATE_SPRINT: int = 5
 # ============================================================
 var health: int = MAX_HEALTH
 var facing_direction: int = 1  # 1 = right, -1 = left
+var can_sprint: bool = true
 var is_invincible: bool = false
 var is_in_ball_form: bool = false  # true when contracted; modifies hitbox + buffs
 
@@ -47,6 +51,7 @@ signal died
 func _ready() -> void:
 	add_to_group("player")
 	set_ball_form(false)
+	can_sprint = true
 
 func change_state(state_id: int) -> void:
 	state_machine.change_state(state_id)
@@ -76,6 +81,23 @@ func set_ball_form(enabled: bool) -> void:
 func set_walking_effect(enabled: bool) -> void:
 	if is_instance_valid(walking_effect):
 		walking_effect.emitting = enabled
+
+func spawn_landing_effect() -> void:
+	if not is_inside_tree() or LANDING_EFFECT_SCENE == null:
+		return
+	var effect := LANDING_EFFECT_SCENE.instantiate() as GPUParticles2D
+	if effect == null:
+		return
+	effect.one_shot = true
+	effect.emitting = true
+	if get_tree().current_scene == null:
+		effect.queue_free()
+		return
+	get_tree().current_scene.add_child(effect)
+	effect.global_position = global_position
+	await get_tree().create_timer(effect.lifetime).timeout
+	if is_instance_valid(effect):
+		effect.queue_free()
 
 func set_facing_direction(direction: int) -> void:
 	if direction == 0:

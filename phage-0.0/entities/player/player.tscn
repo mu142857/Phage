@@ -617,7 +617,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Sprint",
-"speed": 10.0
+"speed": 18.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -875,6 +875,10 @@ script = ExtResource("9_we0b7")
 [node name="Sprint(5)" type="Node" parent="StateMachine" unique_id=733928160]
 script = ExtResource("10_mtric")
 
+[node name="Timer" type="Timer" parent="StateMachine/Sprint(5)" unique_id=1258676256]
+wait_time = 5.0
+one_shot = true
+
 [node name="Contract(6)" type="Node" parent="StateMachine" unique_id=992770841]
 script = ExtResource("11_eyb6c")
 
@@ -889,3 +893,6 @@ script = ExtResource("14_t1t22")
 
 [node name="Attack2(10)" type="Node" parent="StateMachine" unique_id=446000273]
 script = ExtResource("15_50fht")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Sprint(5)" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="timeout" from="StateMachine/Sprint(5)/Timer" to="StateMachine/Sprint(5)" method="_on_timer_timeout"]

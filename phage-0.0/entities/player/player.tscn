@@ -837,8 +837,9 @@ script = ExtResource("1_abrql")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2023249808]
 sprite_frames = SubResource("SpriteFrames_akixf")
-animation = &"Ball"
-frame_progress = 0.43208668
+animation = &"Sprint"
+frame = 4
+frame_progress = 1.0
 offset = Vector2(30, -24)
 
 [node name="CollisionNormal" type="CollisionShape2D" parent="." unique_id=1544803397]

@@ -9,9 +9,9 @@ const GRAVITY: float = 1000.0
 const MAX_HEALTH: int = 100
 const IDLE_TO_CONTRACT_TIME: float = 2.0  # seconds before auto-contract
 const INVINCIBLE_DURATION: float = 0.3
-const RUN_SPEED: float = 250.0
-const JUMP_SPEED: float = -320.0
-const MAX_JUMP_HOLD_TIME: float = 0.18
+const RUN_SPEED: float = 100.0
+const JUMP_SPEED: float = -200.0
+const MAX_JUMP_HOLD_TIME: float = 0.14
 const JUMP_HOLD_GRAVITY_MULTIPLIER: float = 0.35
 
 const STATE_NULL: int = 0

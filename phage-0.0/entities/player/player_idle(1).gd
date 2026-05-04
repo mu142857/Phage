@@ -5,6 +5,7 @@ func enter() -> void:
 	var player := host as Player
 	if player == null:
 		return
+	player.set_walking_effect(false)
 	if is_instance_valid(player.sprite):
 		player.sprite.play(&"Idle")
 

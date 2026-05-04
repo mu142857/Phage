@@ -8,6 +8,7 @@ func enter() -> void:
 	if player == null:
 		return
 	jump_hold_elapsed = 0.0
+	player.set_walking_effect(true)
 	player.velocity.y = player.JUMP_SPEED
 	if is_instance_valid(player.sprite):
 		player.sprite.play(&"Jump")

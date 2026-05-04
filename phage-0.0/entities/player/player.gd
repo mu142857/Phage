@@ -35,6 +35,7 @@ var is_in_ball_form: bool = false  # true when contracted; modifies hitbox + buf
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_normal: CollisionShape2D = $CollisionNormal
 @onready var collision_ball: CollisionShape2D = $CollisionBall
+@onready var walking_effect: GPUParticles2D = $PlayerWalkingEffect
 @onready var state_machine: StateManager = $StateMachine
 
 # ============================================================
@@ -71,6 +72,10 @@ func set_ball_form(enabled: bool) -> void:
 	is_in_ball_form = enabled
 	collision_normal.disabled = enabled
 	collision_ball.disabled = not enabled
+
+func set_walking_effect(enabled: bool) -> void:
+	if is_instance_valid(walking_effect):
+		walking_effect.emitting = enabled
 
 func set_facing_direction(direction: int) -> void:
 	if direction == 0:

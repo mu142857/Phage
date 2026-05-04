@@ -14,6 +14,6 @@ func process(_delta: float) -> void:
 func exit() -> void:
 	pass
 
-func change_state(next_state_id: StringName) -> void:
+func change_state(next_state_id: int) -> void:
 	if host != null and host.has_method("change_state"):
 		host.change_state(next_state_id)

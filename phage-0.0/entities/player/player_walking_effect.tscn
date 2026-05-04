@@ -28,6 +28,5 @@ color_ramp = SubResource("GradientTexture1D_svia4")
 color_initial_ramp = SubResource("GradientTexture1D_wx1h7")
 
 [node name="PlayerWalkingEffect" type="GPUParticles2D" unique_id=1580968959]
-amount = 4
 lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_2dqh1")

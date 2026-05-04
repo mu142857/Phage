@@ -2,60 +2,50 @@
 class_name StateManager
 extends Node
 
-@export var initial_state_id: StringName = &""
+@export var initial_state_index: int = 1
 
-var states_by_id: Dictionary = {}
-var current_state: BasicState = null
-var current_state_id: StringName = &""
+var states_array: Array = []
+var current_state: Node = null
+var current_state_index: int = -1
 var host: Node = null
 
 func _ready() -> void:
 	host = get_parent()
-	_register_states()
+	states_array = get_children()
+	for state in states_array:
+		if state is BasicState:
+			(state as BasicState).host = host
 	_start_initial_state()
 
-func _register_states() -> void:
-	states_by_id.clear()
-	for child in get_children():
-		if not child is BasicState:
-			continue
-		var state: BasicState = child
-		state.host = host
-		var state_key: StringName = state.state_id
-		if state_key == &"":
-			state_key = StringName(state.name)
-		states_by_id[state_key] = state
-
 func _start_initial_state() -> void:
-	if states_by_id.is_empty():
+	if states_array.is_empty():
 		return
-	var start_state_id: StringName = initial_state_id
-	if start_state_id == &"" or not states_by_id.has(start_state_id):
-		start_state_id = &"idle"
-	if not states_by_id.has(start_state_id):
-		start_state_id = states_by_id.keys()[0]
-	current_state_id = start_state_id
-	current_state = states_by_id[current_state_id]
-	current_state.enter()
+	var start_index := clampi(initial_state_index, 0, states_array.size() - 1)
+	current_state_index = start_index
+	current_state = states_array[current_state_index]
+	_call_state_method(current_state, &"enter")
 
 func _physics_process(delta: float) -> void:
 	if current_state != null:
-		current_state.process(delta)
+		_call_state_method(current_state, &"process", [delta])
 
-func change_state(id: StringName) -> void:
-	if current_state_id == id:
+func change_state(id: int) -> void:
+	if states_array.is_empty():
 		return
-	var next_state: BasicState = states_by_id.get(id, null)
-	if next_state == null:
+	if id < 0 or id >= states_array.size():
 		return
+	if current_state_index == id:
+		return
+	var next_state: Node = states_array[id]
 	if current_state != null:
-		current_state.exit()
+		_call_state_method(current_state, &"exit")
 	current_state = next_state
-	current_state_id = id
-	current_state.enter()
+	current_state_index = id
+	_call_state_method(current_state, &"enter")
 
-func has_state(id: StringName) -> bool:
-	return states_by_id.has(id)
+func _call_state_method(state: Node, method_name: StringName, args: Array = []) -> void:
+	if state.has_method(method_name):
+		state.callv(method_name, args)
 
-func get_current_state_id() -> StringName:
-	return current_state_id
+func get_current_state_index() -> int:
+	return current_state_index

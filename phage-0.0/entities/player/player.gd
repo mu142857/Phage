@@ -14,11 +14,12 @@ const JUMP_SPEED: float = -320.0
 const MAX_JUMP_HOLD_TIME: float = 0.18
 const JUMP_HOLD_GRAVITY_MULTIPLIER: float = 0.35
 
-const STATE_IDLE: StringName = &"Idle(1)"
-const STATE_RUN: StringName = &"Run(2)"
-const STATE_FALL: StringName = &"Fall(3)"
-const STATE_JUMP: StringName = &"Jump(4)"
-const STATE_SPRINT: StringName = &"Sprint(5)"
+const STATE_NULL: int = 0
+const STATE_IDLE: int = 1
+const STATE_RUN: int = 2
+const STATE_FALL: int = 3
+const STATE_JUMP: int = 4
+const STATE_SPRINT: int = 5
 
 # ============================================================
 # State (read by states, written by player or specific states)
@@ -46,7 +47,7 @@ func _ready() -> void:
 	add_to_group("player")
 	set_ball_form(false)
 
-func change_state(state_id: StringName) -> void:
+func change_state(state_id: int) -> void:
 	state_machine.change_state(state_id)
 
 func take_damage(amount: int) -> void:
@@ -59,7 +60,7 @@ func take_damage(amount: int) -> void:
 	if health <= 0:
 		died.emit()
 		# Death state transition: handled by whoever listens to `died`
-		# or you can change_state(&"Null(0)") directly here
+		# or you can change_state(STATE_NULL) directly here
 
 func _start_invincibility() -> void:
 	is_invincible = true
@@ -70,6 +71,15 @@ func set_ball_form(enabled: bool) -> void:
 	is_in_ball_form = enabled
 	collision_normal.disabled = enabled
 	collision_ball.disabled = not enabled
+
+func set_facing_direction(direction: int) -> void:
+	if direction == 0:
+		return
+	facing_direction = sign(direction)
+	var scale_x := absf(sprite.scale.x)
+	if scale_x == 0.0:
+		scale_x = 1.0
+	sprite.scale.x = scale_x * float(facing_direction)
 
 func enter_ball_form() -> void:
 	set_ball_form(true)

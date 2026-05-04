@@ -1,11 +1,6 @@
 # res://entities/player/player_idle(1).gd
 extends BasicState
 
-const STATE_ID: StringName = &"Idle(1)"
-
-func _ready() -> void:
-	state_id = STATE_ID
-
 func enter() -> void:
 	var player := host as Player
 	if player == null:
@@ -31,6 +26,6 @@ func process(delta: float) -> void:
 		change_state(player.STATE_RUN)
 		return
 
-	player.velocity.x = move_toward(player.velocity.x, 0.0, player.GRAVITY * delta)
+	player.velocity.x = move_toward(player.velocity.x, 0.0, player.RUN_SPEED * 8.0 * delta)
 	player.velocity.y += player.GRAVITY * delta
 	player.move_and_slide()

@@ -34,3 +34,7 @@ func process(delta: float) -> void:
 	player.velocity.x = move_toward(player.velocity.x, 0.0, player.RUN_SPEED * 8.0 * delta)
 	player.velocity.y += player.GRAVITY * delta
 	player.move_and_slide()
+
+
+func _on_timer_timeout() -> void:
+	pass # Replace with function body.

@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://cqt2fjhakn32x"]
+
+[ext_resource type="Texture2D" uid="uid://bi2ftxkp0w4ig" path="res://levels/cradle_of_decay/ground.png" id="1_ckbcp"]
+[ext_resource type="Texture2D" uid="uid://6s5ig1kn3pi8" path="res://levels/cradle_of_decay/wall.png" id="2_hklc7"]
+[ext_resource type="Texture2D" uid="uid://cdjfx1qn2rjnr" path="res://levels/cradle_of_decay/tree1.png" id="3_pgmxn"]
+[ext_resource type="Texture2D" uid="uid://dhmb2fbwnqnoa" path="res://levels/cradle_of_decay/tree2.png" id="4_4iulq"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="5_hklc7"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ckbcp"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hklc7"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pgmxn"]
+
+[node name="CradleOfDecay" type="Node2D" unique_id=1386702902]
+
+[node name="Environment" type="Node2D" parent="." unique_id=849331867]
+modulate = Color(0.68721527, 0.6872149, 0.6872146, 1)
+
+[node name="Ground" type="Sprite2D" parent="Environment" unique_id=1406474857]
+position = Vector2(80, 45)
+texture = ExtResource("1_ckbcp")
+
+[node name="Wall" type="Sprite2D" parent="Environment" unique_id=146646426]
+position = Vector2(80, 45)
+texture = ExtResource("2_hklc7")
+
+[node name="Tree1" type="Sprite2D" parent="Environment" unique_id=201105919]
+position = Vector2(80, 45)
+texture = ExtResource("3_pgmxn")
+
+[node name="Tree2" type="Sprite2D" parent="Environment" unique_id=926540661]
+position = Vector2(80, 45)
+texture = ExtResource("4_4iulq")
+
+[node name="Tree3" type="Sprite2D" parent="Environment" unique_id=2088473829]
+position = Vector2(106, 45)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("4_4iulq")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment" unique_id=1243320076]
+collision_mask = 0
+
+[node name="CollisionShape2D1" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=230352714]
+position = Vector2(0, 80)
+shape = SubResource("WorldBoundaryShape2D_ckbcp")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=326676164]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_hklc7")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=192136149]
+position = Vector2(160, 80)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_pgmxn")
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("5_hklc7")]
+position = Vector2(60, 14)

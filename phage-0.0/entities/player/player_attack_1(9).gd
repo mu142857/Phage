@@ -2,6 +2,8 @@ extends BasicState
 
 const ATTACK_BURST_SPEED: float = 180.0
 const ATTACK_BRAKE_ACCEL: float = 800.0
+const ATTACK_BURST_SPEED_AIR: float = 240.0
+const ATTACK_BRAKE_ACCEL_AIR: float = 380.0
 const ATTACK1_1_DAMAGE: int = 100
 const ATTACK1_2_DAMAGE: int = 30
 const ATTACK1_1_TRIGGER_FRAME: int = 2
@@ -48,7 +50,8 @@ func process(delta: float) -> void:
 		return
 
 	# Ignore horizontal move input during attack: do a forward lunge then decay.
-	player.velocity.x = move_toward(player.velocity.x, 0.0, ATTACK_BRAKE_ACCEL * delta)
+	var brake_accel := ATTACK_BRAKE_ACCEL if player.is_on_floor() else ATTACK_BRAKE_ACCEL_AIR
+	player.velocity.x = move_toward(player.velocity.x, 0.0, brake_accel * delta)
 	player.set_facing_direction(attack_locked_facing)
 
 	if not player.is_on_floor():
@@ -107,7 +110,8 @@ func _play_attack_animation(player: Player, primary: StringName, fallback: Strin
 		player.sprite.play(fallback)
 
 func _apply_attack_surge(player: Player) -> void:
-	player.velocity.x = float(attack_locked_facing) * ATTACK_BURST_SPEED
+	var burst_speed := ATTACK_BURST_SPEED if player.is_on_floor() else ATTACK_BURST_SPEED_AIR
+	player.velocity.x = float(attack_locked_facing) * burst_speed
 
 func _check_attack_hitbox(hitbox: Area2D, damage: int) -> void:
 	if not is_instance_valid(hitbox):

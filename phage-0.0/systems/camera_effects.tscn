@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://n5bpt1eg5bam"]
+
+[ext_resource type="Script" uid="uid://cqtxala7n1u8w" path="res://systems/camera_effects.gd" id="1_e2bhk"]
+
+[node name="CameraEffects" type="Camera2D" unique_id=537288436]
+script = ExtResource("1_e2bhk")
+
+[node name="FlashLayer" type="CanvasLayer" parent="." unique_id=495696046]
+
+[node name="FlashRect" type="ColorRect" parent="FlashLayer" unique_id=780671504]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="FilterRect" type="ColorRect" parent="FlashLayer" unique_id=1899476825]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)

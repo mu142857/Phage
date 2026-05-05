@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://c2yemnc4mhkny"]
+
+[ext_resource type="Script" uid="uid://dnhee7115k7ad" path="res://systems/game.gd" id="1_muq6v"]
+
+[sub_resource type="Environment" id="Environment_bnhnn"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 2.0
+glow_hdr_scale = 0.0
+adjustment_enabled = true
+
+[node name="Game" type="Camera2D" unique_id=177906645]
+script = ExtResource("1_muq6v")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=744697847]
+environment = SubResource("Environment_bnhnn")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=714821444]
+
+[node name="ColorRect1" type="ColorRect" parent="CanvasLayer" unique_id=531071904]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+mouse_filter = 2
+
+[node name="ColorRect2" type="ColorRect" parent="CanvasLayer" unique_id=129315044]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+mouse_filter = 2

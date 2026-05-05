@@ -14,6 +14,10 @@ config/name="Phage 0.0"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Game="*uid://c2yemnc4mhkny"
+
 [display]
 
 window/size/viewport_width=160

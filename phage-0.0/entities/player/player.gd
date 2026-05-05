@@ -15,6 +15,9 @@ const SPRINT_COOLDOWN: float = 0.75
 const JUMP_SPEED: float = -200.0
 const MAX_JUMP_HOLD_TIME: float = 0.14
 const JUMP_HOLD_GRAVITY_MULTIPLIER: float = 0.35
+const MAX_JUMP_APEX_HANG_TIME: float = 0.08
+const JUMP_APEX_VELOCITY_THRESHOLD: float = 24.0
+const JUMP_APEX_GRAVITY_MULTIPLIER: float = 0.18
 const LANDING_EFFECT_SCENE: PackedScene = preload("res://entities/player/player_jumping_effect.tscn")
 
 const STATE_NULL: int = 0

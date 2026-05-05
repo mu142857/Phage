@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://cqt2fjhakn32x"]
 
 [ext_resource type="Texture2D" uid="uid://bi2ftxkp0w4ig" path="res://levels/cradle_of_decay/ground.png" id="1_ckbcp"]
+[ext_resource type="Script" uid="uid://ddb7j6jlpcnp" path="res://levels/cradle_of_decay/cradle_of_decay.gd" id="1_lqaxi"]
 [ext_resource type="Texture2D" uid="uid://6s5ig1kn3pi8" path="res://levels/cradle_of_decay/wall.png" id="2_hklc7"]
 [ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="3_4iulq"]
 [ext_resource type="Texture2D" uid="uid://cdjfx1qn2rjnr" path="res://levels/cradle_of_decay/tree1.png" id="3_pgmxn"]
 [ext_resource type="Texture2D" uid="uid://dhmb2fbwnqnoa" path="res://levels/cradle_of_decay/tree2.png" id="4_4iulq"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="5_hklc7"]
 [ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="5_lqaxi"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="9_0ul3c"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ul3c"]
 shader = ExtResource("3_4iulq")
@@ -29,6 +31,7 @@ shader_parameter/Speed = 3.000000095
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pgmxn"]
 
 [node name="CradleOfDecay" type="Node2D" unique_id=1386702902 groups=["camera_fixed"]]
+script = ExtResource("1_lqaxi")
 
 [node name="Environment" type="Node2D" parent="." unique_id=849331867]
 modulate = Color(0.68721527, 0.6872149, 0.6872146, 1)
@@ -78,4 +81,15 @@ rotation = -1.5707964
 shape = SubResource("WorldBoundaryShape2D_pgmxn")
 
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("5_hklc7")]
-position = Vector2(60, 14)
+position = Vector2(25, 80)
+
+[node name="Front" type="CanvasLayer" parent="." unique_id=1668978567]
+
+[node name="Label" type="Label" parent="Front" unique_id=263063248]
+offset_right = 160.0
+offset_bottom = 80.0
+theme_override_fonts/font = ExtResource("9_0ul3c")
+theme_override_font_sizes/font_size = 30
+text = "Actinos"
+horizontal_alignment = 1
+vertical_alignment = 1

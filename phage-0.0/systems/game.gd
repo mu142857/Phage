@@ -24,9 +24,12 @@ var rect1_colour: Color = Color(1, 1, 1, 1)
 var rect2_colour: Color = Color(1, 1, 1, 1)
 var follow_target: Node2D = null
 var follow_player: bool = true
+var default_zoom: Vector2 = Vector2.ONE
+var zoom_tween: Tween = null
 
 func _ready() -> void:
 	make_current()
+	default_zoom = zoom
 	screen_shake.connect(_on_screen_shake)
 	screen_flash.connect(_on_screen_flash)
 	screen_filter.connect(_on_screen_filter)
@@ -73,11 +76,23 @@ func _process(delta: float) -> void:
 func shake_camera(amount: float) -> void:
 	screen_shake.emit(amount)
 
+func stop_shake() -> void:
+	shake_strength = 0.0
+
 func flash(amount: float, colour: Color) -> void:
 	screen_flash.emit(amount, colour)
 
 func filter(amount: float, colour: Color) -> void:
 	screen_filter.emit(amount, colour)
+
+func zoom_to(target_zoom: Vector2, duration: float = 0.2) -> void:
+	if is_instance_valid(zoom_tween):
+		zoom_tween.kill()
+	zoom_tween = create_tween()
+	zoom_tween.tween_property(self, "zoom", target_zoom, duration)
+
+func reset_zoom(duration: float = 0.2) -> void:
+	zoom_to(default_zoom, duration)
 
 func _on_screen_shake(amount: float) -> void:
 	shake_strength = max(shake_strength, amount)

@@ -844,7 +844,6 @@ _data = {
 }
 
 [node name="Player" type="CharacterBody2D" unique_id=949587783]
-collision_mask = 5
 script = ExtResource("1_abrql")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2023249808]

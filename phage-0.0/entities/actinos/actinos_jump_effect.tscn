@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://yajsawi6hy3g"]
+
+[ext_resource type="Script" uid="uid://cg3qglbrhfem7" path="res://entities/actinos/actinos_jump_effect.gd" id="1_goqll"]
+
+[sub_resource type="Gradient" id="Gradient_8qcp4"]
+offsets = PackedFloat32Array(0, 0.13114753, 0.7663934, 0.8852459, 1)
+colors = PackedColorArray(1, 1, 0.6666667, 0, 1, 1, 0.6666667, 1, 1, 0.4608522, 0.7153423, 1, 0.654902, 0.56078434, 1, 1, 0.654902, 0.56078434, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_goqll"]
+gradient = SubResource("Gradient_8qcp4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ucvr1"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(5, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 10.0
+initial_velocity_min = 20.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 98, 0)
+scale_min = 2.0
+scale_max = 2.0
+color = Color(1, 1, 0.6666667, 1)
+color_ramp = SubResource("GradientTexture1D_goqll")
+
+[node name="ActinosJumpEffect" type="GPUParticles2D" unique_id=1516146476]
+emitting = false
+amount = 20
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_ucvr1")
+script = ExtResource("1_goqll")
+
+[node name="Timer" type="Timer" parent="." unique_id=287235979]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

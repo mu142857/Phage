@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://bltq4l6ycvhq"]
+
+[ext_resource type="Script" uid="uid://dnic76ota1aqj" path="res://entities/actinos/actinos_spike.gd" id="1_lml7c"]
+[ext_resource type="Texture2D" uid="uid://71dhieoi7vtt" path="res://entities/actinos/actinos_attack-Sheet.png" id="1_outr0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lml7c"]
+atlas = ExtResource("1_outr0")
+region = Rect2(0, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lw8ex"]
+atlas = ExtResource("1_outr0")
+region = Rect2(200, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o45t8"]
+atlas = ExtResource("1_outr0")
+region = Rect2(400, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y5u5e"]
+atlas = ExtResource("1_outr0")
+region = Rect2(600, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cwrrq"]
+atlas = ExtResource("1_outr0")
+region = Rect2(800, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5kvvo"]
+atlas = ExtResource("1_outr0")
+region = Rect2(0, 200, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y8mjl"]
+atlas = ExtResource("1_outr0")
+region = Rect2(200, 200, 200, 200)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g33s1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lml7c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lw8ex")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o45t8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y5u5e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cwrrq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5kvvo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y8mjl")
+}],
+"loop": false,
+"name": &"defult",
+"speed": 10.0
+}]
+
+[node name="ActinosSpike" type="Node2D" unique_id=914917221]
+script = ExtResource("1_lml7c")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=950999438]
+sprite_frames = SubResource("SpriteFrames_g33s1")
+animation = &"defult"
+frame = 5
+offset = Vector2(76.5, -60)
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1849698367]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D" unique_id=832202812]
+polygon = PackedVector2Array(3, 0, 1, -4, 0, -26, -1, -4, -3, 0)
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

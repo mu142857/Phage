@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://4j1065j0avtu"]
 
+[ext_resource type="Script" uid="uid://bj1tnhqrlf4fc" path="res://entities/player/player_jumping_effect.gd" id="1_je1yw"]
+
 [sub_resource type="Gradient" id="Gradient_dwve6"]
 offsets = PackedFloat32Array(0, 0.38114753, 0.6967213, 0.852459, 1)
 colors = PackedColorArray(0.6, 0.2, 1, 1, 1, 1, 1, 1, 0.6, 0.6, 1, 1, 1, 1, 1, 1, 0.5176471, 0.8392157, 0.6784314, 1)
@@ -33,3 +35,9 @@ amount = 10
 lifetime = 0.5
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_dwve6")
+script = ExtResource("1_je1yw")
+
+[node name="Timer" type="Timer" parent="." unique_id=475533162]
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

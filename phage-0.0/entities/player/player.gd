@@ -39,6 +39,7 @@ var facing_direction: int = 1  # 1 = right, -1 = left
 var can_sprint: bool = true
 var is_invincible: bool = false
 var is_in_ball_form: bool = false  # true when contracted; modifies hitbox + buffs
+var input_locked: bool = false
 
 # ============================================================
 # Node references
@@ -65,6 +66,15 @@ func _ready() -> void:
 
 func change_state(state_id: int) -> void:
 	state_machine.change_state(state_id)
+
+func set_lock(locked: bool) -> void:
+	input_locked = locked
+	if is_instance_valid(state_machine):
+		state_machine.set_process(not locked)
+		state_machine.set_physics_process(not locked)
+	if locked:
+		velocity = Vector2.ZERO
+		clear_attack_hitboxes()
 
 func take_damage(amount: int) -> void:
 	if is_invincible:

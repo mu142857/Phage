@@ -14,7 +14,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65m5a"]
 shader = ExtResource("2_y062d")
 shader_parameter/Enabled = true
-shader_parameter/Tint = Color(0.6419111, 0.34170333, 0.35016176, 1)
+shader_parameter/Tint = Color(0.9194927, 0, 0.46656054, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l56ue"]
 atlas = ExtResource("1_778nq")
@@ -304,9 +304,9 @@ script = ExtResource("1_fkg3i")
 material = SubResource("ShaderMaterial_65m5a")
 position = Vector2(41, -60)
 sprite_frames = SubResource("SpriteFrames_l56ue")
-animation = &"Fall"
+animation = &"Idle"
 autoplay = "Idle"
-frame_progress = 0.119116984
+frame_progress = 0.15307446
 
 [node name="StateMachine" type="Node" parent="." unique_id=813129515]
 script = ExtResource("3_cybdv")
@@ -342,7 +342,8 @@ shape = SubResource("RectangleShape2D_y062d")
 debug_color = Color(0, 0.6, 0.69803923, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=751654702]
-position = Vector2(0, -19)
+position = Vector2(3.9999995, -19)
+rotation = 0.26357135
 shape = SubResource("RectangleShape2D_65m5a")
 
 [node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=1142560353]

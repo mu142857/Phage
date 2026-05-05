@@ -1,7 +1,7 @@
 extends BasicState
 
 @export var duration: float = 3.0
-@export var shake_amount: float = 6.0
+@export var shake_amount: float = 3.0
 @export var zoom_amount: float = 1.15
 @export var zoom_duration: float = 0.2
 

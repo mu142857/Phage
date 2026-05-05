@@ -50,6 +50,7 @@ var input_locked: bool = false
 @onready var walking_effect: GPUParticles2D = $PlayerWalkingEffect
 @onready var attack_hitbox_1: Area2D = $HitBox/Attack1_1
 @onready var attack_hitbox_2: Area2D = $HitBox/Attack1_2
+@onready var hitbox_root: Node2D = $HitBox
 @onready var state_machine: StateManager = $StateMachine
 
 # ============================================================
@@ -129,6 +130,11 @@ func set_facing_direction(direction: int) -> void:
 	if scale_x == 0.0:
 		scale_x = 1.0
 	sprite.scale.x = scale_x * float(facing_direction)
+	if is_instance_valid(hitbox_root):
+		var hitbox_scale_x := absf(hitbox_root.scale.x)
+		if hitbox_scale_x == 0.0:
+			hitbox_scale_x = 1.0
+		hitbox_root.scale.x = hitbox_scale_x * float(facing_direction)
 
 func enter_ball_form() -> void:
 	set_ball_form(true)

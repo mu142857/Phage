@@ -26,6 +26,7 @@ color_ramp = SubResource("GradientTexture1D_goqll")
 [node name="ActinosJumpEffect" type="GPUParticles2D" unique_id=1516146476]
 emitting = false
 amount = 20
+one_shot = true
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_ucvr1")
 script = ExtResource("1_goqll")

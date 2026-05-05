@@ -836,12 +836,13 @@ size = Vector2(4, 7)
 size = Vector2(4, 4)
 
 [node name="Player" type="CharacterBody2D" unique_id=949587783]
+z_index = 1
 script = ExtResource("1_abrql")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2023249808]
 sprite_frames = SubResource("SpriteFrames_akixf")
 animation = &"Attack1_2"
-frame = 3
+frame = 1
 offset = Vector2(30, -24)
 
 [node name="CollisionNormal" type="CollisionShape2D" parent="." unique_id=1544803397]
@@ -905,7 +906,7 @@ collision_mask = 4
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="HitBox/Attack1_1" unique_id=1609717214]
 modulate = Color(1, 1, 1, 0.39215687)
-polygon = PackedVector2Array(1, 2, 13, 1, 19, -7, 14, -9, -1, -10, -1, 0)
+polygon = PackedVector2Array(1, 2, 13, 1, 18, -7, 14, -9, 0.056082726, -9.929594, 0, 0)
 
 [node name="Attack1_2" type="Area2D" parent="HitBox" unique_id=2138458351]
 collision_layer = 8
@@ -913,7 +914,7 @@ collision_mask = 4
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="HitBox/Attack1_2" unique_id=145537937]
 modulate = Color(1, 1, 1, 0.39215687)
-polygon = PackedVector2Array(0, 1, 11, 0, 17, -2, 22, -6, 21, -8, 14, -9, 7, -16, -1, -10, -1, 0)
+polygon = PackedVector2Array(0, 1, 11, 0, 17, -2, 21, -5, 21, -8, 14, -9, 7, -16, 0.023375511, -10.518366)
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Sprint(5)" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Contract(6)" method="_on_animated_sprite_2d_animation_finished"]

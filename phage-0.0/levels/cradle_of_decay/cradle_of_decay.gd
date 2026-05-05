@@ -15,11 +15,14 @@ extends Node2D
 
 @export var intro_lock_player: bool = false
 @export var start_battlecry_state: bool = true
+@export var landing_effect_offset: Vector2 = Vector2(0.0, 6.0)
+
+const ACTINOS_JUMP_EFFECT: PackedScene = preload("res://entities/actinos/actinos_jump_effect.tscn")
 
 var actinos_instance: CharacterBody2D = null
 
 func _ready() -> void:
-	call_deferred("_start_intro")
+	pass
 
 func _start_intro() -> void:
 	if intro_lock_player:
@@ -69,6 +72,7 @@ func _drop_actinos() -> void:
 	tween.set_ease(Tween.EASE_IN)
 	tween.tween_property(actinos_instance, "global_position", target, drop_duration)
 	await tween.finished
+	_spawn_landing_effect()
 
 func _start_battlecry() -> void:
 	if actinos_instance == null:
@@ -80,6 +84,18 @@ func _start_battlecry() -> void:
 	if intro_lock_player:
 		_set_player_lock(false)
 
+func _spawn_landing_effect() -> void:
+	if ACTINOS_JUMP_EFFECT == null:
+		return
+	var effect := ACTINOS_JUMP_EFFECT.instantiate()
+	if effect == null:
+		return
+	add_child(effect)
+	if actinos_instance != null:
+		effect.global_position = actinos_instance.global_position + landing_effect_offset
+	if effect is GPUParticles2D:
+		(effect as GPUParticles2D).emitting = true
+
 func _set_player_lock(locked: bool) -> void:
 	var players := get_tree().get_nodes_in_group("player")
 	if players.is_empty():
@@ -87,3 +103,7 @@ func _set_player_lock(locked: bool) -> void:
 	var player := players[0]
 	if player.has_method("set_lock"):
 		player.call("set_lock", locked)
+
+
+func _on_timer_timeout() -> void:
+	call_deferred("_start_intro")

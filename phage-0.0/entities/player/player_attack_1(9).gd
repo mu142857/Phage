@@ -11,6 +11,10 @@ const ATTACK1_2_TRIGGER_FRAME: int = 1
 const ATTACK1_1_TRIGGER_TIME: float = 2.0 / 12.0
 const ATTACK1_2_TRIGGER_TIME: float = 2.0 / 12.0
 const COMBO_QUEUE_OPEN_TIME: float = 2.0 / 12.0
+const HIT_RECOIL_SPEED: float = 110.0
+const HIT_RECOIL_DURATION: float = 0.08
+const HIT_RECOIL_INPUT_SCALE: float = 0.6
+const LUNGE_SUPPRESS_DURATION: float = 0.12
 
 const ANIM_ATTACK1_1: StringName = &"Attack1_1"
 const ANIM_ATTACK1_2: StringName = &"Attack1_2"
@@ -28,12 +32,16 @@ var current_phase: int = 1
 var attack_glow_tween: Tween = null
 var base_sprite_modulate: Color = Color(1, 1, 1, 1)
 var player_ref: Player = null
+var recoil_time_left: float = 0.0
+var lunge_suppress_left: float = 0.0
+var suppress_next_lunge: bool = false
 
 func enter() -> void:
 	var player := host as Player
 	if player == null:
 		return
 	player_ref = player
+	recoil_time_left = 0.0
 	phase_1_done = false
 	phase_2_done = false
 	attack_elapsed = 0.0
@@ -47,7 +55,10 @@ func enter() -> void:
 	player.set_walking_effect(false)
 	player.clear_attack_hitboxes()
 	player.set_attack_hitbox(1, true)
-	_apply_attack_surge(player)
+	if suppress_next_lunge:
+		suppress_next_lunge = false
+	else:
+		_apply_attack_surge(player)
 	_play_attack_glow(player)
 	_play_attack_animation(player, ANIM_ATTACK1_1, ANIM_ATTACK_LEGACY)
 
@@ -58,7 +69,15 @@ func process(delta: float) -> void:
 
 	# Ignore horizontal move input during attack: do a forward lunge then decay.
 	var brake_accel := ATTACK_BRAKE_ACCEL if player.is_on_floor() else ATTACK_BRAKE_ACCEL_AIR
-	player.velocity.x = move_toward(player.velocity.x, 0.0, brake_accel * delta)
+	if recoil_time_left > 0.0:
+		recoil_time_left = maxf(recoil_time_left - delta, 0.0)
+		var move_input := Input.get_axis(&"move_left", &"move_right")
+		var recoil_target := -float(attack_locked_facing) * HIT_RECOIL_SPEED
+		var input_target := move_input * player.RUN_SPEED * HIT_RECOIL_INPUT_SCALE
+		var target_x := recoil_target + input_target
+		player.velocity.x = move_toward(player.velocity.x, target_x, brake_accel * delta)
+	else:
+		player.velocity.x = move_toward(player.velocity.x, 0.0, brake_accel * delta)
 	player.set_facing_direction(attack_locked_facing)
 
 	if not player.is_on_floor():
@@ -67,6 +86,8 @@ func process(delta: float) -> void:
 		player.velocity.y = 0.0
 	player.move_and_slide()
 	attack_elapsed += delta
+	if lunge_suppress_left > 0.0:
+		lunge_suppress_left = maxf(lunge_suppress_left - delta, 0.0)
 
 	# Queue phase 2 only in phase 1 and after combo window opens.
 	if current_phase == 1 and phase_1_done and not phase_2_done and attack_elapsed >= COMBO_QUEUE_OPEN_TIME:
@@ -142,6 +163,17 @@ func _check_attack_hitbox(hitbox: Area2D, damage: int) -> void:
 			body.call("take_hit", damage)
 		elif body.has_method("take_damage"):
 			body.call("take_damage", damage)
+		_apply_hit_recoil()
+		break
+
+func _apply_hit_recoil() -> void:
+	if player_ref == null:
+		return
+	# Push player slightly backward to counter the lunge
+	player_ref.velocity.x = -float(attack_locked_facing) * HIT_RECOIL_SPEED
+	recoil_time_left = HIT_RECOIL_DURATION
+	lunge_suppress_left = LUNGE_SUPPRESS_DURATION
+	suppress_next_lunge = true
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	var player := host as Player
@@ -158,7 +190,10 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 			attack_elapsed = 0.0
 			player.clear_attack_hitboxes()
 			player.set_attack_hitbox(2, true)
-			_apply_attack_surge(player)
+			if suppress_next_lunge:
+				suppress_next_lunge = false
+			else:
+				_apply_attack_surge(player)
 			_play_attack_glow(player)
 			_play_attack_animation(player, ANIM_ATTACK1_2, ANIM_ATTACK_LEGACY)
 			return
@@ -180,3 +215,4 @@ func exit() -> void:
 		player.sprite.modulate = base_sprite_modulate
 	player.clear_attack_hitboxes()
 	player_ref = null
+	recoil_time_left = 0.0

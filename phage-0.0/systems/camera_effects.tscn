@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://cqtxala7n1u8w" path="res://systems/camera_effects.gd" id="1_e2bhk"]
 
 [node name="CameraEffects" type="Camera2D" unique_id=537288436]
+anchor_mode = 0
+limit_enabled = false
 script = ExtResource("1_e2bhk")
 
 [node name="FlashLayer" type="CanvasLayer" parent="." unique_id=495696046]

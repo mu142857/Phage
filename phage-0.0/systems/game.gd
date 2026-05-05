@@ -11,6 +11,9 @@ signal screen_filter(amount: float, colour: Color)
 @export var blink_duration_2: float = 0.2
 @export var max_blink_alpha_2: float = 1.0
 
+const CAMERA_FOLLOW_GROUP: StringName = &"camera_follow"
+const CAMERA_FIXED_GROUP: StringName = &"camera_fixed"
+
 @onready var colour_rect1: ColorRect = $CanvasLayer/ColorRect1
 @onready var colour_rect2: ColorRect = $CanvasLayer/ColorRect2
 
@@ -19,6 +22,8 @@ var blink_time_1: float = 0.0
 var blink_time_2: float = 0.0
 var rect1_colour: Color = Color(1, 1, 1, 1)
 var rect2_colour: Color = Color(1, 1, 1, 1)
+var follow_target: Node2D = null
+var follow_player: bool = true
 
 func _ready() -> void:
 	make_current()
@@ -33,6 +38,13 @@ func _ready() -> void:
 		colour_rect2.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _process(delta: float) -> void:
+	_update_camera_mode()
+	_update_follow_target()
+	if follow_player and is_instance_valid(follow_target):
+		global_position = follow_target.global_position
+	elif not follow_player:
+		global_position = Vector2.ZERO
+
 	if shake_strength > 0.0:
 		offset = Vector2(
 			randf_range(-shake_strength, shake_strength),
@@ -79,3 +91,29 @@ func _on_screen_filter(amount: float, colour: Color) -> void:
 	blink_time_2 = blink_duration_2 * amount
 	rect2_colour = colour
 	max_blink_alpha_2 = colour.a
+
+func _update_camera_mode() -> void:
+	var scene := get_tree().current_scene
+	if not is_instance_valid(scene):
+		return
+	if scene.is_in_group(CAMERA_FIXED_GROUP):
+		follow_player = false
+		follow_target = null
+		global_position = Vector2.ZERO
+		return
+	if scene.is_in_group(CAMERA_FOLLOW_GROUP):
+		follow_player = true
+		return
+	follow_player = true
+
+func _update_follow_target() -> void:
+	if not follow_player:
+		return
+	if is_instance_valid(follow_target):
+		return
+	var players := get_tree().get_nodes_in_group("player")
+	if players.is_empty():
+		return
+	var candidate := players[0]
+	if candidate is Node2D:
+		follow_target = candidate

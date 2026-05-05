@@ -28,7 +28,7 @@ shader_parameter/Speed = 3.000000095
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pgmxn"]
 
-[node name="CradleOfDecay" type="Node2D" unique_id=1386702902]
+[node name="CradleOfDecay" type="Node2D" unique_id=1386702902 groups=["camera_fixed"]]
 
 [node name="Environment" type="Node2D" parent="." unique_id=849331867]
 modulate = Color(0.68721527, 0.6872149, 0.6872146, 1)

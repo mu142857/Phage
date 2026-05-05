@@ -4,7 +4,7 @@
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5f5au"]
 
-[node name="Test" type="Node2D" unique_id=1949528342]
+[node name="Test" type="Node2D" unique_id=1949528342 groups=["camera_fixed"]]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2095468186]
 collision_mask = 0

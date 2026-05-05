@@ -25,6 +25,8 @@ var attack_elapsed: float = 0.0
 var attack_locked_facing: int = 1
 var phase_2_requested: bool = false
 var current_phase: int = 1
+var attack_glow_tween: Tween = null
+var base_sprite_modulate: Color = Color(1, 1, 1, 1)
 
 func enter() -> void:
 	var player := host as Player
@@ -38,10 +40,12 @@ func enter() -> void:
 	attack_locked_facing = player.facing_direction
 	if attack_locked_facing == 0:
 		attack_locked_facing = 1
+	base_sprite_modulate = player.sprite.modulate if is_instance_valid(player.sprite) else Color(1, 1, 1, 1)
 	player.set_facing_direction(attack_locked_facing)
 	player.set_walking_effect(false)
 	player.clear_attack_hitboxes()
 	_apply_attack_surge(player)
+	_play_attack_glow(player)
 	_play_attack_animation(player, ANIM_ATTACK1_1, ANIM_ATTACK_LEGACY)
 
 func process(delta: float) -> void:
@@ -113,6 +117,15 @@ func _apply_attack_surge(player: Player) -> void:
 	var burst_speed := ATTACK_BURST_SPEED if player.is_on_floor() else ATTACK_BURST_SPEED_AIR
 	player.velocity.x = float(attack_locked_facing) * burst_speed
 
+func _play_attack_glow(player: Player) -> void:
+	if not is_instance_valid(player.sprite):
+		return
+	if is_instance_valid(attack_glow_tween):
+		attack_glow_tween.kill()
+	attack_glow_tween = create_tween()
+	attack_glow_tween.tween_property(player.sprite, "modulate", Color(1.6, 1.6, 1.6, base_sprite_modulate.a), 0.05)
+	attack_glow_tween.tween_property(player.sprite, "modulate", base_sprite_modulate, 0.10)
+
 func _check_attack_hitbox(hitbox: Area2D, damage: int) -> void:
 	if not is_instance_valid(hitbox):
 		return
@@ -142,6 +155,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 			attack_elapsed = 0.0
 			player.clear_attack_hitboxes()
 			_apply_attack_surge(player)
+			_play_attack_glow(player)
 			_play_attack_animation(player, ANIM_ATTACK1_2, ANIM_ATTACK_LEGACY)
 			return
 		player.finish_attack()
@@ -155,4 +169,9 @@ func exit() -> void:
 	var player := host as Player
 	if player == null:
 		return
+	if is_instance_valid(attack_glow_tween):
+		attack_glow_tween.kill()
+		attack_glow_tween = null
+	if is_instance_valid(player.sprite):
+		player.sprite.modulate = base_sprite_modulate
 	player.clear_attack_hitboxes()

@@ -26,6 +26,7 @@ const STATE_SPRINT: int = 5
 const STATE_CONTRACT: int = 6
 const STATE_BALL: int = 7
 const STATE_UNCONTRACT: int = 8
+const STATE_ATTACK_1: int = 9
 
 # ============================================================
 # State (read by states, written by player or specific states)
@@ -43,6 +44,8 @@ var is_in_ball_form: bool = false  # true when contracted; modifies hitbox + buf
 @onready var collision_normal: CollisionShape2D = $CollisionNormal
 @onready var collision_ball: CollisionShape2D = $CollisionBall
 @onready var walking_effect: GPUParticles2D = $PlayerWalkingEffect
+@onready var attack_hitbox_1: Area2D = $HitBox/Attack1_1
+@onready var attack_hitbox_2: Area2D = $HitBox/Attack1_2
 @onready var state_machine: StateManager = $StateMachine
 
 # ============================================================
@@ -54,6 +57,7 @@ signal died
 func _ready() -> void:
 	add_to_group("player")
 	set_ball_form(false)
+	clear_attack_hitboxes()
 	can_sprint = true
 
 func change_state(state_id: int) -> void:
@@ -116,3 +120,44 @@ func enter_ball_form() -> void:
 
 func exit_ball_form() -> void:
 	set_ball_form(false)
+
+func start_attack() -> void:
+	clear_attack_hitboxes()
+	change_state(STATE_ATTACK_1)
+
+func set_attack_hitbox(stage: int, enabled: bool = true) -> void:
+	if stage == 1:
+		if is_instance_valid(attack_hitbox_1):
+			attack_hitbox_1.monitoring = enabled
+		if is_instance_valid(attack_hitbox_2):
+			attack_hitbox_2.monitoring = false
+		return
+
+	if stage == 2:
+		if is_instance_valid(attack_hitbox_1):
+			attack_hitbox_1.monitoring = false
+		if is_instance_valid(attack_hitbox_2):
+			attack_hitbox_2.monitoring = enabled
+		return
+
+	clear_attack_hitboxes()
+
+func clear_attack_hitboxes() -> void:
+	if is_instance_valid(attack_hitbox_1):
+		attack_hitbox_1.monitoring = false
+	if is_instance_valid(attack_hitbox_2):
+		attack_hitbox_2.monitoring = false
+
+func finish_attack() -> void:
+	clear_attack_hitboxes()
+	if is_in_ball_form:
+		change_state(STATE_BALL)
+		return
+	if not is_on_floor():
+		change_state(STATE_FALL)
+		return
+	var move_input := Input.get_axis(&"move_left", &"move_right")
+	if abs(move_input) > 0.0:
+		change_state(STATE_RUN)
+	else:
+		change_state(STATE_IDLE)

@@ -28,6 +28,10 @@ func process(delta: float) -> void:
 		change_state(player.STATE_FALL)
 		return
 
+	if Input.is_action_just_pressed(&"Attack1"):
+		change_state(player.STATE_ATTACK_1)
+		return
+
 	if Input.is_action_just_pressed(&"sprint") and player.can_sprint:
 		change_state(player.STATE_SPRINT)
 		return

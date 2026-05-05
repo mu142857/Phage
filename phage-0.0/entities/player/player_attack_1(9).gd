@@ -6,8 +6,8 @@ const ATTACK_BURST_SPEED_AIR: float = 240.0
 const ATTACK_BRAKE_ACCEL_AIR: float = 380.0
 const ATTACK1_1_DAMAGE: int = 100
 const ATTACK1_2_DAMAGE: int = 30
-const ATTACK1_1_TRIGGER_FRAME: int = 2
-const ATTACK1_2_TRIGGER_FRAME: int = 2
+const ATTACK1_1_TRIGGER_FRAME: int = 1
+const ATTACK1_2_TRIGGER_FRAME: int = 1
 const ATTACK1_1_TRIGGER_TIME: float = 2.0 / 12.0
 const ATTACK1_2_TRIGGER_TIME: float = 2.0 / 12.0
 const COMBO_QUEUE_OPEN_TIME: float = 2.0 / 12.0
@@ -27,11 +27,13 @@ var phase_2_requested: bool = false
 var current_phase: int = 1
 var attack_glow_tween: Tween = null
 var base_sprite_modulate: Color = Color(1, 1, 1, 1)
+var player_ref: Player = null
 
 func enter() -> void:
 	var player := host as Player
 	if player == null:
 		return
+	player_ref = player
 	phase_1_done = false
 	phase_2_done = false
 	attack_elapsed = 0.0
@@ -44,6 +46,7 @@ func enter() -> void:
 	player.set_facing_direction(attack_locked_facing)
 	player.set_walking_effect(false)
 	player.clear_attack_hitboxes()
+	player.set_attack_hitbox(1, true)
 	_apply_attack_surge(player)
 	_play_attack_glow(player)
 	_play_attack_animation(player, ANIM_ATTACK1_1, ANIM_ATTACK_LEGACY)
@@ -154,6 +157,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 			current_phase = 2
 			attack_elapsed = 0.0
 			player.clear_attack_hitboxes()
+			player.set_attack_hitbox(2, true)
 			_apply_attack_surge(player)
 			_play_attack_glow(player)
 			_play_attack_animation(player, ANIM_ATTACK1_2, ANIM_ATTACK_LEGACY)
@@ -175,3 +179,4 @@ func exit() -> void:
 	if is_instance_valid(player.sprite):
 		player.sprite.modulate = base_sprite_modulate
 	player.clear_attack_hitboxes()
+	player_ref = null

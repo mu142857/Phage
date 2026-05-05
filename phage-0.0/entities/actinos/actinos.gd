@@ -11,6 +11,10 @@ func _ready() -> void:
 	add_to_group("monster")
 	if health <= 0:
 		health = max_health
+	var sprite := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite != null and sprite.material is ShaderMaterial:
+		var shader_mat := sprite.material as ShaderMaterial
+		shader_mat.set_shader_parameter("Enabled", false)
 	if has_node("StateMachine"):
 		$StateMachine.set_process(true)
 		$StateMachine.set_physics_process(true)

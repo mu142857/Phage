@@ -835,14 +835,6 @@ size = Vector2(4, 7)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sglur"]
 size = Vector2(4, 4)
 
-[sub_resource type="Animation" id="Animation_gx6sm"]
-resource_name = "Attack1"
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_yqrof"]
-_data = {
-&"Attack1": SubResource("Animation_gx6sm")
-}
-
 [node name="Player" type="CharacterBody2D" unique_id=949587783]
 script = ExtResource("1_abrql")
 
@@ -850,7 +842,6 @@ script = ExtResource("1_abrql")
 sprite_frames = SubResource("SpriteFrames_akixf")
 animation = &"Attack1_2"
 frame = 3
-frame_progress = 1.0
 offset = Vector2(30, -24)
 
 [node name="CollisionNormal" type="CollisionShape2D" parent="." unique_id=1544803397]
@@ -923,9 +914,6 @@ collision_mask = 4
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="HitBox/Attack1_2" unique_id=145537937]
 modulate = Color(1, 1, 1, 0.39215687)
 polygon = PackedVector2Array(0, 1, 11, 0, 17, -2, 22, -6, 21, -8, 14, -9, 7, -16, -1, -10, -1, 0)
-
-[node name="AttackPlayer" type="AnimationPlayer" parent="." unique_id=1810889310]
-libraries/ = SubResource("AnimationLibrary_yqrof")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Sprint(5)" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Contract(6)" method="_on_animated_sprite_2d_animation_finished"]

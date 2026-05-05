@@ -306,7 +306,7 @@ position = Vector2(41, -60)
 sprite_frames = SubResource("SpriteFrames_l56ue")
 animation = &"Fall"
 autoplay = "Idle"
-frame_progress = 0.0853306
+frame_progress = 0.119116984
 
 [node name="StateMachine" type="Node" parent="." unique_id=813129515]
 script = ExtResource("3_cybdv")

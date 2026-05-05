@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://b0bams0bffpfy" path="res://entities/actinos/actinos-Sheet.png" id="1_778nq"]
 [ext_resource type="Script" uid="uid://d4ndkm65di634" path="res://entities/actinos/actinos.gd" id="1_fkg3i"]
+[ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_y062d"]
 [ext_resource type="Script" uid="uid://bg8dd0jdo67rm" path="res://systems/state_machine/state_manager.gd" id="3_cybdv"]
 [ext_resource type="Script" uid="uid://ucwhhr37islp" path="res://entities/actinos/actinos_null(0).gd" id="4_d5voe"]
 [ext_resource type="Script" uid="uid://2vchmby18s7a" path="res://entities/actinos/actinos_idle(1).gd" id="5_y062d"]
@@ -9,6 +10,11 @@
 [ext_resource type="Script" uid="uid://b3i31jyq6fjr7" path="res://entities/actinos/actinos_spike_attack(3).gd" id="7_ebm1s"]
 [ext_resource type="Script" uid="uid://dic177an6du1r" path="res://entities/actinos/actinos_battlecry(4).gd" id="8_l56ue"]
 [ext_resource type="Script" uid="uid://ctdxslnvfyov8" path="res://entities/actinos/actinos_death(5).gd" id="9_ptnfe"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_65m5a"]
+shader = ExtResource("2_y062d")
+shader_parameter/Enabled = true
+shader_parameter/Tint = Color(0.6419111, 0.34170333, 0.35016176, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l56ue"]
 atlas = ExtResource("1_778nq")
@@ -252,15 +258,55 @@ size = Vector2(3883, 2707)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_65m5a"]
 size = Vector2(12, 38)
 
+[sub_resource type="Animation" id="Animation_ebm1s"]
+resource_name = "HitFlash"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_y062d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l56ue"]
+_data = {
+&"HitFlash": SubResource("Animation_ebm1s"),
+&"RESET": SubResource("Animation_y062d")
+}
+
 [node name="Actinos" type="CharacterBody2D" unique_id=431397375]
+collision_layer = 4
+collision_mask = 0
 script = ExtResource("1_fkg3i")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1114719210]
+material = SubResource("ShaderMaterial_65m5a")
 position = Vector2(41, -60)
 sprite_frames = SubResource("SpriteFrames_l56ue")
 animation = &"Fall"
 autoplay = "Idle"
-frame_progress = 0.64037246
+frame_progress = 0.0853306
 
 [node name="StateMachine" type="Node" parent="." unique_id=813129515]
 script = ExtResource("3_cybdv")
@@ -298,3 +344,6 @@ debug_color = Color(0, 0.6, 0.69803923, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=751654702]
 position = Vector2(0, -19)
 shape = SubResource("RectangleShape2D_65m5a")
+
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=1142560353]
+libraries/ = SubResource("AnimationLibrary_l56ue")

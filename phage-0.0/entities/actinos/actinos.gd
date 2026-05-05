@@ -21,6 +21,10 @@ func change_state(state_id: int) -> void:
 
 func take_hit(value: int) -> void:
 	health -= value
+	if has_node("HitEffectPlayer"):
+		if not $HitEffectPlayer.active:
+			$HitEffectPlayer.active = true
+		$HitEffectPlayer.play("HitFlash")
 	if health <= 0:
 		health = 0
 		if has_node("StateMachine"):

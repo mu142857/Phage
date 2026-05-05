@@ -2,7 +2,7 @@ extends BasicState
 
 @export var duration: float = 3.0
 @export var shake_amount: float = 6.0
-@export var zoom_amount: float = 0.85
+@export var zoom_amount: float = 1.15
 @export var zoom_duration: float = 0.2
 
 @onready var ani_2D: AnimatedSprite2D = $"../../AnimatedSprite2D"
@@ -12,6 +12,8 @@ var is_active: bool = false
 func enter() -> void:
 	is_active = true
 	_play_battlecry_animation()
+	Game.set_position_override(Vector2(16.0, 9.0))
+	_set_boss_name_visible(true)
 	_set_player_lock(true)
 	Game.zoom_to(Vector2(zoom_amount, zoom_amount), zoom_duration)
 	_start_timer()
@@ -23,7 +25,9 @@ func process(_delta: float) -> void:
 func exit() -> void:
 	is_active = false
 	_set_player_lock(false)
+	_set_boss_name_visible(false)
 	Game.stop_shake()
+	Game.clear_position_override()
 	Game.reset_zoom(zoom_duration)
 
 func _start_timer() -> void:
@@ -45,3 +49,12 @@ func _play_battlecry_animation() -> void:
 	if not is_instance_valid(ani_2D):
 		return
 	ani_2D.play(&"Battlecry")
+
+func _set_boss_name_visible(visible: bool) -> void:
+	var scene := get_tree().current_scene
+	if not is_instance_valid(scene):
+		return
+	var front := scene.get_node_or_null("Front") as CanvasLayer
+	if front == null:
+		return
+	front.visible = visible

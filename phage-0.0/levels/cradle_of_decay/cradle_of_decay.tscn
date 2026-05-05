@@ -84,6 +84,7 @@ shape = SubResource("WorldBoundaryShape2D_pgmxn")
 position = Vector2(25, 80)
 
 [node name="Front" type="CanvasLayer" parent="." unique_id=1668978567]
+visible = false
 
 [node name="Label" type="Label" parent="Front" unique_id=263063248]
 offset_right = 160.0

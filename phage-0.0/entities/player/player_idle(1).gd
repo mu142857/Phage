@@ -8,6 +8,12 @@ func enter() -> void:
 	if player == null:
 		return
 	player.set_walking_effect(false)
+	if "input_locked" in player and player.input_locked:
+		if is_instance_valid(idle_timer):
+			idle_timer.stop()
+		if is_instance_valid(player.sprite):
+			player.sprite.play(&"Idle")
+		return
 	if is_instance_valid(idle_timer):
 		idle_timer.stop()
 		idle_timer.wait_time = player.IDLE_TO_CONTRACT_TIME
@@ -53,6 +59,8 @@ func process(delta: float) -> void:
 func _on_timer_timeout() -> void:
 	var player := host as Player
 	if player == null:
+		return
+	if "input_locked" in player and player.input_locked:
 		return
 	if not player.is_on_floor():
 		return

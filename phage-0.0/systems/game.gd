@@ -26,6 +26,8 @@ var follow_target: Node2D = null
 var follow_player: bool = true
 var default_zoom: Vector2 = Vector2.ONE
 var zoom_tween: Tween = null
+var position_override: Vector2 = Vector2.ZERO
+var position_override_enabled: bool = false
 
 func _ready() -> void:
 	make_current()
@@ -43,7 +45,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_update_camera_mode()
 	_update_follow_target()
-	if follow_player and is_instance_valid(follow_target):
+	if position_override_enabled:
+		global_position = position_override
+	elif follow_player and is_instance_valid(follow_target):
 		global_position = follow_target.global_position
 	elif not follow_player:
 		global_position = Vector2.ZERO
@@ -56,6 +60,7 @@ func _process(delta: float) -> void:
 		shake_strength = move_toward(shake_strength, 0.0, recovery_speed * delta)
 	else:
 		offset = Vector2.ZERO
+
 
 	if is_instance_valid(colour_rect1):
 		if blink_time_1 > 0.0:
@@ -111,6 +116,10 @@ func _update_camera_mode() -> void:
 	var scene := get_tree().current_scene
 	if not is_instance_valid(scene):
 		return
+	if position_override_enabled:
+		follow_player = false
+		follow_target = null
+		return
 	if scene.is_in_group(CAMERA_FIXED_GROUP):
 		follow_player = false
 		follow_target = null
@@ -132,3 +141,10 @@ func _update_follow_target() -> void:
 	var candidate := players[0]
 	if candidate is Node2D:
 		follow_target = candidate
+
+func set_position_override(position: Vector2) -> void:
+	position_override = position
+	position_override_enabled = true
+
+func clear_position_override() -> void:
+	position_override_enabled = false

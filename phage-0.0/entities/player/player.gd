@@ -69,12 +69,14 @@ func change_state(state_id: int) -> void:
 
 func set_lock(locked: bool) -> void:
 	input_locked = locked
+	if locked:
+		set_ball_form(false)
+		change_state(STATE_IDLE)
+		velocity = Vector2.ZERO
+		clear_attack_hitboxes()
 	if is_instance_valid(state_machine):
 		state_machine.set_process(not locked)
 		state_machine.set_physics_process(not locked)
-	if locked:
-		velocity = Vector2.ZERO
-		clear_attack_hitboxes()
 
 func take_damage(amount: int) -> void:
 	if is_invincible:

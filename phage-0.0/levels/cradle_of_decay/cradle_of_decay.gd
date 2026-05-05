@@ -13,7 +13,7 @@ extends Node2D
 @export var heavy_duration: float = 1.0
 @export var pause_duration: float = 0.4
 
-@export var intro_lock_player: bool = true
+@export var intro_lock_player: bool = false
 @export var start_battlecry_state: bool = true
 
 var actinos_instance: CharacterBody2D = null

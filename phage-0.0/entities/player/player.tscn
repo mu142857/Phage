@@ -461,7 +461,12 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_pth52")
+}],
+"loop": false,
+"name": &"Attack1_1",
+"speed": 12.0
 }, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_4iu2e")
 }, {
@@ -475,7 +480,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_qsjf6")
 }],
 "loop": false,
-"name": &"Attack1",
+"name": &"Attack1_2",
 "speed": 12.0
 }, {
 "frames": [{
@@ -844,8 +849,9 @@ script = ExtResource("1_abrql")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2023249808]
 sprite_frames = SubResource("SpriteFrames_akixf")
-animation = &"Attack1"
-frame = 5
+animation = &"Attack1_2"
+frame = 3
+frame_progress = 1.0
 offset = Vector2(30, -24)
 
 [node name="CollisionNormal" type="CollisionShape2D" parent="." unique_id=1544803397]

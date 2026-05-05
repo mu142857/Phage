@@ -863,6 +863,10 @@ script = ExtResource("5_gx6sm")
 [node name="Idle(1)" type="Node" parent="StateMachine" unique_id=1851771524]
 script = ExtResource("6_yqrof")
 
+[node name="Timer" type="Timer" parent="StateMachine/Idle(1)" unique_id=1261132450]
+wait_time = 3.0
+one_shot = true
+
 [node name="Run(2)" type="Node" parent="StateMachine" unique_id=621308808]
 script = ExtResource("7_3wlsy")
 
@@ -896,3 +900,6 @@ script = ExtResource("15_50fht")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Sprint(5)" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="timeout" from="StateMachine/Sprint(5)/Timer" to="StateMachine/Sprint(5)" method="_on_timer_timeout"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Contract(6)" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Uncontract(8)" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="timeout" from="StateMachine/Idle(1)/Timer" to="StateMachine/Idle(1)" method="_on_timer_timeout"]

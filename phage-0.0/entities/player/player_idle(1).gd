@@ -1,13 +1,23 @@
 # res://entities/player/player_idle(1).gd
 extends BasicState
 
+@onready var idle_timer: Timer = $Timer
+
 func enter() -> void:
 	var player := host as Player
 	if player == null:
 		return
 	player.set_walking_effect(false)
+	if is_instance_valid(idle_timer):
+		idle_timer.stop()
+		idle_timer.wait_time = player.IDLE_TO_CONTRACT_TIME
+		idle_timer.start()
 	if is_instance_valid(player.sprite):
 		player.sprite.play(&"Idle")
+
+func exit() -> void:
+	if is_instance_valid(idle_timer):
+		idle_timer.stop()
 
 func process(delta: float) -> void:
 	var player := host as Player
@@ -37,4 +47,9 @@ func process(delta: float) -> void:
 
 
 func _on_timer_timeout() -> void:
-	pass # Replace with function body.
+	var player := host as Player
+	if player == null:
+		return
+	if not player.is_on_floor():
+		return
+	change_state(player.STATE_CONTRACT)

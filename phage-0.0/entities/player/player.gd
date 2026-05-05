@@ -7,7 +7,7 @@ extends CharacterBody2D
 # ============================================================
 const GRAVITY: float = 1000.0
 const MAX_HEALTH: int = 100
-const IDLE_TO_CONTRACT_TIME: float = 2.0  # seconds before auto-contract
+const IDLE_TO_CONTRACT_TIME: float = 3.0
 const INVINCIBLE_DURATION: float = 0.3
 const RUN_SPEED: float = 100.0
 const SPRINT_SPEED: float = 220.0
@@ -23,6 +23,9 @@ const STATE_RUN: int = 2
 const STATE_FALL: int = 3
 const STATE_JUMP: int = 4
 const STATE_SPRINT: int = 5
+const STATE_CONTRACT: int = 6
+const STATE_BALL: int = 7
+const STATE_UNCONTRACT: int = 8
 
 # ============================================================
 # State (read by states, written by player or specific states)

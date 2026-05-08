@@ -162,7 +162,7 @@ func _check_attack_hitbox(hitbox: Area2D, damage: int) -> void:
 		if body.has_method("take_damage"):
 			body.call("take_damage", damage)
 			$"../..".spawn_hit_effect(body.global_position.x)
-			Game.flash(0.4, Color(0.815, 0.908, 0.915, 1.0))
+			Game.flash(0.1, Color(0.815, 0.908, 0.915, 1.0))
 			Game.shake_camera(2)
 		_apply_hit_recoil()
 		break

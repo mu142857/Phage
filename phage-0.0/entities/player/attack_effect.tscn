@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://dxynsywijky77"]
+
+[ext_resource type="Script" uid="uid://bl2pkgqrbil1i" path="res://entities/player/attack_effect.gd" id="1_d0mps"]
+
+[sub_resource type="Gradient" id="Gradient_865sd"]
+colors = PackedColorArray(0.7529412, 0.89411765, 0.8235294, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7of8s"]
+gradient = SubResource("Gradient_865sd")
+
+[sub_resource type="Gradient" id="Gradient_awgjg"]
+offsets = PackedFloat32Array(0, 0.05821918, 0.6917808, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jj3vg"]
+gradient = SubResource("Gradient_awgjg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ntj08"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(5, 5, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+angle_min = 1.0728835e-05
+angle_max = 1.0728835e-05
+direction = Vector3(0, -1, 0)
+spread = 60.0
+initial_velocity_min = 200.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 600, 0)
+color_ramp = SubResource("GradientTexture1D_jj3vg")
+color_initial_ramp = SubResource("GradientTexture1D_7of8s")
+
+[node name="AttackEffect" type="GPUParticles2D" unique_id=757667208]
+emitting = false
+lifetime = 0.5
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_ntj08")
+script = ExtResource("1_d0mps")
+
+[node name="Timer" type="Timer" parent="." unique_id=677972270]
+wait_time = 0.6
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

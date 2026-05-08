@@ -8,6 +8,7 @@ limit_enabled = false
 script = ExtResource("1_e2bhk")
 
 [node name="FlashLayer" type="CanvasLayer" parent="." unique_id=495696046]
+layer = 999
 
 [node name="FlashRect" type="ColorRect" parent="FlashLayer" unique_id=780671504]
 anchors_preset = 15
@@ -20,7 +21,6 @@ offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 0)
 
 [node name="FilterRect" type="ColorRect" parent="FlashLayer" unique_id=1899476825]
 anchors_preset = 15
@@ -33,4 +33,3 @@ offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 0)

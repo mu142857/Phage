@@ -10,10 +10,15 @@ signal screen_filter(amount: float, colour: Color)
 @export var max_blink_alpha_1: float = 1.0
 @export var blink_duration_2: float = 0.2
 @export var max_blink_alpha_2: float = 1.0
+@export var hit_stop_duration: float = 0.035
+@export var hit_recover_duration: float = 0.18
+@export var hit_flash_duration: float = 0.4
+@export var hit_flash_color: Color = Color(1.0, 0.1, 0.1, 0.8)
 
 const CAMERA_FOLLOW_GROUP: StringName = &"camera_follow"
 const CAMERA_FIXED_GROUP: StringName = &"camera_fixed"
 
+@onready var flash_layer: CanvasLayer = $CanvasLayer
 @onready var colour_rect1: ColorRect = $CanvasLayer/ColorRect1
 @onready var colour_rect2: ColorRect = $CanvasLayer/ColorRect2
 
@@ -28,6 +33,7 @@ var default_zoom: Vector2 = Vector2.ONE
 var zoom_tween: Tween = null
 var position_override: Vector2 = Vector2.ZERO
 var position_override_enabled: bool = false
+var slowmo_token: int = 0
 
 func _ready() -> void:
 	make_current()
@@ -41,6 +47,8 @@ func _ready() -> void:
 	if is_instance_valid(colour_rect2):
 		colour_rect2.color = Color(rect2_colour.r, rect2_colour.g, rect2_colour.b, 0.0)
 		colour_rect2.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if is_instance_valid(flash_layer) and not flash_layer.visible:
+		flash_layer.visible = true
 
 func _process(delta: float) -> void:
 	_update_camera_mode()
@@ -90,6 +98,10 @@ func flash(amount: float, colour: Color) -> void:
 func filter(amount: float, colour: Color) -> void:
 	screen_filter.emit(amount, colour)
 
+func play_hit_feedback() -> void:
+	_play_hit_flash()
+	_apply_hit_stop(hit_stop_duration, hit_recover_duration)
+
 func zoom_to(target_zoom: Vector2, duration: float = 0.2) -> void:
 	if is_instance_valid(zoom_tween):
 		zoom_tween.kill()
@@ -111,6 +123,31 @@ func _on_screen_filter(amount: float, colour: Color) -> void:
 	blink_time_2 = blink_duration_2 * amount
 	rect2_colour = colour
 	max_blink_alpha_2 = colour.a
+
+func _play_hit_flash() -> void:
+	blink_time_2 = maxf(hit_flash_duration, 0.0)
+	rect2_colour = hit_flash_color
+	max_blink_alpha_2 = hit_flash_color.a
+
+func _apply_hit_stop(stop_duration: float, recover_duration: float) -> void:
+	if stop_duration <= 0.0 or recover_duration <= 0.0:
+		return
+	slowmo_token += 1
+	var token := slowmo_token
+	Engine.time_scale = 0.0
+	await get_tree().create_timer(stop_duration, false, false, true).timeout
+	if token != slowmo_token:
+		return
+	var elapsed := 0.0
+	while elapsed < recover_duration:
+		await get_tree().create_timer(0.01, false, false, true).timeout
+		if token != slowmo_token:
+			return
+		elapsed = minf(elapsed + 0.01, recover_duration)
+		var t := elapsed / recover_duration
+		var eased := 1.0 - pow(1.0 - t, 3.0)
+		Engine.time_scale = eased
+	Engine.time_scale = 1.0
 
 func _update_camera_mode() -> void:
 	var scene := get_tree().current_scene

@@ -837,6 +837,7 @@ size = Vector2(4, 4)
 
 [node name="Player" type="CharacterBody2D" unique_id=949587783]
 z_index = 1
+collision_layer = 2
 script = ExtResource("1_abrql")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2023249808]
@@ -899,6 +900,9 @@ script = ExtResource("13_ghoj8")
 script = ExtResource("14_t1t22")
 
 [node name="HitBox" type="Node2D" parent="." unique_id=1791830836]
+
+[node name="HitEffectPosition" type="Node2D" parent="HitBox" unique_id=1667925664]
+position = Vector2(16, -6)
 
 [node name="Attack1_1" type="Area2D" parent="HitBox" unique_id=978269557]
 collision_layer = 8

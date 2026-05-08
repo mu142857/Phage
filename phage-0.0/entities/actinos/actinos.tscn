@@ -258,6 +258,9 @@ size = Vector2(3883, 2707)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_65m5a"]
 size = Vector2(12, 38)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ebm1s"]
+size = Vector2(20.012032, 21.01727)
+
 [sub_resource type="Animation" id="Animation_ebm1s"]
 resource_name = "HitFlash"
 length = 0.1
@@ -295,6 +298,26 @@ _data = {
 &"RESET": SubResource("Animation_y062d")
 }
 
+[sub_resource type="Gradient" id="Gradient_y062d"]
+offsets = PackedFloat32Array(0, 0.13114753, 0.7663934, 0.8852459, 1)
+colors = PackedColorArray(1, 1, 0.6666667, 0, 1, 1, 0.6666667, 1, 1, 0.4608522, 0.7153423, 1, 0.654902, 0.56078434, 1, 1, 0.654902, 0.56078434, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_goqll"]
+gradient = SubResource("Gradient_y062d")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_65m5a"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0, -2, 0)
+emission_shape = 3
+emission_box_extents = Vector3(5, 5, 1)
+direction = Vector3(0, -1, 0)
+spread = 20.0
+initial_velocity_min = 10.0
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+color = Color(1, 1, 0.6666667, 1)
+color_ramp = SubResource("GradientTexture1D_goqll")
+
 [node name="Actinos" type="CharacterBody2D" unique_id=431397375]
 collision_layer = 4
 collision_mask = 0
@@ -302,11 +325,10 @@ script = ExtResource("1_fkg3i")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1114719210]
 material = SubResource("ShaderMaterial_65m5a")
-position = Vector2(41, -60)
 sprite_frames = SubResource("SpriteFrames_l56ue")
-animation = &"Idle"
+animation = &"Jump"
 autoplay = "Idle"
-frame_progress = 0.15307446
+offset = Vector2(41, -60)
 
 [node name="StateMachine" type="Node" parent="." unique_id=813129515]
 script = ExtResource("3_cybdv")
@@ -330,21 +352,50 @@ script = ExtResource("8_l56ue")
 script = ExtResource("9_ptnfe")
 
 [node name="JumpHitBox" type="Area2D" parent="." unique_id=2083405631]
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="JumpHitBox" unique_id=1090241643]
 position = Vector2(-3.5, -10.5)
 shape = SubResource("RectangleShape2D_d5voe")
+debug_color = Color(0.5484113, 0.54910076, 0.37736446, 0.19607843)
 
 [node name="PlayerCheck" type="Area2D" parent="." unique_id=492664824]
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=438201314]
 shape = SubResource("RectangleShape2D_y062d")
 debug_color = Color(0, 0.6, 0.69803923, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=751654702]
+[node name="NormalCollision" type="CollisionShape2D" parent="." unique_id=751654702]
 position = Vector2(3.9999995, -19)
 rotation = 0.26357135
 shape = SubResource("RectangleShape2D_65m5a")
+debug_color = Color(0, 0.6, 0.7019608, 0.19607843)
+
+[node name="JumpCollision" type="CollisionShape2D" parent="." unique_id=696477538]
+position = Vector2(-3.9939725, -10.494537)
+rotation = 0.008286846
+scale = Vector2(0.9999998, 0.9999998)
+shape = SubResource("RectangleShape2D_ebm1s")
+debug_color = Color(0, 0.6, 0.7019608, 0.19607843)
 
 [node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=1142560353]
 libraries/ = SubResource("AnimationLibrary_l56ue")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1036941012]
+layer = 2
+
+[node name="ActinosEffect" type="GPUParticles2D" parent="." unique_id=1460489025]
+position = Vector2(-3.5527137e-15, 5.684342e-14)
+scale = Vector2(0.99999994, 0.99999994)
+amount = 10
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_65m5a")
+
+[node name="HealthBar" type="TextureProgressBar" parent="ActinosEffect" unique_id=1675553447]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/SpikeAttack(3)" method="_on_animated_sprite_2d_animation_finished"]

@@ -19,6 +19,7 @@ const MAX_JUMP_APEX_HANG_TIME: float = 0.08
 const JUMP_APEX_VELOCITY_THRESHOLD: float = 24.0
 const JUMP_APEX_GRAVITY_MULTIPLIER: float = 0.18
 const LANDING_EFFECT_SCENE: PackedScene = preload("res://entities/player/player_jumping_effect.tscn")
+const HIT_EFFECT_SCENE: PackedScene = preload("res://entities/player/attack_effect.tscn")
 
 const STATE_NULL: int = 0
 const STATE_IDLE: int = 1
@@ -84,6 +85,7 @@ func take_damage(amount: int) -> void:
 		return
 	health = max(0, health - amount)
 	health_changed.emit(health)
+	Game.play_hit_feedback()
 	# Trigger flash shader here later (no hurt state by design)
 	_start_invincibility()
 	if health <= 0:
@@ -118,6 +120,23 @@ func spawn_landing_effect() -> void:
 		return
 	get_tree().current_scene.add_child(effect)
 	effect.global_position = global_position
+	await get_tree().create_timer(effect.lifetime).timeout
+	if is_instance_valid(effect):
+		effect.queue_free()
+
+func spawn_hit_effect(posx: float) -> void:
+	if not is_inside_tree() or HIT_EFFECT_SCENE == null:
+		return
+	var effect := HIT_EFFECT_SCENE.instantiate() as GPUParticles2D
+	if effect == null:
+		return
+	effect.one_shot = true
+	effect.emitting = true
+	if get_tree().current_scene == null:
+		effect.queue_free()
+		return
+	get_tree().current_scene.add_child(effect)
+	effect.global_position = Vector2(posx, $HitBox/HitEffectPosition.global_position.y)
 	await get_tree().create_timer(effect.lifetime).timeout
 	if is_instance_valid(effect):
 		effect.queue_free()

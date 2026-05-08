@@ -5,6 +5,7 @@ extends BasicState
 @onready var timer: Timer = get_node_or_null("Timer")
 
 var next_attack: int = 2 # 初始默认接 JumpAttack(2)
+var idle_ticket: int = 0
 
 func enter():
 	# 动画名首字母大写
@@ -15,16 +16,19 @@ func enter():
 	if "idle_only" in monster and monster.idle_only:
 		return
 	
-	# 根据血量比例计算Idle时间 (范围 3.0 ~ 6.0 秒)
+	# 根据血量比例计算Idle时间 (范围 0.6 ~ 1.2 秒)
 	# 需要在 actinos.gd 中定义 health 和 max_health
 	var health_ratio: float = 1.0 # 默认比例为1
 	if "health" in monster and "max_health" in monster and monster.max_health > 0:
 		health_ratio = float(monster.health) / float(monster.max_health)
 	
-	var duration: float = lerp(3.0, 6.0, health_ratio)
+	var duration: float = lerp(0.6, 1.2, health_ratio)
 	
 	if timer:
 		timer.start(duration)
+	else:
+		idle_ticket += 1
+		_start_fallback_timer(duration, idle_ticket)
 
 func process(_delta: float) -> void:
 	pass
@@ -44,3 +48,10 @@ func _on_timer_timeout() -> void:
 func exit():
 	if timer:
 		timer.stop()
+	idle_ticket += 1
+
+func _start_fallback_timer(duration: float, ticket: int) -> void:
+	await get_tree().create_timer(duration).timeout
+	if ticket != idle_ticket:
+		return
+	_on_timer_timeout()

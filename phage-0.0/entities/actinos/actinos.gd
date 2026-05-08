@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 @export var max_health: int = 6500
 @export var health: int = 6500
-@export var idle_only: bool = true # 调试用：生成后保持Idle
+@export var idle_only: bool = false # 调试用：生成后保持Idle
 
 var direct: int = 1 # 1 = facing right, -1 = facing left
 
@@ -23,7 +23,7 @@ func change_state(state_id: int) -> void:
 	if has_node("StateMachine"):
 		$StateMachine.change_state(state_id)
 
-func take_hit(value: int) -> void:
+func take_damage(value: int) -> void:
 	health -= value
 	if has_node("HitEffectPlayer"):
 		if not $HitEffectPlayer.active:

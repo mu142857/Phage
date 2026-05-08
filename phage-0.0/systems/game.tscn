@@ -101,6 +101,7 @@ layer = -1000
 visible = false
 
 [node name="ColorRect" type="ColorRect" parent="Background" unique_id=802126795]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -137,55 +138,78 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
-[node name="FrameLayer" type="CanvasLayer" parent="."]
+[node name="BlackScreenFrame" type="CanvasLayer" parent="." unique_id=831257187]
 layer = 1000
 
-[node name="Frame" type="Node2D" parent="FrameLayer" unique_id=1140359819]
+[node name="Frame" type="Node2D" parent="BlackScreenFrame" unique_id=1140359819]
 modulate = Color(0, 0, 0, 1)
 z_index = 1000
 
-[node name="Left" type="Sprite2D" parent="FrameLayer/Frame" unique_id=1623321583]
+[node name="Left" type="Sprite2D" parent="BlackScreenFrame/Frame" unique_id=1623321583]
 position = Vector2(4, 45.000004)
 scale = Vector2(0.125, 1.4062501)
 texture = SubResource("GradientTexture2D_udmc5")
 
-[node name="Right" type="Sprite2D" parent="FrameLayer/Frame" unique_id=1645744101]
+[node name="Right" type="Sprite2D" parent="BlackScreenFrame/Frame" unique_id=1645744101]
 position = Vector2(156, 45)
 scale = Vector2(0.125, 1.4062501)
 texture = SubResource("GradientTexture2D_tvtgb")
 
-[node name="Top" type="Sprite2D" parent="FrameLayer/Frame" unique_id=419597034]
+[node name="Top" type="Sprite2D" parent="BlackScreenFrame/Frame" unique_id=419597034]
 position = Vector2(80.00001, 3.9999998)
 scale = Vector2(2.5000002, 0.12499999)
 texture = SubResource("GradientTexture2D_gqkpf")
 
-[node name="Bottom" type="Sprite2D" parent="FrameLayer/Frame" unique_id=671239133]
+[node name="Bottom" type="Sprite2D" parent="BlackScreenFrame/Frame" unique_id=671239133]
 position = Vector2(80, 86)
 scale = Vector2(2.5000002, 0.12499999)
 texture = SubResource("GradientTexture2D_3msmo")
 
-[node name="ColorRect1" type="ColorRect" parent="FrameLayer/Frame" unique_id=1858785533]
+[node name="ColorRect1" type="ColorRect" parent="BlackScreenFrame/Frame" unique_id=1858785533]
 offset_left = -40.0
 offset_bottom = 90.0
 
-[node name="ColorRect2" type="ColorRect" parent="FrameLayer/Frame" unique_id=1593598778]
+[node name="ColorRect2" type="ColorRect" parent="BlackScreenFrame/Frame" unique_id=1593598778]
 offset_left = 160.0
 offset_right = 200.0
 offset_bottom = 90.0
 
-[node name="ColorRect3" type="ColorRect" parent="FrameLayer/Frame" unique_id=759458271]
+[node name="ColorRect3" type="ColorRect" parent="BlackScreenFrame/Frame" unique_id=759458271]
 offset_left = -40.0
 offset_top = 90.0
 offset_right = 200.0
 offset_bottom = 129.0
 
-[node name="ColorRect4" type="ColorRect" parent="FrameLayer/Frame" unique_id=1593865119]
+[node name="ColorRect4" type="ColorRect" parent="BlackScreenFrame/Frame" unique_id=1593865119]
 offset_left = -40.0
 offset_top = -39.0
 offset_right = 200.0
 
 [node name="RedScreenFrame" type="CanvasLayer" parent="." unique_id=1513337176]
 visible = false
+
+[node name="Frame" type="Node2D" parent="RedScreenFrame" unique_id=1185303254]
+modulate = Color(0, 0, 0, 1)
+
+[node name="ColorRect1" type="ColorRect" parent="RedScreenFrame/Frame" unique_id=12965400]
+offset_left = -40.0
+offset_bottom = 90.0
+
+[node name="ColorRect2" type="ColorRect" parent="RedScreenFrame/Frame" unique_id=1631986827]
+offset_left = 160.0
+offset_right = 200.0
+offset_bottom = 90.0
+
+[node name="ColorRect3" type="ColorRect" parent="RedScreenFrame/Frame" unique_id=883407332]
+offset_left = -40.0
+offset_top = 90.0
+offset_right = 200.0
+offset_bottom = 129.0
+
+[node name="ColorRect4" type="ColorRect" parent="RedScreenFrame/Frame" unique_id=1869298070]
+offset_left = -40.0
+offset_top = -39.0
+offset_right = 200.0
 
 [node name="ColorRect" type="ColorRect" parent="RedScreenFrame" unique_id=241379096]
 material = SubResource("ShaderMaterial_xkpjx")

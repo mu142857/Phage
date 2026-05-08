@@ -22,6 +22,7 @@ var jump_remaining: int = 0
 var spike_remaining: int = 0
 var current_mode: String = "jump"
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var initial_battlecry_shown: bool = false
 
 func _ready() -> void:
 	velocity = Vector2.ZERO
@@ -107,6 +108,10 @@ func _update_phase() -> void:
 	if phase >= PHASE_QUARTER and not battlecry_done_25:
 		battlecry_done_25 = true
 		pending_battlecry += 1
+
+func _physics_process(delta: float) -> void:
+	# Keep boss within safe horizontal bounds
+	global_position.x = clampf(global_position.x, 10.0, 150.0)
 
 func _roll_jump_count() -> int:
 	if phase == PHASE_NORMAL:

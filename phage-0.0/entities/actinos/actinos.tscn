@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://dic177an6du1r" path="res://entities/actinos/actinos_battlecry(4).gd" id="8_l56ue"]
 [ext_resource type="Script" uid="uid://ctdxslnvfyov8" path="res://entities/actinos/actinos_death(5).gd" id="9_ptnfe"]
 [ext_resource type="Texture2D" uid="uid://bf122xnkx1by8" path="res://entities/actinos/actinos_health_bar_under.png" id="11_l56ue"]
+[ext_resource type="Texture2D" uid="uid://bci7sx5ngrxvt" path="res://entities/actinos/actinos_health_bar_over.png" id="12_ptnfe"]
 [ext_resource type="Texture2D" uid="uid://bs7gwcp6vxcdl" path="res://entities/actinos/actinos_health_bar_progerss.png" id="13_adqn7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65m5a"]
@@ -320,9 +321,6 @@ gravity = Vector3(0, 98, 0)
 color = Color(1, 1, 0.6666667, 1)
 color_ramp = SubResource("GradientTexture1D_goqll")
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ebm1s"]
-load_path = "res://.godot/imported/actinos_health_bar_over.png-e77735eeaa3a703570024ccf582545e1.ctex"
-
 [node name="Actinos" type="CharacterBody2D" unique_id=431397375]
 collision_layer = 4
 collision_mask = 0
@@ -353,6 +351,11 @@ script = ExtResource("7_ebm1s")
 
 [node name="Battlecry(4)" type="Node" parent="StateMachine" unique_id=618872226]
 script = ExtResource("8_l56ue")
+duration = null
+shake_amount = null
+zoom_amount = null
+zoom_duration = null
+state_id = null
 
 [node name="Death(5)" type="Node" parent="StateMachine" unique_id=1339796040]
 script = ExtResource("9_ptnfe")
@@ -393,22 +396,22 @@ libraries/ = SubResource("AnimationLibrary_l56ue")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1036941012]
 layer = 2
 
+[node name="HealthBar" type="TextureProgressBar" parent="CanvasLayer" unique_id=1675553447]
+offset_left = 15.0
+offset_top = 79.99999
+offset_right = 145.0
+offset_bottom = 87.99999
+value = 100.0
+texture_under = ExtResource("11_l56ue")
+texture_over = ExtResource("12_ptnfe")
+texture_progress = ExtResource("13_adqn7")
+
 [node name="ActinosEffect" type="GPUParticles2D" parent="." unique_id=1460489025]
 position = Vector2(-3.5527137e-15, 5.684342e-14)
 scale = Vector2(0.99999994, 0.99999994)
 amount = 10
 lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_65m5a")
-
-[node name="HealthBar" type="TextureProgressBar" parent="ActinosEffect" unique_id=1675553447]
-offset_left = 15.000001
-offset_top = 80.0
-offset_right = 145.0
-offset_bottom = 88.0
-value = 100.0
-texture_under = ExtResource("11_l56ue")
-texture_over = SubResource("CompressedTexture2D_ebm1s")
-texture_progress = ExtResource("13_adqn7")
 
 [node name="BulletReleasePoint" type="Node2D" parent="." unique_id=1283330467]
 position = Vector2(0, -23)

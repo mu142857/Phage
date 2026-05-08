@@ -61,6 +61,7 @@ func process(delta: float) -> void:
 	if landed and monster.velocity.y >= 0.0:
 		monster.velocity = Vector2.ZERO
 		_spawn_jump_effect(monster.global_position + effect_offset)
+		Game.shake_camera(2)
 		landing_started = true
 		if is_instance_valid(ani_2D):
 			ani_2D.play(&"Afterjump")
@@ -88,6 +89,8 @@ func _on_animation_finished() -> void:
 		monster.velocity.x = speed_x
 		return
 	if ani_2D.animation == &"Afterjump":
+		if monster != null and monster.has_method("notify_jump_complete"):
+			monster.call("notify_jump_complete")
 		change_state(1)
 
 func _set_target_x() -> void:

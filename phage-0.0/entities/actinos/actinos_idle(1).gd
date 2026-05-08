@@ -36,14 +36,11 @@ func process(_delta: float) -> void:
 func _on_timer_timeout() -> void:
 	if "idle_only" in monster and monster.idle_only:
 		return
+	var next_state := next_attack
+	if monster != null and monster.has_method("get_next_attack_state"):
+		next_state = monster.call("get_next_attack_state")
 	# 切换到对应的攻击状态
-	get_parent().change_state(next_attack)
-	
-	# 更新下一次的攻击方式 (交替进行)
-	if next_attack == 2: # 如果这次是 JumpAttack
-		next_attack = 3  # 下次变成 SpikeAttack
-	else:
-		next_attack = 2  # 否则变回 JumpAttack
+	get_parent().change_state(int(next_state))
 
 func exit():
 	if timer:

@@ -4,13 +4,33 @@ extends CharacterBody2D
 @export var health: int = 6500
 @export var idle_only: bool = false # 调试用：生成后保持Idle
 
+const STATE_IDLE: int = 1
+const STATE_JUMP_ATTACK: int = 2
+const STATE_SPIKE_ATTACK: int = 3
+const STATE_BATTLECRY: int = 4
+
+const PHASE_NORMAL: int = 0
+const PHASE_HALF: int = 1
+const PHASE_QUARTER: int = 2
+
 var direct: int = 1 # 1 = facing right, -1 = facing left
+var phase: int = PHASE_NORMAL
+var battlecry_done_50: bool = false
+var battlecry_done_25: bool = false
+var pending_battlecry: int = 0
+var jump_remaining: int = 0
+var spike_remaining: int = 0
+var current_mode: String = "jump"
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 func _ready() -> void:
 	velocity = Vector2.ZERO
 	add_to_group("monster")
 	if health <= 0:
 		health = max_health
+	rng.randomize()
+	phase = _calc_phase()
+	_update_phase()
 	var sprite := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if sprite != null and sprite.material is ShaderMaterial:
 		var shader_mat := sprite.material as ShaderMaterial
@@ -25,6 +45,7 @@ func change_state(state_id: int) -> void:
 
 func take_damage(value: int) -> void:
 	health -= value
+	_update_phase()
 	if has_node("HitEffectPlayer"):
 		if not $HitEffectPlayer.active:
 			$HitEffectPlayer.active = true
@@ -39,3 +60,64 @@ func face_left() -> void:
 
 func face_right() -> void:
 	direct = 1
+
+func get_next_attack_state() -> int:
+	_update_phase()
+	if pending_battlecry > 0:
+		pending_battlecry -= 1
+		return STATE_BATTLECRY
+	if current_mode == "jump":
+		if jump_remaining <= 0:
+			jump_remaining = _roll_jump_count()
+		return STATE_JUMP_ATTACK
+	if spike_remaining <= 0:
+		spike_remaining = _roll_spike_count()
+	return STATE_SPIKE_ATTACK
+
+func notify_jump_complete() -> void:
+	if jump_remaining > 0:
+		jump_remaining -= 1
+	if jump_remaining <= 0:
+		current_mode = "spike"
+
+func notify_spike_complete() -> void:
+	if spike_remaining > 0:
+		spike_remaining -= 1
+	if spike_remaining <= 0:
+		current_mode = "jump"
+
+func _calc_phase() -> int:
+	if max_health <= 0:
+		return PHASE_NORMAL
+	var ratio := float(health) / float(max_health)
+	if ratio <= 0.25:
+		return PHASE_QUARTER
+	if ratio <= 0.5:
+		return PHASE_HALF
+	return PHASE_NORMAL
+
+func _update_phase() -> void:
+	var new_phase := _calc_phase()
+	if new_phase == phase:
+		return
+	phase = new_phase
+	if phase >= PHASE_HALF and not battlecry_done_50:
+		battlecry_done_50 = true
+		pending_battlecry += 1
+	if phase >= PHASE_QUARTER and not battlecry_done_25:
+		battlecry_done_25 = true
+		pending_battlecry += 1
+
+func _roll_jump_count() -> int:
+	if phase == PHASE_NORMAL:
+		return rng.randi_range(1, 2)
+	if phase == PHASE_HALF:
+		return rng.randi_range(2, 3)
+	return rng.randi_range(3, 4)
+
+func _roll_spike_count() -> int:
+	if phase == PHASE_NORMAL:
+		return rng.randi_range(2, 3)
+	if phase == PHASE_HALF:
+		return rng.randi_range(3, 4)
+	return rng.randi_range(3, 4)

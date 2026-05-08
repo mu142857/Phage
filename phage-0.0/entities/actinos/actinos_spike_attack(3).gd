@@ -3,8 +3,8 @@ extends BasicState
 @export var ground_y: float = 80.0
 @export var attack_fps: float = 10.0
 @export var trigger_frame_index: int = 3
-@export var bullet_flight_time: float = 0.45
-@export var bullet_gravity: float = 900.0
+@export var bullet_flight_time: float = 1.1
+@export var bullet_gravity: float = 400.0
 
 @onready var ani_2D: AnimatedSprite2D = $"../../AnimatedSprite2D"
 @onready var monster: CharacterBody2D = $"../.."
@@ -35,6 +35,8 @@ func exit() -> void:
 
 func _on_animation_finished() -> void:
 	if is_instance_valid(ani_2D) and ani_2D.animation == &"Attack":
+		if monster != null and monster.has_method("notify_spike_complete"):
+			monster.call("notify_spike_complete")
 		change_state(1)
 
 func _trigger_time() -> float:

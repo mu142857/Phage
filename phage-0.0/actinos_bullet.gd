@@ -5,6 +5,7 @@ extends Node2D
 @export var flight_time: float = 0.45
 
 const SPIKE_SCENE: PackedScene = preload("res://entities/actinos/actinos_spike.tscn")
+const JUMP_EFFECT_SCENE: PackedScene = preload("res://entities/actinos/actinos_jump_effect.tscn")
 
 var velocity: Vector2 = Vector2.ZERO
 var target_position: Vector2 = Vector2.ZERO
@@ -36,7 +37,9 @@ func _process(delta: float) -> void:
 	velocity.y += gravity * delta
 	global_position += velocity * delta
 	if elapsed >= flight_time:
+		_spawn_jump_effect()
 		_spawn_spike()
+		Game.shake_camera(2)
 		queue_free()
 
 func _spawn_spike() -> void:
@@ -49,3 +52,16 @@ func _spawn_spike() -> void:
 		return
 	get_tree().current_scene.add_child(spike)
 	spike.global_position = target_position
+
+func _spawn_jump_effect() -> void:
+	if JUMP_EFFECT_SCENE == null:
+		return
+	var effect := JUMP_EFFECT_SCENE.instantiate()
+	if effect == null:
+		return
+	if get_tree().current_scene == null:
+		return
+	get_tree().current_scene.add_child(effect)
+	effect.global_position = target_position
+	if effect is GPUParticles2D:
+		(effect as GPUParticles2D).emitting = true

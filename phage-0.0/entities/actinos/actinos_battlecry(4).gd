@@ -13,19 +13,19 @@ func enter() -> void:
 	is_active = true
 	_play_battlecry_animation()
 	 # Show name and zoom only for the very first battlecry (intro)
-	 var show_intro := false
-	 if host != null and host.has_method("change_state"):
-	 	if not host.initial_battlecry_shown:
-	 		host.initial_battlecry_shown = true
-	 		show_intro = true
+	var show_intro := false
+	if host != null and host.has_method("change_state"):
+		if not host.initial_battlecry_shown:
+			host.initial_battlecry_shown = true
+			show_intro = true
 
-	 if show_intro:
-	 	Game.set_position_override(Vector2(16.0, 9.0))
-	 	_set_boss_name_visible(true)
-	 	Game.zoom_to(Vector2(zoom_amount, zoom_amount), zoom_duration)
+	if show_intro:
+		Game.set_position_override(Vector2(16.0, 9.0))
+		_set_boss_name_visible(true)
+		Game.zoom_to(Vector2(zoom_amount, zoom_amount), zoom_duration)
 
 	 # Always lock player during battlecry
-	 _set_player_lock(true)
+	_set_player_lock(true)
 	_start_timer()
 
 func process(_delta: float) -> void:

@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bf122xnkx1by8" path="res://entities/actinos/actinos_health_bar_under.png" id="11_l56ue"]
 [ext_resource type="Texture2D" uid="uid://bci7sx5ngrxvt" path="res://entities/actinos/actinos_health_bar_over.png" id="12_ptnfe"]
 [ext_resource type="Texture2D" uid="uid://bs7gwcp6vxcdl" path="res://entities/actinos/actinos_health_bar_progerss.png" id="13_adqn7"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="14_ptnfe"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65m5a"]
 shader = ExtResource("2_y062d")
@@ -196,7 +197,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Death",
-"speed": 12.0
+"speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -329,9 +330,9 @@ script = ExtResource("1_fkg3i")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1114719210]
 material = SubResource("ShaderMaterial_65m5a")
 sprite_frames = SubResource("SpriteFrames_l56ue")
-animation = &"Attack"
+animation = &"Death"
 autoplay = "Idle"
-frame = 3
+frame_progress = 0.7499607
 offset = Vector2(41, -60)
 
 [node name="StateMachine" type="Node" parent="." unique_id=813129515]
@@ -351,11 +352,6 @@ script = ExtResource("7_ebm1s")
 
 [node name="Battlecry(4)" type="Node" parent="StateMachine" unique_id=618872226]
 script = ExtResource("8_l56ue")
-duration = null
-shake_amount = null
-zoom_amount = null
-zoom_duration = null
-state_id = null
 
 [node name="Death(5)" type="Node" parent="StateMachine" unique_id=1339796040]
 script = ExtResource("9_ptnfe")
@@ -374,6 +370,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=438201314]
+position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_y062d")
 debug_color = Color(0, 0.6, 0.69803923, 0)
 
@@ -398,13 +395,23 @@ layer = 2
 
 [node name="HealthBar" type="TextureProgressBar" parent="CanvasLayer" unique_id=1675553447]
 offset_left = 15.0
-offset_top = 79.99999
+offset_top = 82.0
 offset_right = 145.0
-offset_bottom = 87.99999
+offset_bottom = 86.0
 value = 100.0
 texture_under = ExtResource("11_l56ue")
 texture_over = ExtResource("12_ptnfe")
 texture_progress = ExtResource("13_adqn7")
+
+[node name="HealthLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=939539975]
+offset_left = 18.0
+offset_top = 80.0
+offset_right = 94.0
+offset_bottom = 88.0
+theme_override_fonts/normal_font = ExtResource("14_ptnfe")
+theme_override_font_sizes/normal_font_size = 7
+text = "6500"
+vertical_alignment = 1
 
 [node name="ActinosEffect" type="GPUParticles2D" parent="." unique_id=1460489025]
 position = Vector2(-3.5527137e-15, 5.684342e-14)

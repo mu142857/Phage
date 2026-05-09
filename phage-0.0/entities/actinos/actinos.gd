@@ -23,15 +23,18 @@ var spike_remaining: int = 0
 var current_mode: String = "jump"
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var initial_battlecry_shown: bool = false
+@onready var health_bar: TextureProgressBar = get_node_or_null("CanvasLayer/HealthBar")
 
 func _ready() -> void:
 	velocity = Vector2.ZERO
 	add_to_group("monster")
 	if health <= 0:
 		health = max_health
+	health = clampi(health, 0, max_health)
 	rng.randomize()
 	phase = _calc_phase()
 	_update_phase()
+	_setup_health_bar()
 	var sprite := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if sprite != null and sprite.material is ShaderMaterial:
 		var shader_mat := sprite.material as ShaderMaterial
@@ -46,13 +49,14 @@ func change_state(state_id: int) -> void:
 
 func take_damage(value: int) -> void:
 	health -= value
+	health = clampi(health, 0, max_health)
+	_update_health_bar()
 	_update_phase()
 	if has_node("HitEffectPlayer"):
 		if not $HitEffectPlayer.active:
 			$HitEffectPlayer.active = true
 		$HitEffectPlayer.play("HitFlash")
 	if health <= 0:
-		health = 0
 		if has_node("StateMachine"):
 			$StateMachine.change_state(5)
 
@@ -126,3 +130,15 @@ func _roll_spike_count() -> int:
 	if phase == PHASE_HALF:
 		return rng.randi_range(3, 4)
 	return rng.randi_range(3, 4)
+
+func _setup_health_bar() -> void:
+	if health_bar == null:
+		return
+	health_bar.min_value = 0
+	health_bar.max_value = max_health
+	_update_health_bar()
+
+func _update_health_bar() -> void:
+	if health_bar == null:
+		return
+	health_bar.value = health

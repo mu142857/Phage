@@ -6,6 +6,7 @@ extends BasicState
 @export var zoom_duration: float = 0.2
 
 @onready var ani_2D: AnimatedSprite2D = $"../../AnimatedSprite2D"
+var _show_intro: bool = false
 
 var is_active: bool = false
 
@@ -13,13 +14,13 @@ func enter() -> void:
 	is_active = true
 	_play_battlecry_animation()
 	 # Show name and zoom only for the very first battlecry (intro)
-	var show_intro := false
+	_show_intro = false
 	if host != null and host.has_method("change_state"):
 		if not host.initial_battlecry_shown:
 			host.initial_battlecry_shown = true
-			show_intro = true
+			_show_intro = true
 
-	if show_intro:
+	if _show_intro:
 		Game.set_position_override(Vector2(16.0, 9.0))
 		_set_boss_name_visible(true)
 		Game.zoom_to(Vector2(zoom_amount, zoom_amount), zoom_duration)
@@ -45,6 +46,9 @@ func _start_timer() -> void:
 	await timer.timeout
 	if is_active:
 		Game.stop_shake()
+		# 首次 Battlecry 结束后显示 boss 血条与数值
+		if _show_intro and host != null and host.has_method("show_health_ui"):
+			host.call("show_health_ui")
 		change_state(1)
 
 func _set_player_lock(locked: bool) -> void:

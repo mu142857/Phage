@@ -35,6 +35,11 @@ func _ready() -> void:
 	rng.randomize()
 	phase = _calc_phase()
 	_update_phase()
+	# 初始隐藏血条和数值，等首个 Battlecry 结束再显示
+	if health_bar != null:
+		health_bar.visible = false
+	if health_label != null:
+		health_label.visible = false
 	_setup_health_ui()
 	var sprite := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if sprite != null and sprite.material is ShaderMaterial:
@@ -145,4 +150,16 @@ func _update_health_ui() -> void:
 		health_bar.value = health
 	if health_label == null:
 		return
-	health_label.text = "%d/%d" % [health, max_health]
+	health_label.text = "%d" % health
+
+func show_health_ui() -> void:
+	if health_bar != null:
+		health_bar.visible = true
+	if health_label != null:
+		health_label.visible = true
+
+func hide_health_ui() -> void:
+	if health_bar != null:
+		health_bar.visible = false
+	if health_label != null:
+		health_label.visible = false

@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://diojcfsu5srtp"]
+
+[ext_resource type="Script" uid="uid://c1eqqcfj5cia5" path="res://levels/cradle_corridor/cradel_corridor.gd" id="1_js0h5"]
+[ext_resource type="Texture2D" uid="uid://dtchvx4o02bc0" path="res://levels/cradle_corridor/cradel_corridor_left_end.png" id="1_qbil3"]
+[ext_resource type="Texture2D" uid="uid://ebnc676xw8di" path="res://levels/cradle_corridor/cradel_corridor.png" id="2_kshva"]
+[ext_resource type="Texture2D" uid="uid://nnubgpoob6q5" path="res://levels/cradle_corridor/cradel_corridor_right_end.png" id="4_l5uys"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="5_l5uys"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a1y6q"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_wq26s"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tk2pr"]
+
+[node name="CradelCorridor" type="Node2D" unique_id=1653966913]
+script = ExtResource("1_js0h5")
+
+[node name="Walls" type="Node2D" parent="." unique_id=493115003]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=1506982933]
+collision_mask = 0
+
+[node name="CollisionShape2D1" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=53368663]
+position = Vector2(0, 80)
+shape = SubResource("WorldBoundaryShape2D_a1y6q")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=464846403]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_wq26s")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1284362462]
+position = Vector2(1326, 90)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_tk2pr")
+
+[node name="1" type="Sprite2D" parent="Walls" unique_id=959361662]
+texture = ExtResource("1_qbil3")
+centered = false
+
+[node name="2" type="Sprite2D" parent="Walls" unique_id=347308591]
+position = Vector2(229.5, 45)
+texture = ExtResource("2_kshva")
+
+[node name="3" type="Sprite2D" parent="Walls" unique_id=1208428975]
+position = Vector2(382.5, 45)
+texture = ExtResource("2_kshva")
+
+[node name="4" type="Sprite2D" parent="Walls" unique_id=1950296295]
+position = Vector2(535.5, 45)
+texture = ExtResource("2_kshva")
+
+[node name="5" type="Sprite2D" parent="Walls" unique_id=1046688266]
+position = Vector2(688.5, 45)
+texture = ExtResource("2_kshva")
+
+[node name="6" type="Sprite2D" parent="Walls" unique_id=150845500]
+position = Vector2(841.5, 45)
+texture = ExtResource("2_kshva")
+
+[node name="7" type="Sprite2D" parent="Walls" unique_id=243411168]
+position = Vector2(994.5, 45)
+texture = ExtResource("2_kshva")
+
+[node name="8" type="Sprite2D" parent="Walls" unique_id=626914069]
+position = Vector2(1198.5, 45)
+texture = ExtResource("4_l5uys")
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("5_l5uys")]
+position = Vector2(11, 3)

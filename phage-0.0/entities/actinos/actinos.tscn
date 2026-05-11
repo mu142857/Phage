@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bci7sx5ngrxvt" path="res://entities/actinos/actinos_health_bar_over.png" id="12_ptnfe"]
 [ext_resource type="Texture2D" uid="uid://bs7gwcp6vxcdl" path="res://entities/actinos/actinos_health_bar_progerss.png" id="13_adqn7"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="14_ptnfe"]
+[ext_resource type="Script" uid="uid://cts6rntwen0yp" path="res://systems/ui/boss_health_ui.gd" id="15_hu9ui"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65m5a"]
 shader = ExtResource("2_y062d")
@@ -390,15 +391,17 @@ debug_color = Color(0, 0.6, 0.7019608, 0.19607843)
 [node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=1142560353]
 libraries/ = SubResource("AnimationLibrary_l56ue")
 
+[node name="BossHealthUI" type="Node" parent="." unique_id=399105289]
+script = ExtResource("15_hu9ui")
+
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1036941012]
 layer = 2000
 
 [node name="HealthBar" type="TextureProgressBar" parent="CanvasLayer" unique_id=1675553447]
-modulate = Color(0.72673184, 0.7267317, 0.7267317, 1)
 offset_left = 15.0
-offset_top = 85.99999
+offset_top = 84.99999
 offset_right = 145.0
-offset_bottom = 93.99999
+offset_bottom = 92.99999
 value = 100.0
 texture_under = ExtResource("11_l56ue")
 texture_over = ExtResource("12_ptnfe")
@@ -407,9 +410,9 @@ texture_progress = ExtResource("13_adqn7")
 [node name="HealthLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=939539975]
 modulate = Color(0.7254902, 0.7254902, 0.7254902, 1)
 offset_left = 21.0
-offset_top = 84.0
+offset_top = 83.0
 offset_right = 97.0
-offset_bottom = 92.0
+offset_bottom = 91.0
 theme_override_fonts/normal_font = ExtResource("14_ptnfe")
 theme_override_font_sizes/normal_font_size = 7
 text = "6500"

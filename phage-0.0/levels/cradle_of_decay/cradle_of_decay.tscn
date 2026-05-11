@@ -81,7 +81,7 @@ rotation = -1.5707964
 shape = SubResource("WorldBoundaryShape2D_pgmxn")
 
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("5_hklc7")]
-position = Vector2(25, 80)
+position = Vector2(68, 81)
 
 [node name="Front" type="CanvasLayer" parent="." unique_id=1668978567]
 visible = false

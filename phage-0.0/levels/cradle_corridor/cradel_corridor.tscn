@@ -6,17 +6,35 @@
 [ext_resource type="Texture2D" uid="uid://nnubgpoob6q5" path="res://levels/cradle_corridor/cradel_corridor_right_end.png" id="4_l5uys"]
 [ext_resource type="Texture2D" uid="uid://0uarw2wnpgl4" path="res://levels/cradle_corridor/tree1.png" id="5_ewxpp"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="5_l5uys"]
+[ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="5_woclt"]
 [ext_resource type="Texture2D" uid="uid://b8avk4awwhc0n" path="res://levels/cradle_corridor/tree2.png" id="6_2rlar"]
 [ext_resource type="Texture2D" uid="uid://pk1831mnlid7" path="res://levels/cradle_corridor/cradel_corridor_front.png" id="6_a1y6q"]
 [ext_resource type="Texture2D" uid="uid://bkgoipd3p8wyv" path="res://levels/cradle_corridor/tree3.png" id="7_nfyjk"]
 [ext_resource type="Texture2D" uid="uid://ddjnqvu38a1uv" path="res://levels/cradle_corridor/tree4.png" id="8_hu8kv"]
-[ext_resource type="Texture2D" uid="uid://6s5ig1kn3pi8" path="res://levels/cradle_of_decay/wall.png" id="11_2rlar"]
+[ext_resource type="Texture2D" uid="uid://drbdeq7r3fmdv" path="res://levels/cradle_corridor/wall.png" id="11_nfyjk"]
+[ext_resource type="Texture2D" uid="uid://bh2siqogdaihy" path="res://levels/cradle_corridor/red_wall.png" id="12_hu8kv"]
+[ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="12_woclt"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a1y6q"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_wq26s"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tk2pr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_obbm8"]
+shader = ExtResource("5_woclt")
+shader_parameter/Strength = 2.0000000475
+shader_parameter/Speed = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xvv1a"]
+shader = ExtResource("5_woclt")
+shader_parameter/Strength = 2.0
+shader_parameter/Speed = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3c5xb"]
+shader = ExtResource("5_woclt")
+shader_parameter/Strength = 2.0
+shader_parameter/Speed = 2.0000000475
 
 [sub_resource type="Gradient" id="Gradient_l5uys"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -27,10 +45,23 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
-[node name="CradelCorridor" type="Node2D" unique_id=1653966913 groups=["camera_follow"]]
+[sub_resource type="Gradient" id="Gradient_woclt"]
+colors = PackedColorArray(0.6480781, 0.64807814, 0.64807796, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ecic6"]
+gradient = SubResource("Gradient_woclt")
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ecic6"]
+shader = ExtResource("12_woclt")
+shader_parameter/WindStrength = 4.000000095
+
+[node name="CradleCorridor" type="Node2D" unique_id=1653966913 groups=["camera_follow"]]
 script = ExtResource("1_js0h5")
 
 [node name="Walls" type="Node2D" parent="." unique_id=493115003]
+z_index = 10
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=1506982933]
 collision_mask = 0
@@ -82,36 +113,103 @@ position = Vector2(1198.5, 45)
 texture = ExtResource("4_l5uys")
 
 [node name="Trees" type="Node2D" parent="." unique_id=1385956041]
-
-[node name="Tree1_1" type="Sprite2D" parent="Trees" unique_id=428942079]
-position = Vector2(213, 40)
-texture = ExtResource("5_ewxpp")
+z_index = 2
 
 [node name="Tree2_1" type="Sprite2D" parent="Trees" unique_id=1152178339]
-position = Vector2(143, 40)
+modulate = Color(0.7442451, 0.95022386, 0.9737988, 1)
+material = SubResource("ShaderMaterial_obbm8")
+position = Vector2(182, 40)
 texture = ExtResource("6_2rlar")
 
-[node name="Tree3_1" type="Sprite2D" parent="Trees" unique_id=654507009]
-position = Vector2(120, 62)
-texture = ExtResource("7_nfyjk")
-
 [node name="Tree4_1" type="Sprite2D" parent="Trees" unique_id=176756563]
-position = Vector2(173, 54)
+modulate = Color(0.9166399, 0.91663986, 0.9166398, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(149, 55)
 texture = ExtResource("8_hu8kv")
 
+[node name="Tree4_2" type="Sprite2D" parent="Trees" unique_id=606580951]
+modulate = Color(0.9105588, 0.94397616, 0.722814, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(199, 55)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree4_3" type="Sprite2D" parent="Trees" unique_id=2123892613]
+modulate = Color(0.79059786, 0.82159853, 0.837707, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(287, 55)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree4_4" type="Sprite2D" parent="Trees" unique_id=467999198]
+modulate = Color(0.89824647, 0.8100202, 0.59369826, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(258, 62)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree3_1" type="Sprite2D" parent="Trees" unique_id=654507009]
+modulate = Color(0.60324824, 0.6032482, 0.6032482, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(220, 70)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_5" type="Sprite2D" parent="Trees" unique_id=1511754057]
+modulate = Color(0.44740987, 0.6528941, 0.60468495, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(40, 76)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_6" type="Sprite2D" parent="Trees" unique_id=1288225070]
+modulate = Color(0.7071337, 0.55130345, 0.62333244, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(128, 73)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_2" type="Sprite2D" parent="Trees" unique_id=1105994566]
+modulate = Color(0.4295577, 0.6484456, 0.66770655, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(249, 62)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_4" type="Sprite2D" parent="Trees" unique_id=140339395]
+modulate = Color(2.2621452e-06, 0.7129485, 0.4857198, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(276, 64)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_3" type="Sprite2D" parent="Trees" unique_id=830011976]
+modulate = Color(0.65979284, 0.6011967, 0.43161812, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(267, 73)
+texture = ExtResource("7_nfyjk")
+
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("5_l5uys")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+z_index = 10
 position = Vector2(11, 3)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1585810709]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("GradientTexture2D_a1y6q")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1434196974]
 position = Vector2(61.000008, 30)
 scale = Vector2(1.375, 1.375)
 texture = SubResource("GradientTexture2D_a1y6q")
 
+[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=639070420]
+visible = false
+position = Vector2(673.5, 70)
+scale = Vector2(21.046875, 0.31250003)
+texture = SubResource("GradientTexture2D_ecic6")
+
 [node name="1point5x" type="Parallax2D" parent="." unique_id=384603227]
-z_index = 4
+z_index = 20
 scroll_scale = Vector2(1.5, 1.5)
 repeat_size = Vector2(400, 0)
-repeat_times = 5
+repeat_times = 10
 
 [node name="1" type="Sprite2D" parent="1point5x" unique_id=1594762424]
 position = Vector2(127, 47)
@@ -137,10 +235,36 @@ texture = ExtResource("6_a1y6q")
 region_enabled = true
 region_rect = Rect2(60.5, 0, 110.5, 90)
 
-[node name="0point75x" type="Parallax2D" parent="." unique_id=1250343372]
+[node name="0point8xMoving" type="Parallax2D" parent="." unique_id=1250343372]
 z_index = -1
-scroll_scale = Vector2(0.75, 0.75)
+scroll_scale = Vector2(0.9, 0.9)
+repeat_size = Vector2(153, 0)
+repeat_times = 20
 
-[node name="1" type="Sprite2D" parent="0point75x" unique_id=30917951]
-texture = ExtResource("11_2rlar")
+[node name="1" type="Sprite2D" parent="0point8xMoving" unique_id=30917951]
+texture = ExtResource("11_nfyjk")
 centered = false
+
+[node name="0point8xFixing" type="Parallax2D" parent="." unique_id=919941917]
+scroll_scale = Vector2(0.9, 0.9)
+
+[node name="1" type="Sprite2D" parent="0point8xFixing" unique_id=974798601]
+position = Vector2(959, 0)
+texture = ExtResource("12_hu8kv")
+centered = false
+
+[node name="Tree1_1" type="Sprite2D" parent="0point8xFixing" unique_id=428942079]
+modulate = Color(0.76389813, 0.92530197, 0.99539655, 1)
+material = SubResource("ShaderMaterial_ecic6")
+position = Vector2(16, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("5_ewxpp")
+
+[node name="Tree1_2" type="Sprite2D" parent="0point8xFixing" unique_id=672247503]
+modulate = Color(0.52287346, 0.5321808, 0.56511515, 1)
+material = SubResource("ShaderMaterial_ecic6")
+position = Vector2(160, 40)
+texture = ExtResource("5_ewxpp")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=391920685]
+color = Color(0.5370987, 0.5370987, 0.5370987, 1)

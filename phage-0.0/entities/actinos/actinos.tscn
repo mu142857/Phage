@@ -405,7 +405,7 @@ texture_over = ExtResource("12_ptnfe")
 texture_progress = ExtResource("13_adqn7")
 
 [node name="HealthLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=939539975]
-modulate = Color(0.72673184, 0.7267317, 0.7267317, 1)
+modulate = Color(0.7254902, 0.7254902, 0.7254902, 1)
 offset_left = 21.0
 offset_top = 84.0
 offset_right = 97.0

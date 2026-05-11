@@ -4,6 +4,8 @@ extends BasicState
 @export var shake_amount: float = 3.0
 @export var zoom_amount: float = 1.15
 @export var zoom_duration: float = 0.2
+@export var camera_focus_position: Vector2 = Vector2(16.0, 9.0)
+@export var camera_move_duration: float = 0.25
 
 @onready var ani_2D: AnimatedSprite2D = $"../../AnimatedSprite2D"
 var _show_intro: bool = false
@@ -21,7 +23,7 @@ func enter() -> void:
 			_show_intro = true
 
 	if _show_intro:
-		Game.set_position_override(Vector2(16.0, 9.0))
+		Game.set_position_override_smooth(camera_focus_position, camera_move_duration)
 		_set_boss_name_visible(true)
 		Game.zoom_to(Vector2(zoom_amount, zoom_amount), zoom_duration)
 
@@ -38,7 +40,10 @@ func exit() -> void:
 	_set_player_lock(false)
 	_set_boss_name_visible(false)
 	Game.stop_shake()
-	Game.clear_position_override()
+	if _show_intro:
+		Game.clear_position_override_smooth(camera_move_duration)
+	else:
+		Game.clear_position_override()
 	Game.reset_zoom(zoom_duration)
 
 func _start_timer() -> void:

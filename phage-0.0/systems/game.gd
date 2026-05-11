@@ -17,6 +17,8 @@ signal screen_filter(amount: float, colour: Color)
 
 const CAMERA_FOLLOW_GROUP: StringName = &"camera_follow"
 const CAMERA_FIXED_GROUP: StringName = &"camera_fixed"
+const ANCHOR_FOLLOW: int = Camera2D.ANCHOR_MODE_DRAG_CENTER
+const ANCHOR_FIXED: int = Camera2D.ANCHOR_MODE_FIXED_TOP_LEFT
 
 @onready var flash_layer: CanvasLayer = $CanvasLayer
 @onready var colour_rect1: ColorRect = $CanvasLayer/ColorRect1
@@ -30,14 +32,23 @@ var rect2_colour: Color = Color(1, 1, 1, 1)
 var follow_target: Node2D = null
 var follow_player: bool = true
 var default_zoom: Vector2 = Vector2.ONE
+var default_limit_left: int = 0
+var default_limit_right: int = 0
+var default_limit_top: int = 0
+var default_limit_bottom: int = 0
 var zoom_tween: Tween = null
 var position_override: Vector2 = Vector2.ZERO
 var position_override_enabled: bool = false
+var position_override_tween: Tween = null
 var slowmo_token: int = 0
 
 func _ready() -> void:
 	make_current()
 	default_zoom = zoom
+	default_limit_left = limit_left
+	default_limit_right = limit_right
+	default_limit_top = limit_top
+	default_limit_bottom = limit_bottom
 	screen_shake.connect(_on_screen_shake)
 	screen_flash.connect(_on_screen_flash)
 	screen_filter.connect(_on_screen_filter)
@@ -153,6 +164,11 @@ func _update_camera_mode() -> void:
 	var scene := get_tree().current_scene
 	if not is_instance_valid(scene):
 		return
+	_apply_scene_camera_limits(scene)
+	if scene.is_in_group(CAMERA_FIXED_GROUP):
+		anchor_mode = ANCHOR_FIXED
+	else:
+		anchor_mode = ANCHOR_FOLLOW
 	if position_override_enabled:
 		follow_player = false
 		follow_target = null
@@ -160,7 +176,13 @@ func _update_camera_mode() -> void:
 	if scene.is_in_group(CAMERA_FIXED_GROUP):
 		follow_player = false
 		follow_target = null
-		global_position = Vector2.ZERO
+		# Allow scenes to specify their own fixed camera origin by
+		# implementing `func get_camera_fixed_position() -> Vector2` on
+		# the scene root. If not present, default to top-left (0,0).
+		var fixed_pos: Vector2 = Vector2.ZERO
+		if is_instance_valid(scene) and scene.has_method("get_camera_fixed_position"):
+			fixed_pos = scene.call("get_camera_fixed_position")
+		global_position = fixed_pos
 		return
 	if scene.is_in_group(CAMERA_FOLLOW_GROUP):
 		follow_player = true
@@ -180,8 +202,67 @@ func _update_follow_target() -> void:
 		follow_target = candidate
 
 func set_position_override(position: Vector2) -> void:
+	if is_instance_valid(position_override_tween):
+		position_override_tween.kill()
 	position_override = position
 	position_override_enabled = true
 
+func set_position_override_smooth(position: Vector2, duration: float = 0.2) -> void:
+	if duration <= 0.0:
+		set_position_override(position)
+		return
+	if is_instance_valid(position_override_tween):
+		position_override_tween.kill()
+	position_override_enabled = true
+	position_override = global_position
+	position_override_tween = create_tween()
+	position_override_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	position_override_tween.tween_property(self, "position_override", position, duration)
+
 func clear_position_override() -> void:
+	if is_instance_valid(position_override_tween):
+		position_override_tween.kill()
 	position_override_enabled = false
+
+func clear_position_override_smooth(duration: float = 0.2) -> void:
+	if not position_override_enabled:
+		return
+	if duration <= 0.0:
+		clear_position_override()
+		return
+	if is_instance_valid(position_override_tween):
+		position_override_tween.kill()
+	var target_position := position_override
+	if follow_player and is_instance_valid(follow_target):
+		target_position = follow_target.global_position
+	elif not follow_player:
+		target_position = Vector2.ZERO
+	var tween := create_tween()
+	position_override_tween = tween
+	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(self, "position_override", target_position, duration)
+	await tween.finished
+	if position_override_tween != tween:
+		return
+	position_override_tween = null
+	position_override_enabled = false
+
+func set_camera_limits(left: int, right: int, top: int, bottom: int) -> void:
+	limit_left = left
+	limit_right = right
+	limit_top = top
+	limit_bottom = bottom
+	limit_enabled = true
+
+func _apply_scene_camera_limits(scene: Node) -> void:
+	if scene.has_method("get_camera_limits"):
+		var limits = scene.call("get_camera_limits")
+		if limits is Dictionary:
+			set_camera_limits(
+				int((limits as Dictionary).get("left", default_limit_left)),
+				int((limits as Dictionary).get("right", default_limit_right)),
+				int((limits as Dictionary).get("top", default_limit_top)),
+				int((limits as Dictionary).get("bottom", default_limit_bottom))
+			)
+			return
+	set_camera_limits(default_limit_left, default_limit_right, default_limit_top, default_limit_bottom)

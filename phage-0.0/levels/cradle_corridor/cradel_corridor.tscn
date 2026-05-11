@@ -4,7 +4,13 @@
 [ext_resource type="Texture2D" uid="uid://dtchvx4o02bc0" path="res://levels/cradle_corridor/cradel_corridor_left_end.png" id="1_qbil3"]
 [ext_resource type="Texture2D" uid="uid://ebnc676xw8di" path="res://levels/cradle_corridor/cradel_corridor.png" id="2_kshva"]
 [ext_resource type="Texture2D" uid="uid://nnubgpoob6q5" path="res://levels/cradle_corridor/cradel_corridor_right_end.png" id="4_l5uys"]
+[ext_resource type="Texture2D" uid="uid://0uarw2wnpgl4" path="res://levels/cradle_corridor/tree1.png" id="5_ewxpp"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="5_l5uys"]
+[ext_resource type="Texture2D" uid="uid://b8avk4awwhc0n" path="res://levels/cradle_corridor/tree2.png" id="6_2rlar"]
+[ext_resource type="Texture2D" uid="uid://pk1831mnlid7" path="res://levels/cradle_corridor/cradel_corridor_front.png" id="6_a1y6q"]
+[ext_resource type="Texture2D" uid="uid://bkgoipd3p8wyv" path="res://levels/cradle_corridor/tree3.png" id="7_nfyjk"]
+[ext_resource type="Texture2D" uid="uid://ddjnqvu38a1uv" path="res://levels/cradle_corridor/tree4.png" id="8_hu8kv"]
+[ext_resource type="Texture2D" uid="uid://6s5ig1kn3pi8" path="res://levels/cradle_of_decay/wall.png" id="11_2rlar"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a1y6q"]
 
@@ -12,7 +18,16 @@
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tk2pr"]
 
-[node name="CradelCorridor" type="Node2D" unique_id=1653966913]
+[sub_resource type="Gradient" id="Gradient_l5uys"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a1y6q"]
+gradient = SubResource("Gradient_l5uys")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="CradelCorridor" type="Node2D" unique_id=1653966913 groups=["camera_follow"]]
 script = ExtResource("1_js0h5")
 
 [node name="Walls" type="Node2D" parent="." unique_id=493115003]
@@ -66,5 +81,66 @@ texture = ExtResource("2_kshva")
 position = Vector2(1198.5, 45)
 texture = ExtResource("4_l5uys")
 
+[node name="Trees" type="Node2D" parent="." unique_id=1385956041]
+
+[node name="Tree1_1" type="Sprite2D" parent="Trees" unique_id=428942079]
+position = Vector2(213, 40)
+texture = ExtResource("5_ewxpp")
+
+[node name="Tree2_1" type="Sprite2D" parent="Trees" unique_id=1152178339]
+position = Vector2(143, 40)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree3_1" type="Sprite2D" parent="Trees" unique_id=654507009]
+position = Vector2(120, 62)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree4_1" type="Sprite2D" parent="Trees" unique_id=176756563]
+position = Vector2(173, 54)
+texture = ExtResource("8_hu8kv")
+
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("5_l5uys")]
 position = Vector2(11, 3)
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1434196974]
+position = Vector2(61.000008, 30)
+scale = Vector2(1.375, 1.375)
+texture = SubResource("GradientTexture2D_a1y6q")
+
+[node name="1point5x" type="Parallax2D" parent="." unique_id=384603227]
+z_index = 4
+scroll_scale = Vector2(1.5, 1.5)
+repeat_size = Vector2(400, 0)
+repeat_times = 5
+
+[node name="1" type="Sprite2D" parent="1point5x" unique_id=1594762424]
+position = Vector2(127, 47)
+texture = ExtResource("6_a1y6q")
+
+[node name="2" type="Sprite2D" parent="1point5x" unique_id=914402008]
+position = Vector2(139, 52)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("6_a1y6q")
+region_enabled = true
+region_rect = Rect2(60.5, 0, 110.5, 90)
+
+[node name="3" type="Sprite2D" parent="1point5x" unique_id=497049748]
+position = Vector2(228.5, 46)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("6_a1y6q")
+
+[node name="4" type="Sprite2D" parent="1point5x" unique_id=1956822289]
+position = Vector2(262, 44)
+texture = ExtResource("6_a1y6q")
+region_enabled = true
+region_rect = Rect2(60.5, 0, 110.5, 90)
+
+[node name="0point75x" type="Parallax2D" parent="." unique_id=1250343372]
+z_index = -1
+scroll_scale = Vector2(0.75, 0.75)
+
+[node name="1" type="Sprite2D" parent="0point75x" unique_id=30917951]
+texture = ExtResource("11_2rlar")
+centered = false

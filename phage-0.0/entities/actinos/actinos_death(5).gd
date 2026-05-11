@@ -8,6 +8,10 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/actinos/actinos_
 
 @onready var ani_2D: AnimatedSprite2D = $"../../AnimatedSprite2D"
 @onready var monster: CharacterBody2D = $"../.."
+@onready var jump_hitbox: Area2D = $"../../JumpHitBox"
+@onready var player_check: Area2D = $"../../PlayerCheck"
+@onready var normal_collision: CollisionShape2D = $"../../NormalCollision"
+@onready var jump_collision: CollisionShape2D = $"../../JumpCollision"
 
 var is_active: bool = false
 
@@ -16,6 +20,7 @@ func enter() -> void:
 	if is_instance_valid(monster):
 		monster.velocity = Vector2.ZERO
 		monster.set_physics_process(false)
+		_disable_collision_and_interaction()
 		_play_sequence()
 
 func exit() -> void:
@@ -34,8 +39,7 @@ func _play_sequence() -> void:
 		return
 	# Death 动画期间做轻微震动
 	ani_2D.play(&"Death")
-	if Engine.has_singleton("Game"):
-		Game.shake_camera(2)
+	Game.shake_camera(2)
 	await get_tree().create_timer(death_duration).timeout
 	if not is_active:
 		return
@@ -46,9 +50,27 @@ func _play_sequence() -> void:
 		eff.global_position = monster.global_position
 		if eff is GPUParticles2D:
 			(eff as GPUParticles2D).emitting = true
-	if Engine.has_singleton("Game"):
-		Game.shake_camera(6)
+	Game.shake_camera(6)
 	_queue_free_boss()
+
+func _disable_collision_and_interaction() -> void:
+	if is_instance_valid(monster):
+		monster.collision_layer = 0
+		monster.collision_mask = 0
+	if is_instance_valid(normal_collision):
+		normal_collision.disabled = true
+	if is_instance_valid(jump_collision):
+		jump_collision.disabled = true
+	if is_instance_valid(jump_hitbox):
+		jump_hitbox.monitoring = false
+		jump_hitbox.monitorable = false
+		jump_hitbox.collision_layer = 0
+		jump_hitbox.collision_mask = 0
+	if is_instance_valid(player_check):
+		player_check.monitoring = false
+		player_check.monitorable = false
+		player_check.collision_layer = 0
+		player_check.collision_mask = 0
 
 func _queue_free_boss() -> void:
 	if is_instance_valid(monster):

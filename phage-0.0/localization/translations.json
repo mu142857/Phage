@@ -1,0 +1,27 @@
+{
+  "Actinos": {
+    "en": "Actinos",
+    "zh": "阿克提诺斯",
+    "es": "Actinos"
+  },
+  "Boss": {
+    "en": "Boss",
+    "zh": "首领",
+    "es": "Jefe"
+  },
+  "Health": {
+    "en": "Health",
+    "zh": "血量",
+    "es": "Salud"
+  },
+  "Attack": {
+    "en": "Attack",
+    "zh": "攻击",
+    "es": "Ataque"
+  },
+  "Enemy": {
+    "en": "Enemy",
+    "zh": "敌人",
+    "es": "Enemigo"
+  }
+}

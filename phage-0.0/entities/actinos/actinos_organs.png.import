@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bbyuqpsijcvtt"
-path="res://.godot/imported/actinos_organs.png-337adedc09476d52b2c113ae2645131d.ctex"
+uid="uid://bknw0lavwsir"
+path="res://.godot/imported/actinos_organs.png-369a757632817ac42cc4edb94c4da9cf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://actinos_organs.png"
-dest_files=["res://.godot/imported/actinos_organs.png-337adedc09476d52b2c113ae2645131d.ctex"]
+source_file="res://entities/actinos/actinos_organs.png"
+dest_files=["res://.godot/imported/actinos_organs.png-369a757632817ac42cc4edb94c4da9cf.ctex"]
 
 [params]
 

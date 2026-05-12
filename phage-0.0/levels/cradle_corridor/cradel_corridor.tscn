@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://drbdeq7r3fmdv" path="res://levels/cradle_corridor/wall.png" id="11_nfyjk"]
 [ext_resource type="Texture2D" uid="uid://bh2siqogdaihy" path="res://levels/cradle_corridor/red_wall.png" id="12_hu8kv"]
 [ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="12_woclt"]
+[ext_resource type="PackedScene" uid="uid://joegf2jsjujd" path="res://entities/pop_tops/pop_tops.tscn" id="15_ecic6"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a1y6q"]
 
@@ -1113,5 +1114,7 @@ scale = Vector2(1, -1)
 texture = ExtResource("7_nfyjk")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=391920685]
-visible = false
 color = Color(0.5370987, 0.5370987, 0.5370987, 1)
+
+[node name="PopTops" parent="." unique_id=1770411110 instance=ExtResource("15_ecic6")]
+position = Vector2(613, 80)

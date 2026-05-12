@@ -1,12 +1,10 @@
-# res://entities/actinos/actinos_bullet.tscn
 extends Area2D
 
-@export var projectile_gravity: float = 900.0
-@export var flight_time: float = 0.45
+@export var projectile_gravity: float = 500.0
+@export var flight_time: float = 1.0
 @export var damage_amount: int = 5
 
-const SPIKE_SCENE: PackedScene = preload("res://entities/actinos/actinos_spike.tscn")
-const JUMP_EFFECT_SCENE: PackedScene = preload("res://entities/actinos/actinos_jump_effect.tscn")
+const IMPACT_EFFECT_SCENE: PackedScene = preload("res://entities/pop_tops/pop_tops_bullet_effects.tscn")
 
 var velocity: Vector2 = Vector2.ZERO
 var target_position: Vector2 = Vector2.ZERO
@@ -41,9 +39,7 @@ func _physics_process(delta: float) -> void:
 	global_position += velocity * delta
 	_try_damage_player()
 	if elapsed >= flight_time:
-		_spawn_jump_effect()
-		_spawn_spike()
-		Game.shake_camera(2)
+		_spawn_impact_effect()
 		queue_free()
 
 func _try_damage_player() -> void:
@@ -57,26 +53,13 @@ func _try_damage_player() -> void:
 		damage_applied = true
 		break
 
-func _spawn_spike() -> void:
-	if SPIKE_SCENE == null:
-		return
-	var spike := SPIKE_SCENE.instantiate() as Node2D
-	if spike == null:
+func _spawn_impact_effect() -> void:
+	if IMPACT_EFFECT_SCENE == null:
 		return
 	if get_tree().current_scene == null:
 		return
-	get_tree().current_scene.add_child(spike)
-	spike.global_position = target_position
-
-func _spawn_jump_effect() -> void:
-	if JUMP_EFFECT_SCENE == null:
-		return
-	var effect := JUMP_EFFECT_SCENE.instantiate()
+	var effect := IMPACT_EFFECT_SCENE.instantiate()
 	if effect == null:
-		return
-	if get_tree().current_scene == null:
 		return
 	get_tree().current_scene.add_child(effect)
 	effect.global_position = target_position
-	if effect is GPUParticles2D:
-		(effect as GPUParticles2D).emitting = true

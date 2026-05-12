@@ -1,8 +1,15 @@
 extends CharacterBody2D
 
+signal died
+
 @export var max_health: int = 400
 @export var health: int = 400
-@export var spin_distance: float = 10.0
+@export var attack_distance: float = 100.0
+@export var spin_distance: float = 20.0
+
+func _ready() -> void:
+	add_to_group("monster")
+	health = clampi(health, 0, max_health)
 
 func take_damage(value: int) -> void:
 	health -= value
@@ -12,12 +19,18 @@ func take_damage(value: int) -> void:
 			$HitEffectPlayer.active = true
 		$HitEffectPlayer.play("HitFlash")
 	if health <= 0:
+		died.emit()
 		queue_free()
 
 func get_next_attack_state() -> int:
 	if _is_player_close(spin_distance):
 		return 3
-	return 2
+	if _is_player_close(attack_distance):
+		return 2
+	return 1
+
+func is_player_close(distance_limit: float) -> bool:
+	return _is_player_close(distance_limit)
 
 func _is_player_close(distance_limit: float) -> bool:
 	var players := get_tree().get_nodes_in_group("player")
@@ -26,4 +39,4 @@ func _is_player_close(distance_limit: float) -> bool:
 	var player := players[0]
 	if not (player is Node2D):
 		return false
-	return (player as Node2D).global_position.distance_to(global_position) <= distance_limit
+	return absf((player as Node2D).global_position.x - global_position.x) <= distance_limit

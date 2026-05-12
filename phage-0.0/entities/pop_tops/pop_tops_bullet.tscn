@@ -1,3 +1,98 @@
 [gd_scene format=3 uid="uid://bkapksp2xgig0"]
 
+[ext_resource type="Script" uid="uid://cc4vxqe3vd0ch" path="res://entities/pop_tops/pop_tops_bullet.gd" id="1_u1rd3"]
+[ext_resource type="Texture2D" uid="uid://ksqxwuh0aew1" path="res://entities/pop_tops/pop_tops_bullet-Sheet.png" id="2_nog6h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwjah"]
+atlas = ExtResource("2_nog6h")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_74edg"]
+atlas = ExtResource("2_nog6h")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gni3n"]
+atlas = ExtResource("2_nog6h")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71cx2"]
+atlas = ExtResource("2_nog6h")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ck40"]
+atlas = ExtResource("2_nog6h")
+region = Rect2(32, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l6txw"]
+atlas = ExtResource("2_nog6h")
+region = Rect2(0, 8, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yj4ey"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wwjah")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_74edg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gni3n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71cx2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ck40")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l6txw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_nog6h"]
+offsets = PackedFloat32Array(0, 0.31390134, 0.6891892, 1)
+colors = PackedColorArray(1, 0.9490196, 0.78039217, 1, 0.9019608, 0.7647059, 0.34901962, 1, 1, 1, 1, 1, 0.7058824, 0.36078432, 0.007843138, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wwjah"]
+gradient = SubResource("Gradient_nog6h")
+
+[sub_resource type="Gradient" id="Gradient_74edg"]
+offsets = PackedFloat32Array(0, 0.36936936, 0.6576577, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gni3n"]
+gradient = SubResource("Gradient_74edg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_71cx2"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_gni3n")
+color_initial_ramp = SubResource("GradientTexture1D_wwjah")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sc3o4"]
+radius = 3.0
+
 [node name="PopTopsBullet" type="Area2D" unique_id=70408034]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_u1rd3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1282284758]
+sprite_frames = SubResource("SpriteFrames_yj4ey")
+frame = 4
+frame_progress = 0.6079852
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=757344409]
+lifetime = 0.5
+explosiveness = 0.5
+process_material = SubResource("ParticleProcessMaterial_71cx2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=130925636]
+shape = SubResource("CircleShape2D_sc3o4")

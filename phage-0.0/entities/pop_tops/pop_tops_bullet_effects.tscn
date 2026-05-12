@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://baxgo8vne2nfw"]
+
+[ext_resource type="Script" uid="uid://bulog1f60264e" path="res://entities/pop_tops/pop_tops_bullet_effects.gd" id="1_rhire"]
+
+[sub_resource type="Gradient" id="Gradient_rhire"]
+colors = PackedColorArray(0.9019608, 0.7647059, 0.34901962, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_l0i8i"]
+gradient = SubResource("Gradient_rhire")
+
+[sub_resource type="Gradient" id="Gradient_l0i8i"]
+offsets = PackedFloat32Array(0, 0.09417041, 0.24663678, 0.9955157)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0.81445485, 0, 0.20063028, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ditt2"]
+gradient = SubResource("Gradient_l0i8i")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_op21v"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(4, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 10.0
+initial_velocity_min = 20.0
+initial_velocity_max = 80.0
+gravity = Vector3(0, 98, 0)
+color_ramp = SubResource("GradientTexture1D_ditt2")
+color_initial_ramp = SubResource("GradientTexture1D_l0i8i")
+
+[node name="PopTopsBulletEffects" type="GPUParticles2D" unique_id=2097305031]
+emitting = false
+amount = 20
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_op21v")
+script = ExtResource("1_rhire")
+
+[node name="Timer" type="Timer" parent="." unique_id=1964846086]
+wait_time = 1.0999999999999999
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

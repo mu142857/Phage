@@ -346,9 +346,8 @@ script = ExtResource("1_k7wsa")
 material = SubResource("ShaderMaterial_xsxg8")
 sprite_frames = SubResource("SpriteFrames_k7wsa")
 animation = &"Spin"
-autoplay = "Idle"
-frame = 13
-frame_progress = 1.0
+autoplay = "Spin"
+frame = 5
 offset = Vector2(-3, -32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1086345879]
@@ -367,6 +366,9 @@ script = ExtResource("4_ku72c")
 [node name="Idle(1)" type="Node" parent="StateMachine" unique_id=2020603837]
 script = ExtResource("5_sxt5m")
 
+[node name="Timer" type="Timer" parent="StateMachine/Idle(1)" unique_id=1177581586]
+one_shot = true
+
 [node name="Attack(2)" type="Node" parent="StateMachine" unique_id=767691329]
 script = ExtResource("6_xsxg8")
 
@@ -376,11 +378,13 @@ script = ExtResource("7_ftmhd")
 [node name="PlayerCheck" type="Area2D" parent="." unique_id=1149491709]
 collision_layer = 0
 collision_mask = 2
+metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=613468829]
 position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_sxt5m")
 debug_color = Color(0, 0.6, 0.69803923, 0)
+metadata/_edit_lock_ = true
 
 [node name="SpinHitBox" type="Area2D" parent="." unique_id=844012584]
 collision_layer = 0
@@ -390,3 +394,10 @@ collision_mask = 2
 position = Vector2(0, -11)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_xsxg8")
+
+[node name="ReleasePoint" type="Node2D" parent="." unique_id=1973463441]
+position = Vector2(0, -11)
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Attack(2)" method="_on_animation_finished"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Spin(3)" method="_on_animation_finished"]
+[connection signal="timeout" from="StateMachine/Idle(1)/Timer" to="StateMachine/Idle(1)" method="_on_timer_timeout"]

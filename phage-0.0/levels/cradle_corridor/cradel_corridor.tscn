@@ -14,7 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://drbdeq7r3fmdv" path="res://levels/cradle_corridor/wall.png" id="11_nfyjk"]
 [ext_resource type="Texture2D" uid="uid://bh2siqogdaihy" path="res://levels/cradle_corridor/red_wall.png" id="12_hu8kv"]
 [ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="12_woclt"]
-[ext_resource type="PackedScene" uid="uid://joegf2jsjujd" path="res://entities/pop_tops/pop_tops.tscn" id="15_ecic6"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a1y6q"]
 
@@ -36,6 +35,10 @@ shader_parameter/Speed = 1.0
 shader = ExtResource("5_woclt")
 shader_parameter/Strength = 2.0
 shader_parameter/Speed = 2.0000000475
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ecic6"]
+shader = ExtResource("12_woclt")
+shader_parameter/WindStrength = 4.000000095
 
 [sub_resource type="Gradient" id="Gradient_l5uys"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -318,9 +321,127 @@ shader = SubResource("VisualShader_dmw6x")
 shader_parameter/Strength = 10.0
 shader_parameter/Speed = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ecic6"]
-shader = ExtResource("12_woclt")
-shader_parameter/WindStrength = 4.000000095
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_obbm8"]
+function = 0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_y72mp"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_khcyo"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_i1eg3"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_pb6ck"]
+default_input_values = [0, 0.0, 1, 20.0]
+operator = 2
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_rrmdp"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_cm8b1"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_6vdb4"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_tgnfd"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_iusr5"]
+parameter_name = "Speed"
+hint = 1
+min = 1.0
+max = 20.0
+default_value_enabled = true
+default_value = 10.0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_qh4b8"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_e541m"]
+default_input_values = [0, 0.0, 1, 20.0]
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_qa4r1"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_pgip3"]
+parameter_name = "Strength"
+hint = 1
+min = 1.0
+max = 10.0
+default_value_enabled = true
+default_value = 2.0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_7w07x"]
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_47pp4"]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_aymv4"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_725ed"]
+output_port_for_preview = 0
+function = 31
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_048g6"]
+default_input_values = [0, 0.0, 1, 10.0]
+operator = 2
+
+[sub_resource type="VisualShader" id="VisualShader_x0rm3"]
+resource_local_to_scene = true
+mode = 1
+flags/light_only = false
+nodes/vertex/0/position = Vector2(80, 240)
+nodes/vertex/3/node = SubResource("VisualShaderNodeVectorDecompose_qa4r1")
+nodes/vertex/3/position = Vector2(-1320, 540)
+nodes/vertex/4/node = SubResource("VisualShaderNodeFloatParameter_pgip3")
+nodes/vertex/4/position = Vector2(-2800, -600)
+nodes/vertex/5/node = SubResource("VisualShaderNodeFloatOp_7w07x")
+nodes/vertex/5/position = Vector2(-780, 20)
+nodes/vertex/6/node = SubResource("VisualShaderNodeVectorCompose_47pp4")
+nodes/vertex/6/position = Vector2(-380, 160)
+nodes/vertex/7/node = SubResource("VisualShaderNodeVectorDecompose_aymv4")
+nodes/vertex/7/position = Vector2(-3220, -80)
+nodes/vertex/8/node = SubResource("VisualShaderNodeFloatFunc_725ed")
+nodes/vertex/8/position = Vector2(-2820, 140)
+nodes/vertex/9/node = SubResource("VisualShaderNodeFloatOp_048g6")
+nodes/vertex/9/position = Vector2(-2080, 100)
+nodes/vertex/10/node = SubResource("VisualShaderNodeFloatFunc_obbm8")
+nodes/vertex/10/position = Vector2(-2020, 600)
+nodes/vertex/11/node = SubResource("VisualShaderNodeFloatOp_y72mp")
+nodes/vertex/11/position = Vector2(-1400, 180)
+nodes/vertex/12/node = SubResource("VisualShaderNodeVectorDecompose_khcyo")
+nodes/vertex/12/position = Vector2(-4460, -440)
+nodes/vertex/13/node = SubResource("VisualShaderNodeFloatOp_i1eg3")
+nodes/vertex/13/position = Vector2(-3460, 520)
+nodes/vertex/14/node = SubResource("VisualShaderNodeFloatOp_pb6ck")
+nodes/vertex/14/position = Vector2(-4140, 960)
+nodes/vertex/15/node = SubResource("VisualShaderNodeInput_rrmdp")
+nodes/vertex/15/position = Vector2(-2040, 820)
+nodes/vertex/16/node = SubResource("VisualShaderNodeInput_cm8b1")
+nodes/vertex/16/position = Vector2(-5040, -840)
+nodes/vertex/17/node = SubResource("VisualShaderNodeInput_6vdb4")
+nodes/vertex/17/position = Vector2(-4009.65, -725.962)
+nodes/vertex/18/node = SubResource("VisualShaderNodeInput_tgnfd")
+nodes/vertex/18/position = Vector2(-4920, 360)
+nodes/vertex/19/node = SubResource("VisualShaderNodeFloatParameter_iusr5")
+nodes/vertex/19/position = Vector2(-4920, 1020)
+nodes/vertex/28/node = SubResource("VisualShaderNodeFloatOp_qh4b8")
+nodes/vertex/28/position = Vector2(-820, 920)
+nodes/vertex/29/node = SubResource("VisualShaderNodeFloatOp_e541m")
+nodes/vertex/29/position = Vector2(-2901.18, -1064.1)
+nodes/vertex/connections = PackedInt32Array(5, 0, 6, 0, 4, 0, 9, 0, 9, 0, 11, 0, 10, 0, 11, 1, 13, 0, 10, 0, 14, 0, 13, 1, 6, 0, 0, 0, 15, 0, 3, 0, 18, 0, 14, 0, 19, 0, 14, 1, 8, 0, 9, 1, 11, 0, 5, 0, 3, 0, 5, 1, 3, 1, 28, 0, 28, 0, 6, 1, 17, 0, 7, 0, 7, 1, 8, 0, 16, 0, 12, 0, 12, 1, 13, 0)
+nodes/fragment/0/position = Vector2(780, 400)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4nl8o"]
+shader = SubResource("VisualShader_x0rm3")
+shader_parameter/Strength = 2.0
+shader_parameter/Speed = 1.6000000285
 
 [sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_woclt"]
 function = 0
@@ -770,6 +891,30 @@ material = SubResource("ShaderMaterial_obbm8")
 position = Vector2(388, 40)
 texture = ExtResource("6_2rlar")
 
+[node name="Tree2_6" type="Sprite2D" parent="Trees" unique_id=696268621]
+modulate = Color(0.7442451, 0.95022386, 0.9737988, 1)
+material = SubResource("ShaderMaterial_obbm8")
+position = Vector2(1143.5, 40)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree4_11" type="Sprite2D" parent="Trees" unique_id=850615946]
+modulate = Color(0.9166399, 0.91663986, 0.9166398, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(1110.5, 55)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree4_12" type="Sprite2D" parent="Trees" unique_id=355520273]
+modulate = Color(0.9105588, 0.94397616, 0.722814, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(1160.5, 55)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree2_7" type="Sprite2D" parent="Trees" unique_id=1072019799]
+modulate = Color(1, 0.8767097, 0.81664383, 1)
+material = SubResource("ShaderMaterial_obbm8")
+position = Vector2(1077, 40)
+texture = ExtResource("6_2rlar")
+
 [node name="Tree4_5" type="Sprite2D" parent="Trees" unique_id=1631615689]
 modulate = Color(0.968774, 0.88912475, 0.97136515, 1)
 material = SubResource("ShaderMaterial_xvv1a")
@@ -788,6 +933,37 @@ material = SubResource("ShaderMaterial_xvv1a")
 position = Vector2(258, 62)
 scale = Vector2(-1, 1)
 texture = ExtResource("8_hu8kv")
+
+[node name="Tree4_6" type="Sprite2D" parent="Trees" unique_id=1846566933]
+modulate = Color(0.89824647, 0.8100202, 0.59369826, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(490, 68)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree2_3" type="Sprite2D" parent="Trees" unique_id=1650575197]
+modulate = Color(0.7442451, 0.95022386, 0.9737988, 1)
+material = SubResource("ShaderMaterial_obbm8")
+position = Vector2(759.5, 40)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree4_7" type="Sprite2D" parent="Trees" unique_id=70039797]
+modulate = Color(0.9166399, 0.91663986, 0.9166398, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(726.5, 55)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree4_8" type="Sprite2D" parent="Trees" unique_id=344224448]
+modulate = Color(0.9105588, 0.94397616, 0.722814, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(776.5, 55)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree2_4" type="Sprite2D" parent="Trees" unique_id=1258461081]
+modulate = Color(1, 0.8767097, 0.81664383, 1)
+material = SubResource("ShaderMaterial_obbm8")
+position = Vector2(799, 40)
+texture = ExtResource("6_2rlar")
 
 [node name="Tree3_1" type="Sprite2D" parent="Trees" unique_id=654507009]
 modulate = Color(0.60324824, 0.6032482, 0.6032482, 1)
@@ -875,6 +1051,217 @@ position = Vector2(377.5, 77)
 scale = Vector2(-1, 1)
 texture = ExtResource("7_nfyjk")
 
+[node name="Tree3_14" type="Sprite2D" parent="Trees" unique_id=778423939]
+modulate = Color(0.6564714, 0.6081119, 0.31964126, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(461, 80)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_15" type="Sprite2D" parent="Trees" unique_id=1761423750]
+modulate = Color(0.7071337, 0.55130345, 0.62333244, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(775, 64)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_16" type="Sprite2D" parent="Trees" unique_id=1014884874]
+modulate = Color(0.5826972, 0.64046025, 0.28640422, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(685, 73)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_17" type="Sprite2D" parent="Trees" unique_id=2033375334]
+modulate = Color(0.2913454, 0.706862, 0.30537876, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(711, 64)
+rotation = 3.1415925
+scale = Vector2(-1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_18" type="Sprite2D" parent="Trees" unique_id=1906215270]
+modulate = Color(0.5481948, 0.60578585, 0.7104631, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(702, 73)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_19" type="Sprite2D" parent="Trees" unique_id=477709045]
+modulate = Color(0.7392084, 0.5631474, 0.4018295, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(731, 75)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_20" type="Sprite2D" parent="Trees" unique_id=2025099663]
+modulate = Color(0.34396553, 0.65416425, 0.7458595, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(755, 68)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_21" type="Sprite2D" parent="Trees" unique_id=1555499009]
+modulate = Color(0.5353042, 0.65682805, 0.30994543, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(820, 68)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree1_1" type="Sprite2D" parent="Trees" unique_id=1220921669]
+modulate = Color(0.76389813, 0.92530197, 0.99539655, 1)
+material = SubResource("ShaderMaterial_ecic6")
+position = Vector2(839, 40)
+texture = ExtResource("5_ewxpp")
+
+[node name="Tree2_5" type="Sprite2D" parent="Trees" unique_id=633891375]
+modulate = Color(0.8213333, 0.9356407, 0.911688, 1)
+material = SubResource("ShaderMaterial_obbm8")
+position = Vector2(873, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree4_9" type="Sprite2D" parent="Trees" unique_id=649808397]
+modulate = Color(0.4784388, 0.7964836, 0.677624, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(890, 55)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree4_10" type="Sprite2D" parent="Trees" unique_id=39502851]
+modulate = Color(0.82986754, 0.70338917, 0.44318932, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(1012, 62)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree1_2" type="Sprite2D" parent="Trees" unique_id=734178061]
+modulate = Color(0.8086849, 0.82072383, 0.8190275, 1)
+material = SubResource("ShaderMaterial_ecic6")
+position = Vector2(1033, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("5_ewxpp")
+
+[node name="Tree3_22" type="Sprite2D" parent="Trees" unique_id=727827509]
+modulate = Color(0.7071337, 0.55130345, 0.62333244, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1101.5, 67)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_23" type="Sprite2D" parent="Trees" unique_id=828580963]
+modulate = Color(0.5826972, 0.64046025, 0.28640422, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1030.5, 64)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_24" type="Sprite2D" parent="Trees" unique_id=1487195113]
+modulate = Color(0.2913454, 0.706862, 0.30537876, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1062, 62)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_25" type="Sprite2D" parent="Trees" unique_id=890855088]
+modulate = Color(0.5481948, 0.60578585, 0.7104631, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1044.5, 64)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_38" type="Sprite2D" parent="Trees" unique_id=2089681641]
+modulate = Color(0.5481948, 0.60578585, 0.7104631, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1168, 78)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_26" type="Sprite2D" parent="Trees" unique_id=386583830]
+modulate = Color(0.7392084, 0.5631474, 0.4018295, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1079.5, 64)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_35" type="Sprite2D" parent="Trees" unique_id=1299890154]
+modulate = Color(0.7392084, 0.5631474, 0.4018295, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1185.5, 66)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_27" type="Sprite2D" parent="Trees" unique_id=133177743]
+modulate = Color(0.4295577, 0.6484456, 0.66770655, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1113.5, 68)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_28" type="Sprite2D" parent="Trees" unique_id=170498500]
+modulate = Color(2.2621452e-06, 0.7129485, 0.4857198, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1089.5, 77)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_29" type="Sprite2D" parent="Trees" unique_id=1992588638]
+modulate = Color(0.65979284, 0.6011967, 0.43161812, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1154, 66)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_37" type="Sprite2D" parent="Trees" unique_id=988931587]
+modulate = Color(0.65979284, 0.6011967, 0.43161812, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1223.5, 72)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_34" type="Sprite2D" parent="Trees" unique_id=1552446979]
+modulate = Color(0.65979284, 0.6011967, 0.43161812, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1053.5, 80)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_30" type="Sprite2D" parent="Trees" unique_id=1779750060]
+modulate = Color(0.7071337, 0.55130345, 0.62333244, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1022.5, 78)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_33" type="Sprite2D" parent="Trees" unique_id=1294276087]
+modulate = Color(0.7071337, 0.55130345, 0.62333244, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1169.5, 66)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_31" type="Sprite2D" parent="Trees" unique_id=920125793]
+modulate = Color(0.5826972, 0.64046025, 0.28640422, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1133.5, 67)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_36" type="Sprite2D" parent="Trees" unique_id=203148469]
+modulate = Color(0.5826972, 0.64046025, 0.28640422, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1206.5, 73)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_32" type="Sprite2D" parent="Trees" unique_id=237485]
+modulate = Color(2.2621452e-06, 0.7129485, 0.4857198, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1196.5, 81)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("5_l5uys")]
 modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
 z_index = 10
@@ -941,6 +1328,13 @@ material = SubResource("ShaderMaterial_4t1mf")
 position = Vector2(414, 66)
 texture = ExtResource("8_hu8kv")
 
+[node name="Tree4_6" type="Sprite2D" parent="1point5xFixing" unique_id=695650038]
+modulate = Color(0.16745102, 0.16745102, 0.16745102, 1)
+material = SubResource("ShaderMaterial_4t1mf")
+position = Vector2(1012, 75)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_hu8kv")
+
 [node name="Tree2_1" type="Sprite2D" parent="1point5xFixing" unique_id=1903355994]
 modulate = Color(0.02917914, 0.15929931, 0.1728814, 1)
 material = SubResource("ShaderMaterial_e5esn")
@@ -953,6 +1347,173 @@ material = SubResource("ShaderMaterial_e5esn")
 position = Vector2(175, 59)
 scale = Vector2(-1, 1)
 texture = ExtResource("6_2rlar")
+
+[node name="Tree2_6" type="Sprite2D" parent="1point5xFixing" unique_id=259011748]
+modulate = Color(0.22362906, 0.09779341, 0.07965205, 1)
+material = SubResource("ShaderMaterial_e5esn")
+position = Vector2(1780, 57)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree2_7" type="Sprite2D" parent="1point5xFixing" unique_id=993964369]
+modulate = Color(0.19505015, 0.092289425, 0.21309218, 1)
+material = SubResource("ShaderMaterial_e5esn")
+position = Vector2(1743, 73)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree2_8" type="Sprite2D" parent="1point5xFixing" unique_id=1500335804]
+modulate = Color(0.22362906, 0.09779341, 0.07965205, 1)
+material = SubResource("ShaderMaterial_e5esn")
+position = Vector2(1512, 67)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree2_9" type="Sprite2D" parent="1point5xFixing" unique_id=1143449759]
+modulate = Color(0.19505015, 0.092289425, 0.21309218, 1)
+material = SubResource("ShaderMaterial_e5esn")
+position = Vector2(1489, 67)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree4_2" type="Sprite2D" parent="1point5xFixing" unique_id=625574296]
+modulate = Color(0.16745102, 0.16745102, 0.16745102, 1)
+material = SubResource("ShaderMaterial_4t1mf")
+position = Vector2(1144, 71)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree4_3" type="Sprite2D" parent="1point5xFixing" unique_id=456172011]
+modulate = Color(0.16745102, 0.16745102, 0.16745102, 1)
+material = SubResource("ShaderMaterial_4t1mf")
+position = Vector2(1087.5, 70)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree2_3" type="Sprite2D" parent="1point5xFixing" unique_id=854973141]
+modulate = Color(0.02917914, 0.15929931, 0.1728814, 1)
+material = SubResource("ShaderMaterial_e5esn")
+position = Vector2(1106.5, 55)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree4_8" type="Sprite2D" parent="1point5xFixing" unique_id=1797115832]
+modulate = Color(0.16745102, 0.16745102, 0.16745102, 1)
+material = SubResource("ShaderMaterial_4t1mf")
+position = Vector2(1608.5, 71)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree2_10" type="Sprite2D" parent="1point5xFixing" unique_id=61675741]
+modulate = Color(0.02917914, 0.15929931, 0.1728814, 1)
+material = SubResource("ShaderMaterial_e5esn")
+position = Vector2(1627.5, 56)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree4_4" type="Sprite2D" parent="1point5xFixing" unique_id=541049084]
+modulate = Color(0.16745102, 0.16745102, 0.16745102, 1)
+material = SubResource("ShaderMaterial_4t1mf")
+position = Vector2(1213, 81)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree4_7" type="Sprite2D" parent="1point5xFixing" unique_id=1518178933]
+modulate = Color(0.16745102, 0.16745102, 0.16745102, 1)
+material = SubResource("ShaderMaterial_4t1mf")
+position = Vector2(1327, 77)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree4_5" type="Sprite2D" parent="1point5xFixing" unique_id=519370565]
+modulate = Color(0.16745102, 0.16745102, 0.16745102, 1)
+material = SubResource("ShaderMaterial_4t1mf")
+position = Vector2(1190.5, 70)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree2_4" type="Sprite2D" parent="1point5xFixing" unique_id=1208655528]
+modulate = Color(0.23748678, 0.007947253, 0.25980544, 1)
+material = SubResource("ShaderMaterial_e5esn")
+position = Vector2(1232, 55)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree2_5" type="Sprite2D" parent="1point5xFixing" unique_id=1587409188]
+modulate = Color(0.02917914, 0.15929931, 0.1728814, 1)
+material = SubResource("ShaderMaterial_e5esn")
+position = Vector2(1284, 61)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree3_1" type="Sprite2D" parent="1point5xFixing" unique_id=1671119854]
+modulate = Color(0.11323204, 0.07108071, 0.030533066, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1033.5, 82)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_2" type="Sprite2D" parent="1point5xFixing" unique_id=1982677077]
+modulate = Color(0.02234926, 0.09192621, 0.11240662, 1)
+material = SubResource("ShaderMaterial_4nl8o")
+position = Vector2(1057.5, 75)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_5" type="Sprite2D" parent="1point5xFixing" unique_id=1469093182]
+modulate = Color(0.0046652113, 0.09896294, 0.0894266, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(976.5, 88)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_7" type="Sprite2D" parent="1point5xFixing" unique_id=1005188214]
+modulate = Color(0.08971349, 0.0767361, 0.07396238, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1548, 74)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_11" type="Sprite2D" parent="1point5xFixing" unique_id=751989330]
+modulate = Color(0.08971349, 0.0767361, 0.07396238, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1800, 84)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_8" type="Sprite2D" parent="1point5xFixing" unique_id=1886073750]
+modulate = Color(0.08971349, 0.0767361, 0.07396238, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1661, 81)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_9" type="Sprite2D" parent="1point5xFixing" unique_id=557441649]
+modulate = Color(0.08971349, 0.0767361, 0.07396238, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1688, 92)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_10" type="Sprite2D" parent="1point5xFixing" unique_id=2022995768]
+modulate = Color(0.08971349, 0.0767361, 0.07396238, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1705, 84)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_6" type="Sprite2D" parent="1point5xFixing" unique_id=707347990]
+modulate = Color(0.02234926, 0.09192621, 0.11240662, 1)
+material = SubResource("ShaderMaterial_4nl8o")
+position = Vector2(1000.5, 81)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_3" type="Sprite2D" parent="1point5xFixing" unique_id=235974867]
+modulate = Color(0.11323204, 0.07108071, 0.030533066, 1)
+material = SubResource("ShaderMaterial_3c5xb")
+position = Vector2(1175, 85)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree3_4" type="Sprite2D" parent="1point5xFixing" unique_id=554103886]
+modulate = Color(0.02234926, 0.09192621, 0.11240662, 1)
+material = SubResource("ShaderMaterial_4nl8o")
+position = Vector2(660, 80)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("7_nfyjk")
 
 [node name="0point8xMoving" type="Parallax2D" parent="." unique_id=1250343372]
 z_index = -1
@@ -1113,8 +1674,96 @@ rotation = 3.1415925
 scale = Vector2(1, -1)
 texture = ExtResource("7_nfyjk")
 
+[node name="Tree1_6" type="Sprite2D" parent="0point8xFixing" unique_id=1138152566]
+modulate = Color(0.5685498, 0.7235185, 0.7347652, 1)
+material = SubResource("ShaderMaterial_ecic6")
+position = Vector2(796, 41.000008)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("5_ewxpp")
+
+[node name="Tree1_7" type="Sprite2D" parent="0point8xFixing" unique_id=803865351]
+modulate = Color(0.7195023, 0.6622251, 0.76696604, 1)
+material = SubResource("ShaderMaterial_ecic6")
+position = Vector2(731.5, 41.000008)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("5_ewxpp")
+
+[node name="Tree1_8" type="Sprite2D" parent="0point8xFixing" unique_id=1701511941]
+modulate = Color(0.526843, 0.7547998, 0.548389, 1)
+material = SubResource("ShaderMaterial_ecic6")
+position = Vector2(785.5, 41.000008)
+texture = ExtResource("5_ewxpp")
+
+[node name="Tree1_9" type="Sprite2D" parent="0point8xFixing" unique_id=133316848]
+modulate = Color(0.33863637, 0.5749091, 0.6348845, 1)
+material = SubResource("ShaderMaterial_ecic6")
+position = Vector2(676, 41.000008)
+texture = ExtResource("5_ewxpp")
+
+[node name="Tree2_3" type="Sprite2D" parent="0point8xFixing" unique_id=322970052]
+modulate = Color(0.46481615, 0.86485463, 0.8319252, 1)
+material = SubResource("ShaderMaterial_obbm8")
+position = Vector2(711.5, 41.000008)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree2_4" type="Sprite2D" parent="0point8xFixing" unique_id=426944696]
+modulate = Color(0.5537241, 0.8562728, 0.77579844, 1)
+material = SubResource("ShaderMaterial_obbm8")
+position = Vector2(643, 41.000004)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree4_5" type="Sprite2D" parent="0point8xFixing" unique_id=733390253]
+modulate = Color(0.65888023, 0.85621506, 0.70765805, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(750.5, 56.000004)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree3_20" type="Sprite2D" parent="0point8xFixing" unique_id=1431420351]
+modulate = Color(0.4178476, 0.2949197, 0.3531601, 1)
+material = SubResource("ShaderMaterial_qh4b8")
+position = Vector2(664, 63.000004)
+rotation = 3.1415925
+scale = Vector2(-1, -1)
+texture = ExtResource("7_nfyjk")
+
+[node name="Tree2_6" type="Sprite2D" parent="0point8xFixing" unique_id=2015380790]
+modulate = Color(0.7271013, 0.6152885, 0.56634897, 1)
+material = SubResource("ShaderMaterial_obbm8")
+position = Vector2(1091.5, 39)
+texture = ExtResource("6_2rlar")
+
+[node name="Tree4_11" type="Sprite2D" parent="0point8xFixing" unique_id=2096725106]
+modulate = Color(0.57700837, 0.5770084, 0.57700837, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(1040, 54)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree4_12" type="Sprite2D" parent="0point8xFixing" unique_id=146477737]
+modulate = Color(0.58071816, 0.49968833, 0.44444513, 1)
+material = SubResource("ShaderMaterial_xvv1a")
+position = Vector2(1005, 54)
+texture = ExtResource("8_hu8kv")
+
+[node name="Tree2_7" type="Sprite2D" parent="0point8xFixing" unique_id=1069552622]
+modulate = Color(0.5806579, 0.7154933, 0.20485654, 1)
+material = SubResource("ShaderMaterial_obbm8")
+position = Vector2(1025, 39)
+texture = ExtResource("6_2rlar")
+
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=391920685]
 color = Color(0.5370987, 0.5370987, 0.5370987, 1)
 
-[node name="PopTops" parent="." unique_id=1770411110 instance=ExtResource("15_ecic6")]
+[node name="PopTopsPosition1" type="Node2D" parent="." unique_id=291048422]
 position = Vector2(613, 80)
+
+[node name="PopTopsPosition2" type="Node2D" parent="." unique_id=2025007576]
+position = Vector2(954, 80)

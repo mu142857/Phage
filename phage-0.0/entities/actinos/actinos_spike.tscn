@@ -110,9 +110,6 @@ frame = 6
 frame_progress = 1.0
 offset = Vector2(76.5, -60)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=832202812]
-polygon = PackedVector2Array(3, 0, 1, -4, 0, -26, -1, -4, -3, 0)
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1952941583]
 libraries/ = SubResource("AnimationLibrary_lw8ex")
 

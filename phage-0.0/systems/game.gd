@@ -13,7 +13,7 @@ signal screen_filter(amount: float, colour: Color)
 @export var hit_stop_duration: float = 0.035
 @export var hit_recover_duration: float = 0.18
 @export var hit_flash_duration: float = 0.4
-@export var hit_flash_color: Color = Color(1.0, 0.1, 0.1, 0.8)
+@export var hit_flash_color: Color = Color(1.0, 0.1, 0.1, 0.16)
 
 const CAMERA_FOLLOW_GROUP: StringName = &"camera_follow"
 const CAMERA_FIXED_GROUP: StringName = &"camera_fixed"

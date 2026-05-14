@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c71lynlj5c5dq"]
 
-[ext_resource type="Texture2D" path="res://actinos_organs.png" id="1_1gn8v"]
+[ext_resource type="Texture2D" uid="uid://bknw0lavwsir" path="res://entities/actinos/actinos_organs.png" id="1_56fic"]
 [ext_resource type="Script" uid="uid://djuw7nc37st30" path="res://entities/actinos/actinos_death_effect.gd" id="2_56fic"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_56fic"]
@@ -33,7 +33,7 @@ material = SubResource("CanvasItemMaterial_56fic")
 rotation = 0.19821683
 emitting = false
 amount = 12
-texture = ExtResource("1_1gn8v")
+texture = ExtResource("1_56fic")
 one_shot = true
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_4fmrr")

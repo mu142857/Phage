@@ -4,12 +4,16 @@ signal died
 
 @export var max_health: int = 400
 @export var health: int = 400
-@export var attack_distance: float = 100.0
-@export var spin_distance: float = 20.0
+@export var attack_distance: float = 70.0
+@export var spin_distance: float = 25.0
 
 func _ready() -> void:
 	add_to_group("monster")
 	health = clampi(health, 0, max_health)
+	var sprite := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite != null and sprite.material is ShaderMaterial:
+		var shader_mat := sprite.material as ShaderMaterial
+		shader_mat.set_shader_parameter("Enabled", false)
 
 func take_damage(value: int) -> void:
 	health -= value

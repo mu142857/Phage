@@ -83,9 +83,11 @@ func set_lock(locked: bool) -> void:
 func take_damage(amount: int) -> void:
 	if is_invincible:
 		return
+	var previous_health := health
 	health = max(0, health - amount)
 	health_changed.emit(health)
-	Game.play_hit_feedback()
+	if health < previous_health:
+		Game.play_hit_feedback()
 	# Trigger flash shader here later (no hurt state by design)
 	_start_invincibility()
 	if health <= 0:

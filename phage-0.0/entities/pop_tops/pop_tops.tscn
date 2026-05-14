@@ -10,8 +10,9 @@
 [ext_resource type="Script" uid="uid://doimpvdgfvtac" path="res://entities/pop_tops/spin(3).gd" id="7_ftmhd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xsxg8"]
+resource_local_to_scene = true
 shader = ExtResource("2_sxt5m")
-shader_parameter/Enabled = true
+shader_parameter/Enabled = false
 shader_parameter/Tint = Color(0.5818549, 0.8095983, 0.75085557, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5oxri"]
@@ -322,7 +323,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5oxri"]
@@ -345,9 +346,8 @@ script = ExtResource("1_k7wsa")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=884480841]
 material = SubResource("ShaderMaterial_xsxg8")
 sprite_frames = SubResource("SpriteFrames_k7wsa")
-animation = &"Spin"
-autoplay = "Spin"
-frame = 5
+animation = &"Idle"
+autoplay = "Idle"
 offset = Vector2(-3, -32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1086345879]

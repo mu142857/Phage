@@ -2,7 +2,7 @@ extends BasicState
 
 @export var ground_y: float = 80.0
 @export var attack_fps: float = 10.0
-@export var trigger_frame_index: int = 3
+@export var trigger_frame_index: int = 6
 @export var bullet_flight_time: float = -1.0
 @export var bullet_gravity: float = -1.0
 @export var attack_timeout_fallback: float = 1.8
@@ -30,7 +30,7 @@ func enter() -> void:
 
 func process(delta: float) -> void:
 	attack_elapsed += delta
-	if not bullet_spawned and attack_elapsed >= _trigger_time():
+	if not bullet_spawned and _should_spawn_bullet():
 		_spawn_bullet()
 		bullet_spawned = true
 
@@ -41,13 +41,19 @@ func exit() -> void:
 
 func _on_animation_finished() -> void:
 	if ani_2D.animation == "Attack":
-		print("asddasdasdfasdyfahkwdf")
 		get_parent().change_state(1)
 
 func _trigger_time() -> float:
 	if attack_fps <= 0.0:
 		return 0.0
 	return float(trigger_frame_index) / attack_fps
+
+func _should_spawn_bullet() -> bool:
+	if not is_instance_valid(ani_2D):
+		return attack_elapsed >= _trigger_time()
+	if ani_2D.animation == "Attack" and ani_2D.frame >= trigger_frame_index:
+		return true
+	return attack_elapsed >= _trigger_time()
 
 func _spawn_bullet() -> void:
 	if BULLET_SCENE == null:

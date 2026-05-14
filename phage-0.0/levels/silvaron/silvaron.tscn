@@ -1,0 +1,168 @@
+[gd_scene format=3 uid="uid://d71f5lta185c"]
+
+[ext_resource type="Script" uid="uid://b0yqm2ol2in4y" path="res://levels/silvaron/silvaron.gd" id="1_4cmem"]
+[ext_resource type="Texture2D" uid="uid://dbvrbun0815ca" path="res://levels/silvaron/silvaron_ground.png" id="1_38yq8"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_wiwgd"]
+[ext_resource type="Texture2D" uid="uid://dqfy7nayqs18q" path="res://levels/silvaron/silvaron_background.png" id="4_2rk1k"]
+[ext_resource type="Texture2D" uid="uid://cj08xg8batjgi" path="res://levels/silvaron/silvaron_lake_edge.png" id="4_22mx7"]
+[ext_resource type="Texture2D" uid="uid://dtdmcsjxx408l" path="res://levels/silvaron/silvaron_platform.png" id="5_d58ry"]
+[ext_resource type="Shader" uid="uid://dtyfaypopvdpc" path="res://asstes/shaders/silvaron.gdshader" id="5_ghrtq"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_4cmem"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2rk1k"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ghrtq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_22mx7"]
+size = Vector2(485, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d58ry"]
+size = Vector2(121.5, 24)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ghrtq"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_22mx7"]
+noise = SubResource("FastNoiseLite_ghrtq")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_22mx7"]
+shader = ExtResource("5_ghrtq")
+shader_parameter/water_colour = Color(0, 0.32941177, 0.5058824, 1)
+shader_parameter/wave_noise = SubResource("NoiseTexture2D_22mx7")
+
+[sub_resource type="Gradient" id="Gradient_d58ry"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_832g4"]
+gradient = SubResource("Gradient_d58ry")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_832g4"]
+size = Vector2(32, 7)
+
+[sub_resource type="Gradient" id="Gradient_l5uys"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_38yq8"]
+gradient = SubResource("Gradient_l5uys")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="Silvaron" type="Node2D" unique_id=374355723]
+script = ExtResource("1_4cmem")
+
+[node name="Walls" type="Node2D" parent="." unique_id=756676257]
+z_index = 10
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=1634970643]
+collision_mask = 0
+
+[node name="CollisionShape2D1" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=231672102]
+position = Vector2(0, 400)
+shape = SubResource("WorldBoundaryShape2D_4cmem")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=350703357]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_2rk1k")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=153208044]
+position = Vector2(1326, 90)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_ghrtq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1212769706]
+position = Vector2(241.5, 85)
+shape = SubResource("RectangleShape2D_22mx7")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=67573891]
+position = Vector2(838, 85)
+shape = SubResource("RectangleShape2D_22mx7")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1478394116]
+position = Vector2(538.25, 94)
+shape = SubResource("RectangleShape2D_d58ry")
+
+[node name="Lake" type="Sprite2D" parent="Walls" unique_id=1274738904]
+material = SubResource("ShaderMaterial_22mx7")
+position = Vector2(540, 94)
+scale = Vector2(1.875, 0.37499997)
+texture = SubResource("GradientTexture2D_832g4")
+
+[node name="1" type="Sprite2D" parent="Walls" unique_id=800941959]
+texture = ExtResource("1_38yq8")
+centered = false
+
+[node name="2" type="Sprite2D" parent="Walls" unique_id=447453413]
+position = Vector2(160, 0)
+texture = ExtResource("1_38yq8")
+centered = false
+
+[node name="3" type="Sprite2D" parent="Walls" unique_id=608541775]
+position = Vector2(320, 0)
+texture = ExtResource("1_38yq8")
+centered = false
+
+[node name="4" type="Sprite2D" parent="Walls" unique_id=2114123543]
+position = Vector2(600, 0)
+texture = ExtResource("1_38yq8")
+centered = false
+
+[node name="5" type="Sprite2D" parent="Walls" unique_id=2048230061]
+position = Vector2(760, 0)
+texture = ExtResource("1_38yq8")
+centered = false
+
+[node name="6" type="Sprite2D" parent="Walls" unique_id=1705308111]
+position = Vector2(920, 0)
+texture = ExtResource("1_38yq8")
+centered = false
+
+[node name="LakeEdge1" type="Sprite2D" parent="Walls" unique_id=1120421082]
+position = Vector2(494, 90)
+texture = ExtResource("4_22mx7")
+
+[node name="LakeEdge2" type="Sprite2D" parent="Walls" unique_id=597024628]
+position = Vector2(584, 90)
+scale = Vector2(-1, 1)
+texture = ExtResource("4_22mx7")
+
+[node name="Platforms" type="Node2D" parent="." unique_id=41951980]
+
+[node name="Platform1" type="Sprite2D" parent="Platforms" unique_id=406440035]
+position = Vector2(240, -200)
+texture = ExtResource("5_d58ry")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Platforms/Platform1" unique_id=742906330]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform1/StaticBody2D" unique_id=50740785]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_832g4")
+debug_color = Color(0.368734, 0.6037999, 0.35086948, 0)
+
+[node name="Trees" type="Node2D" parent="." unique_id=952544519]
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("1_wiwgd")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+z_index = 10
+position = Vector2(232, -253)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1167658772]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("GradientTexture2D_38yq8")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=286134911]
+visible = false
+color = Color(0.5370987, 0.5370987, 0.5370987, 1)
+
+[node name="0point1xFixing" type="Parallax2D" parent="." unique_id=1602762584]
+scroll_scale = Vector2(0.1, 0.1)
+repeat_size = Vector2(160, 0)
+repeat_times = 15
+
+[node name="Sprite2D" type="Sprite2D" parent="0point1xFixing" unique_id=657686036]
+position = Vector2(0, -70)
+texture = ExtResource("4_2rk1k")
+centered = false

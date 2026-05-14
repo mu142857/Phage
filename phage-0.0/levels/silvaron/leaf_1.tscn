@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dpr1lfo6y73bv"]
+
+[sub_resource type="Gradient" id="Gradient_xyuvp"]
+colors = PackedColorArray(0.47697306, 0.9652514, 0, 1, 0.340241, 0.3305126, 0.11219209, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_iodma"]
+gradient = SubResource("Gradient_xyuvp")
+
+[sub_resource type="Gradient" id="Gradient_qiqcy"]
+offsets = PackedFloat32Array(0, 0.15765765, 0.8153153, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 0.7630391, 3.0226112e-05, 0.23233941, 1, 1, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_v3byh"]
+gradient = SubResource("Gradient_qiqcy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6o0ie"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(15, 15, 1)
+direction = Vector3(0.5, 1, 0)
+spread = 15.0
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_v3byh")
+color_initial_ramp = SubResource("GradientTexture1D_iodma")
+
+[node name="Leaf1" type="GPUParticles2D" unique_id=901768451]
+amount = 16
+lifetime = 4.0
+process_material = SubResource("ParticleProcessMaterial_6o0ie")

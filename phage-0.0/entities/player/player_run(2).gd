@@ -36,7 +36,7 @@ func process(delta: float) -> void:
 		return
 
 	player.velocity.x = move_input * player.RUN_SPEED
-	player.velocity.y += player.GRAVITY * delta
+	player.apply_gravity(delta)
 
 	if move_input > 0.0:
 		player.set_facing_direction(1)

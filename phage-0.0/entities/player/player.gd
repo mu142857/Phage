@@ -32,6 +32,9 @@ const STATE_BALL: int = 7
 const STATE_UNCONTRACT: int = 8
 const STATE_ATTACK_1: int = 9
 
+# Maximum downward speed (terminal velocity). Normal jumps shouldn't hit this.
+const MAX_FALL_SPEED: float = 600.0
+
 # ============================================================
 # State (read by states, written by player or specific states)
 # ============================================================
@@ -99,6 +102,15 @@ func _start_invincibility() -> void:
 	is_invincible = true
 	await get_tree().create_timer(INVINCIBLE_DURATION).timeout
 	is_invincible = false
+
+var reached_terminal: bool = false
+
+func apply_gravity(delta: float, multiplier: float = 1.0) -> void:
+	# Apply gravity and clamp to terminal velocity. Mark if terminal reached.
+	velocity.y += GRAVITY * multiplier * delta
+	if velocity.y > MAX_FALL_SPEED:
+		velocity.y = MAX_FALL_SPEED
+		reached_terminal = true
 
 func set_ball_form(enabled: bool) -> void:
 	is_in_ball_form = enabled

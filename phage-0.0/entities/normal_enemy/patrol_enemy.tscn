@@ -1,0 +1,128 @@
+[gd_scene format=3 uid="uid://cbl1wev1t7l4y"]
+
+[ext_resource type="Texture2D" uid="uid://br22p7ngf6cxs" path="res://entities/pop_tops/pop_top_death.png" id="1_lcgpl"]
+[ext_resource type="Script" uid="uid://b2snu7ki4j8va" path="res://entities/normal_enemy/patrol_enemy.gd" id="1_rt7w2"]
+[ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_v7y7h"]
+[ext_resource type="Script" uid="uid://bg8dd0jdo67rm" path="res://systems/state_machine/state_manager.gd" id="4_30r6r"]
+[ext_resource type="Script" uid="uid://bu2nyq12bjftd" path="res://entities/normal_enemy/PatrolEnemy_null(0).gd" id="5_arlvp"]
+[ext_resource type="Script" uid="uid://dv36rnhk8yb04" path="res://entities/normal_enemy/PatrolEnemy_moving(1).gd" id="6_vfn8f"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_30r6r"]
+shader = ExtResource("2_v7y7h")
+shader_parameter/Enabled = false
+shader_parameter/Tint = Color(1, 1, 1, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rt7w2"]
+atlas = ExtResource("1_lcgpl")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v7y7h"]
+atlas = ExtResource("1_lcgpl")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_30r6r"]
+atlas = ExtResource("1_lcgpl")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_twnna"]
+atlas = ExtResource("1_lcgpl")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_opy7l"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rt7w2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v7y7h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_30r6r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_twnna")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_arlvp"]
+size = Vector2(5.5, 6)
+
+[sub_resource type="Animation" id="Animation_ebm1s"]
+resource_name = "HitFlash"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_y062d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_twnna"]
+_data = {
+&"HitFlash": SubResource("Animation_ebm1s"),
+&"RESET": SubResource("Animation_y062d")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vfn8f"]
+size = Vector2(3883, 2707)
+
+[node name="PatrolEnemy" type="CharacterBody2D" unique_id=1096291053]
+script = ExtResource("1_rt7w2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=787967541]
+material = SubResource("ShaderMaterial_30r6r")
+position = Vector2(0, -4)
+sprite_frames = SubResource("SpriteFrames_opy7l")
+frame_progress = 0.00867183
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=159002919]
+position = Vector2(0.25, -3)
+shape = SubResource("RectangleShape2D_arlvp")
+
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=205087627]
+libraries/ = SubResource("AnimationLibrary_twnna")
+
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=2038750905]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=1999428528]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_vfn8f")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+metadata/_edit_lock_ = true
+
+[node name="StateMachine" type="Node" parent="." unique_id=1872397705]
+script = ExtResource("4_30r6r")
+
+[node name="Null(0)" type="Node" parent="StateMachine" unique_id=1186938188]
+script = ExtResource("5_arlvp")
+
+[node name="Moving(1)" type="Node" parent="StateMachine" unique_id=1396953408]
+script = ExtResource("6_vfn8f")

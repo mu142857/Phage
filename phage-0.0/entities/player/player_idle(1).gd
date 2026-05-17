@@ -52,7 +52,7 @@ func process(delta: float) -> void:
 		return
 
 	player.velocity.x = move_toward(player.velocity.x, 0.0, player.RUN_SPEED * 8.0 * delta)
-	player.velocity.y += player.GRAVITY * delta
+	player.apply_gravity(delta)
 	player.move_and_slide()
 
 

@@ -15,6 +15,8 @@ signal screen_filter(amount: float, colour: Color)
 @export var hit_flash_duration: float = 0.4
 @export var hit_flash_color: Color = Color(1.0, 0.1, 0.1, 0.16)
 
+@export var follow_offset: Vector2 = Vector2(0, -30)
+
 const CAMERA_FOLLOW_GROUP: StringName = &"camera_follow"
 const CAMERA_FIXED_GROUP: StringName = &"camera_fixed"
 const ANCHOR_FOLLOW: int = Camera2D.ANCHOR_MODE_DRAG_CENTER
@@ -67,7 +69,7 @@ func _process(delta: float) -> void:
 	if position_override_enabled:
 		global_position = position_override
 	elif follow_player and is_instance_valid(follow_target):
-		global_position = follow_target.global_position
+		global_position = follow_target.global_position + follow_offset
 	elif not follow_player:
 		global_position = Vector2.ZERO
 
@@ -234,7 +236,7 @@ func clear_position_override_smooth(duration: float = 0.2) -> void:
 		position_override_tween.kill()
 	var target_position := position_override
 	if follow_player and is_instance_valid(follow_target):
-		target_position = follow_target.global_position
+		target_position = follow_target.global_position + follow_offset
 	elif not follow_player:
 		target_position = Vector2.ZERO
 	var tween := create_tween()

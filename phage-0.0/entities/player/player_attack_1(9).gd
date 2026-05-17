@@ -81,7 +81,7 @@ func process(delta: float) -> void:
 	player.set_facing_direction(attack_locked_facing)
 
 	if not player.is_on_floor():
-		player.velocity.y += player.GRAVITY * delta
+		player.apply_gravity(delta)
 	elif player.velocity.y > 0.0:
 		player.velocity.y = 0.0
 	player.move_and_slide()

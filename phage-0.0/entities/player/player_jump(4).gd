@@ -12,6 +12,7 @@ func enter() -> void:
 	apex_hang_elapsed = 0.0
 	player.set_walking_effect(true)
 	player.velocity.y = player.JUMP_SPEED
+	player.reached_terminal = false
 	if is_instance_valid(player.sprite):
 		player.sprite.play(&"Jump")
 
@@ -45,7 +46,7 @@ func process(delta: float) -> void:
 		apex_hang_elapsed += delta
 		gravity_multiplier = minf(gravity_multiplier, player.JUMP_APEX_GRAVITY_MULTIPLIER)
 
-	player.velocity.y += player.GRAVITY * gravity_multiplier * delta
+	player.apply_gravity(delta, gravity_multiplier)
 
 	if player.velocity.y >= 0.0:
 		change_state(player.STATE_FALL)

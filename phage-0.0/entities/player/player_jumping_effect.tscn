@@ -30,6 +30,7 @@ color_ramp = SubResource("GradientTexture1D_svia4")
 color_initial_ramp = SubResource("GradientTexture1D_wx1h7")
 
 [node name="PlayerJumpingEffect" type="GPUParticles2D" unique_id=1580968959]
+z_index = 10
 emitting = false
 amount = 10
 lifetime = 0.5

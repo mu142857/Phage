@@ -1,10 +1,10 @@
-class_name Wowen
+class_name PatrolEnemy
 extends CharacterBody2D
 
 signal died
 
-@export var max_health: int = 1800
-@export var health: int = 1800
+@export var max_health: int = 800
+@export var health: int = 800
 @export var move_speed: float = 40.0
 @export var patrol_distance: float = 72.0
 @export var use_custom_patrol_range: bool = false
@@ -16,8 +16,6 @@ signal died
 @export var knockback_speed: float = 160.0
 @export var knockback_vertical_speed: float = -120.0
 @export var knockback_duration: float = 0.16
-@export var knockback_edge_falloff_distance: float = 48.0
-@export var min_knockback_factor: float = 0.15
 
 var direct: int = 1
 var _patrol_origin_x: float = 0.0
@@ -38,7 +36,7 @@ func _ready() -> void:
 		patrol_min_x = _patrol_origin_x - patrol_distance
 		patrol_max_x = _patrol_origin_x + patrol_distance
 	elif patrol_min_x > patrol_max_x:
-		var temp_x = patrol_min_x
+		var temp_x := patrol_min_x
 		patrol_min_x = patrol_max_x
 		patrol_max_x = temp_x
 	_setup_body_collision()
@@ -84,26 +82,17 @@ func _apply_gravity(delta: float) -> void:
 		velocity.y = 0.0
 
 func _start_knockback() -> void:
-	var knockback_direction = -float(direct)
-	var players = get_tree().get_nodes_in_group("player")
+	var knockback_direction := -float(direct)
+	var players := get_tree().get_nodes_in_group("player")
 	if not players.is_empty():
-		var candidate = players[0]
+		var candidate := players[0]
 		if candidate is Node2D:
-			var player_x = (candidate as Node2D).global_position.x
+			var player_x := (candidate as Node2D).global_position.x
 			knockback_direction = sign(global_position.x - player_x)
 			if knockback_direction == 0.0:
 				knockback_direction = -float(direct)
-	# Compute horizontal knockback scaling near patrol edges to avoid being knocked off platforms
-	var hk_dir = knockback_direction
-	var horiz_factor = 1.0
-	if patrol_max_x != patrol_min_x:
-		var dist_to_min = absf(global_position.x - patrol_min_x)
-		var dist_to_max = absf(global_position.x - patrol_max_x)
-		var nearest = min(dist_to_min, dist_to_max)
-		horiz_factor = clampf(nearest / knockback_edge_falloff_distance, min_knockback_factor, 1.0)
-
 	_knockback_time_left = knockback_duration
-	velocity.x = knockback_speed * hk_dir * horiz_factor
+	velocity.x = knockback_speed * knockback_direction
 	velocity.y = knockback_vertical_speed
 	if knockback_direction != 0.0:
 		direct = int(sign(knockback_direction))
@@ -117,12 +106,12 @@ func _play_hit_flash() -> void:
 func _try_damage_player_from_collision() -> void:
 	if _contact_damage_time_left > 0.0:
 		return
-	var slide_count = get_slide_collision_count()
+	var slide_count := get_slide_collision_count()
 	for index in range(slide_count):
-		var collision = get_slide_collision(index)
+		var collision := get_slide_collision(index)
 		if collision == null:
 			continue
-		var collider = collision.get_collider()
+		var collider := collision.get_collider()
 		if collider == null:
 			continue
 		if not (collider is Node):
@@ -137,23 +126,19 @@ func _try_damage_player_from_collision() -> void:
 func _setup_visual() -> void:
 	if sprite == null:
 		return
-	# Ensure each instance has a unique material so animation toggles don't affect others
-		if sprite.material != null:
-			var new_mat = sprite.material.duplicate()
-			sprite.material = new_mat
-		if sprite.material is ShaderMaterial:
-			var shader_mat = sprite.material as ShaderMaterial
-			shader_mat.set_shader_parameter("Enabled", false)
+	if sprite.material is ShaderMaterial:
+		var shader_mat := sprite.material as ShaderMaterial
+		shader_mat.set_shader_parameter("Enabled", false)
 
 func _setup_body_collision() -> void:
 	if body_collision == null:
 		return
 	if body_collision.shape == null:
-		var fallback_shape = RectangleShape2D.new()
+		var fallback_shape := RectangleShape2D.new()
 		fallback_shape.size = Vector2(12.0, 14.0)
 		body_collision.shape = fallback_shape
 	if body_collision.shape is RectangleShape2D:
-		var rect = body_collision.shape as RectangleShape2D
+		var rect := body_collision.shape as RectangleShape2D
 		if rect.size == Vector2.ZERO:
 			rect.size = Vector2(12.0, 14.0)
 
@@ -167,7 +152,7 @@ func _should_turn_around() -> bool:
 func _update_facing_visual() -> void:
 	if sprite == null:
 		return
-	var scale_x = absf(sprite.scale.x)
+	var scale_x := absf(sprite.scale.x)
 	if scale_x == 0.0:
 		scale_x = 1.0
 	sprite.scale.x = scale_x * float(direct)

@@ -1,28 +1,56 @@
-[gd_scene format=3 uid="uid://cbl1wev1t7l4y"]
+[gd_scene format=3 uid="uid://dumhmcodsiajy"]
 
-[ext_resource type="Script" uid="uid://biuww8h4expi3" path="res://entities/wowen/wowen.gd" id="1_v7y7h"]
-[ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_v7y7h"]
-[ext_resource type="Texture2D" uid="uid://nsdpuhwgw3rd" path="res://entities/wowen/wowen-Sheet.png" id="3_arlvp"]
+[ext_resource type="Script" uid="uid://b2snu7ki4j8va" path="res://entities/normal_enemy/patrol_enemy.gd" id="1_dlmq8"]
+[ext_resource type="Texture2D" uid="uid://nsdpuhwgw3rd" path="res://entities/wowen/wowen-Sheet.png" id="3_76sri"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_30r6r"]
-shader = ExtResource("2_v7y7h")
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_a58jk"]
+parameter_name = "Tint"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_dlmq8"]
+parameter_name = "Enabled"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeIf" id="VisualShaderNodeIf_eninp"]
+default_input_values = [0, 0.0, 1, 1.0, 2, 1e-05, 3, Vector3(0, 0, 0), 4, Vector3(0, 0, 0), 5, Vector3(0, 0, 0)]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_76sri"]
+input_name = "color"
+
+[sub_resource type="VisualShader" id="VisualShader_o1xuu"]
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(940, -200)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_a58jk")
+nodes/fragment/2/position = Vector2(-20, 160)
+nodes/fragment/3/node = SubResource("VisualShaderNodeBooleanParameter_dlmq8")
+nodes/fragment/3/position = Vector2(-20, -200)
+nodes/fragment/4/node = SubResource("VisualShaderNodeIf_eninp")
+nodes/fragment/4/position = Vector2(540, -200)
+nodes/fragment/5/node = SubResource("VisualShaderNodeInput_76sri")
+nodes/fragment/5/position = Vector2(-100, 600)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 2, 0, 4, 3, 4, 0, 0, 0, 5, 0, 4, 4, 5, 0, 4, 5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7rg2m"]
+resource_local_to_scene = true
+shader = SubResource("VisualShader_o1xuu")
 shader_parameter/Enabled = false
-shader_parameter/Tint = Color(1, 1, 1, 1)
+shader_parameter/Tint = Color(0.3406633, 0.52611035, 0.5776887, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vfn8f"]
-atlas = ExtResource("3_arlvp")
+atlas = ExtResource("3_76sri")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lagth"]
-atlas = ExtResource("3_arlvp")
+atlas = ExtResource("3_76sri")
 region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nh5ax"]
-atlas = ExtResource("3_arlvp")
+atlas = ExtResource("3_76sri")
 region = Rect2(128, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k4e8h"]
-atlas = ExtResource("3_arlvp")
+atlas = ExtResource("3_76sri")
 region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_opy7l"]
@@ -88,16 +116,16 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vfn8f"]
 size = Vector2(3883, 2707)
 
-[node name="PatrolEnemy" type="CharacterBody2D" unique_id=1096291053]
+[node name="Wowen" type="CharacterBody2D" unique_id=1096291053]
 modulate = Color(0.63375676, 0.6337568, 0.63375676, 1)
 collision_layer = 4
-script = ExtResource("1_v7y7h")
+script = ExtResource("1_dlmq8")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=787967541]
-material = SubResource("ShaderMaterial_30r6r")
+material = SubResource("ShaderMaterial_7rg2m")
 sprite_frames = SubResource("SpriteFrames_opy7l")
 autoplay = "default"
-frame_progress = 0.37815234
+frame_progress = 0.9433429
 offset = Vector2(1, -16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=159002919]
@@ -106,6 +134,7 @@ shape = SubResource("RectangleShape2D_arlvp")
 debug_color = Color(0, 0.60038817, 0.70000815, 0)
 
 [node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=205087627]
+root_motion_local = true
 libraries/ = SubResource("AnimationLibrary_twnna")
 
 [node name="PlayerCheck" type="Area2D" parent="." unique_id=2038750905]

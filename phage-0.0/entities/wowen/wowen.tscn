@@ -35,7 +35,7 @@ nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 2, 0, 4, 3, 4, 0, 0, 0
 resource_local_to_scene = true
 shader = SubResource("VisualShader_o1xuu")
 shader_parameter/Enabled = false
-shader_parameter/Tint = Color(0.3406633, 0.52611035, 0.5776887, 1)
+shader_parameter/Tint = Color(0.45800614, 0.65911686, 0.7153796, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vfn8f"]
 atlas = ExtResource("3_76sri")
@@ -113,11 +113,12 @@ _data = {
 &"RESET": SubResource("Animation_y062d")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_vfn8f"]
-size = Vector2(3883, 2707)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a58jk"]
+size = Vector2(22, 9)
 
 [node name="Wowen" type="CharacterBody2D" unique_id=1096291053]
 modulate = Color(0.63375676, 0.6337568, 0.63375676, 1)
+scale = Vector2(-1, 1)
 collision_layer = 4
 script = ExtResource("1_dlmq8")
 
@@ -125,7 +126,7 @@ script = ExtResource("1_dlmq8")
 material = SubResource("ShaderMaterial_7rg2m")
 sprite_frames = SubResource("SpriteFrames_opy7l")
 autoplay = "default"
-frame_progress = 0.9433429
+frame_progress = 0.47057086
 offset = Vector2(1, -16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=159002919]
@@ -137,13 +138,11 @@ debug_color = Color(0, 0.60038817, 0.70000815, 0)
 root_motion_local = true
 libraries/ = SubResource("AnimationLibrary_twnna")
 
-[node name="PlayerCheck" type="Area2D" parent="." unique_id=2038750905]
+[node name="AttackCheck" type="Area2D" parent="." unique_id=423803918]
 collision_layer = 0
 collision_mask = 2
-metadata/_edit_lock_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=1999428528]
-position = Vector2(0, -1)
-shape = SubResource("RectangleShape2D_vfn8f")
-debug_color = Color(0, 0.6, 0.69803923, 0)
-metadata/_edit_lock_ = true
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackCheck" unique_id=460353044]
+position = Vector2(0, -4.5)
+shape = SubResource("RectangleShape2D_a58jk")
+debug_color = Color(0, 0.60038817, 0.70000815, 0)

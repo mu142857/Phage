@@ -4,8 +4,9 @@ const ATTACK_BURST_SPEED: float = 180.0
 const ATTACK_BRAKE_ACCEL: float = 800.0
 const ATTACK_BURST_SPEED_AIR: float = 240.0
 const ATTACK_BRAKE_ACCEL_AIR: float = 380.0
-const ATTACK1_1_DAMAGE: int = 100
-const ATTACK1_2_DAMAGE: int = 160
+const ATTACK1_1_DAMAGE: int = 90
+const ATTACK1_2_DAMAGE: int = 60
+const AIR_ATTACK_INDEX: float = 3
 const ATTACK1_1_TRIGGER_FRAME: int = 1
 const ATTACK1_2_TRIGGER_FRAME: int = 1
 const ATTACK1_1_TRIGGER_TIME: float = 2.0 / 12.0
@@ -35,6 +36,7 @@ var player_ref: Player = null
 var recoil_time_left: float = 0.0
 var lunge_suppress_left: float = 0.0
 var suppress_next_lunge: bool = false
+var is_air_attack: bool = false
 
 func enter() -> void:
 	var player := host as Player
@@ -47,6 +49,7 @@ func enter() -> void:
 	attack_elapsed = 0.0
 	phase_2_requested = false
 	current_phase = 1
+	is_air_attack = not player.is_on_floor()
 	attack_locked_facing = player.facing_direction
 	if attack_locked_facing == 0:
 		attack_locked_facing = 1
@@ -100,7 +103,7 @@ func attack1_1_check() -> void:
 	if phase_1_done:
 		return
 	phase_1_done = true
-	_check_attack_hitbox(attack_hitbox_1, ATTACK1_1_DAMAGE)
+	_check_attack_hitbox(attack_hitbox_1, _get_attack_damage(ATTACK1_1_DAMAGE))
 
 func attack1_2_check() -> void:
 	if not phase_2_requested:
@@ -108,7 +111,12 @@ func attack1_2_check() -> void:
 	if phase_2_done:
 		return
 	phase_2_done = true
-	_check_attack_hitbox(attack_hitbox_2, ATTACK1_2_DAMAGE)
+	_check_attack_hitbox(attack_hitbox_2, _get_attack_damage(ATTACK1_2_DAMAGE))
+
+func _get_attack_damage(base_damage: int) -> int:
+	if is_air_attack:
+		return base_damage * AIR_ATTACK_INDEX
+	return base_damage
 
 func _try_auto_attack_phases(player: Player) -> void:
 	if not is_instance_valid(player.sprite):
@@ -161,7 +169,11 @@ func _check_attack_hitbox(hitbox: Area2D, damage: int) -> void:
 			continue
 		if body.has_method("take_damage"):
 			body.call("take_damage", damage)
-			$"../..".spawn_hit_effect(body.global_position.x)
+			if body is Node2D and player_ref != null:
+				var hit_x := (body as Node2D).global_position.x
+				if is_air_attack:
+					player_ref.spawn_jump_attack_effect(hit_x)
+				player_ref.spawn_hit_effect(hit_x)
 			Game.flash(0.1, Color(0.815, 0.908, 0.915, 1.0))
 			Game.shake_camera(2)
 		_apply_hit_recoil()

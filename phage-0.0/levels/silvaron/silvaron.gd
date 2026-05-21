@@ -2,9 +2,9 @@ extends Node2D
 
 @export var pop_tops_scene: PackedScene = preload("res://entities/pop_tops/pop_tops.tscn")
 @export var camera_limit_top: int = -100000
-@export var camera_limit_bottom: int = 400
+@export var camera_limit_bottom: int = 410
 @export var camera_limit_left: int = 0
-@export var camera_limit_right: int = 1325
+@export var camera_limit_right: int = 1365.0
 
 const POP_TOPS_SPAWN_POINTS: Array[NodePath] = [
 	NodePath("PopTopsPosition1"),

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://capcsmxn6ost3"]
 
 [sub_resource type="Gradient" id="Gradient_b5cvc"]
-offsets = PackedFloat32Array(0, 0.990991)
-colors = PackedColorArray(0.98117346, 0.58391625, 0.68493724, 1, 0.60319376, 0.02211714, 0.38057995, 1)
+offsets = PackedFloat32Array(0, 0.518018, 0.990991)
+colors = PackedColorArray(1.8059429, 1.0921792, 1.2739512, 1, 0.98117346, 0.58391625, 0.68493724, 1, 0.60319376, 0.02211714, 0.38057995, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_7t04u"]
 gradient = SubResource("Gradient_b5cvc")
@@ -14,6 +14,13 @@ colors = PackedColorArray(2.0002677, 2.0002677, 2.0002677, 0, 2, 2, 2, 1, 1, 1, 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_b5cvc"]
 gradient = SubResource("Gradient_bhu7c")
 
+[sub_resource type="Curve" id="Curve_bhu7c"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.49968964), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_b5cvc"]
+curve = SubResource("Curve_bhu7c")
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7t04u"]
 particle_flag_disable_z = true
 spread = 180.0
@@ -21,12 +28,15 @@ initial_velocity_max = 100.0
 gravity = Vector3(0, 100, 0)
 linear_accel_min = 99.99999
 linear_accel_max = 99.99999
+scale_min = 2.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_b5cvc")
 color_ramp = SubResource("GradientTexture1D_b5cvc")
 color_initial_ramp = SubResource("GradientTexture1D_7t04u")
 
 [node name="JumpAttackEffect" type="GPUParticles2D" unique_id=1531444346]
 emitting = false
-amount = 16
+amount = 20
 lifetime = 0.3
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_7t04u")

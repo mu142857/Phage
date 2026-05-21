@@ -15,7 +15,7 @@ signal screen_filter(amount: float, colour: Color)
 @export var hit_flash_duration: float = 0.4
 @export var hit_flash_color: Color = Color(1.0, 0.1, 0.1, 0.16)
 
-@export var follow_offset: Vector2 = Vector2(0, -30)
+@export var follow_offset: Vector2 = Vector2(0, -20)
 
 const CAMERA_FOLLOW_GROUP: StringName = &"camera_follow"
 const CAMERA_FIXED_GROUP: StringName = &"camera_fixed"

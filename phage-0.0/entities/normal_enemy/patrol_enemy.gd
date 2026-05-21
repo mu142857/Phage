@@ -4,7 +4,7 @@ extends CharacterBody2D
 signal died
 
 @export var max_health: int = 1800
-@export var health: int = 1800
+@export var health: int = 280
 @export var move_speed: float = 40.0
 @export var patrol_distance: float = 72.0
 @export var use_custom_patrol_range: bool = false
@@ -27,6 +27,7 @@ var _contact_damage_time_left: float = 0.0
 @onready var sprite: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 @onready var hit_effect_player: AnimationPlayer = get_node_or_null("HitEffectPlayer") as AnimationPlayer
 @onready var body_collision: CollisionShape2D = get_node_or_null("CollisionShape2D") as CollisionShape2D
+@onready var attack_check: Area2D = get_node_or_null("AttackCheck") as Area2D
 
 func _ready() -> void:
 	add_to_group("monster")
@@ -117,6 +118,19 @@ func _play_hit_flash() -> void:
 func _try_damage_player_from_collision() -> void:
 	if _contact_damage_time_left > 0.0:
 		return
+	# Prefer Area2D-based attack check if present (prevents physics push issues)
+	if attack_check != null and attack_check.get_overlapping_bodies().size() > 0:
+		for body in attack_check.get_overlapping_bodies():
+			if body == null:
+				continue
+			if not body.is_in_group("player"):
+				continue
+			if body.has_method("take_damage"):
+				body.call("take_damage", collision_damage)
+				_contact_damage_time_left = contact_damage_cooldown
+				return
+
+	# Fallback: use slide collisions (legacy behavior)
 	var slide_count = get_slide_collision_count()
 	for index in range(slide_count):
 		var collision = get_slide_collision(index)
@@ -138,12 +152,12 @@ func _setup_visual() -> void:
 	if sprite == null:
 		return
 	# Ensure each instance has a unique material so animation toggles don't affect others
-		if sprite.material != null:
-			var new_mat = sprite.material.duplicate()
-			sprite.material = new_mat
-		if sprite.material is ShaderMaterial:
-			var shader_mat = sprite.material as ShaderMaterial
-			shader_mat.set_shader_parameter("Enabled", false)
+	if sprite.material != null:
+		var new_mat = sprite.material.duplicate()
+		sprite.material = new_mat
+	if sprite.material is ShaderMaterial:
+		var shader_mat = sprite.material as ShaderMaterial
+		shader_mat.set_shader_parameter("Enabled", false)
 
 func _setup_body_collision() -> void:
 	if body_collision == null:

@@ -6105,7 +6105,7 @@ scale = Vector2(-1, 1)
 texture = ExtResource("26_1dbek")
 
 [node name="Bank" type="Sprite2D" parent="Buildings" unique_id=1095960440]
-position = Vector2(317, 333)
+position = Vector2(317, 334)
 texture = ExtResource("28_u2oux")
 
 [node name="Fort" type="Sprite2D" parent="Buildings" unique_id=2044965400]

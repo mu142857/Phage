@@ -6591,6 +6591,15 @@ use_custom_patrol_range = true
 patrol_min_x = 1251.0
 patrol_max_x = 1332.0
 
+[node name="Cox1" parent="Monsrers" unique_id=263783893 instance=ExtResource("36_jbuho")]
+position = Vector2(304, -237)
+
+[node name="Cox2" parent="Monsrers" unique_id=216066248 instance=ExtResource("36_jbuho")]
+position = Vector2(1058, 285)
+
+[node name="Cox3" parent="Monsrers" unique_id=1057159235 instance=ExtResource("36_jbuho")]
+position = Vector2(715, 17)
+
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("1_wiwgd")]
 modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
 z_index = 10
@@ -6600,6 +6609,3 @@ position = Vector2(229, -230)
 position = Vector2(0, -7)
 scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("GradientTexture2D_u2oux")
-
-[node name="Cox" parent="." unique_id=263783893 instance=ExtResource("36_jbuho")]
-position = Vector2(307, -244)

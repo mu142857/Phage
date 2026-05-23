@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://dnf060fxv5rfe"]
+
+[ext_resource type="Script" uid="uid://b0yxv8d0foqou" path="res://entities/cox/cox_death.gd" id="1_lg8r4"]
+
+[sub_resource type="Gradient" id="Gradient_lg8r4"]
+offsets = PackedFloat32Array(0, 0.62650603, 1)
+colors = PackedColorArray(0, 0.59513354, 0.678499, 1, 1, 1, 1, 1, 0.85442704, 0, 0.304899, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_u34xh"]
+gradient = SubResource("Gradient_lg8r4")
+
+[sub_resource type="Gradient" id="Gradient_8qav2"]
+offsets = PackedFloat32Array(0, 0.20783132, 0.77710843, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4d380"]
+gradient = SubResource("Gradient_8qav2")
+
+[sub_resource type="Curve" id="Curve_gyapq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_k6xfj"]
+curve = SubResource("Curve_gyapq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3vc6e"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(5, 5, 1)
+direction = Vector3(0, -1, 0)
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 200, 0)
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_k6xfj")
+color_ramp = SubResource("GradientTexture1D_4d380")
+color_initial_ramp = SubResource("GradientTexture1D_u34xh")
+
+[node name="CoxDeath" type="GPUParticles2D" unique_id=1850428239]
+z_index = 11
+emitting = false
+amount = 12
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_3vc6e")
+script = ExtResource("1_lg8r4")
+
+[node name="Timer" type="Timer" parent="." unique_id=1360959229]
+wait_time = 1.1
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

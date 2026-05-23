@@ -5,6 +5,7 @@
 [ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="1_tycie"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_im5db"]
+resource_local_to_scene = true
 shader = ExtResource("1_tycie")
 shader_parameter/Enabled = false
 shader_parameter/Tint = Color(0.7841302, 0.50126714, 0.49497557, 1)
@@ -99,7 +100,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_im5db"]
-size = Vector2(125, 125.5)
+size = Vector2(125, 62.75)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_im5db"]
 
@@ -113,7 +114,7 @@ material = SubResource("ShaderMaterial_im5db")
 position = Vector2(2, 1)
 sprite_frames = SubResource("SpriteFrames_rha7h")
 autoplay = "default"
-frame_progress = 0.8388784
+frame_progress = 0.7474196
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=758222173]
 shape = SubResource("CircleShape2D_pm5f3")
@@ -128,6 +129,7 @@ collision_mask = 2
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=1808281918]
+position = Vector2(0, 31.375)
 shape = SubResource("RectangleShape2D_im5db")
 debug_color = Color(0, 0.6, 0.69803923, 0)
 metadata/_edit_lock_ = true

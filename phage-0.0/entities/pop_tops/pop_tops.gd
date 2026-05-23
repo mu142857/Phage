@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-signal died
+const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/pop_tops/pop_tops_death.tscn")
 
 @export var max_health: int = 400
 @export var health: int = 400
@@ -11,6 +11,8 @@ func _ready() -> void:
 	add_to_group("monster")
 	health = clampi(health, 0, max_health)
 	var sprite := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite != null and sprite.material != null:
+		sprite.material = sprite.material.duplicate()
 	if sprite != null and sprite.material is ShaderMaterial:
 		var shader_mat := sprite.material as ShaderMaterial
 		shader_mat.set_shader_parameter("Enabled", false)
@@ -23,7 +25,7 @@ func take_damage(value: int) -> void:
 			$HitEffectPlayer.active = true
 		$HitEffectPlayer.play("HitFlash")
 	if health <= 0:
-		died.emit()
+		_spawn_death_effect()
 		queue_free()
 
 func get_next_attack_state() -> int:
@@ -44,3 +46,15 @@ func _is_player_close(distance_limit: float) -> bool:
 	if not (player is Node2D):
 		return false
 	return absf((player as Node2D).global_position.x - global_position.x) <= distance_limit
+
+func _spawn_death_effect() -> void:
+	if DEATH_EFFECT_SCENE == null:
+		return
+	if get_tree().current_scene == null:
+		return
+	var effect := DEATH_EFFECT_SCENE.instantiate()
+	get_tree().current_scene.add_child(effect)
+	if effect is Node2D:
+		(effect as Node2D).global_position = global_position
+	if effect is GPUParticles2D:
+		(effect as GPUParticles2D).emitting = true

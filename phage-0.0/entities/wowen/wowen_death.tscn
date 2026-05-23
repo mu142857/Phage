@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://cj8bh5h2icffo"]
+
+[ext_resource type="Script" uid="uid://b1a3u2nfbrenk" path="res://entities/wowen/wowen_death.gd" id="1_52vya"]
+
+[sub_resource type="Gradient" id="Gradient_b8bqa"]
+colors = PackedColorArray(0, 0.3293204, 0.70118725, 1, 0.75594413, 0.8351969, 0.9335139, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ukhjo"]
+gradient = SubResource("Gradient_b8bqa")
+
+[sub_resource type="Gradient" id="Gradient_8nha6"]
+offsets = PackedFloat32Array(0, 0.20481928, 0.82530123, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_crcj2"]
+gradient = SubResource("Gradient_8nha6")
+
+[sub_resource type="Curve" id="Curve_b8bqa"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ukhjo"]
+curve = SubResource("Curve_b8bqa")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b8bqa"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(8, 1, 1)
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 300, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_ukhjo")
+color_ramp = SubResource("GradientTexture1D_crcj2")
+color_initial_ramp = SubResource("GradientTexture1D_ukhjo")
+
+[node name="WowenDeath" type="GPUParticles2D" unique_id=1281792815]
+z_index = 11
+emitting = false
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_b8bqa")
+script = ExtResource("1_52vya")
+
+[node name="Timer" type="Timer" parent="." unique_id=694970064]
+wait_time = 1.1
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

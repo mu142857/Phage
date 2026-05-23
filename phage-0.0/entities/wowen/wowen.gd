@@ -1,10 +1,10 @@
-class_name PatrolEnemy
+class_name Wowen
 extends CharacterBody2D
 
-signal died
+const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/wowen/wowen_death.tscn")
 
-@export var max_health: int = 800
-@export var health: int = 800
+@export var max_health: int = 260
+@export var health: int = 260
 @export var move_speed: float = 40.0
 @export var patrol_distance: float = 72.0
 @export var use_custom_patrol_range: bool = false
@@ -72,7 +72,7 @@ func take_damage(value: int) -> void:
 	_play_hit_flash()
 	_start_knockback()
 	if health <= 0:
-		died.emit()
+		_spawn_death_effect()
 		queue_free()
 
 func _apply_gravity(delta: float) -> void:
@@ -126,6 +126,8 @@ func _try_damage_player_from_collision() -> void:
 func _setup_visual() -> void:
 	if sprite == null:
 		return
+	if sprite.material != null:
+		sprite.material = sprite.material.duplicate()
 	if sprite.material is ShaderMaterial:
 		var shader_mat := sprite.material as ShaderMaterial
 		shader_mat.set_shader_parameter("Enabled", false)
@@ -156,3 +158,15 @@ func _update_facing_visual() -> void:
 	if scale_x == 0.0:
 		scale_x = 1.0
 	sprite.scale.x = scale_x * float(direct)
+
+func _spawn_death_effect() -> void:
+	if DEATH_EFFECT_SCENE == null:
+		return
+	if get_tree().current_scene == null:
+		return
+	var effect := DEATH_EFFECT_SCENE.instantiate()
+	get_tree().current_scene.add_child(effect)
+	if effect is Node2D:
+		(effect as Node2D).global_position = global_position
+	if effect is GPUParticles2D:
+		(effect as GPUParticles2D).emitting = true

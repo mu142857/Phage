@@ -29,6 +29,7 @@ color_ramp = SubResource("GradientTexture1D_56fic")
 anim_offset_max = 1.0
 
 [node name="ActinosDeathEffect" type="GPUParticles2D" unique_id=1715617855]
+z_index = 11
 material = SubResource("CanvasItemMaterial_56fic")
 rotation = 0.19821683
 emitting = false

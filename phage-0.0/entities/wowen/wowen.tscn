@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dumhmcodsiajy"]
 
-[ext_resource type="Script" uid="uid://b2snu7ki4j8va" path="res://entities/normal_enemy/patrol_enemy.gd" id="1_dlmq8"]
+[ext_resource type="Script" uid="uid://biuww8h4expi3" path="res://entities/wowen/wowen.gd" id="1_dlmq8"]
 [ext_resource type="Texture2D" uid="uid://nsdpuhwgw3rd" path="res://entities/wowen/wowen-Sheet.png" id="3_76sri"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_a58jk"]

@@ -35,6 +35,7 @@
 [ext_resource type="PackedScene" uid="uid://dumhmcodsiajy" path="res://entities/wowen/wowen.tscn" id="27_wowen"]
 [ext_resource type="Texture2D" uid="uid://neicdw27p5bd" path="res://levels/silvaron/silvaron_bank.png" id="28_u2oux"]
 [ext_resource type="Texture2D" uid="uid://cdwk5alvjaj7o" path="res://levels/silvaron/silvaron_fort.png" id="29_jbuho"]
+[ext_resource type="PackedScene" uid="uid://bsmyvj2nlkdvr" path="res://entities/cox/cox.tscn" id="36_jbuho"]
 
 [sub_resource type="Gradient" id="Gradient_aiehn"]
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
@@ -44,15 +45,15 @@ gradient = SubResource("Gradient_aiehn")
 fill_to = Vector2(0, 1)
 
 [sub_resource type="Gradient" id="Gradient_86iit"]
-offsets = PackedFloat32Array(0, 0.73571426, 1)
-colors = PackedColorArray(0, 0, 0, 0.5, 0.74125385, 0.4072413, 0.34237343, 0.3, 1, 1, 1, 0.25)
+offsets = PackedFloat32Array(0, 0.3809524, 0.73571426, 1)
+colors = PackedColorArray(0.14509805, 0.14509805, 0.14509805, 0.5019608, 0.11674089, 0.116740905, 0.11674089, 0.5, 0.74125385, 0.4072413, 0.34237343, 0.3, 1, 1, 1, 0.25)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_pxlvs"]
 gradient = SubResource("Gradient_86iit")
 fill_to = Vector2(0, 1)
 
 [sub_resource type="Gradient" id="Gradient_pxlvs"]
-colors = PackedColorArray(0.5535536, 0.4353445, 0.2827793, 0, 0, 0, 0, 0.5)
+colors = PackedColorArray(0.5535536, 0.4353445, 0.2827793, 0, 0.14586785, 0.14586785, 0.14586785, 0.5)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_64edn"]
 gradient = SubResource("Gradient_pxlvs")
@@ -76,6 +77,21 @@ size = Vector2(485, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d58ry"]
 size = Vector2(121.5, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u2oux"]
+size = Vector2(274, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jbuho"]
+size = Vector2(1, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_amr7c"]
+size = Vector2(1, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7260q"]
+size = Vector2(42, 73)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_13ur6"]
+size = Vector2(42, 73.5)
 
 [sub_resource type="Gradient" id="Gradient_vdj8d"]
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
@@ -2564,15 +2580,6 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
-[sub_resource type="Gradient" id="Gradient_l5uys"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_38yq8"]
-gradient = SubResource("Gradient_l5uys")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.5, 0)
-
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_aiehn"]
 
 [sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_aiehn"]
@@ -2961,6 +2968,15 @@ shader = SubResource("VisualShader_0aucp")
 shader_parameter/Strength = 1.0
 shader_parameter/Speed = 1.30000001425
 
+[sub_resource type="Gradient" id="Gradient_ecic6"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u2oux"]
+gradient = SubResource("Gradient_ecic6")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
 [node name="Silvaron" type="Node2D" unique_id=374355723]
 script = ExtResource("1_4cmem")
 
@@ -2975,13 +2991,13 @@ texture = SubResource("GradientTexture2D_vdj8d")
 z_index = 1
 
 [node name="Orange1" type="Sprite2D" parent="SunFilter" unique_id=1103673255]
-position = Vector2(720.00006, 323.5)
-scale = Vector2(22.5, 2.5156248)
+position = Vector2(720, 310)
+scale = Vector2(22.499998, 2.9375)
 texture = SubResource("GradientTexture2D_pxlvs")
 
 [node name="Orange2" type="Sprite2D" parent="SunFilter" unique_id=273792687]
-position = Vector2(1259.5, 199.5)
-scale = Vector2(5.6406255, 1.3593751)
+position = Vector2(1259.5, 185.99998)
+scale = Vector2(5.6406255, 0.9374999)
 texture = SubResource("GradientTexture2D_64edn")
 
 [node name="Walls" type="Node2D" parent="." unique_id=756676257]
@@ -3028,9 +3044,29 @@ shape = SubResource("RectangleShape2D_22mx7")
 position = Vector2(538.25, 94)
 shape = SubResource("RectangleShape2D_d58ry")
 
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=5430593]
+position = Vector2(814, 332.5)
+shape = SubResource("RectangleShape2D_u2oux")
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=426989956]
+position = Vector2(677.5, 324.5)
+shape = SubResource("RectangleShape2D_jbuho")
+
+[node name="CollisionShape2D12" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=283379373]
+position = Vector2(950.5, 324.5)
+shape = SubResource("RectangleShape2D_amr7c")
+
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1202340237]
+position = Vector2(698, 280.5)
+shape = SubResource("RectangleShape2D_7260q")
+
+[node name="CollisionShape2D13" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1296752189]
+position = Vector2(930, 280.25)
+shape = SubResource("RectangleShape2D_13ur6")
+
 [node name="Black1" type="Sprite2D" parent="Walls" unique_id=14222419]
-position = Vector2(538.5, 167)
-scale = Vector2(16.859375, 2.40625)
+position = Vector2(538.5, 153)
+scale = Vector2(16.859375, 1.9687501)
 texture = SubResource("GradientTexture2D_28ex5")
 
 [node name="Black2" type="Sprite2D" parent="Walls" unique_id=469594165]
@@ -3163,47 +3199,49 @@ position = Vector2(903, 397)
 texture = ExtResource("6_cjutc")
 
 [node name="Wall1" type="Sprite2D" parent="Walls" unique_id=159055479]
-position = Vector2(1119, 164)
+position = Vector2(1119, 150)
+scale = Vector2(1, 0.825)
 texture = ExtResource("7_1x4c3")
 
 [node name="Wall2" type="Sprite2D" parent="Walls" unique_id=742740081]
-position = Vector2(998, 283)
+position = Vector2(998, 255)
 rotation = 1.5707964
 texture = ExtResource("7_1x4c3")
 
 [node name="Wall3" type="Sprite2D" parent="Walls" unique_id=94314763]
-position = Vector2(838, 283)
+position = Vector2(838, 255)
 rotation = 1.5707964
 texture = ExtResource("7_1x4c3")
 
 [node name="Wall4" type="Sprite2D" parent="Walls" unique_id=912090673]
-position = Vector2(678, 283)
+position = Vector2(678, 255)
 rotation = 1.5707964
 texture = ExtResource("7_1x4c3")
 
 [node name="Wall5" type="Sprite2D" parent="Walls" unique_id=1105081626]
-position = Vector2(518, 283)
+position = Vector2(518, 255)
 rotation = 1.5707964
 texture = ExtResource("7_1x4c3")
 
 [node name="Wall6" type="Sprite2D" parent="Walls" unique_id=459113119]
-position = Vector2(358, 283)
+position = Vector2(358, 255)
 rotation = 1.5707964
 texture = ExtResource("7_1x4c3")
 
 [node name="Wall7" type="Sprite2D" parent="Walls" unique_id=1766884822]
-position = Vector2(198, 283)
+position = Vector2(198, 255)
 rotation = 1.5707964
 texture = ExtResource("7_1x4c3")
 
 [node name="Wall8" type="Sprite2D" parent="Walls" unique_id=896025126]
-position = Vector2(80, 283)
+position = Vector2(80, 255)
 rotation = 1.5707964
 texture = ExtResource("7_1x4c3")
 
 [node name="Wall9" type="Sprite2D" parent="Walls" unique_id=1653832955]
-position = Vector2(-39, 163)
+position = Vector2(-39.01743, 149.49406)
 rotation = 3.1415927
+scale = Vector2(0.99961257, 0.83117574)
 texture = ExtResource("7_1x4c3")
 
 [node name="Platforms" type="Node2D" parent="." unique_id=41951980]
@@ -6072,6 +6110,7 @@ process_material = SubResource("ParticleProcessMaterial_ik2bl")
 [node name="Bridge" type="Sprite2D" parent="Buildings" unique_id=440791029]
 position = Vector2(688, 337)
 texture = ExtResource("23_pxlvs")
+metadata/_edit_lock_ = true
 
 [node name="MusicHouse" type="Sprite2D" parent="Buildings" unique_id=1232769174]
 position = Vector2(463, 360)
@@ -6111,16 +6150,6 @@ texture = ExtResource("28_u2oux")
 [node name="Fort" type="Sprite2D" parent="Buildings" unique_id=2044965400]
 position = Vector2(-130, 364)
 texture = ExtResource("29_jbuho")
-
-[node name="Player" parent="." unique_id=949587783 instance=ExtResource("1_wiwgd")]
-modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
-z_index = 10
-position = Vector2(235, -228)
-
-[node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1167658772]
-position = Vector2(0, -7)
-scale = Vector2(3.0664063, 1.21875)
-texture = SubResource("GradientTexture2D_38yq8")
 
 [node name="0point2xMoving" type="Parallax2D" parent="." unique_id=1602762584]
 scroll_scale = Vector2(0.2, 0.2)
@@ -6561,3 +6590,16 @@ scale = Vector2(1, -1)
 use_custom_patrol_range = true
 patrol_min_x = 1251.0
 patrol_max_x = 1332.0
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("1_wiwgd")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+z_index = 10
+position = Vector2(229, -230)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1764559963]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("GradientTexture2D_u2oux")
+
+[node name="Cox" parent="." unique_id=263783893 instance=ExtResource("36_jbuho")]
+position = Vector2(307, -244)

@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cj8bh5h2icffo"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b8bqa"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(8, 1, 1)
+gravity = Vector3(0, 98, 0)
+
+[node name="WowenDeath" type="GPUParticles2D" unique_id=1281792815]
+process_material = SubResource("ParticleProcessMaterial_b8bqa")

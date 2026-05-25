@@ -27,10 +27,14 @@
 [ext_resource type="Texture2D" uid="uid://cui0eap7qofaa" path="res://levels/silvaron/Silvaron0.3.png" id="19_aiehn"]
 [ext_resource type="Texture2D" uid="uid://cgmsbf67rsr18" path="res://levels/silvaron/Silvaron0.6.png" id="20_vdj8d"]
 [ext_resource type="Texture2D" uid="uid://dd031ms7ixvby" path="res://levels/silvaron/silvaron_bridge.png" id="23_pxlvs"]
+[ext_resource type="Texture2D" uid="uid://t70tdxrogbat" path="res://levels/silvaronian outpost/clustered_small_crystal.png" id="23_uhyuj"]
 [ext_resource type="Texture2D" uid="uid://bhjphprjcf6g5" path="res://levels/silvaron/silvaron_music_house.png" id="24_2ehoa"]
+[ext_resource type="Texture2D" uid="uid://dger0phpkjhvu" path="res://levels/silvaronian outpost/sharped_small_crystal.png" id="24_r8omv"]
 [ext_resource type="PackedScene" uid="uid://b6kx1xnd7tf35" path="res://interactive/Bonfire/bonfire.tscn" id="25_1dbek"]
 [ext_resource type="Texture2D" uid="uid://c61wbps25ysa6" path="res://levels/silvaron/silvaron_hall1.png" id="25_2cc0k"]
+[ext_resource type="Texture2D" uid="uid://d3v0my752onmw" path="res://levels/silvaronian outpost/long_crystal.png" id="25_ik2bl"]
 [ext_resource type="Texture2D" uid="uid://b04yua6ey3hp8" path="res://levels/silvaron/silvaron_hall2.png" id="26_1dbek"]
+[ext_resource type="Texture2D" uid="uid://daw3pb1bpgg20" path="res://levels/silvaronian outpost/long_small_crystal.png" id="26_uivn3"]
 [ext_resource type="Texture2D" uid="uid://be8itg2bt40fu" path="res://levels/silvaron/silvaron_fake_ground.png" id="27_86iit"]
 [ext_resource type="PackedScene" uid="uid://dumhmcodsiajy" path="res://entities/wowen/wowen.tscn" id="27_wowen"]
 [ext_resource type="Texture2D" uid="uid://neicdw27p5bd" path="res://levels/silvaron/silvaron_bank.png" id="28_u2oux"]
@@ -3028,7 +3032,7 @@ rotation = 1.5707964
 shape = SubResource("WorldBoundaryShape2D_2rk1k")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=153208044]
-position = Vector2(1365, 90)
+position = Vector2(1400, 90)
 rotation = -1.5707964
 shape = SubResource("WorldBoundaryShape2D_ghrtq")
 
@@ -3999,6 +4003,30 @@ texture = ExtResource("6_b6bdo")
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/SmallPlatform23/StaticBody2D" unique_id=1646820021]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_4tj01")
+debug_color = Color(0, 0.60038817, 0, 0)
+
+[node name="SmallPlatform24" type="Sprite2D" parent="Platforms" unique_id=86121076]
+position = Vector2(1369, 61)
+texture = ExtResource("6_b6bdo")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Platforms/SmallPlatform24" unique_id=804930258]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/SmallPlatform24/StaticBody2D" unique_id=1773692448]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_4tj01")
+debug_color = Color(0, 0.60038817, 0, 0)
+
+[node name="SmallPlatform25" type="Sprite2D" parent="Platforms" unique_id=1067940211]
+position = Vector2(1394, 30)
+texture = ExtResource("6_b6bdo")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Platforms/SmallPlatform25" unique_id=1209535849]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/SmallPlatform25/StaticBody2D" unique_id=2007357152]
 position = Vector2(0, -2.5)
 shape = SubResource("RectangleShape2D_4tj01")
 debug_color = Color(0, 0.60038817, 0, 0)
@@ -6046,6 +6074,78 @@ position = Vector2(-261, 84)
 texture = ExtResource("17_vdj8d")
 region_enabled = true
 region_rect = Rect2(12.021685, 0.88281536, 10.966133, 15.05351)
+
+[node name="Crystal1" type="Sprite2D" parent="Trees" unique_id=2038916721]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(546, 54)
+texture = ExtResource("23_uhyuj")
+
+[node name="Crystal5" type="Sprite2D" parent="Trees" unique_id=1964534192]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(478, 81)
+texture = ExtResource("23_uhyuj")
+
+[node name="Crystal6" type="Sprite2D" parent="Trees" unique_id=739088655]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(565, 64)
+rotation = 1.5707964
+texture = ExtResource("23_uhyuj")
+
+[node name="Crystal3" type="Sprite2D" parent="Trees" unique_id=1963932627]
+modulate = Color(1.2072555, 0.9274322, 1.2754622, 1)
+position = Vector2(545, 90)
+rotation = 1.5707964
+texture = ExtResource("24_r8omv")
+
+[node name="Crystal2" type="Sprite2D" parent="Trees" unique_id=557650253]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(509, 62)
+texture = ExtResource("25_ik2bl")
+
+[node name="Crystal4" type="Sprite2D" parent="Trees" unique_id=1088560531]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(519, 71)
+scale = Vector2(-1, 1)
+texture = ExtResource("25_ik2bl")
+region_enabled = true
+region_rect = Rect2(0, 0, 11, 37.415672)
+
+[node name="Crystal8" type="Sprite2D" parent="Trees" unique_id=442626382]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(577, 11)
+texture = ExtResource("25_ik2bl")
+region_enabled = true
+region_rect = Rect2(0, 0, 11, 37.415672)
+
+[node name="Crystal7" type="Sprite2D" parent="Trees" unique_id=1583585295]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(569, 21)
+scale = Vector2(-1, 1)
+texture = ExtResource("26_uivn3")
+region_rect = Rect2(0, 0, 11, 37.415672)
+
+[node name="Crystal9" type="Sprite2D" parent="Trees" unique_id=1968950596]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(573, 24)
+texture = ExtResource("23_uhyuj")
+
+[node name="Crystal10" type="Sprite2D" parent="Trees" unique_id=2114232759]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(556, 55)
+texture = ExtResource("24_r8omv")
+
+[node name="Crystal11" type="Sprite2D" parent="Trees" unique_id=347675808]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(534, 81)
+scale = Vector2(-1, 1)
+texture = ExtResource("24_r8omv")
+
+[node name="Crystal12" type="Sprite2D" parent="Trees" unique_id=309236933]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(560, 31.999998)
+rotation = -1.5707964
+scale = Vector2(-1, 1)
+texture = ExtResource("24_r8omv")
 
 [node name="Buildings" type="Node2D" parent="." unique_id=2060429091]
 z_index = 2

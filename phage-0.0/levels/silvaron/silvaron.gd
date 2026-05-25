@@ -4,7 +4,7 @@ extends Node2D
 @export var camera_limit_top: int = -100000
 @export var camera_limit_bottom: int = 410
 @export var camera_limit_left: int = 0
-@export var camera_limit_right: int = 1365.0
+@export var camera_limit_right: int = 1400.0
 
 const POP_TOPS_SPAWN_POINTS: Array[NodePath] = [
 	NodePath("PopTopsPosition1"),

@@ -25,6 +25,7 @@ var _contact_damage_time_left: float = 0.0
 @onready var sprite: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 @onready var hit_effect_player: AnimationPlayer = get_node_or_null("HitEffectPlayer") as AnimationPlayer
 @onready var body_collision: CollisionShape2D = get_node_or_null("CollisionShape2D") as CollisionShape2D
+@onready var attack_check: Area2D = get_node_or_null("AttackCheck") as Area2D
 
 func _ready() -> void:
 	add_to_group("monster")
@@ -106,6 +107,19 @@ func _play_hit_flash() -> void:
 func _try_damage_player_from_collision() -> void:
 	if _contact_damage_time_left > 0.0:
 		return
+	# Prefer Area2D-based attack check if present (prevents physics push issues)
+	if is_instance_valid(attack_check) and attack_check.get_overlapping_bodies().size() > 0:
+		for body in attack_check.get_overlapping_bodies():
+			if body == null:
+				continue
+			if not body.is_in_group("player"):
+				continue
+			if body.has_method("take_damage"):
+				body.call("take_damage", collision_damage)
+				_contact_damage_time_left = contact_damage_cooldown
+				return
+
+	# Fallback: use slide collisions (legacy behavior)
 	var slide_count := get_slide_collision_count()
 	for index in range(slide_count):
 		var collision := get_slide_collision(index)

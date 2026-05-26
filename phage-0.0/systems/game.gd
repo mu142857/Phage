@@ -14,11 +14,15 @@ signal screen_filter(amount: float, colour: Color)
 @export var hit_recover_duration: float = 0.18
 @export var hit_flash_duration: float = 0.4
 @export var hit_flash_color: Color = Color(1.0, 0.1, 0.1, 0.16)
+@export var teleport_fade_duration: float = 0.08
 
 @export var follow_offset: Vector2 = Vector2(0, -20)
 
 const CAMERA_FOLLOW_GROUP: StringName = &"camera_follow"
 const CAMERA_FIXED_GROUP: StringName = &"camera_fixed"
+const TELEPORT_GROUP: StringName = &"teleport"
+const PLAYER_SCENE: PackedScene = preload("res://entities/player/player.tscn")
+const PLAYER_LIGHT_SCENE: PackedScene = preload("res://entities/player/player_light.tscn")
 const ANCHOR_FOLLOW: int = Camera2D.ANCHOR_MODE_DRAG_CENTER
 const ANCHOR_FIXED: int = Camera2D.ANCHOR_MODE_FIXED_TOP_LEFT
 
@@ -43,6 +47,10 @@ var position_override: Vector2 = Vector2.ZERO
 var position_override_enabled: bool = false
 var position_override_tween: Tween = null
 var slowmo_token: int = 0
+var teleport_transition_tween: Tween = null
+var teleport_transition_layer: CanvasLayer = null
+var teleport_transition_rect: ColorRect = null
+var teleport_transition_active: bool = false
 
 func _ready() -> void:
 	make_current()
@@ -268,3 +276,101 @@ func _apply_scene_camera_limits(scene: Node) -> void:
 			)
 			return
 	set_camera_limits(default_limit_left, default_limit_right, default_limit_top, default_limit_bottom)
+
+
+func change_scene(scene_path: String, teleport_id: int, player_light: bool) -> void:
+	if teleport_transition_active:
+		return
+	if scene_path.is_empty():
+		return
+	teleport_transition_active = true
+	await _play_teleport_fade(1.0)
+	var tree := get_tree()
+	if tree == null:
+		teleport_transition_active = false
+		return
+	tree.change_scene_to_file(scene_path)
+	await tree.process_frame
+	var target_teleport := _find_teleport_by_id(teleport_id)
+	var target_position := Vector2.ZERO
+	if is_instance_valid(target_teleport):
+		target_position = target_teleport.global_position
+	var player := _find_player_in_current_scene()
+	if not is_instance_valid(player):
+		player = PLAYER_SCENE.instantiate() as Player
+		if is_instance_valid(tree.current_scene):
+			tree.current_scene.add_child(player)
+	if is_instance_valid(player):
+		player.global_position = target_position
+		_ensure_player_light(player, player_light)
+	await _play_teleport_fade(0.0)
+	teleport_transition_active = false
+
+
+func _find_teleport_by_id(teleport_id: int) -> Node2D:
+	var tree := get_tree()
+	if tree == null:
+		return null
+	for node in tree.get_nodes_in_group(TELEPORT_GROUP):
+		if int(node.get("teleport_id")) == teleport_id and node is Node2D:
+			return node
+	return null
+
+
+func _find_player_in_current_scene() -> Player:
+	var tree := get_tree()
+	if tree == null:
+		return null
+	for node in tree.get_nodes_in_group("player"):
+		if node is Player:
+			return node
+	return null
+
+
+func _ensure_player_light(player: Player, enabled: bool) -> void:
+	if not enabled:
+		return
+	if player.get_node_or_null("PlayerLight") != null:
+		return
+	if PLAYER_LIGHT_SCENE == null:
+		return
+	var light := PLAYER_LIGHT_SCENE.instantiate()
+	player.add_child(light)
+	if light is Node2D:
+		(light as Node2D).position = Vector2.ZERO
+
+
+func _play_teleport_fade(target_alpha: float) -> void:
+	var rect := _get_teleport_transition_rect()
+	if rect == null:
+		return
+	if is_instance_valid(teleport_transition_tween):
+		teleport_transition_tween.kill()
+	rect.visible = true
+	teleport_transition_tween = create_tween()
+	teleport_transition_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	teleport_transition_tween.tween_property(rect, "color:a", target_alpha, teleport_fade_duration)
+	await teleport_transition_tween.finished
+	if target_alpha <= 0.0 and is_instance_valid(rect):
+		rect.visible = false
+
+
+func _get_teleport_transition_rect() -> ColorRect:
+	if is_instance_valid(teleport_transition_rect):
+		return teleport_transition_rect
+	if not is_instance_valid(teleport_transition_layer):
+		teleport_transition_layer = CanvasLayer.new()
+		teleport_transition_layer.name = "TeleportTransitionLayer"
+		teleport_transition_layer.layer = 1000
+		add_child(teleport_transition_layer)
+	teleport_transition_rect = ColorRect.new()
+	teleport_transition_rect.name = "TeleportTransitionRect"
+	teleport_transition_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	teleport_transition_rect.offset_left = 0.0
+	teleport_transition_rect.offset_top = 0.0
+	teleport_transition_rect.offset_right = 0.0
+	teleport_transition_rect.offset_bottom = 0.0
+	teleport_transition_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	teleport_transition_rect.color = Color(0, 0, 0, 0)
+	teleport_transition_layer.add_child(teleport_transition_rect)
+	return teleport_transition_rect

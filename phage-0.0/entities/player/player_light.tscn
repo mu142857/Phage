@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bctjne3ik57vu"]
+
+[sub_resource type="Gradient" id="Gradient_ecic6"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u2oux"]
+gradient = SubResource("Gradient_ecic6")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="PlayerLight" type="Node2D" unique_id=1789326887]
+
+[node name="PlayerLight" type="PointLight2D" parent="." unique_id=543441045]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("GradientTexture2D_u2oux")

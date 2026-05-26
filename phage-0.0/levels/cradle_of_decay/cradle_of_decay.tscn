@@ -87,6 +87,7 @@ position = Vector2(68, 81)
 visible = false
 
 [node name="Label" type="Label" parent="Front" unique_id=263063248]
+z_index = 100
 offset_right = 160.0
 offset_bottom = 80.0
 theme_override_fonts/font = ExtResource("9_0ul3c")

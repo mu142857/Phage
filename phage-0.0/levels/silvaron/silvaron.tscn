@@ -40,6 +40,8 @@
 [ext_resource type="Texture2D" uid="uid://neicdw27p5bd" path="res://levels/silvaron/silvaron_bank.png" id="28_u2oux"]
 [ext_resource type="Texture2D" uid="uid://cdwk5alvjaj7o" path="res://levels/silvaron/silvaron_fort.png" id="29_jbuho"]
 [ext_resource type="PackedScene" uid="uid://bsmyvj2nlkdvr" path="res://entities/cox/cox.tscn" id="36_jbuho"]
+[ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="41_r8omv"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="42_ik2bl"]
 
 [sub_resource type="Gradient" id="Gradient_aiehn"]
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
@@ -6709,3 +6711,20 @@ position = Vector2(229, -230)
 position = Vector2(0, -7)
 scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("GradientTexture2D_u2oux")
+
+[node name="Teleport" parent="." unique_id=1957074840 instance=ExtResource("41_r8omv")]
+position = Vector2(234, -207)
+scene_path = "uid://diojcfsu5srtp"
+teleport_id = 1
+player_light = true
+
+[node name="Label" type="Label" parent="Teleport" unique_id=2054507442]
+z_index = 100
+offset_left = -10.0
+offset_top = -18.0
+offset_right = 23.0
+offset_bottom = -8.0
+theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
+theme_override_fonts/font = ExtResource("42_ik2bl")
+theme_override_font_sizes/font_size = 10
+text = "back"

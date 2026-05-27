@@ -836,7 +836,7 @@ size = Vector2(4, 7)
 size = Vector2(4, 4)
 
 [node name="Player" type="CharacterBody2D" unique_id=949587783]
-z_index = 1
+z_index = 10
 collision_layer = 2
 script = ExtResource("1_abrql")
 

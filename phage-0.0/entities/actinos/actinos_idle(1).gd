@@ -22,7 +22,7 @@ func enter():
 	if "health" in monster and "max_health" in monster and monster.max_health > 0:
 		health_ratio = float(monster.health) / float(monster.max_health)
 	
-	var duration: float = lerp(0.6, 1.2, health_ratio)
+	var duration: float = lerp(1.0, 2.0, health_ratio)
 	
 	if timer:
 		timer.start(duration)

@@ -524,6 +524,53 @@ size = Vector2(20, 40)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vgtkr"]
 size = Vector2(3883, 2707)
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bvspa"]
+height = 42.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4j0d1"]
+radius = 13.0
+height = 52.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_letyf"]
+radius = 15.0
+height = 62.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bvspa"]
+size = Vector2(33, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rewig"]
+size = Vector2(35, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tpbh0"]
+size = Vector2(45, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3molg"]
+size = Vector2(58.5, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ll4rr"]
+size = Vector2(58.5, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fmv45"]
+size = Vector2(61, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8q8mt"]
+size = Vector2(61, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hmdbm"]
+size = Vector2(61, 9)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tcwd3"]
+size = Vector2(61, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a81t5"]
+size = Vector2(59, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4nqqy"]
+size = Vector2(59, 2)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rewig"]
+height = 31.999998
+
 [sub_resource type="Animation" id="Animation_ebm1s"]
 resource_name = "HitFlash"
 length = 0.1
@@ -575,6 +622,7 @@ offset = Vector2(21, -23)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=537100522]
 position = Vector2(0, -20)
 shape = SubResource("RectangleShape2D_1qoe7")
+debug_color = Color(0.5071214, 0.5414939, 0.5654519, 0.2)
 
 [node name="PlayerCheck" type="Area2D" parent="." unique_id=2025660166]
 collision_layer = 0
@@ -584,6 +632,97 @@ collision_mask = 2
 position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_vgtkr")
 debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="TramplingHitBox" type="Area2D" parent="." unique_id=253048913]
+collision_layer = 0
+collision_mask = 2
+
+[node name="0" type="CollisionShape2D" parent="TramplingHitBox" unique_id=1091708068]
+position = Vector2(-3, -4)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_bvspa")
+debug_color = Color(0.25030932, 0.60209715, 0.5757751, 0)
+
+[node name="1" type="CollisionShape2D" parent="TramplingHitBox" unique_id=101959275]
+position = Vector2(-3, -4)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_4j0d1")
+debug_color = Color(0.25590485, 0.5861744, 0.6871971, 0)
+
+[node name="2" type="CollisionShape2D" parent="TramplingHitBox" unique_id=1390790308]
+position = Vector2(-3, -4)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_letyf")
+debug_color = Color(0.27130693, 0.5627242, 0.7831185, 0)
+
+[node name="AttackHitBox" type="Area2D" parent="." unique_id=1795345684]
+collision_layer = 0
+collision_mask = 2
+
+[node name="6" type="CollisionShape2D" parent="AttackHitBox" unique_id=1844640219]
+position = Vector2(16.5, -6.5)
+shape = SubResource("RectangleShape2D_bvspa")
+debug_color = Color(0.24269372, 0.548779, 0.8586215, 0)
+
+[node name="7" type="CollisionShape2D" parent="AttackHitBox" unique_id=1701945079]
+position = Vector2(27.5, -6)
+shape = SubResource("RectangleShape2D_rewig")
+debug_color = Color(0.52912915, 0.4661066, 0.86663747, 0)
+
+[node name="8" type="CollisionShape2D" parent="AttackHitBox" unique_id=791165722]
+position = Vector2(36.5, -6)
+shape = SubResource("RectangleShape2D_tpbh0")
+debug_color = Color(0.8350781, 0.31711304, 0.59608823, 0)
+
+[node name="9" type="CollisionShape2D" parent="AttackHitBox" unique_id=1156047781]
+position = Vector2(43.25, -6.5)
+shape = SubResource("RectangleShape2D_3molg")
+debug_color = Color(0.8198382, 0.39151636, 0.3133042, 0)
+
+[node name="10" type="CollisionShape2D" parent="AttackHitBox" unique_id=280494759]
+position = Vector2(43.25, -5)
+shape = SubResource("RectangleShape2D_ll4rr")
+debug_color = Color(0.77295625, 0.44171134, 0.19966345, 0)
+
+[node name="11" type="CollisionShape2D" parent="AttackHitBox" unique_id=1742235015]
+position = Vector2(44.5, -5.5)
+shape = SubResource("RectangleShape2D_fmv45")
+debug_color = Color(0.6629255, 0.51396924, 0.18410519, 0)
+
+[node name="12" type="CollisionShape2D" parent="AttackHitBox" unique_id=1283210076]
+position = Vector2(44.5, -5)
+shape = SubResource("RectangleShape2D_8q8mt")
+debug_color = Color(0.5884033, 0.54983366, 0.16131583, 0)
+
+[node name="13" type="CollisionShape2D" parent="AttackHitBox" unique_id=1166745201]
+position = Vector2(44.5, -4.5)
+shape = SubResource("RectangleShape2D_hmdbm")
+debug_color = Color(0.49807966, 0.5801239, 0.21991569, 0)
+
+[node name="14" type="CollisionShape2D" parent="AttackHitBox" unique_id=1182843512]
+position = Vector2(44.5, -4)
+shape = SubResource("RectangleShape2D_tcwd3")
+debug_color = Color(0.34823534, 0.60927606, 0.3779205, 0)
+
+[node name="15" type="CollisionShape2D" parent="AttackHitBox" unique_id=1282538910]
+position = Vector2(43.5, -2)
+shape = SubResource("RectangleShape2D_a81t5")
+debug_color = Color(0.26722264, 0.6058177, 0.5384675, 0)
+
+[node name="16" type="CollisionShape2D" parent="AttackHitBox" unique_id=1424979633]
+position = Vector2(43.5, -1)
+shape = SubResource("RectangleShape2D_4nqqy")
+debug_color = Color(0.27015907, 0.5888144, 0.64119923, 0)
+
+[node name="PunchHitBox" type="Area2D" parent="." unique_id=539178304]
+collision_layer = 0
+collision_mask = 2
+
+[node name="6-10" type="CollisionShape2D" parent="PunchHitBox" unique_id=1574741368]
+position = Vector2(12, -16)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_rewig")
+debug_color = Color(0.5210043, 0.4565437, 0.9013065, 0)
 
 [node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=1061343629]
 libraries/ = SubResource("AnimationLibrary_621kp")
@@ -614,3 +753,8 @@ script = ExtResource("11_ll4rr")
 
 [node name="Death(7)" type="Node" parent="StateMachine" unique_id=249439440]
 script = ExtResource("12_fmv45")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Sprint(2)" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Attack(3)" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Crystallization(4)" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Trampling(5)" method="_on_animated_sprite_2d_animation_finished"]

@@ -1,0 +1,543 @@
+[gd_scene format=3 uid="uid://7g2w8ch1g23a"]
+
+[ext_resource type="Texture2D" uid="uid://dqfy7nayqs18q" path="res://levels/silvaron/silvaron_background.png" id="1_2juot"]
+[ext_resource type="Script" uid="uid://dkiqh1tslpxvc" path="res://levels/silvaronian outpost/silvaronian_outpost.gd" id="1_k0aww"]
+[ext_resource type="Texture2D" uid="uid://dbvrbun0815ca" path="res://levels/silvaron/silvaron_ground.png" id="1_l1cuu"]
+[ext_resource type="Texture2D" uid="uid://cdwk5alvjaj7o" path="res://levels/silvaron/silvaron_fort.png" id="2_3tuqn"]
+[ext_resource type="Texture2D" uid="uid://cui0eap7qofaa" path="res://levels/silvaron/Silvaron0.3.png" id="2_uobp7"]
+[ext_resource type="Texture2D" uid="uid://t70tdxrogbat" path="res://levels/silvaronian outpost/clustered_small_crystal.png" id="3_fcste"]
+[ext_resource type="Texture2D" uid="uid://cgmsbf67rsr18" path="res://levels/silvaron/Silvaron0.6.png" id="3_l1cuu"]
+[ext_resource type="Texture2D" uid="uid://dysipv8344544" path="res://levels/silvaronian outpost/hexagonal_crystal.png" id="3_nc6d0"]
+[ext_resource type="Texture2D" uid="uid://crse8ltbvglrn" path="res://levels/silvaron/silvaron_green_tree.png" id="4_3tuqn"]
+[ext_resource type="Texture2D" uid="uid://dger0phpkjhvu" path="res://levels/silvaronian outpost/sharped_small_crystal.png" id="4_nc6d0"]
+[ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="5_k0aww"]
+[ext_resource type="Texture2D" uid="uid://d3v0my752onmw" path="res://levels/silvaronian outpost/long_crystal.png" id="5_t8dir"]
+[ext_resource type="Texture2D" uid="uid://daw3pb1bpgg20" path="res://levels/silvaronian outpost/long_small_crystal.png" id="6_uadtp"]
+[ext_resource type="Texture2D" uid="uid://ca77sew7lyyms" path="res://levels/silvaron/silvaron_bush.png" id="6_vtgru"]
+[ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="7_vjvbo"]
+[ext_resource type="Texture2D" uid="uid://m4uxh3lnb8h5" path="res://levels/silvaron/silvaron_shrub.png" id="8_jjndc"]
+[ext_resource type="Texture2D" uid="uid://cfan4uj1jux22" path="res://levels/silvaron/silvaron_bush(small).png" id="9_fcste"]
+[ext_resource type="Texture2D" uid="uid://be8itg2bt40fu" path="res://levels/silvaron/silvaron_fake_ground.png" id="10_nc6d0"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="13_3tuqn"]
+[ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="20_uadtp"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="21_3md8r"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_k0aww"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_vtgru"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_vjvbo"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_t8dir"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_20d8k"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_wurxf"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_ekwsx"]
+function = 0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_lq654"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_oemls"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_vipek"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_aiehn"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_vdj8d"]
+default_input_values = [0, 0.0, 1, 0.4]
+operator = 2
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_28ex5"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_7mcua"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_8ju2l"]
+parameter_name = "WindStrength"
+hint = 1
+min = 2.0
+max = 10.0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_pt6yc"]
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_cjutc"]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1x4c3"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_86iit"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_pxlvs"]
+output_port_for_preview = 0
+function = 31
+
+[sub_resource type="VisualShader" id="VisualShader_64edn"]
+mode = 1
+flags/light_only = false
+nodes/vertex/0/position = Vector2(1780, 780)
+nodes/vertex/2/node = SubResource("VisualShaderNodeInput_28ex5")
+nodes/vertex/2/position = Vector2(-320, 400)
+nodes/vertex/3/node = SubResource("VisualShaderNodeVectorDecompose_7mcua")
+nodes/vertex/3/position = Vector2(220, 520)
+nodes/vertex/4/node = SubResource("VisualShaderNodeFloatParameter_8ju2l")
+nodes/vertex/4/position = Vector2(-1020, 520)
+nodes/vertex/5/node = SubResource("VisualShaderNodeFloatOp_pt6yc")
+nodes/vertex/5/position = Vector2(800, 520)
+nodes/vertex/6/node = SubResource("VisualShaderNodeVectorCompose_cjutc")
+nodes/vertex/6/position = Vector2(1220, 840)
+nodes/vertex/7/node = SubResource("VisualShaderNodeInput_1x4c3")
+nodes/vertex/7/position = Vector2(-1980, 660)
+nodes/vertex/8/node = SubResource("VisualShaderNodeVectorDecompose_86iit")
+nodes/vertex/8/position = Vector2(-1440, 840)
+nodes/vertex/9/node = SubResource("VisualShaderNodeFloatFunc_pxlvs")
+nodes/vertex/9/position = Vector2(-1040, 1060)
+nodes/vertex/10/node = SubResource("VisualShaderNodeFloatOp_20d8k")
+nodes/vertex/10/position = Vector2(-300, 1020)
+nodes/vertex/11/node = SubResource("VisualShaderNodeInput_wurxf")
+nodes/vertex/11/position = Vector2(-2780, 2040)
+nodes/vertex/12/node = SubResource("VisualShaderNodeFloatFunc_ekwsx")
+nodes/vertex/12/position = Vector2(-240, 1520)
+nodes/vertex/13/node = SubResource("VisualShaderNodeFloatOp_lq654")
+nodes/vertex/13/position = Vector2(380, 1100)
+nodes/vertex/14/node = SubResource("VisualShaderNodeInput_oemls")
+nodes/vertex/14/position = Vector2(-3200, 820)
+nodes/vertex/15/node = SubResource("VisualShaderNodeVectorDecompose_vipek")
+nodes/vertex/15/position = Vector2(-2680, 480)
+nodes/vertex/16/node = SubResource("VisualShaderNodeFloatOp_aiehn")
+nodes/vertex/16/position = Vector2(-1680, 1440)
+nodes/vertex/17/node = SubResource("VisualShaderNodeFloatOp_vdj8d")
+nodes/vertex/17/position = Vector2(-2180, 1900)
+nodes/vertex/connections = PackedInt32Array(2, 0, 3, 0, 3, 0, 5, 0, 5, 0, 6, 0, 3, 1, 6, 1, 6, 0, 0, 0, 7, 0, 8, 0, 8, 1, 9, 0, 4, 0, 10, 0, 9, 0, 10, 1, 10, 0, 13, 0, 12, 0, 13, 1, 13, 0, 5, 1, 14, 0, 15, 0, 15, 0, 16, 0, 16, 0, 12, 0, 17, 0, 16, 1, 11, 0, 17, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uadtp"]
+shader = SubResource("VisualShader_64edn")
+shader_parameter/WindStrength = 2.50000002375
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3md8r"]
+shader = ExtResource("5_k0aww")
+shader_parameter/Strength = 1.0
+shader_parameter/Speed = 2.0000000475
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_aiehn"]
+function = 0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_ik2bl"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_08jux"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_hu4sa"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_40lii"]
+default_input_values = [0, 0.0, 1, 20.0]
+operator = 2
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_qhsvs"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_11l1r"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ds4gm"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_cd0xp"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_rb8cl"]
+parameter_name = "Speed"
+hint = 1
+min = 1.0
+max = 20.0
+default_value_enabled = true
+default_value = 10.0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_0xpvk"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_gfuky"]
+default_input_values = [0, 0.0, 1, 20.0]
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_lpwsa"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_mh8bv"]
+parameter_name = "Strength"
+hint = 1
+min = 1.0
+max = 10.0
+default_value_enabled = true
+default_value = 2.0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_gjpb2"]
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_1mg7n"]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_3cj7g"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_8cjbf"]
+output_port_for_preview = 0
+function = 31
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_ivobc"]
+default_input_values = [0, 0.0, 1, 10.0]
+operator = 2
+
+[sub_resource type="VisualShader" id="VisualShader_bot71"]
+resource_local_to_scene = true
+mode = 1
+flags/light_only = false
+nodes/vertex/0/position = Vector2(80, 240)
+nodes/vertex/3/node = SubResource("VisualShaderNodeVectorDecompose_lpwsa")
+nodes/vertex/3/position = Vector2(-1320, 540)
+nodes/vertex/4/node = SubResource("VisualShaderNodeFloatParameter_mh8bv")
+nodes/vertex/4/position = Vector2(-2800, -600)
+nodes/vertex/5/node = SubResource("VisualShaderNodeFloatOp_gjpb2")
+nodes/vertex/5/position = Vector2(-780, 20)
+nodes/vertex/6/node = SubResource("VisualShaderNodeVectorCompose_1mg7n")
+nodes/vertex/6/position = Vector2(-380, 160)
+nodes/vertex/7/node = SubResource("VisualShaderNodeVectorDecompose_3cj7g")
+nodes/vertex/7/position = Vector2(-3220, -80)
+nodes/vertex/8/node = SubResource("VisualShaderNodeFloatFunc_8cjbf")
+nodes/vertex/8/position = Vector2(-2820, 140)
+nodes/vertex/9/node = SubResource("VisualShaderNodeFloatOp_ivobc")
+nodes/vertex/9/position = Vector2(-2080, 100)
+nodes/vertex/10/node = SubResource("VisualShaderNodeFloatFunc_aiehn")
+nodes/vertex/10/position = Vector2(-2020, 600)
+nodes/vertex/11/node = SubResource("VisualShaderNodeFloatOp_ik2bl")
+nodes/vertex/11/position = Vector2(-1400, 180)
+nodes/vertex/12/node = SubResource("VisualShaderNodeVectorDecompose_08jux")
+nodes/vertex/12/position = Vector2(-4460, -440)
+nodes/vertex/13/node = SubResource("VisualShaderNodeFloatOp_hu4sa")
+nodes/vertex/13/position = Vector2(-3460, 520)
+nodes/vertex/14/node = SubResource("VisualShaderNodeFloatOp_40lii")
+nodes/vertex/14/position = Vector2(-4140, 960)
+nodes/vertex/15/node = SubResource("VisualShaderNodeInput_qhsvs")
+nodes/vertex/15/position = Vector2(-2040, 820)
+nodes/vertex/16/node = SubResource("VisualShaderNodeInput_11l1r")
+nodes/vertex/16/position = Vector2(-5040, -840)
+nodes/vertex/17/node = SubResource("VisualShaderNodeInput_ds4gm")
+nodes/vertex/17/position = Vector2(-4009.65, -725.962)
+nodes/vertex/18/node = SubResource("VisualShaderNodeInput_cd0xp")
+nodes/vertex/18/position = Vector2(-4920, 360)
+nodes/vertex/19/node = SubResource("VisualShaderNodeFloatParameter_rb8cl")
+nodes/vertex/19/position = Vector2(-4920, 1020)
+nodes/vertex/28/node = SubResource("VisualShaderNodeFloatOp_0xpvk")
+nodes/vertex/28/position = Vector2(-820, 920)
+nodes/vertex/29/node = SubResource("VisualShaderNodeFloatOp_gfuky")
+nodes/vertex/29/position = Vector2(-2901.18, -1064.1)
+nodes/vertex/connections = PackedInt32Array(5, 0, 6, 0, 4, 0, 9, 0, 9, 0, 11, 0, 10, 0, 11, 1, 13, 0, 10, 0, 14, 0, 13, 1, 6, 0, 0, 0, 15, 0, 3, 0, 18, 0, 14, 0, 19, 0, 14, 1, 8, 0, 9, 1, 11, 0, 5, 0, 3, 0, 5, 1, 3, 1, 28, 0, 28, 0, 6, 1, 17, 0, 7, 0, 7, 1, 8, 0, 16, 0, 12, 0, 12, 1, 13, 0)
+nodes/fragment/0/position = Vector2(780, 400)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xgri7"]
+shader = SubResource("VisualShader_bot71")
+shader_parameter/Strength = 1.0
+shader_parameter/Speed = 1.400000019
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w5kxe"]
+shader = ExtResource("7_vjvbo")
+shader_parameter/WindStrength = 3.0000000475
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2pil7"]
+shader = ExtResource("5_k0aww")
+shader_parameter/Strength = 1.0
+shader_parameter/Speed = 1.150000007125
+
+[node name="SilvaronianOutpost" type="Node2D" unique_id=1100625247 groups=["camera_fixed"]]
+script = ExtResource("1_k0aww")
+
+[node name="Environment" type="Node2D" parent="." unique_id=664840511]
+z_index = 10
+
+[node name="1" type="Sprite2D" parent="Environment" unique_id=702539702]
+texture = ExtResource("1_l1cuu")
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment" unique_id=659212256]
+collision_mask = 0
+
+[node name="CollisionShape2D1" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=406870323]
+position = Vector2(0, 80)
+shape = SubResource("WorldBoundaryShape2D_k0aww")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=1839842972]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_vtgru")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=1256588590]
+position = Vector2(160, 80)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_vjvbo")
+
+[node name="Trees" type="Node2D" parent="." unique_id=441736033]
+modulate = Color(0.5372549, 0.5372549, 0.5372549, 1)
+z_index = 2
+position = Vector2(150, -26)
+
+[node name="Crystal15" type="Sprite2D" parent="Trees" unique_id=133906284]
+modulate = Color(0.32851192, 0.52638036, 0.8081818, 1)
+position = Vector2(-61, 100)
+texture = ExtResource("3_nc6d0")
+
+[node name="Crystal1" type="Sprite2D" parent="Trees" unique_id=1955425509]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-138, 100)
+texture = ExtResource("3_fcste")
+
+[node name="Crystal14" type="Sprite2D" parent="Trees" unique_id=271448794]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-96, 101)
+texture = ExtResource("3_fcste")
+
+[node name="Crystal13" type="Sprite2D" parent="Trees" unique_id=1266498894]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-81, 93)
+rotation = 1.5707964
+texture = ExtResource("3_fcste")
+
+[node name="Crystal5" type="Sprite2D" parent="Trees" unique_id=831902041]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-1, 53)
+texture = ExtResource("3_fcste")
+
+[node name="Crystal6" type="Sprite2D" parent="Trees" unique_id=1102795257]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-21, 105)
+rotation = -1.5707964
+texture = ExtResource("3_fcste")
+
+[node name="Crystal3" type="Sprite2D" parent="Trees" unique_id=1248265154]
+modulate = Color(1.2072555, 0.9274322, 1.2754622, 1)
+position = Vector2(-34, 99)
+texture = ExtResource("4_nc6d0")
+
+[node name="Crystal2" type="Sprite2D" parent="Trees" unique_id=737236569]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-91, 82)
+texture = ExtResource("5_t8dir")
+
+[node name="Crystal4" type="Sprite2D" parent="Trees" unique_id=679739275]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-103, 88)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("5_t8dir")
+region_enabled = true
+region_rect = Rect2(0, 0, 11, 37.415672)
+
+[node name="Crystal8" type="Sprite2D" parent="Trees" unique_id=1175756511]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-48, 88)
+texture = ExtResource("5_t8dir")
+region_enabled = true
+region_rect = Rect2(0, 0, 11, 37.415672)
+
+[node name="Crystal7" type="Sprite2D" parent="Trees" unique_id=1476658692]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-147, 94)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("6_uadtp")
+region_rect = Rect2(0, 0, 11, 37.415672)
+
+[node name="Crystal16" type="Sprite2D" parent="Trees" unique_id=1798018549]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-15, 94)
+texture = ExtResource("6_uadtp")
+region_rect = Rect2(0, 0, 11, 37.415672)
+
+[node name="Crystal9" type="Sprite2D" parent="Trees" unique_id=779385158]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-54, 100)
+texture = ExtResource("3_fcste")
+
+[node name="Crystal10" type="Sprite2D" parent="Trees" unique_id=270920433]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-84, 100)
+texture = ExtResource("4_nc6d0")
+
+[node name="Crystal11" type="Sprite2D" parent="Trees" unique_id=1746395497]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-115, 100)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("4_nc6d0")
+
+[node name="Crystal12" type="Sprite2D" parent="Trees" unique_id=979325361]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(-114, 90)
+rotation = 1.5707963
+scale = Vector2(1, -1)
+texture = ExtResource("4_nc6d0")
+
+[node name="Fort" type="Sprite2D" parent="Trees" unique_id=964079555]
+modulate = Color(0.8369494, 0.7874656, 0.59934926, 1)
+position = Vector2(51, 77)
+texture = ExtResource("2_3tuqn")
+
+[node name="Crystal17" type="Sprite2D" parent="Trees" unique_id=325282036]
+modulate = Color(1.2072555, 0.9274322, 1.2754622, 1)
+position = Vector2(-7, 74)
+rotation = -1.5707964
+texture = ExtResource("4_nc6d0")
+
+[node name="Crystal18" type="Sprite2D" parent="Trees" unique_id=2091375608]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+position = Vector2(8, 102)
+texture = ExtResource("3_fcste")
+
+[node name="0point2xMoving" type="Parallax2D" parent="." unique_id=1726733568]
+scroll_scale = Vector2(0.2, 0.2)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving" unique_id=960697986]
+position = Vector2(0, -70)
+texture = ExtResource("1_2juot")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="0point4xMoving" type="Parallax2D" parent="." unique_id=1417717077]
+scroll_scale = Vector2(0.4, 0.4)
+scroll_offset = Vector2(2, -96)
+repeat_size = Vector2(120, 0)
+repeat_times = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving" unique_id=1839351495]
+modulate = Color(0.12357537, 0.18296972, 0.17704535, 1)
+material = SubResource("CanvasItemMaterial_t8dir")
+position = Vector2(0, 156)
+texture = ExtResource("2_uobp7")
+
+[node name="Sprite2D2" type="Sprite2D" parent="0point4xMoving" unique_id=1637926505]
+modulate = Color(0.12357537, 0.18296972, 0.17704535, 1)
+material = SubResource("CanvasItemMaterial_t8dir")
+position = Vector2(0, 297)
+texture = ExtResource("2_uobp7")
+
+[node name="0point8xMoving" type="Parallax2D" parent="." unique_id=1407974247]
+scroll_scale = Vector2(0.8, 0.8)
+scroll_offset = Vector2(0, 19)
+repeat_size = Vector2(120, 0)
+repeat_times = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="0point8xMoving" unique_id=1870324038]
+modulate = Color(0.2727649, 0.3795481, 0.3739565, 1)
+texture = ExtResource("3_l1cuu")
+
+[node name="GreenTree1" type="Sprite2D" parent="0point8xMoving" unique_id=214998272]
+modulate = Color(0.12835406, 0.15170373, 0.16409835, 0.90000004)
+material = SubResource("ShaderMaterial_uadtp")
+position = Vector2(-711, 27)
+texture = ExtResource("4_3tuqn")
+
+[node name="Bush1" type="Sprite2D" parent="0point8xMoving" unique_id=1548475572]
+modulate = Color(0.03876, 0.16409835, 0.1680183, 0.90000004)
+material = SubResource("ShaderMaterial_3md8r")
+position = Vector2(-698, 51)
+texture = ExtResource("6_vtgru")
+
+[node name="Bush2" type="Sprite2D" parent="0point8xMoving" unique_id=1502766659]
+modulate = Color(0.14733289, 0.14733289, 0.07016479, 0.90000004)
+material = SubResource("ShaderMaterial_xgri7")
+position = Vector2(-620, 56)
+texture = ExtResource("6_vtgru")
+
+[node name="Shrub1" type="Sprite2D" parent="0point8xMoving" unique_id=1935013618]
+modulate = Color(0.22658296, 0.22658296, 0.22658296, 0.90000004)
+material = SubResource("ShaderMaterial_w5kxe")
+position = Vector2(-47, 49)
+texture = ExtResource("8_jjndc")
+
+[node name="SmallBush1" type="Sprite2D" parent="0point8xMoving" unique_id=1796925395]
+modulate = Color(0.20906562, 0.09985284, 0.12835406, 0.90000004)
+material = SubResource("ShaderMaterial_2pil7")
+position = Vector2(-683, 55)
+texture = ExtResource("9_fcste")
+
+[node name="FakeGround" type="Sprite2D" parent="0point8xMoving" unique_id=1466942339]
+modulate = Color(0.17641911, 0.17641908, 0.17641908, 1)
+position = Vector2(161, 80)
+texture = ExtResource("10_nc6d0")
+region_enabled = true
+region_rect = Rect2(0, 0, 160, 202.25)
+
+[node name="Sprite2D2" type="Sprite2D" parent="0point8xMoving" unique_id=1331225839]
+modulate = Color(0.2727649, 0.3795481, 0.3739565, 1)
+position = Vector2(1, 267)
+texture = ExtResource("3_l1cuu")
+
+[node name="GreenTree2" type="Sprite2D" parent="0point8xMoving" unique_id=904486385]
+modulate = Color(0.12835406, 0.15170373, 0.16409835, 0.90000004)
+material = SubResource("ShaderMaterial_uadtp")
+position = Vector2(-710, 294)
+texture = ExtResource("4_3tuqn")
+
+[node name="Bush3" type="Sprite2D" parent="0point8xMoving" unique_id=840357961]
+modulate = Color(0.03876, 0.16409835, 0.1680183, 0.90000004)
+material = SubResource("ShaderMaterial_3md8r")
+position = Vector2(-697, 318)
+texture = ExtResource("6_vtgru")
+
+[node name="Bush4" type="Sprite2D" parent="0point8xMoving" unique_id=1299815767]
+modulate = Color(0.14733289, 0.14733289, 0.07016479, 0.90000004)
+material = SubResource("ShaderMaterial_xgri7")
+position = Vector2(-619, 323)
+texture = ExtResource("6_vtgru")
+
+[node name="Shrub2" type="Sprite2D" parent="0point8xMoving" unique_id=956866551]
+modulate = Color(0.22658296, 0.22658296, 0.22658296, 0.90000004)
+material = SubResource("ShaderMaterial_w5kxe")
+position = Vector2(-46, 316)
+texture = ExtResource("8_jjndc")
+
+[node name="SmallBush2" type="Sprite2D" parent="0point8xMoving" unique_id=96899672]
+modulate = Color(0.20906562, 0.09985284, 0.12835406, 0.90000004)
+material = SubResource("ShaderMaterial_2pil7")
+position = Vector2(-682, 322)
+texture = ExtResource("9_fcste")
+
+[node name="FakeGround2" type="Sprite2D" parent="0point8xMoving" unique_id=1374510070]
+modulate = Color(0.17641911, 0.17641908, 0.17641908, 1)
+position = Vector2(162, 347)
+texture = ExtResource("10_nc6d0")
+region_enabled = true
+region_rect = Rect2(0, 0, 160, 202.25)
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("13_3tuqn")]
+
+[node name="OutPost" parent="." unique_id=1957074840 instance=ExtResource("20_uadtp")]
+position = Vector2(4, 78)
+scene_path = "uid://d71f5lta185c"
+teleport_id = 2
+
+[node name="Label" type="Label" parent="OutPost" unique_id=1957081594]
+z_index = 100
+offset_left = 5.0
+offset_top = -7.0
+offset_right = 38.0
+offset_bottom = 3.0
+theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
+theme_override_fonts/font = ExtResource("21_3md8r")
+theme_override_font_sizes/font_size = 10
+text = "Silvaron"

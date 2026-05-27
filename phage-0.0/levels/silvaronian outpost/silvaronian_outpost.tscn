@@ -524,14 +524,13 @@ texture = ExtResource("10_nc6d0")
 region_enabled = true
 region_rect = Rect2(0, 0, 160, 202.25)
 
-[node name="Player" parent="." unique_id=949587783 instance=ExtResource("13_3tuqn")]
-
-[node name="OutPost" parent="." unique_id=1957074840 instance=ExtResource("20_uadtp")]
+[node name="Silvaron" parent="." unique_id=1957074840 instance=ExtResource("20_uadtp")]
 position = Vector2(4, 78)
 scene_path = "uid://d71f5lta185c"
 teleport_id = 2
+player_light = true
 
-[node name="Label" type="Label" parent="OutPost" unique_id=1957081594]
+[node name="Label" type="Label" parent="Silvaron" unique_id=1957081594]
 z_index = 100
 offset_left = 5.0
 offset_top = -7.0
@@ -541,3 +540,7 @@ theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
 theme_override_fonts/font = ExtResource("21_3md8r")
 theme_override_font_sizes/font_size = 10
 text = "Silvaron"
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("13_3tuqn")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+position = Vector2(229, -230)

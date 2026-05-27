@@ -12,6 +12,8 @@ fill_to = Vector2(0.5, 0)
 [node name="PlayerLight" type="Node2D" unique_id=1789326887]
 
 [node name="PlayerLight" type="PointLight2D" parent="." unique_id=543441045]
+modulate = Color(0.6862745, 0.6862745, 0.6862745, 1)
+z_index = 10
 position = Vector2(0, -7)
 scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("GradientTexture2D_u2oux")

@@ -15,6 +15,7 @@ signal screen_filter(amount: float, colour: Color)
 @export var hit_flash_duration: float = 0.4
 @export var hit_flash_color: Color = Color(1.0, 0.1, 0.1, 0.16)
 @export var teleport_fade_duration: float = 0.08
+@export var teleport_fade_in_duration: float = 0.35
 
 @export var follow_offset: Vector2 = Vector2(0, -20)
 
@@ -284,53 +285,64 @@ func change_scene(scene_path: String, teleport_id: int, player_light: bool) -> v
 	if scene_path.is_empty():
 		return
 	teleport_transition_active = true
-	await _play_teleport_fade(1.0)
+	await _play_teleport_fade(1.0, teleport_fade_duration)
 	var tree := get_tree()
 	if tree == null:
 		teleport_transition_active = false
 		return
 	tree.change_scene_to_file(scene_path)
 	await tree.process_frame
-	var target_teleport := _find_teleport_by_id(teleport_id)
+	await tree.process_frame
+	var current_scene := tree.current_scene
+	if not is_instance_valid(current_scene):
+		teleport_transition_active = false
+		await _play_teleport_fade(0.0, teleport_fade_in_duration)
+		return
+	var target_teleport := _find_teleport_by_id(current_scene, teleport_id)
 	var target_position := Vector2.ZERO
 	if is_instance_valid(target_teleport):
 		target_position = target_teleport.global_position
-	var player := _find_player_in_current_scene()
+	var player := _find_player_in_current_scene(current_scene)
 	if not is_instance_valid(player):
 		player = PLAYER_SCENE.instantiate() as Player
-		if is_instance_valid(tree.current_scene):
-			tree.current_scene.add_child(player)
+		current_scene.add_child(player)
 	if is_instance_valid(player):
 		player.global_position = target_position
 		_ensure_player_light(player, player_light)
-	await _play_teleport_fade(0.0)
+		_set_player_lock(true)
+	await _play_teleport_fade(0.0, teleport_fade_in_duration)
+	_set_player_lock(false)
 	teleport_transition_active = false
 
 
-func _find_teleport_by_id(teleport_id: int) -> Node2D:
-	var tree := get_tree()
-	if tree == null:
+func _find_teleport_by_id(root: Node, teleport_id: int) -> Node2D:
+	if not is_instance_valid(root):
 		return null
-	for node in tree.get_nodes_in_group(TELEPORT_GROUP):
-		if int(node.get("teleport_id")) == teleport_id and node is Node2D:
-			return node
+	if root is Node2D and root.get("teleport_id") == teleport_id:
+		return root
+	for child in root.get_children():
+		var match := _find_teleport_by_id(child, teleport_id)
+		if is_instance_valid(match):
+			return match
 	return null
 
 
-func _find_player_in_current_scene() -> Player:
-	var tree := get_tree()
-	if tree == null:
+func _find_player_in_current_scene(root: Node) -> Player:
+	if not is_instance_valid(root):
 		return null
-	for node in tree.get_nodes_in_group("player"):
-		if node is Player:
-			return node
+	if root is Player:
+		return root
+	for child in root.get_children():
+		var player := _find_player_in_current_scene(child)
+		if is_instance_valid(player):
+			return player
 	return null
 
 
 func _ensure_player_light(player: Player, enabled: bool) -> void:
 	if not enabled:
 		return
-	if player.get_node_or_null("PlayerLight") != null:
+	if player.find_child("PlayerLight", true, false) != null:
 		return
 	if PLAYER_LIGHT_SCENE == null:
 		return
@@ -340,7 +352,7 @@ func _ensure_player_light(player: Player, enabled: bool) -> void:
 		(light as Node2D).position = Vector2.ZERO
 
 
-func _play_teleport_fade(target_alpha: float) -> void:
+func _play_teleport_fade(target_alpha: float, duration: float) -> void:
 	var rect := _get_teleport_transition_rect()
 	if rect == null:
 		return
@@ -349,10 +361,19 @@ func _play_teleport_fade(target_alpha: float) -> void:
 	rect.visible = true
 	teleport_transition_tween = create_tween()
 	teleport_transition_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	teleport_transition_tween.tween_property(rect, "color:a", target_alpha, teleport_fade_duration)
+	teleport_transition_tween.tween_property(rect, "color:a", target_alpha, duration)
 	await teleport_transition_tween.finished
 	if target_alpha <= 0.0 and is_instance_valid(rect):
 		rect.visible = false
+
+
+func _set_player_lock(locked: bool) -> void:
+	var players := get_tree().get_nodes_in_group("player")
+	if players.is_empty():
+		return
+	var player := players[0]
+	if player.has_method("set_lock"):
+		player.call("set_lock", locked)
 
 
 func _get_teleport_transition_rect() -> ColorRect:

@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://b0yqm2ol2in4y" path="res://levels/silvaron/silvaron.gd" id="1_4cmem"]
 [ext_resource type="Texture2D" uid="uid://dbvrbun0815ca" path="res://levels/silvaron/silvaron_ground.png" id="1_38yq8"]
-[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_wiwgd"]
 [ext_resource type="Texture2D" uid="uid://dqfy7nayqs18q" path="res://levels/silvaron/silvaron_background.png" id="4_2rk1k"]
 [ext_resource type="Texture2D" uid="uid://cj08xg8batjgi" path="res://levels/silvaron/silvaron_lake_edge.png" id="4_22mx7"]
 [ext_resource type="Texture2D" uid="uid://dtdmcsjxx408l" path="res://levels/silvaron/silvaron_platform.png" id="5_d58ry"]
@@ -2973,15 +2972,6 @@ nodes/fragment/0/position = Vector2(780, 400)
 shader = SubResource("VisualShader_0aucp")
 shader_parameter/Strength = 1.0
 shader_parameter/Speed = 1.30000001425
-
-[sub_resource type="Gradient" id="Gradient_ecic6"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_u2oux"]
-gradient = SubResource("Gradient_ecic6")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.5, 0)
 
 [node name="Silvaron" type="Node2D" unique_id=374355723]
 script = ExtResource("1_4cmem")
@@ -6701,15 +6691,6 @@ position = Vector2(1058, 285)
 
 [node name="Cox3" parent="Monsrers" unique_id=1057159235 instance=ExtResource("36_jbuho")]
 position = Vector2(715, 17)
-
-[node name="Player" parent="." unique_id=949587783 instance=ExtResource("1_wiwgd")]
-modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
-position = Vector2(229, -230)
-
-[node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1764559963]
-position = Vector2(0, -7)
-scale = Vector2(3.0664063, 1.21875)
-texture = SubResource("GradientTexture2D_u2oux")
 
 [node name="Teleport" parent="." unique_id=1957074840 instance=ExtResource("41_r8omv")]
 position = Vector2(234, -207)

@@ -1,0 +1,139 @@
+[gd_scene format=3 uid="uid://s3hdppp0km17"]
+
+[ext_resource type="Script" uid="uid://dtq1vmfaf8lrc" path="res://levels/spawn_room/spawn_room.gd" id="1_aun17"]
+[ext_resource type="Texture2D" uid="uid://clb0l4nguq52i" path="res://levels/spawn_room/spawn_room_ground.png" id="2_ctuyw"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="3_ctuyw"]
+[ext_resource type="Texture2D" uid="uid://bsaq2q1au3773" path="res://levels/spawn_room/spawn_room_left_end.png" id="3_i4v8s"]
+[ext_resource type="Texture2D" uid="uid://bvd4vvm5tjt31" path="res://levels/spawn_room/spawn_room_background.png" id="4_gv5lq"]
+[ext_resource type="Texture2D" uid="uid://dgtrp3rx1ucrp" path="res://levels/spawn_room/spawn_room_5.png" id="4_hqcya"]
+[ext_resource type="Texture2D" uid="uid://dcyk2jxg3ohn3" path="res://levels/spawn_room/spawn_room_4.png" id="5_hqcya"]
+[ext_resource type="Texture2D" uid="uid://rm17y84t3q6h" path="res://levels/spawn_room/spawn_room_3.png" id="5_i4v8s"]
+[ext_resource type="Texture2D" uid="uid://bqf7o1dgg18m8" path="res://levels/spawn_room/spawn_room_2.png" id="6_hqcya"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_3oexc"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2s6tj"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_aun17"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ctuyw"]
+size = Vector2(40, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xf3p4"]
+size = Vector2(72, 70)
+
+[sub_resource type="Gradient" id="Gradient_ecic6"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xf3p4"]
+gradient = SubResource("Gradient_ecic6")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_i4v8s"]
+
+[node name="spawn_room" type="Node2D" unique_id=1159039431 groups=["camera_follow"]]
+script = ExtResource("1_aun17")
+
+[node name="Walls" type="Node2D" parent="." unique_id=288094062]
+z_index = 10
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=665971864]
+collision_mask = 0
+
+[node name="CollisionShape2D1" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1665214600]
+position = Vector2(0, 80)
+shape = SubResource("WorldBoundaryShape2D_3oexc")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1061205748]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_2s6tj")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1030870066]
+position = Vector2(1326, 90)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_aun17")
+
+[node name="Platform" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1980596708]
+position = Vector2(75, 51)
+shape = SubResource("RectangleShape2D_ctuyw")
+
+[node name="Platform2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=89407589]
+position = Vector2(184, 55)
+shape = SubResource("RectangleShape2D_xf3p4")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Walls/StaticBody2D" unique_id=1114493311]
+polygon = PackedVector2Array(10, 89, 6, 81, 6, 79, 5, 78, 5, 75, 4, 74, 4, 72, 3, 71, 3, 68, 0, 10, 0, 89)
+
+[node name="Ground" type="Sprite2D" parent="Walls" unique_id=1671977831]
+texture = ExtResource("2_ctuyw")
+centered = false
+
+[node name="LeftEnd" type="Sprite2D" parent="Walls" unique_id=531490342]
+position = Vector2(-169, 0)
+texture = ExtResource("3_i4v8s")
+centered = false
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("3_ctuyw")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+position = Vector2(11, 3)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1296208497]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("GradientTexture2D_xf3p4")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1751261856]
+color = Color(0.5370987, 0.5370987, 0.5370987, 1)
+
+[node name="0point0xMoving" type="Parallax2D" parent="." unique_id=480106631]
+scroll_scale = Vector2(0, 0)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="0point0xMoving" unique_id=2059028379]
+texture = ExtResource("4_gv5lq")
+centered = false
+
+[node name="0point2xMoving" type="Parallax2D" parent="." unique_id=1112510577]
+scroll_scale = Vector2(0.2, 0.2)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving" unique_id=1151437884]
+texture = ExtResource("4_hqcya")
+centered = false
+
+[node name="0point4xMoving" type="Parallax2D" parent="." unique_id=1275547077]
+scroll_scale = Vector2(0.4, 0.4)
+scroll_offset = Vector2(2, -96)
+repeat_size = Vector2(120, 0)
+repeat_times = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving" unique_id=836998767]
+modulate = Color(0.12357537, 0.18296972, 0.17704535, 1)
+material = SubResource("CanvasItemMaterial_i4v8s")
+position = Vector2(118, 141)
+texture = ExtResource("5_hqcya")
+
+[node name="0point6xMoving" type="Parallax2D" parent="." unique_id=1661050919]
+scroll_scale = Vector2(0.6, 0.6)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="0point6xMoving" unique_id=1676205291]
+texture = ExtResource("5_i4v8s")
+centered = false
+
+[node name="0point8xMoving" type="Parallax2D" parent="." unique_id=1997365140]
+scroll_scale = Vector2(0.8, 0.8)
+scroll_offset = Vector2(0, 19)
+repeat_size = Vector2(120, 0)
+repeat_times = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="0point8xMoving" unique_id=1949766641]
+modulate = Color(0.2727649, 0.3795481, 0.3739565, 1)
+position = Vector2(0, 26)
+texture = ExtResource("6_hqcya")

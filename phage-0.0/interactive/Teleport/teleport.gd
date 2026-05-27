@@ -7,6 +7,8 @@ extends Marker2D
 @export var hint_fade_duration: float = 0.12
 
 var _player_inside: bool = false
+var _tracked_player: Player = null
+var _hint_visible: bool = false
 var _hint_tween: Tween = null
 var _hint_canvas_items: Array[CanvasItem] = []
 var _hint_base_modulates: Dictionary = {}
@@ -22,25 +24,37 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not _player_inside:
 		return
+	if not is_instance_valid(_tracked_player):
+		return
+	if _tracked_player.input_locked:
+		if _hint_visible:
+			_set_hint_visible(false)
+		return
+	if not _hint_visible:
+		_set_hint_visible(true)
 	if Input.is_action_just_pressed("Select"):
 		Game.change_scene(scene_path, teleport_id, player_light)
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is Player:
+		_tracked_player = body
 		_player_inside = true
-		_set_hint_visible(true)
 		set_process(true)
+		if not body.input_locked:
+			_set_hint_visible(true)
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body is Player:
 		_player_inside = false
 		_set_hint_visible(false)
+		_tracked_player = null
 		set_process(false)
 
 
 func _set_hint_visible(visible: bool) -> void:
 	if is_instance_valid(_hint_tween):
 		_hint_tween.kill()
+	_hint_visible = visible
 	if visible:
 		for canvas_item in _hint_canvas_items:
 			if is_instance_valid(canvas_item):

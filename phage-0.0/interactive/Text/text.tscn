@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://c8pnajburl72k"]
+
+[ext_resource type="Script" uid="uid://dpgakbmw6beqd" path="res://interactive/Text/text.gd" id="1_d7aon"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_axvix"]
+size = Vector2(20, 1)
+
+[node name="Text" type="Marker2D" unique_id=1026677927]
+script = ExtResource("1_d7aon")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=2003642953]
+z_index = 100
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1485149264]
+shape = SubResource("RectangleShape2D_axvix")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

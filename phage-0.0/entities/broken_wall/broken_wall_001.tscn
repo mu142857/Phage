@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://ci5jraudpqo07"]
+
+[ext_resource type="Script" uid="uid://lquts7jq51cw" path="res://entities/broken_wall/broken_wall_001.gd" id="1_x2dha"]
+[ext_resource type="Texture2D" uid="uid://wuju8wxr2l13" path="res://entities/broken_wall/broken_wall_001.png" id="2_5wpv8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5wpv8"]
+size = Vector2(29, 14)
+
+[sub_resource type="Gradient" id="Gradient_5wpv8"]
+offsets = PackedFloat32Array(0, 0.49050632, 1)
+colors = PackedColorArray(0.3019608, 0.08235294, 0.1254902, 1, 0.07058824, 0, 0.011764706, 1, 0.02745098, 0, 0.003921569, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tm42c"]
+gradient = SubResource("Gradient_5wpv8")
+
+[sub_resource type="Gradient" id="Gradient_4bgfn"]
+offsets = PackedFloat32Array(0, 0.24367088, 0.778481, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rq1vc"]
+gradient = SubResource("Gradient_4bgfn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ha8g8"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0, -5, 0)
+emission_shape_scale = Vector3(14, 5, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 150.0
+gravity = Vector3(0, 300, 0)
+scale_max = 5.0
+color_ramp = SubResource("GradientTexture1D_rq1vc")
+color_initial_ramp = SubResource("GradientTexture1D_tm42c")
+
+[node name="BrokenWall001" type="CharacterBody2D" unique_id=1173287841]
+z_index = 10
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_x2dha")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1877558757]
+texture = ExtResource("2_5wpv8")
+offset = Vector2(0, -7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=949090505]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_5wpv8")
+debug_color = Color(0.48788664, 0.5847179, 0.050708726, 0)
+
+[node name="AttackArea2D" type="Area2D" parent="." unique_id=2067464407]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea2D" unique_id=723434081]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_5wpv8")
+debug_color = Color(0, 0.60038817, 0.70000815, 0)
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=685617715]
+z_index = 20
+emitting = false
+amount = 20
+lifetime = 0.8
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_ha8g8")

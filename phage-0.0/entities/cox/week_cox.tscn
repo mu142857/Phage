@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://dmp2knbj4tnir"]
+
+[ext_resource type="Script" uid="uid://cxg3vvv2fl8at" path="res://entities/cox/week_cox.gd" id="1_ex2t7"]
+[ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_cj6gp"]
+[ext_resource type="Texture2D" uid="uid://c38syl5llmfkj" path="res://entities/cox/week_cox-Sheet.png" id="3_ex2t7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_im5db"]
+resource_local_to_scene = true
+shader = ExtResource("2_cj6gp")
+shader_parameter/Enabled = false
+shader_parameter/Tint = Color(0.7841302, 0.50126714, 0.49497557, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cj6gp"]
+atlas = ExtResource("3_ex2t7")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yg1u1"]
+atlas = ExtResource("3_ex2t7")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0lb0j"]
+atlas = ExtResource("3_ex2t7")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lmtfl"]
+atlas = ExtResource("3_ex2t7")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_07jrp"]
+atlas = ExtResource("3_ex2t7")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q1e8r"]
+atlas = ExtResource("3_ex2t7")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rha7h"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cj6gp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yg1u1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0lb0j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lmtfl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_07jrp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q1e8r")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pm5f3"]
+
+[sub_resource type="Animation" id="Animation_ebm1s"]
+resource_name = "HitFlash"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_y062d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pm5f3"]
+_data = {
+&"HitFlash": SubResource("Animation_ebm1s"),
+&"RESET": SubResource("Animation_y062d")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_im5db"]
+size = Vector2(125, 62.75)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_im5db"]
+radius = 4.1231055
+
+[node name="WeekCox" type="CharacterBody2D" unique_id=263783893]
+z_index = 10
+collision_layer = 4
+script = ExtResource("1_ex2t7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=759122362]
+material = SubResource("ShaderMaterial_im5db")
+position = Vector2(2, 1)
+sprite_frames = SubResource("SpriteFrames_rha7h")
+autoplay = "default"
+frame_progress = 0.90881777
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=758222173]
+shape = SubResource("CircleShape2D_pm5f3")
+
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=1451039704]
+root_motion_local = true
+libraries/ = SubResource("AnimationLibrary_pm5f3")
+
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=1997340319]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=1808281918]
+position = Vector2(0, 31.375)
+shape = SubResource("RectangleShape2D_im5db")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+metadata/_edit_lock_ = true
+
+[node name="AttackCheck" type="Area2D" parent="." unique_id=1702093957]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackCheck" unique_id=1857354209]
+shape = SubResource("CircleShape2D_im5db")
+debug_color = Color(0, 0.60038817, 0.70000815, 0)

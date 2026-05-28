@@ -163,21 +163,39 @@ func _check_attack_hitbox(hitbox: Area2D, damage: int) -> void:
 		return
 
 	for body in hitbox.get_overlapping_bodies():
-		if body == null:
-			continue
-		if not body.is_in_group("monster"):
-			continue
-		if body.has_method("take_damage"):
-			body.call("take_damage", damage)
-			if body is Node2D and player_ref != null:
-				var hit_x := (body as Node2D).global_position.x
-				if is_air_attack:
-					player_ref.spawn_jump_attack_effect(hit_x)
-				player_ref.spawn_hit_effect(hit_x)
-			Game.flash(0.1, Color(0.815, 0.908, 0.915, 1.0))
-			Game.shake_camera(2)
-		_apply_hit_recoil()
-		break
+		if _try_damage_target(body, damage):
+			_apply_hit_recoil()
+			return
+
+	for area in hitbox.get_overlapping_areas():
+		if _try_damage_target(area, damage):
+			_apply_hit_recoil()
+			return
+
+
+func _try_damage_target(target: Node, damage: int) -> bool:
+	if target == null:
+		return false
+	if not target.is_in_group("monster") and not target.is_in_group("breakable_wall"):
+		return false
+
+	var damage_target: Node = target
+	if target.has_method("take_damage"):
+		target.call("take_damage", damage)
+	elif target.get_parent() != null and target.get_parent().has_method("take_damage"):
+		damage_target = target.get_parent()
+		damage_target.call("take_damage", damage)
+	else:
+		return false
+
+	if damage_target is Node2D and player_ref != null:
+		var hit_x := (damage_target as Node2D).global_position.x
+		if is_air_attack:
+			player_ref.spawn_jump_attack_effect(hit_x)
+		player_ref.spawn_hit_effect(hit_x)
+	Game.flash(0.1, Color(0.815, 0.908, 0.915, 1.0))
+	Game.shake_camera(2)
+	return true
 
 func _apply_hit_recoil() -> void:
 	if player_ref == null:

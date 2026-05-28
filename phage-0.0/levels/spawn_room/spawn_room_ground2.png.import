@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://clb0l4nguq52i"
-path="res://.godot/imported/spawn_room_ground.png-eec842b9c01499dc5fa0ae7b4258e34c.ctex"
+uid="uid://hhiudf1n06rc"
+path="res://.godot/imported/spawn_room_ground2.png-b1ff0963ac08ec114b2a9bf2865d3caf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://levels/spawn_room/spawn_room_ground.png"
-dest_files=["res://.godot/imported/spawn_room_ground.png-eec842b9c01499dc5fa0ae7b4258e34c.ctex"]
+source_file="res://levels/spawn_room/spawn_room_ground2.png"
+dest_files=["res://.godot/imported/spawn_room_ground2.png-b1ff0963ac08ec114b2a9bf2865d3caf.ctex"]
 
 [params]
 

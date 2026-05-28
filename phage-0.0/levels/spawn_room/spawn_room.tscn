@@ -1,14 +1,19 @@
 [gd_scene format=3 uid="uid://s3hdppp0km17"]
 
 [ext_resource type="Script" uid="uid://dtq1vmfaf8lrc" path="res://levels/spawn_room/spawn_room.gd" id="1_aun17"]
-[ext_resource type="Texture2D" uid="uid://clb0l4nguq52i" path="res://levels/spawn_room/spawn_room_ground.png" id="2_ctuyw"]
+[ext_resource type="Texture2D" uid="uid://bdv6l6g0k54rr" path="res://levels/spawn_room/spawn_room_ground1.png" id="2_f6b0m"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="3_ctuyw"]
+[ext_resource type="Texture2D" uid="uid://hhiudf1n06rc" path="res://levels/spawn_room/spawn_room_ground2.png" id="3_f6b0m"]
 [ext_resource type="Texture2D" uid="uid://bsaq2q1au3773" path="res://levels/spawn_room/spawn_room_left_end.png" id="3_i4v8s"]
 [ext_resource type="Texture2D" uid="uid://bvd4vvm5tjt31" path="res://levels/spawn_room/spawn_room_background.png" id="4_gv5lq"]
 [ext_resource type="Texture2D" uid="uid://dgtrp3rx1ucrp" path="res://levels/spawn_room/spawn_room_5.png" id="4_hqcya"]
+[ext_resource type="PackedScene" uid="uid://ci5jraudpqo07" path="res://entities/broken_wall/broken_wall_001.tscn" id="5_bcwdp"]
 [ext_resource type="Texture2D" uid="uid://dcyk2jxg3ohn3" path="res://levels/spawn_room/spawn_room_4.png" id="5_hqcya"]
 [ext_resource type="Texture2D" uid="uid://rm17y84t3q6h" path="res://levels/spawn_room/spawn_room_3.png" id="5_i4v8s"]
 [ext_resource type="Texture2D" uid="uid://bqf7o1dgg18m8" path="res://levels/spawn_room/spawn_room_2.png" id="6_hqcya"]
+[ext_resource type="PackedScene" uid="uid://dmp2knbj4tnir" path="res://entities/cox/week_cox.tscn" id="12_a46js"]
+[ext_resource type="PackedScene" uid="uid://c8pnajburl72k" path="res://interactive/Text/text.tscn" id="13_hsfmc"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="14_0ro3w"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_3oexc"]
 
@@ -20,7 +25,19 @@
 size = Vector2(40, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xf3p4"]
-size = Vector2(72, 70)
+size = Vector2(73, 70)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bcwdp"]
+size = Vector2(28.5, 45)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f6b0m"]
+size = Vector2(5.5, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a46js"]
+size = Vector2(39.75, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hsfmc"]
+size = Vector2(5, 25)
 
 [sub_resource type="Gradient" id="Gradient_ecic6"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -56,19 +73,46 @@ position = Vector2(1326, 90)
 rotation = -1.5707964
 shape = SubResource("WorldBoundaryShape2D_aun17")
 
-[node name="Platform" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1980596708]
+[node name="Platform1" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1980596708]
+z_index = 11
 position = Vector2(75, 51)
 shape = SubResource("RectangleShape2D_ctuyw")
 
 [node name="Platform2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=89407589]
-position = Vector2(184, 55)
+z_index = 11
+position = Vector2(184.5, 55)
 shape = SubResource("RectangleShape2D_xf3p4")
+
+[node name="Platform3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1826410974]
+z_index = 11
+position = Vector2(235.25, 42.5)
+shape = SubResource("RectangleShape2D_bcwdp")
+
+[node name="Platform4" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=547497649]
+z_index = 11
+position = Vector2(252.25, 46)
+shape = SubResource("RectangleShape2D_f6b0m")
+
+[node name="Platform5" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1781997860]
+z_index = 11
+position = Vector2(304.125, 74)
+shape = SubResource("RectangleShape2D_a46js")
+
+[node name="Platform6" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1111436647]
+z_index = 11
+position = Vector2(223.5, 77.5)
+shape = SubResource("RectangleShape2D_hsfmc")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Walls/StaticBody2D" unique_id=1114493311]
 polygon = PackedVector2Array(10, 89, 6, 81, 6, 79, 5, 78, 5, 75, 4, 74, 4, 72, 3, 71, 3, 68, 0, 10, 0, 89)
 
-[node name="Ground" type="Sprite2D" parent="Walls" unique_id=1671977831]
-texture = ExtResource("2_ctuyw")
+[node name="Ground1" type="Sprite2D" parent="Walls" unique_id=1671977831]
+texture = ExtResource("2_f6b0m")
+centered = false
+
+[node name="Ground2" type="Sprite2D" parent="Walls" unique_id=1448250425]
+position = Vector2(220, -1)
+texture = ExtResource("3_f6b0m")
 centered = false
 
 [node name="LeftEnd" type="Sprite2D" parent="Walls" unique_id=531490342]
@@ -76,9 +120,13 @@ position = Vector2(-169, 0)
 texture = ExtResource("3_i4v8s")
 centered = false
 
+[node name="BrokenWall001" parent="Walls" unique_id=1173287841 instance=ExtResource("5_bcwdp")]
+position = Vector2(235, 79)
+collision_mask = 2
+
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("3_ctuyw")]
 modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
-position = Vector2(11, 3)
+position = Vector2(27, 3)
 
 [node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1296208497]
 position = Vector2(0, -7)
@@ -137,3 +185,50 @@ repeat_times = 5
 modulate = Color(0.2727649, 0.3795481, 0.3739565, 1)
 position = Vector2(0, 26)
 texture = ExtResource("6_hqcya")
+
+[node name="WeekCox" parent="." unique_id=263783893 instance=ExtResource("12_a46js")]
+position = Vector2(399, 16)
+
+[node name="Guide" type="Node2D" parent="." unique_id=2102713541]
+
+[node name="Text1" parent="Guide" unique_id=1026677927 instance=ExtResource("13_hsfmc")]
+position = Vector2(38, 77)
+
+[node name="Label" type="Label" parent="Guide/Text1" unique_id=1630534121]
+z_index = 100
+offset_left = -21.0
+offset_top = -19.0
+offset_right = 21.0
+offset_bottom = -11.0
+theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
+theme_override_fonts/font = ExtResource("14_0ro3w")
+theme_override_font_sizes/font_size = 7
+text = "按下空格跳跃"
+
+[node name="Text2" parent="Guide" unique_id=1096043887 instance=ExtResource("13_hsfmc")]
+position = Vector2(85, 45)
+
+[node name="Label" type="Label" parent="Guide/Text2" unique_id=1470028998]
+z_index = 100
+offset_left = -19.0
+offset_top = -18.0
+offset_right = 23.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
+theme_override_fonts/font = ExtResource("14_0ro3w")
+theme_override_font_sizes/font_size = 7
+text = "按下→冲刺"
+
+[node name="Text3" parent="Guide" unique_id=1817680346 instance=ExtResource("13_hsfmc")]
+position = Vector2(343, 78)
+
+[node name="Label" type="Label" parent="Guide/Text3" unique_id=1854660327]
+z_index = 100
+offset_left = -19.0
+offset_top = -18.0
+offset_right = 23.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
+theme_override_fonts/font = ExtResource("14_0ro3w")
+theme_override_font_sizes/font_size = 7
+text = "按下←攻击"

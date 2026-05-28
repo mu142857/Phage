@@ -1,4 +1,4 @@
-#Cox
+#WeekCox
 extends CharacterBody2D
 
 const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cox/cox_death.tscn")
@@ -7,9 +7,9 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cox/cox_death.ts
 @export var health: int = 1100
 @export var idle_hover_amplitude: float = 15.0
 @export var idle_hover_speed: float = 2.2
-@export var hover_follow_speed: float = 62.0
-@export var chase_speed: float = 45.0
-@export var collision_damage: int = 8
+@export var hover_follow_speed: float = 18.0
+@export var chase_speed: float = 18.0
+@export var collision_damage: int = 1
 @export var contact_damage_cooldown: float = 0.35
 @export var knockback_speed: float = 310.0
 @export var knockback_vertical_speed: float = -40.0
@@ -112,7 +112,7 @@ func _set_attack_glow(enabled: bool, immediate: bool = false) -> void:
 
 	var target_modulate := _base_modulate
 	if enabled:
-		target_modulate = Color(_base_modulate.r, _base_modulate.g, 3.0, _base_modulate.a)
+		target_modulate = Color(1.5, 1.5, _base_modulate.b, _base_modulate.a)
 
 	if immediate:
 		sprite.modulate = target_modulate
@@ -124,18 +124,17 @@ func _set_attack_glow(enabled: bool, immediate: bool = false) -> void:
 
 func _update_attack_movement(player: Node2D, delta: float) -> void:
 	_update_facing_toward_player(player.global_position.x)
-	var hover_offset := sin(_time_passed * idle_hover_speed) * idle_hover_amplitude
-	var target_above_player := Vector2(player.global_position.x, _spawn_position.y + hover_offset)
-	var x_distance := absf(global_position.x - player.global_position.x)
+	var attack_height := player.global_position.y - 9.0
 
 	if _attack_phase == 0:
+		var target_above_player := Vector2(global_position.x, attack_height)
 		global_position = global_position.move_toward(target_above_player, chase_speed * delta)
-		if x_distance <= 10.0:
+		if absf(global_position.y - attack_height) <= 2.0:
 			_attack_phase = 1
 			_set_attack_glow(true)
 		return
 
-	var attack_target := Vector2(player.global_position.x, player.global_position.y + hover_offset)
+	var attack_target := Vector2(player.global_position.x, attack_height)
 	global_position = global_position.move_toward(attack_target, chase_speed * delta)
 	_set_attack_glow(true)
 

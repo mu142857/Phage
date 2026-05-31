@@ -3,8 +3,8 @@ extends CharacterBody2D
 
 const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cox/cox_death.tscn")
 
-@export var max_health: int = 1100
-@export var health: int = 1100
+@export var max_health: int = 1000
+@export var health: int = 1000
 @export var idle_hover_amplitude: float = 15.0
 @export var idle_hover_speed: float = 2.2
 @export var hover_follow_speed: float = 18.0
@@ -30,6 +30,7 @@ var _glow_tween: Tween = null
 @onready var hit_effect_player: AnimationPlayer = get_node_or_null("HitEffectPlayer") as AnimationPlayer
 @onready var player_check: Area2D = get_node_or_null("PlayerCheck") as Area2D
 @onready var attack_check: Area2D = get_node_or_null("AttackCheck") as Area2D
+@onready var health_bar: ProgressBar = get_node_or_null("ProgressBar") as ProgressBar
 
 func _ready() -> void:
 	add_to_group("monster")
@@ -46,6 +47,7 @@ func _ready() -> void:
 			_base_sprite_scale_x = 1.0
 	if is_instance_valid(hit_effect_player):
 		hit_effect_player.active = true
+	_setup_health_bar()
 	_set_player_detected(false, true)
 
 func _physics_process(delta: float) -> void:
@@ -80,6 +82,7 @@ func _physics_process(delta: float) -> void:
 
 func take_damage(value: int) -> void:
 	health = clampi(health - value, 0, max_health)
+	_update_health_bar()
 	_play_hit_flash()
 	_start_knockback()
 	if health <= 0:
@@ -191,3 +194,14 @@ func _spawn_death_effect() -> void:
 		(effect as Node2D).global_position = global_position
 	if effect is GPUParticles2D:
 		(effect as GPUParticles2D).emitting = true
+
+func _setup_health_bar() -> void:
+	if not is_instance_valid(health_bar):
+		return
+	health_bar.max_value = float(max_health)
+	health_bar.value = float(health)
+
+func _update_health_bar() -> void:
+	if not is_instance_valid(health_bar):
+		return
+	health_bar.value = float(health)

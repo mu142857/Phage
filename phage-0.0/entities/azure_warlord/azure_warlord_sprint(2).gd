@@ -9,7 +9,7 @@ extends BasicState
 @export var punch_damage: int = 20
 
 var hit_registered: bool = false
-var tween = null
+var tween: Tween = null
 
 func enter() -> void:
 	hit_registered = false

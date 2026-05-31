@@ -4222,6 +4222,22 @@ texture = ExtResource("9_0vl2u")
 [node name="Leaf1" parent="Trees/GreenTree22" unique_id=714418578 instance=ExtResource("10_0vl2u")]
 position = Vector2(-3, -11)
 
+[node name="GreenTree23" type="Sprite2D" parent="Trees" unique_id=795186594]
+material = SubResource("ShaderMaterial_f4gh7")
+position = Vector2(-314, 373)
+texture = ExtResource("9_0vl2u")
+
+[node name="Leaf1" parent="Trees/GreenTree23" unique_id=752917023 instance=ExtResource("10_0vl2u")]
+position = Vector2(-3, -11)
+
+[node name="GreenTree24" type="Sprite2D" parent="Trees" unique_id=2141567830]
+material = SubResource("ShaderMaterial_f4gh7")
+position = Vector2(-196, 372)
+texture = ExtResource("9_0vl2u")
+
+[node name="Leaf1" parent="Trees/GreenTree24" unique_id=1781055513 instance=ExtResource("10_0vl2u")]
+position = Vector2(-3, -11)
+
 [node name="BlueTree1" type="Sprite2D" parent="Trees" unique_id=881118586]
 modulate = Color(0.8350177, 0.864682, 0.8040865, 1)
 material = SubResource("ShaderMaterial_2cc0k")
@@ -4744,6 +4760,18 @@ material = SubResource("ShaderMaterial_gc7i0")
 position = Vector2(-71, 406)
 texture = ExtResource("12_wurxf")
 
+[node name="Bush75" type="Sprite2D" parent="Trees" unique_id=1060178574]
+modulate = Color(0.8604981, 0.74346346, 0.91704, 1)
+material = SubResource("ShaderMaterial_gc7i0")
+position = Vector2(-337, 397)
+texture = ExtResource("12_wurxf")
+
+[node name="Bush76" type="Sprite2D" parent="Trees" unique_id=2141736752]
+modulate = Color(0.8604981, 0.74346346, 0.91704, 1)
+material = SubResource("ShaderMaterial_gc7i0")
+position = Vector2(-431, 400)
+texture = ExtResource("12_wurxf")
+
 [node name="Shrub1" type="Sprite2D" parent="Trees" unique_id=928283437]
 material = SubResource("ShaderMaterial_vipek")
 position = Vector2(-35, 70)
@@ -4822,6 +4850,12 @@ texture = ExtResource("13_oemls")
 [node name="Shrub14" type="Sprite2D" parent="Trees" unique_id=526601482]
 material = SubResource("ShaderMaterial_vipek")
 position = Vector2(-144, 388)
+scale = Vector2(-1, 1)
+texture = ExtResource("13_oemls")
+
+[node name="Shrub15" type="Sprite2D" parent="Trees" unique_id=1127194071]
+material = SubResource("ShaderMaterial_vipek")
+position = Vector2(-442, 382)
 scale = Vector2(-1, 1)
 texture = ExtResource("13_oemls")
 
@@ -6236,7 +6270,7 @@ scale = Vector2(-1, 1)
 texture = ExtResource("26_1dbek")
 
 [node name="Bank" type="Sprite2D" parent="Buildings" unique_id=1095960440]
-position = Vector2(317, 334)
+position = Vector2(317, 355)
 texture = ExtResource("28_u2oux")
 
 [node name="Fort" type="Sprite2D" parent="Buildings" unique_id=2044965400]

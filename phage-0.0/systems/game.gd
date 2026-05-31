@@ -18,6 +18,10 @@ signal screen_filter(amount: float, colour: Color)
 @export var teleport_fade_in_duration: float = 0.35
 
 @export var follow_offset: Vector2 = Vector2(0, -20)
+@export var follow_horizontal_speed: float = 18.0
+@export var follow_vertical_down_speed: float = 18.0
+@export var follow_vertical_up_speed: float = 4.0
+@export var follow_vertical_up_deadzone: float = 12.0
 
 const CAMERA_FOLLOW_GROUP: StringName = &"camera_follow"
 const CAMERA_FIXED_GROUP: StringName = &"camera_fixed"
@@ -78,7 +82,18 @@ func _process(delta: float) -> void:
 	if position_override_enabled:
 		global_position = position_override
 	elif follow_player and is_instance_valid(follow_target):
-		global_position = follow_target.global_position + follow_offset
+		var target_position := follow_target.global_position + follow_offset
+		var follow_position := global_position
+		var x_alpha := clampf(delta * follow_horizontal_speed, 0.0, 1.0)
+		follow_position.x = lerpf(follow_position.x, target_position.x, x_alpha)
+		var y_delta := target_position.y - follow_position.y
+		if y_delta > 0.0:
+			var down_alpha := clampf(delta * follow_vertical_down_speed, 0.0, 1.0)
+			follow_position.y = lerpf(follow_position.y, target_position.y, down_alpha)
+		elif y_delta < -follow_vertical_up_deadzone:
+			var up_alpha := clampf(delta * follow_vertical_up_speed, 0.0, 1.0)
+			follow_position.y = lerpf(follow_position.y, target_position.y, up_alpha)
+		global_position = follow_position
 	elif not follow_player:
 		global_position = Vector2.ZERO
 
@@ -308,6 +323,11 @@ func change_scene(scene_path: String, teleport_id: int, player_light: bool) -> v
 		current_scene.add_child(player)
 	if is_instance_valid(player):
 		player.global_position = target_position
+		# Ensure player's sprite modulate is normalized so adding/removing lights
+		# does not inadvertently change perceived brightness.
+		if player is Player:
+			if is_instance_valid(player.sprite):
+				player.sprite.modulate = Color(1, 1, 1, 1)
 		_ensure_player_light(player, player_light)
 		_set_player_lock(true)
 	await _play_teleport_fade(0.0, teleport_fade_in_duration)

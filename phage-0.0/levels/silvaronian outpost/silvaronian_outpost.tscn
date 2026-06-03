@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="13_3tuqn"]
 [ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="20_uadtp"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="21_3md8r"]
+[ext_resource type="PackedScene" uid="uid://d3ocflqruuwjd" path="res://entities/azure_warlord/azure_warlord.tscn" id="22_3md8r"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_k0aww"]
 
@@ -544,3 +545,6 @@ text = "Silvaron"
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("13_3tuqn")]
 modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
 position = Vector2(229, -230)
+
+[node name="AzureWarlord" parent="." unique_id=1960126414 instance=ExtResource("22_3md8r")]
+position = Vector2(79, -4)

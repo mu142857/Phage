@@ -1,6 +1,7 @@
 extends BasicState
 
 @onready var ani_2D: AnimatedSprite2D = $"../../AnimatedSprite2D"
+@onready var boss: AzureWarlord = $"../.." as AzureWarlord
 @onready var trampling_hitbox: Area2D = $"../../TramplingHitBox"
 
 @export var trampling_damage: int = 25
@@ -18,8 +19,9 @@ func enter() -> void:
 		trampling_hitbox.monitorable = true
 
 func process(_delta: float) -> void:
-	# trampling usually stays on ground; ensure monitoring
-	pass
+	if boss != null:
+		boss.velocity = Vector2.ZERO
+		boss.move_and_slide()
 
 func exit() -> void:
 	if is_instance_valid(ani_2D) and ani_2D.frame_changed.is_connected(_on_frame_changed):
@@ -28,6 +30,8 @@ func exit() -> void:
 		for child in trampling_hitbox.get_children():
 			if child is CollisionShape2D:
 				child.disabled = true
+		trampling_hitbox.monitoring = false
+		trampling_hitbox.monitorable = false
 
 func _on_frame_changed() -> void:
 	if not is_instance_valid(ani_2D) or not is_instance_valid(trampling_hitbox):
@@ -38,9 +42,9 @@ func _on_frame_changed() -> void:
 	bodies_hit_this_frame.clear()
 	for child in trampling_hitbox.get_children():
 		if child is CollisionShape2D:
-			var n := child.name
+			var n := String(child.name)
 			var idx := -1
-			if n.is_valid_integer():
+			if n.is_valid_int():
 				idx = int(n)
 			if idx == frame:
 				child.disabled = false
@@ -65,4 +69,7 @@ func _attack_check(dmg: int) -> void:
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if ani_2D.animation == &"Trampling":
-		change_state(0)
+		if boss != null:
+			boss.finish_trampling()
+		else:
+			change_state(1)

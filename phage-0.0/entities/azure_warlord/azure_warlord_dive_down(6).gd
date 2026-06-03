@@ -1,17 +1,17 @@
 extends BasicState
 
 @onready var ani_2D: AnimatedSprite2D = $"../../AnimatedSprite2D"
-@onready var host_monster: CharacterBody2D = $"../.."
+@onready var host_monster: AzureWarlord = $"../.." as AzureWarlord
 
 @export var start_y: float = 10.0
 @export var ground_y: float = 80.0
 @export var gravity: float = 350.0
 
 func enter() -> void:
-	# place above screen
 	if host_monster != null:
 		host_monster.global_position.y = start_y
 		host_monster.velocity = Vector2.ZERO
+		host_monster.visible = true
 	if is_instance_valid(ani_2D):
 		ani_2D.play(&"DiveDown")
 
@@ -23,7 +23,6 @@ func process(delta: float) -> void:
 	if host_monster.global_position.y >= ground_y:
 		host_monster.global_position.y = ground_y
 		host_monster.velocity = Vector2.ZERO
-		# landed -> go to Trampling state (index 5)
 		change_state(5)
 
 func exit() -> void:

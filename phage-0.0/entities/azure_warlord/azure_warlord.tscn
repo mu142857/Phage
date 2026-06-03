@@ -609,6 +609,7 @@ _data = {
 }
 
 [node name="AzureWarlord" type="CharacterBody2D" unique_id=1960126414]
+z_index = 10
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_621kp")
@@ -729,6 +730,7 @@ libraries/ = SubResource("AnimationLibrary_621kp")
 
 [node name="StateMachine" type="Node" parent="." unique_id=1306157156]
 script = ExtResource("4_1v7se")
+initial_state_index = 0
 
 [node name="Null(0)" type="Node" parent="StateMachine" unique_id=474888052]
 script = ExtResource("5_bvspa")

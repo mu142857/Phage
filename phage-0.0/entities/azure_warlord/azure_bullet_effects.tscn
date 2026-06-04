@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://dhu1vvmddb0uc"]
+
+[ext_resource type="Script" uid="uid://gfqaxw04s4dt" path="res://entities/azure_warlord/azure_bullet_effects.gd" id="1_gyuar"]
+
+[sub_resource type="Gradient" id="Gradient_0rusa"]
+offsets = PackedFloat32Array(0, 0.14356436)
+colors = PackedColorArray(1, 1, 1, 1, 0.62863654, 0.8406308, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_eh602"]
+gradient = SubResource("Gradient_0rusa")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_0y361"]
+offsets = PackedFloat32Array(0, 0.5506329, 1)
+colors = PackedColorArray(0.16470589, 0.37254903, 0.6392157, 1, 0.45490196, 0.9019608, 0.9490196, 1, 0.99744004, 0.9349463, 0.96094507, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_acq3q"]
+gradient = SubResource("Gradient_0y361")
+
+[sub_resource type="Gradient" id="Gradient_wwdma"]
+offsets = PackedFloat32Array(0, 0.094936706, 0.87025315, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jdxkx"]
+gradient = SubResource("Gradient_wwdma")
+
+[sub_resource type="Curve" id="Curve_qyjiv"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0navj"]
+curve = SubResource("Curve_qyjiv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tinwp"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(2, 2, 1)
+direction = Vector3(0, -1, 0)
+spread = 90.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_0navj")
+color_ramp = SubResource("GradientTexture1D_jdxkx")
+color_initial_ramp = SubResource("GradientTexture1D_acq3q")
+
+[node name="AzureBulletEffects" type="GPUParticles2D" unique_id=1286658994]
+z_index = 11
+emitting = false
+amount = 7
+texture = SubResource("GradientTexture2D_eh602")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_tinwp")
+script = ExtResource("1_gyuar")
+
+[node name="Timer" type="Timer" parent="." unique_id=1708680722]
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

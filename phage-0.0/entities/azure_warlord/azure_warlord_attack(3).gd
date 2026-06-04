@@ -10,6 +10,10 @@ var bodies_hit_this_frame := {}
 
 func enter() -> void:
 	bodies_hit_this_frame.clear()
+	if host_monster != null:
+		host_monster.set_facing_from_player()
+		host_monster.velocity.y = 0.0
+		host_monster.global_position.y = 80.0
 	if is_instance_valid(ani_2D):
 		ani_2D.play(&"Attack")
 		if not ani_2D.frame_changed.is_connected(_on_frame_changed):
@@ -20,7 +24,8 @@ func enter() -> void:
 
 func process(_delta: float) -> void:
 	if host_monster != null:
-		host_monster.velocity.y += 350.0 * _delta
+		host_monster.velocity.y = 0.0
+		host_monster.global_position.y = 80.0
 		host_monster.move_and_slide()
 
 func exit() -> void:

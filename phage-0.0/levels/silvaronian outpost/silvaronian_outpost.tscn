@@ -547,4 +547,16 @@ modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
 position = Vector2(229, -230)
 
 [node name="AzureWarlord" parent="." unique_id=1960126414 instance=ExtResource("22_3md8r")]
-position = Vector2(79, -4)
+position = Vector2(78, 0)
+
+[node name="Front" type="CanvasLayer" parent="." unique_id=798526350]
+
+[node name="Label" type="Label" parent="Front" unique_id=63663653]
+z_index = 100
+offset_right = 160.0
+offset_bottom = 80.0
+theme_override_fonts/font = ExtResource("21_3md8r")
+theme_override_font_sizes/font_size = 20
+text = "Azure Warlord"
+horizontal_alignment = 1
+vertical_alignment = 1

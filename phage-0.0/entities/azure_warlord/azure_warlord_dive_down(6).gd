@@ -11,7 +11,6 @@ func enter() -> void:
 	if host_monster != null:
 		host_monster.global_position.y = start_y
 		host_monster.velocity = Vector2.ZERO
-		host_monster.visible = true
 	if is_instance_valid(ani_2D):
 		ani_2D.play(&"DiveDown")
 

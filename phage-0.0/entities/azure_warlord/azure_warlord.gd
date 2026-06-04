@@ -28,7 +28,8 @@ var direct: int = 1
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var attack_batch_index: int = 0
 var attacks_left_in_batch: int = 0
-var crystallization_pending: bool = false
+var crystallization_active: bool = false
+var intro_shown: bool = false
 
 func _ready() -> void:
 	velocity = Vector2.ZERO
@@ -40,6 +41,10 @@ func _ready() -> void:
 	if boss_health_ui != null:
 		boss_health_ui.refresh(health, max_health)
 		boss_health_ui.show_ui(false)
+	var sprite := animated_sprite
+	if sprite != null and sprite.material is ShaderMaterial:
+		var shader_mat := sprite.material as ShaderMaterial
+		shader_mat.set_shader_parameter("Enabled", false)
 	if has_node("StateMachine"):
 		$StateMachine.set_process(true)
 		$StateMachine.set_physics_process(true)
@@ -72,11 +77,23 @@ func set_facing_direction(direction: int) -> void:
 
 func set_facing_from_player() -> void:
 	if not is_instance_valid(player_check):
+		var fallback_players := get_tree().get_nodes_in_group("player")
+		if fallback_players.is_empty():
+			return
+		var fallback_player := fallback_players[0]
+		if fallback_player is Node2D:
+			set_facing_direction(sign((fallback_player as Node2D).global_position.x - global_position.x))
 		return
 	for body in player_check.get_overlapping_bodies():
 		if body != null and body.is_in_group("player"):
 			set_facing_direction(sign(body.global_position.x - global_position.x))
 			return
+	var players := get_tree().get_nodes_in_group("player")
+	if players.is_empty():
+		return
+	var player := players[0]
+	if player is Node2D:
+		set_facing_direction(sign((player as Node2D).global_position.x - global_position.x))
 
 func begin_attack_batch() -> void:
 	attacks_left_in_batch = rng.randi_range(1, 3)
@@ -95,20 +112,18 @@ func consume_attack_followup() -> int:
 func reset_cycle() -> void:
 	attack_batch_index = 0
 	attacks_left_in_batch = 0
-	crystallization_pending = false
+	crystallization_active = false
 
 func finish_null() -> void:
 	change_state(STATE_IDLE)
-
-func finish_crystallization_wait() -> void:
-	crystallization_pending = false
-	change_state(STATE_DIVE_DOWN)
 
 func finish_trampling() -> void:
 	reset_cycle()
 	change_state(STATE_IDLE)
 
 func take_damage(value: int) -> void:
+	if crystallization_active:
+		return
 	health -= value
 	health = clampi(health, 0, max_health)
 	if boss_health_ui != null:
@@ -118,13 +133,10 @@ func take_damage(value: int) -> void:
 	if health <= 0:
 		change_state(STATE_DEATH)
 
-func start_crystallization_wait() -> void:
-	if crystallization_pending:
-		return
-	crystallization_pending = true
-	visible = false
-	await get_tree().create_timer(crystallization_wait_time).timeout
-	if not is_inside_tree():
-		return
-	visible = true
-	finish_crystallization_wait()
+func show_health_ui() -> void:
+	if boss_health_ui != null:
+		boss_health_ui.show_ui(true)
+
+func hide_health_ui() -> void:
+	if boss_health_ui != null:
+		boss_health_ui.hide_ui(false)

@@ -41,6 +41,7 @@
 [ext_resource type="PackedScene" uid="uid://bsmyvj2nlkdvr" path="res://entities/cox/cox.tscn" id="36_jbuho"]
 [ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="41_r8omv"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="42_ik2bl"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="42_uivn3"]
 
 [sub_resource type="Gradient" id="Gradient_aiehn"]
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
@@ -2972,6 +2973,15 @@ nodes/fragment/0/position = Vector2(780, 400)
 shader = SubResource("VisualShader_0aucp")
 shader_parameter/Strength = 1.0
 shader_parameter/Speed = 1.30000001425
+
+[sub_resource type="Gradient" id="Gradient_ecic6"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_08jux"]
+gradient = SubResource("Gradient_ecic6")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
 
 [node name="Silvaron" type="Node2D" unique_id=374355723]
 script = ExtResource("1_4cmem")
@@ -6283,6 +6293,7 @@ repeat_size = Vector2(160, 0)
 repeat_times = 15
 
 [node name="Sprite2D" type="Sprite2D" parent="0point2xMoving" unique_id=657686036]
+light_mask = 0
 position = Vector2(0, -70)
 texture = ExtResource("4_2rk1k")
 centered = false
@@ -6296,12 +6307,14 @@ repeat_times = 15
 
 [node name="Sprite2D" type="Sprite2D" parent="0point4xMoving" unique_id=945667087]
 modulate = Color(0.12357537, 0.18296972, 0.17704535, 1)
+light_mask = 0
 material = SubResource("CanvasItemMaterial_aiehn")
 position = Vector2(0, 156)
 texture = ExtResource("19_aiehn")
 
 [node name="Sprite2D2" type="Sprite2D" parent="0point4xMoving" unique_id=1999516946]
 modulate = Color(0.12357537, 0.18296972, 0.17704535, 1)
+light_mask = 0
 material = SubResource("CanvasItemMaterial_aiehn")
 position = Vector2(0, 297)
 texture = ExtResource("19_aiehn")
@@ -6759,3 +6772,12 @@ theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
 theme_override_fonts/font = ExtResource("42_ik2bl")
 theme_override_font_sizes/font_size = 10
 text = "Enter"
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("42_uivn3")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+position = Vector2(236, -296)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1435471926]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("GradientTexture2D_08jux")

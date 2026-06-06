@@ -12,16 +12,16 @@
 [ext_resource type="Script" uid="uid://c21l6ubdieqk1" path="res://entities/azure_warlord/azure_warlord_trampling(5).gd" id="10_3molg"]
 [ext_resource type="Script" uid="uid://bry0a62t4fjhx" path="res://entities/azure_warlord/azure_warlord_dive_down(6).gd" id="11_ll4rr"]
 [ext_resource type="Script" uid="uid://bnerumeyfx6u" path="res://entities/azure_warlord/azure_warlord_death(7).gd" id="12_fmv45"]
+[ext_resource type="Texture2D" uid="uid://cqik4ag71emly" path="res://entities/azure_warlord/azure_warlord_health_bar_under.png" id="13_3molg"]
 [ext_resource type="Script" uid="uid://cts6rntwen0yp" path="res://systems/ui/boss_health_ui.gd" id="13_bossui"]
-[ext_resource type="Texture2D" uid="uid://bf122xnkx1by8" path="res://entities/actinos/actinos_health_bar_under.png" id="13_tpbh0"]
-[ext_resource type="Texture2D" uid="uid://bci7sx5ngrxvt" path="res://entities/actinos/actinos_health_bar_over.png" id="14_3molg"]
-[ext_resource type="Texture2D" uid="uid://bs7gwcp6vxcdl" path="res://entities/actinos/actinos_health_bar_progerss.png" id="15_ll4rr"]
+[ext_resource type="Texture2D" uid="uid://bvk10c3nm1hnm" path="res://entities/azure_warlord/azure_warlord_health_bar_over.png" id="14_ll4rr"]
+[ext_resource type="Texture2D" uid="uid://dmrwytgl0pa0w" path="res://entities/azure_warlord/azure_warlord_health_bar_progerss.png" id="15_fmv45"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="16_fmv45"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5yapt"]
 shader = ExtResource("1_vgtkr")
 shader_parameter/Enabled = true
-shader_parameter/Tint = Color(0.49803922, 0.7647059, 1, 1)
+shader_parameter/Tint = Color(3.85046e-07, 0.5328837, 0.8554044, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vgtkr"]
 atlas = ExtResource("1_1qoe7")
@@ -621,6 +621,7 @@ _data = {
 }
 
 [node name="AzureWarlord" type="CharacterBody2D" unique_id=1960126414]
+light_mask = 0
 z_index = 10
 collision_layer = 4
 collision_mask = 0
@@ -629,8 +630,8 @@ script = ExtResource("1_621kp")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1059102581]
 material = SubResource("ShaderMaterial_5yapt")
 sprite_frames = SubResource("SpriteFrames_y7nfk")
-animation = &"Crystallization"
-frame = 5
+animation = &"Attack"
+frame = 19
 frame_progress = 1.0
 offset = Vector2(21, -23)
 
@@ -780,9 +781,9 @@ offset_right = 145.0
 offset_bottom = 92.99999
 max_value = 8000.0
 value = 8000.0
-texture_under = ExtResource("13_tpbh0")
-texture_over = ExtResource("14_3molg")
-texture_progress = ExtResource("15_ll4rr")
+texture_under = ExtResource("13_3molg")
+texture_over = ExtResource("14_ll4rr")
+texture_progress = ExtResource("15_fmv45")
 
 [node name="HealthLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=565117787]
 modulate = Color(0.7254902, 0.7254902, 0.7254902, 1)

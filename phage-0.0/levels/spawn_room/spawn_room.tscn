@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bsaq2q1au3773" path="res://levels/spawn_room/spawn_room_left_end.png" id="3_i4v8s"]
 [ext_resource type="Texture2D" uid="uid://bvd4vvm5tjt31" path="res://levels/spawn_room/spawn_room_background.png" id="4_gv5lq"]
 [ext_resource type="Texture2D" uid="uid://dgtrp3rx1ucrp" path="res://levels/spawn_room/spawn_room_5.png" id="4_hqcya"]
+[ext_resource type="Texture2D" uid="uid://8g2y2rno3678" path="res://levels/spawn_room/spawn_room_ground3.png" id="4_n5t8k"]
 [ext_resource type="PackedScene" uid="uid://ci5jraudpqo07" path="res://entities/broken_wall/broken_wall_001.tscn" id="5_bcwdp"]
 [ext_resource type="Texture2D" uid="uid://dcyk2jxg3ohn3" path="res://levels/spawn_room/spawn_room_4.png" id="5_hqcya"]
 [ext_resource type="Texture2D" uid="uid://rm17y84t3q6h" path="res://levels/spawn_room/spawn_room_3.png" id="5_i4v8s"]
@@ -37,7 +38,25 @@ size = Vector2(5.5, 18)
 size = Vector2(39.75, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hsfmc"]
-size = Vector2(5, 25)
+size = Vector2(5.5, 25.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n5t8k"]
+size = Vector2(16, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ctaym"]
+size = Vector2(40, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bg2p1"]
+size = Vector2(8, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ukcda"]
+size = Vector2(8, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_egpqp"]
+size = Vector2(15, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p7yjn"]
+size = Vector2(8, 80)
 
 [sub_resource type="Gradient" id="Gradient_ecic6"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -103,6 +122,36 @@ z_index = 11
 position = Vector2(223.5, 77.5)
 shape = SubResource("RectangleShape2D_hsfmc")
 
+[node name="Platform7" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=896448586]
+z_index = 11
+position = Vector2(440, 30)
+shape = SubResource("RectangleShape2D_n5t8k")
+
+[node name="Platform8" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=2120534859]
+z_index = 11
+position = Vector2(495, 56)
+shape = SubResource("RectangleShape2D_ctaym")
+
+[node name="Platform9" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1289717511]
+z_index = 11
+position = Vector2(545, 71)
+shape = SubResource("RectangleShape2D_bg2p1")
+
+[node name="Platform10" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1537292489]
+z_index = 11
+position = Vector2(583, 71)
+shape = SubResource("RectangleShape2D_ukcda")
+
+[node name="Platform11" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=56370406]
+z_index = 11
+position = Vector2(564.5, 80)
+shape = SubResource("RectangleShape2D_egpqp")
+
+[node name="Platform12" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=788662627]
+z_index = 11
+position = Vector2(596, 39)
+shape = SubResource("RectangleShape2D_p7yjn")
+
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Walls/StaticBody2D" unique_id=1114493311]
 polygon = PackedVector2Array(10, 89, 6, 81, 6, 79, 5, 78, 5, 75, 4, 74, 4, 72, 3, 71, 3, 68, 0, 10, 0, 89)
 
@@ -113,6 +162,11 @@ centered = false
 [node name="Ground2" type="Sprite2D" parent="Walls" unique_id=1448250425]
 position = Vector2(220, -1)
 texture = ExtResource("3_f6b0m")
+centered = false
+
+[node name="Ground3" type="Sprite2D" parent="Walls" unique_id=2141692163]
+position = Vector2(440, -1)
+texture = ExtResource("4_n5t8k")
 centered = false
 
 [node name="LeftEnd" type="Sprite2D" parent="Walls" unique_id=531490342]
@@ -169,7 +223,7 @@ texture = ExtResource("5_hqcya")
 [node name="0point6xMoving" type="Parallax2D" parent="." unique_id=1661050919]
 scroll_scale = Vector2(0.6, 0.6)
 repeat_size = Vector2(160, 0)
-repeat_times = 2
+repeat_times = 6
 
 [node name="Sprite2D" type="Sprite2D" parent="0point6xMoving" unique_id=1676205291]
 texture = ExtResource("5_i4v8s")
@@ -179,7 +233,7 @@ centered = false
 scroll_scale = Vector2(0.8, 0.8)
 scroll_offset = Vector2(0, 19)
 repeat_size = Vector2(120, 0)
-repeat_times = 5
+repeat_times = 8
 
 [node name="Sprite2D" type="Sprite2D" parent="0point8xMoving" unique_id=1949766641]
 modulate = Color(0.2727649, 0.3795481, 0.3739565, 1)

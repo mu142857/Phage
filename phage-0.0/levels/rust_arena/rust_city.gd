@@ -1,10 +1,10 @@
 extends Node2D
 
-@export var pop_tops_scene: PackedScene = preload("res://entities/pop_tops/pop_tops.tscn")
 @export var camera_limit_top: int = 0
 @export var camera_limit_bottom: int = 90
 @export var camera_limit_left: int = -80
-@export var camera_limit_right: int = 600
+@export var camera_limit_right: int = 1600
+
 
 
 func _ready() -> void:

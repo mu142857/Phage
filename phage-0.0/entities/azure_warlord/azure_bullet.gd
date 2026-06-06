@@ -31,6 +31,7 @@ func _physics_process(delta: float) -> void:
 		_try_damage_player()
 
 func land():
+	Game.shake_camera(1)
 	if !effect_released:
 		_spawn_effect()
 		effect_released = true

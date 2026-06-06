@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://b6ivjjfn6mpn7"]
+
+[ext_resource type="Shader" uid="uid://c6wujf1qhuwva" path="res://asstes/shaders/back_ground_smoke.gdshader" id="1_hj7gk"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hj7gk"]
+frequency = 0.03
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3eb3t"]
+width = 160
+height = 90
+noise = SubResource("FastNoiseLite_hj7gk")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3eb3t"]
+resource_local_to_scene = true
+shader = ExtResource("1_hj7gk")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_3eb3t")
+shader_parameter/density = 0.50000002375
+shader_parameter/speed = Vector2(0, 0.03)
+
+[node name="BackGroundSmoke" type="Parallax2D" unique_id=258183138]
+repeat_size = Vector2(160, 0)
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=618300008]
+material = SubResource("ShaderMaterial_3eb3t")
+offset_right = 160.0
+offset_bottom = 90.0

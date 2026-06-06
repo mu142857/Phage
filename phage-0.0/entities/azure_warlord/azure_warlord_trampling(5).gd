@@ -9,6 +9,7 @@ extends BasicState
 var bodies_hit_this_frame := {}
 
 func enter() -> void:
+	Game.shake_camera(5)
 	bodies_hit_this_frame.clear()
 	if is_instance_valid(ani_2D):
 		ani_2D.play(&"Trampling")

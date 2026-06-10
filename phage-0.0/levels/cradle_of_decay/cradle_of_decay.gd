@@ -1,3 +1,4 @@
+# res://levels/cradle_of_decay/cradle_of_decay.gd
 extends Node2D
 
 @export var actinos_scene: PackedScene = preload("res://entities/actinos/actinos.tscn")

@@ -1,3 +1,35 @@
 [gd_scene format=3 uid="uid://dcmarsf2gr5yy"]
 
+[ext_resource type="Texture2D" uid="uid://dbvrbun0815ca" path="res://levels/silvaron/silvaron_ground.png" id="1_wr5j1"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1c05a"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_8cwx5"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_b06ws"]
+
 [node name="RustArena" type="Node2D" unique_id=931264449]
+
+[node name="Environment" type="Node2D" parent="." unique_id=1023337210]
+z_index = 10
+
+[node name="1" type="Sprite2D" parent="Environment" unique_id=1304837322]
+texture = ExtResource("1_wr5j1")
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment" unique_id=1252868412]
+collision_mask = 0
+
+[node name="CollisionShape2D1" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=447570193]
+position = Vector2(0, 80)
+shape = SubResource("WorldBoundaryShape2D_1c05a")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=1809014995]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_8cwx5")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=288492060]
+position = Vector2(160, 80)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_b06ws")

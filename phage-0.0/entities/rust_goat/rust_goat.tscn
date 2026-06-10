@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bkxhs53x3r0g3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kiinv"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}]
+
+[node name="RustGOAT" type="CharacterBody2D" unique_id=2060703585]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=435819926]
+sprite_frames = SubResource("SpriteFrames_kiinv")
+animation = &"Idle"

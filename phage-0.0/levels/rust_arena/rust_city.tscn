@@ -549,7 +549,7 @@ metadata/_edit_lock_ = true
 [node name="Light8" type="Sprite2D" parent="Buildings" unique_id=557795930]
 light_mask = 2
 z_index = 9
-position = Vector2(1099, 63.5)
+position = Vector2(936, 63.5)
 texture = ExtResource("10_kjcdh")
 
 [node name="PointLight2D" type="PointLight2D" parent="Buildings/Light8" unique_id=1157098539]
@@ -560,6 +560,90 @@ energy = 7.6
 range_item_cull_mask = 2
 texture = SubResource("GradientTexture2D_qsdf7")
 metadata/_edit_lock_ = true
+
+[node name="Light9" type="Sprite2D" parent="Buildings" unique_id=907892283]
+light_mask = 2
+z_index = 9
+position = Vector2(1099, 63.5)
+texture = ExtResource("10_kjcdh")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/Light9" unique_id=1797455649]
+position = Vector2(2.861023e-06, -7.4999924)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_qsdf7")
+metadata/_edit_lock_ = true
+
+[node name="Light10" type="Sprite2D" parent="Buildings" unique_id=1349366219]
+light_mask = 2
+z_index = 9
+position = Vector2(1233, 63.5)
+texture = ExtResource("10_kjcdh")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/Light10" unique_id=646592460]
+position = Vector2(2.861023e-06, -7.4999924)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_qsdf7")
+metadata/_edit_lock_ = true
+
+[node name="Light11" type="Sprite2D" parent="Buildings" unique_id=1460424254]
+light_mask = 2
+z_index = 9
+position = Vector2(1311, 63.5)
+texture = ExtResource("10_kjcdh")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/Light11" unique_id=1802158255]
+position = Vector2(2.861023e-06, -7.4999924)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_qsdf7")
+metadata/_edit_lock_ = true
+
+[node name="Light12" type="Sprite2D" parent="Buildings" unique_id=18682235]
+light_mask = 2
+z_index = 9
+position = Vector2(1516, 63.5)
+texture = ExtResource("10_kjcdh")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/Light12" unique_id=962384675]
+position = Vector2(2.861023e-06, -7.4999924)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_qsdf7")
+metadata/_edit_lock_ = true
+
+[node name="Light13" type="Sprite2D" parent="Buildings" unique_id=403483948]
+light_mask = 2
+z_index = 9
+position = Vector2(1551, 63.5)
+texture = ExtResource("10_kjcdh")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/Light13" unique_id=1693919204]
+position = Vector2(2.861023e-06, -7.4999924)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_qsdf7")
+metadata/_edit_lock_ = true
+
+[node name="Factory2" type="Sprite2D" parent="Buildings" unique_id=1297496585]
+light_mask = 3
+position = Vector2(973, 59)
+rotation = 3.1415925
+scale = Vector2(1, -1)
+texture = ExtResource("8_0jstw")
+region_enabled = true
+region_rect = Rect2(22, 57.852615, 52, 42.147385)
 
 [node name="BlackBuilding1_1" type="Sprite2D" parent="Buildings" unique_id=1553682866]
 light_mask = 3
@@ -606,13 +690,20 @@ light_mask = 3
 position = Vector2(1018.5, 46)
 texture = ExtResource("5_tem7k")
 region_enabled = true
-region_rect = Rect2(0, 0, 55, 68.96398)
+region_rect = Rect2(0, 0, 55, 69)
 
 [node name="BlackBuilding2_5" type="Sprite2D" parent="Buildings" unique_id=938998899]
 light_mask = 3
 position = Vector2(1068.5, 24)
 scale = Vector2(-1, 1)
 texture = ExtResource("5_tem7k")
+
+[node name="BlackBuilding2_6" type="Sprite2D" parent="Buildings" unique_id=1682929800]
+light_mask = 3
+position = Vector2(1442, 24)
+texture = ExtResource("5_tem7k")
+region_enabled = true
+region_rect = Rect2(0, 0, 50, 68)
 
 [node name="YellowBuilding1_1" type="Sprite2D" parent="Buildings" unique_id=102895982]
 light_mask = 3
@@ -639,10 +730,58 @@ light_mask = 3
 position = Vector2(701, 43)
 texture = ExtResource("7_vldaw")
 
+[node name="YellowBuilding2_4" type="Sprite2D" parent="Buildings" unique_id=824977797]
+light_mask = 3
+position = Vector2(1343, 43.5)
+texture = ExtResource("7_vldaw")
+
+[node name="YellowBuilding2_5" type="Sprite2D" parent="Buildings" unique_id=1911457858]
+light_mask = 3
+position = Vector2(1379, 69)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_vldaw")
+region_enabled = true
+region_rect = Rect2(4, 11, 40, 22)
+
+[node name="YellowBuilding2_6" type="Sprite2D" parent="Buildings" unique_id=1230091061]
+light_mask = 3
+position = Vector2(1416, 69)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_vldaw")
+region_enabled = true
+region_rect = Rect2(4, 11, 34, 22)
+
+[node name="YellowBuilding2_7" type="Sprite2D" parent="Buildings" unique_id=1830324171]
+light_mask = 3
+position = Vector2(1450, 69)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_vldaw")
+region_enabled = true
+region_rect = Rect2(4, 11, 34, 22)
+
+[node name="YellowBuilding2_8" type="Sprite2D" parent="Buildings" unique_id=2003329332]
+light_mask = 3
+position = Vector2(1485, 43.5)
+texture = ExtResource("7_vldaw")
+
 [node name="Factory1" type="Sprite2D" parent="Buildings" unique_id=1504720075]
 light_mask = 3
 position = Vector2(1598, 30)
 texture = ExtResource("8_0jstw")
+
+[node name="Factory3" type="Sprite2D" parent="Buildings" unique_id=36014370]
+light_mask = 3
+position = Vector2(1185, 59)
+texture = ExtResource("8_0jstw")
+region_enabled = true
+region_rect = Rect2(0, 57.852615, 74, 42.147385)
+
+[node name="Factory4" type="Sprite2D" parent="Buildings" unique_id=1437754395]
+light_mask = 3
+position = Vector2(1395, 44)
+texture = ExtResource("8_0jstw")
+region_enabled = true
+region_rect = Rect2(0, 58, 66, 28)
 
 [node name="Bush1" type="Sprite2D" parent="Buildings" unique_id=845881457]
 modulate = Color(0.61057377, 0.3599029, 0, 0.9019608)

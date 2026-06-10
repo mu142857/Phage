@@ -16,7 +16,16 @@
 [ext_resource type="PackedScene" uid="uid://c8pnajburl72k" path="res://interactive/Text/text.tscn" id="13_hsfmc"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="14_0ro3w"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_3oexc"]
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_n5t8k"]
+b = Vector2(541, -1)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_ctaym"]
+a = Vector2(587, -1)
+b = Vector2(592, -1)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_bg2p1"]
+a = Vector2(587, -1)
+b = Vector2(617, -1)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2s6tj"]
 
@@ -47,10 +56,10 @@ size = Vector2(16, 60)
 size = Vector2(40, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bg2p1"]
-size = Vector2(8, 36)
+size = Vector2(8, 73)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ukcda"]
-size = Vector2(8, 36)
+size = Vector2(8, 73)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_egpqp"]
 size = Vector2(15, 4)
@@ -58,11 +67,11 @@ size = Vector2(15, 4)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p7yjn"]
 size = Vector2(8, 80)
 
-[sub_resource type="Gradient" id="Gradient_ecic6"]
+[sub_resource type="Gradient" id="Gradient_ctaym"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_xf3p4"]
-gradient = SubResource("Gradient_ecic6")
+gradient = SubResource("Gradient_ctaym")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
@@ -78,9 +87,20 @@ z_index = 10
 [node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=665971864]
 collision_mask = 0
 
-[node name="CollisionShape2D1" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1665214600]
+[node name="G1" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1665214600]
+z_index = 10
 position = Vector2(0, 80)
-shape = SubResource("WorldBoundaryShape2D_3oexc")
+shape = SubResource("SegmentShape2D_n5t8k")
+
+[node name="G2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=336713933]
+z_index = 10
+position = Vector2(0, 80)
+shape = SubResource("SegmentShape2D_ctaym")
+
+[node name="G3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=512221431]
+z_index = 10
+position = Vector2(-38, 108)
+shape = SubResource("SegmentShape2D_bg2p1")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1061205748]
 position = Vector2(0, 80)
@@ -134,12 +154,12 @@ shape = SubResource("RectangleShape2D_ctaym")
 
 [node name="Platform9" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1289717511]
 z_index = 11
-position = Vector2(545, 71)
+position = Vector2(545, 89.5)
 shape = SubResource("RectangleShape2D_bg2p1")
 
 [node name="Platform10" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1537292489]
 z_index = 11
-position = Vector2(583, 71)
+position = Vector2(583, 89.5)
 shape = SubResource("RectangleShape2D_ukcda")
 
 [node name="Platform11" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=56370406]

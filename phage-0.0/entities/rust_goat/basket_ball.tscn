@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://8ijcyhojctjb"]
+
+[ext_resource type="Script" uid="uid://0hqf6tf87r18" path="res://entities/rust_goat/basket_ball.gd" id="1_tdkwp"]
+[ext_resource type="Texture2D" uid="uid://cjti21hci8yls" path="res://entities/rust_goat/basketball.png" id="2_uyncs"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_a8kxj"]
+radius = 15.0
+
+[sub_resource type="Gradient" id="Gradient_0y361"]
+offsets = PackedFloat32Array(0, 0.7846535)
+colors = PackedColorArray(1, 1, 1, 1, 0.9873894, 0.7625532, 0.53053, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_tdkwp"]
+gradient = SubResource("Gradient_0y361")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_tdkwp"]
+offsets = PackedFloat32Array(0, 0.18987341, 0.73734176, 1)
+colors = PackedColorArray(0.9541022, 0.8146032, 1.1551381e-06, 1, 0.99232024, 0.9493883, 0.87202495, 1, 1, 1, 1, 1, 0.95686275, 0.85882354, 0.7019608, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_uyncs"]
+gradient = SubResource("Gradient_tdkwp")
+
+[sub_resource type="Gradient" id="Gradient_8ryvo"]
+offsets = PackedFloat32Array(0, 0.06329114, 0.15822785, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dipjf"]
+gradient = SubResource("Gradient_8ryvo")
+
+[sub_resource type="Curve" id="Curve_iyaxf"]
+_data = [Vector2(0, 0.49195403), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_7tuw3"]
+curve = SubResource("Curve_iyaxf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2uw1t"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(10, 10, 1)
+direction = Vector3(0, -1, 0)
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_7tuw3")
+color_ramp = SubResource("GradientTexture1D_dipjf")
+color_initial_ramp = SubResource("GradientTexture1D_uyncs")
+
+[node name="BasketBall" type="Area2D" unique_id=2121843995]
+z_index = 10
+collision_mask = 2
+script = ExtResource("1_tdkwp")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1253685225]
+texture = ExtResource("2_uyncs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1033293559]
+shape = SubResource("CircleShape2D_a8kxj")
+debug_color = Color(0, 0.60038817, 0.70000815, 0)
+
+[node name="Trail" type="GPUParticles2D" parent="." unique_id=1139231898]
+amount = 15
+texture = SubResource("GradientTexture2D_tdkwp")
+process_material = SubResource("ParticleProcessMaterial_2uw1t")

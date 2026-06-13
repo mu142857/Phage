@@ -4,22 +4,20 @@
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5f5au"]
 
-[sub_resource type="Gradient" id="Gradient_ecic6"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_mucky"]
-gradient = SubResource("Gradient_ecic6")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.5, 0)
-
 [node name="Test" type="Node2D" unique_id=1949528342 groups=["camera_fixed"]]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=682380344]
+visible = false
+offset_left = -49.0
+offset_top = -28.0
+offset_right = 251.0
+offset_bottom = 124.0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2095468186]
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=122847418]
-position = Vector2(0, 90)
+position = Vector2(0, 56)
 shape = SubResource("WorldBoundaryShape2D_5f5au")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1688946771]
@@ -33,13 +31,4 @@ rotation = 4.7134733
 shape = SubResource("WorldBoundaryShape2D_5f5au")
 
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("1_mucky")]
-position = Vector2(32, 74)
-
-[node name="Player2" parent="." unique_id=1228073172 instance=ExtResource("1_mucky")]
-modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
-position = Vector2(229, -230)
-
-[node name="PointLight2D" type="PointLight2D" parent="Player2" unique_id=1473296241]
-position = Vector2(0, -7)
-scale = Vector2(3.0664063, 1.21875)
-texture = SubResource("GradientTexture2D_mucky")
+position = Vector2(32, 23)

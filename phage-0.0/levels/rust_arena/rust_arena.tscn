@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://dcmarsf2gr5yy"]
 
-[ext_resource type="Texture2D" uid="uid://dbvrbun0815ca" path="res://levels/silvaron/silvaron_ground.png" id="1_wr5j1"]
+[ext_resource type="Texture2D" uid="uid://kwls34uva2eu" path="res://levels/rust_arena/rust_arena.png" id="1_wr5j1"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_1c05a"]
+[ext_resource type="PackedScene" uid="uid://bkxhs53x3r0g3" path="res://entities/rust_goat/rust_goat.tscn" id="3_8cwx5"]
+[ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="4_b06ws"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1c05a"]
 
@@ -8,10 +11,9 @@
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_b06ws"]
 
-[node name="RustArena" type="Node2D" unique_id=931264449]
+[node name="RustArena" type="Node2D" unique_id=931264449 groups=["camera_fixed"]]
 
 [node name="Environment" type="Node2D" parent="." unique_id=1023337210]
-z_index = 10
 
 [node name="1" type="Sprite2D" parent="Environment" unique_id=1304837322]
 texture = ExtResource("1_wr5j1")
@@ -33,3 +35,12 @@ shape = SubResource("WorldBoundaryShape2D_8cwx5")
 position = Vector2(160, 80)
 rotation = -1.5707964
 shape = SubResource("WorldBoundaryShape2D_b06ws")
+
+[node name="RustGOAT" parent="." unique_id=2060703585 instance=ExtResource("3_8cwx5")]
+position = Vector2(86, 80)
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("2_1c05a")]
+
+[node name="BackGroundSmoke" parent="." unique_id=258183138 instance=ExtResource("4_b06ws")]
+light_mask = 0
+z_index = 11

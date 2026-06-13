@@ -1,10 +1,15 @@
 extends Node
 class_name BossHealthUI
 
+@export_group("Base UI Setup")
 @export var health_bar_path: NodePath = ^"../CanvasLayer/HealthBar"
 @export var health_label_path: NodePath = ^"../CanvasLayer/HealthLabel"
 @export var fade_duration: float = 0.19
 @export var base_tint: Color = Color(0.6, 0.6, 0.6, 1.0)
+@export var show_on_ready: bool = false
+@export var auto_sync_from_parent: bool = true
+
+@export_group("Hit Flash")
 @export var hit_flash_tint: Color = Color(1.0, 0.7, 0.7, 1.0)
 @export var hit_flash_in_duration: float = 0.06
 @export var hit_flash_hold_duration: float = 0.06
@@ -12,9 +17,18 @@ class_name BossHealthUI
 @export var hit_flash_scale: float = 1.12
 @export var hit_flash_scale_in_duration: float = 0.04
 @export var hit_flash_scale_out_duration: float = 0.10
-@export var auto_sync_from_parent: bool = true
 @export var auto_flash_on_damage: bool = true
-@export var show_on_ready: bool = false
+
+# ===== 新增：回血闪烁配置 =====
+@export_group("Heal Flash")
+@export var heal_flash_tint: Color = Color(0.4, 0.9, 0.4, 1.0)  # 回血变绿
+@export var heal_flash_in_duration: float = 0.12
+@export var heal_flash_hold_duration: float = 0.12
+@export var heal_flash_out_duration: float = 0.65
+@export var heal_flash_scale: float = 1.08
+@export var heal_flash_scale_in_duration: float = 0.06
+@export var heal_flash_scale_out_duration: float = 0.15
+@export var auto_flash_on_heal: bool = true
 
 var _health_bar: TextureProgressBar = null
 var _health_label: RichTextLabel = null
@@ -40,18 +54,28 @@ func refresh(health: int, max_health: int, trigger_flash: bool = false) -> void:
 	if max_health <= 0:
 		return
 	var clamped_health := clampi(health, 0, max_health)
+	var old_health := _last_health  # 在更新数值前，记录当前的旧血量
+	
 	if _health_bar != null:
 		_health_bar.min_value = 0
 		_health_bar.max_value = max_health
 		_health_bar.value = clamped_health
 	if _health_label != null:
 		_health_label.text = "%d" % clamped_health
+		
 	_last_health = clamped_health
 	_last_max_health = max_health
+	
 	if trigger_flash:
 		if (_health_bar == null or not _health_bar.visible) and (_health_label == null or not _health_label.visible):
 			show_ui(false)
-		flash_on_hit()
+		
+		# 判断是回血还是受击：
+		# 如果存在上一次的血量记录，且新血量大于旧血量，则执行绿闪；否则红闪
+		if old_health >= 0 and clamped_health > old_health:
+			flash_on_heal()  # 触发回血绿闪
+		else:
+			flash_on_hit()   # 触发受击红闪
 
 func show_ui(animate: bool = true) -> void:
 	_resolve_nodes()
@@ -116,6 +140,48 @@ func flash_on_hit() -> void:
 	if _health_label != null:
 		_flash_tween.parallel().tween_property(_health_label, "scale", Vector2.ONE, hit_flash_scale_out_duration)
 
+# ===== 新增：执行回血闪烁缓动 =====
+func flash_on_heal() -> void:
+	if is_instance_valid(_ui_tween):
+		_ui_tween.kill()
+	if is_instance_valid(_flash_tween):
+		_flash_tween.kill()
+	if (_health_bar == null or not _health_bar.visible) and (_health_label == null or not _health_label.visible):
+		show_ui(false)
+	_set_ui_tint(base_tint)
+	_set_ui_scale(Vector2.ONE)
+	_flash_tween = create_tween()
+	_flash_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	# 颜色渐变至绿色
+	if _health_bar != null:
+		_flash_tween.parallel().tween_property(_health_bar, "modulate", heal_flash_tint, heal_flash_in_duration)
+	if _health_label != null:
+		_flash_tween.parallel().tween_property(_health_label, "modulate", heal_flash_tint, heal_flash_in_duration)
+	
+	# 微幅放大抖动（象征注入生命力的反馈）
+	var flash_scale := Vector2.ONE * maxf(1.0, heal_flash_scale)
+	if _health_bar != null:
+		_flash_tween.parallel().tween_property(_health_bar, "scale", flash_scale, heal_flash_scale_in_duration)
+	if _health_label != null:
+		_flash_tween.parallel().tween_property(_health_label, "scale", flash_scale, heal_flash_scale_in_duration)
+		
+	if heal_flash_hold_duration > 0.0:
+		_flash_tween.tween_interval(heal_flash_hold_duration)
+		
+	_flash_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	
+	# 渐渐褪回默认颜色
+	if _health_bar != null:
+		_flash_tween.parallel().tween_property(_health_bar, "modulate", base_tint, heal_flash_out_duration)
+	if _health_label != null:
+		_flash_tween.parallel().tween_property(_health_label, "modulate", base_tint, heal_flash_out_duration)
+	if _health_bar != null:
+		_flash_tween.parallel().tween_property(_health_bar, "scale", Vector2.ONE, heal_flash_scale_out_duration)
+	if _health_label != null:
+		_flash_tween.parallel().tween_property(_health_label, "scale", Vector2.ONE, heal_flash_scale_out_duration)
+
+
 func _sync_from_parent(force: bool) -> void:
 	var host := get_parent()
 	if host == null:
@@ -135,8 +201,16 @@ func _sync_from_parent(force: bool) -> void:
 			_health_bar.value = clampi(current_health, 0, current_max_health)
 		if _health_label != null:
 			_health_label.text = "%d" % clampi(current_health, 0, current_max_health)
-		if not force and auto_flash_on_damage and _last_health >= 0 and current_health < _last_health:
-			flash_on_hit()
+		
+		# 判断血量变动情况：
+		if not force and _last_health >= 0:
+			if current_health < _last_health and auto_flash_on_damage:
+				# 血量减少 -> 受击闪红
+				flash_on_hit()
+			elif current_health > _last_health and auto_flash_on_heal:
+				# ===== 新增：血量上升 -> 回血闪绿 =====
+				flash_on_heal()
+				
 	_last_health = current_health
 	_last_max_health = current_max_health
 

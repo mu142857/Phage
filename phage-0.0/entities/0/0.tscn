@@ -1,11 +1,119 @@
 [gd_scene format=3 uid="uid://ddcsevn0mclqs"]
 
-[ext_resource type="Script" uid="uid://prq87ustde5l" path="res://entities/0/0.gd" id="1_ls6oo"]
+[ext_resource type="Script" uid="uid://cyhvg5rq1f4kp" path="res://entities/0/boss_base.gd" id="1_ls6oo"]
+[ext_resource type="Script" uid="uid://bg8dd0jdo67rm" path="res://systems/state_machine/state_manager.gd" id="2_2ano1"]
+[ext_resource type="Script" uid="uid://dipfayqdhffuc" path="res://entities/0/State/state_null.gd" id="3_p5fy1"]
+[ext_resource type="Script" uid="uid://dqnn3gbae0pn6" path="res://entities/0/State/state_idle.gd" id="4_n6t8v"]
+[ext_resource type="Script" uid="uid://cthrmx224tj3g" path="res://entities/0/State/state_death.gd" id="5_hxp58"]
+[ext_resource type="Script" uid="uid://ehd3i53k3ip2" path="res://entities/0/State/state_battlecry.gd" id="6_vcdco"]
+[ext_resource type="Script" uid="uid://coui44rk5r85j" path="res://entities/0/State/state_dash_attack.gd" id="7_it7px"]
+[ext_resource type="Script" uid="uid://e1wl0a0usmwr" path="res://entities/0/State/state_melee.gd" id="8_vcdco"]
+[ext_resource type="Script" uid="uid://dkneygsjaqsto" path="res://entities/0/State/state_shoot.gd" id="9_it7px"]
+[ext_resource type="Script" uid="uid://bsm6t5ttev71b" path="res://entities/0/State/state_dodge.gd" id="10_x70ur"]
+[ext_resource type="Script" uid="uid://yj755mdq8ujk" path="res://entities/0/Bullet/bullet_straight.gd" id="11_x0h1e"]
+[ext_resource type="Script" uid="uid://c870j5whsaoft" path="res://entities/0/Bullet/bullet_parabola.gd" id="12_wlmsk"]
+[ext_resource type="Script" uid="uid://boy31stf3cthw" path="res://entities/0/Bullet/bullet_bounce.gd" id="13_7gpac"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yv4b1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eeykl"]
+size = Vector2(3883, 2707)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ls6oo"]
 
+[sub_resource type="Animation" id="Animation_ebm1s"]
+resource_name = "HitFlash"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_y062d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dljl1"]
+_data = {
+&"HitFlash": SubResource("Animation_ebm1s"),
+&"RESET": SubResource("Animation_y062d")
+}
+
 [node name="0" type="CharacterBody2D" unique_id=1866212368]
+light_mask = 0
 script = ExtResource("1_ls6oo")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=22082512]
+light_mask = 0
+sprite_frames = SubResource("SpriteFrames_yv4b1")
+
+[node name="StateMachine" type="Node" parent="." unique_id=366777419]
+script = ExtResource("2_2ano1")
+
+[node name="Null(0)" type="Node" parent="StateMachine" unique_id=46761142]
+script = ExtResource("3_p5fy1")
+
+[node name="Idle(1)" type="Node" parent="StateMachine" unique_id=1176577399]
+script = ExtResource("4_n6t8v")
+
+[node name="Death(2)" type="Node" parent="StateMachine" unique_id=1885981302]
+script = ExtResource("5_hxp58")
+
+[node name="Battlecry(3)" type="Node" parent="StateMachine" unique_id=2089986307]
+script = ExtResource("6_vcdco")
+
+[node name="DashAttack(4)" type="Node" parent="StateMachine" unique_id=1779527421]
+script = ExtResource("7_it7px")
+
+[node name="Melee(5)" type="Node" parent="StateMachine" unique_id=1138458558]
+script = ExtResource("8_vcdco")
+
+[node name="Shoot(6)" type="Node" parent="StateMachine" unique_id=1255164845]
+script = ExtResource("9_it7px")
+
+[node name="Dodge(7)" type="Node" parent="StateMachine" unique_id=1339377313]
+script = ExtResource("10_x70ur")
+
+[node name="Bullet-Straight" type="Node" parent="StateMachine" unique_id=1705615056]
+script = ExtResource("11_x0h1e")
+
+[node name="Bullet-Parabola" type="Node" parent="StateMachine" unique_id=113320766]
+script = ExtResource("12_wlmsk")
+
+[node name="Bullet-Bounce" type="Node" parent="StateMachine" unique_id=1144601220]
+script = ExtResource("13_7gpac")
+
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=1123041060]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=2024677553]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_eeykl")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=234407941]
 shape = SubResource("CircleShape2D_ls6oo")
+
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=1032068795]
+libraries/ = SubResource("AnimationLibrary_dljl1")

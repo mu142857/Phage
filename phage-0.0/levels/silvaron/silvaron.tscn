@@ -39,6 +39,7 @@
 [ext_resource type="Texture2D" uid="uid://neicdw27p5bd" path="res://levels/silvaron/silvaron_bank.png" id="28_u2oux"]
 [ext_resource type="Texture2D" uid="uid://cdwk5alvjaj7o" path="res://levels/silvaron/silvaron_fort.png" id="29_jbuho"]
 [ext_resource type="PackedScene" uid="uid://bsmyvj2nlkdvr" path="res://entities/cox/cox.tscn" id="36_jbuho"]
+[ext_resource type="Texture2D" uid="uid://dbt17aot4lqqq" path="res://entities/talktive_npc/future_girl.png" id="38_uivn3"]
 [ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="41_r8omv"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="42_ik2bl"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="42_uivn3"]
@@ -6410,6 +6411,16 @@ region_rect = Rect2(0, 0, 160, 202.25)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=286134911]
 color = Color(0.5370987, 0.5370987, 0.5370987, 1)
+
+[node name="Interactive" type="Node2D" parent="." unique_id=539148915]
+
+[node name="FutureGirl" type="Sprite2D" parent="Interactive" unique_id=1287887692]
+modulate = Color(1.8247963, 1.8247963, 1.8247963, 1)
+light_mask = 0
+z_index = 10
+position = Vector2(616, 388.5)
+scale = Vector2(-1, 1)
+texture = ExtResource("38_uivn3")
 
 [node name="Lotus" type="Node2D" parent="." unique_id=459696475]
 z_index = 10

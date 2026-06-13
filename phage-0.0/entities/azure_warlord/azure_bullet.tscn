@@ -21,7 +21,7 @@ fill_to = Vector2(0.5, 0)
 offsets = PackedFloat32Array(0, 0.5506329, 1)
 colors = PackedColorArray(0.16470589, 0.37254903, 0.6392157, 1, 0.45490196, 0.9019608, 0.9490196, 1, 0.99744004, 0.9349463, 0.96094507, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_0y361"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_acq3q"]
 gradient = SubResource("Gradient_eh602")
 
 [sub_resource type="Gradient" id="Gradient_acq3q"]
@@ -35,7 +35,7 @@ gradient = SubResource("Gradient_acq3q")
 _data = [Vector2(0, 0.25650883), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_qyjiv"]
+[sub_resource type="CurveTexture" id="CurveTexture_jdxkx"]
 curve = SubResource("Curve_jdxkx")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0rusa"]
@@ -44,9 +44,9 @@ emission_shape = 3
 emission_box_extents = Vector3(2, 2, 1)
 gravity = Vector3(0, 0, 0)
 scale_max = 2.0
-scale_curve = SubResource("CurveTexture_qyjiv")
+scale_curve = SubResource("CurveTexture_jdxkx")
 color_ramp = SubResource("GradientTexture1D_wwdma")
-color_initial_ramp = SubResource("GradientTexture1D_0y361")
+color_initial_ramp = SubResource("GradientTexture1D_acq3q")
 
 [node name="AzureBullet" type="Area2D" unique_id=1545342279]
 z_index = 10

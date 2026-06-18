@@ -21,11 +21,11 @@
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tlm15"]
 
-[sub_resource type="Gradient" id="Gradient_ecic6"]
+[sub_resource type="Gradient" id="Gradient_i5hsc"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_27gjy"]
-gradient = SubResource("Gradient_ecic6")
+gradient = SubResource("Gradient_i5hsc")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)

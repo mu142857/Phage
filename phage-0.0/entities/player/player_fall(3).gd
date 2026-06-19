@@ -14,9 +14,20 @@ func process(delta: float) -> void:
 	if player == null:
 		return
 
+	player.coyote_timer = maxf(player.coyote_timer - delta, 0.0)
+	player.jump_buffer_timer = maxf(player.jump_buffer_timer - delta, 0.0)
+
+	if Input.is_action_just_pressed(&"jump"):
+		if player.coyote_timer > 0.0:
+			player.coyote_timer = 0.0
+			player.jump_buffer_timer = 0.0
+			change_state(player.STATE_JUMP)
+			return
+		player.jump_buffer_timer = player.JUMP_BUFFER_TIME
+
 	var move_input := Input.get_axis(&"move_left", &"move_right")
 	player.velocity.x = move_input * player.RUN_SPEED
-	player.apply_gravity(delta)
+	player.apply_gravity(delta, player.FALL_GRAVITY_MULTIPLIER)
 
 	if move_input > 0.0:
 		player.set_facing_direction(1)
@@ -36,11 +47,16 @@ func process(delta: float) -> void:
 	if player.is_on_floor():
 		var impact_speed := player.velocity.y
 		player.velocity.y = 0.0
-		# If terminal velocity was reached (or impact was very strong), shake camera
 		if player.reached_terminal or impact_speed >= player.MAX_FALL_SPEED:
 			Game.shake_camera(2)
 		player.reached_terminal = false
 		player.spawn_landing_effect()
+
+		if player.jump_buffer_timer > 0.0:
+			player.jump_buffer_timer = 0.0
+			change_state(player.STATE_JUMP)
+			return
+
 		if abs(move_input) > 0.0:
 			change_state(player.STATE_RUN)
 		else:

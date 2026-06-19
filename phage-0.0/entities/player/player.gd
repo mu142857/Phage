@@ -35,6 +35,9 @@ const STATE_ATTACK_1: int = 9
 
 # Maximum downward speed (terminal velocity). Normal jumps shouldn't hit this.
 const MAX_FALL_SPEED: float = 600.0
+const FALL_GRAVITY_MULTIPLIER: float = 1.6
+const COYOTE_TIME: float = 0.10
+const JUMP_BUFFER_TIME: float = 0.10
 
 # ============================================================
 # State (read by states, written by player or specific states)
@@ -105,6 +108,8 @@ func _start_invincibility() -> void:
 	is_invincible = false
 
 var reached_terminal: bool = false
+var coyote_timer: float = 0.0
+var jump_buffer_timer: float = 0.0
 
 func apply_gravity(delta: float, multiplier: float = 1.0) -> void:
 	# Apply gravity and clamp to terminal velocity. Mark if terminal reached.

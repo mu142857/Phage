@@ -15,6 +15,7 @@ func process(delta: float) -> void:
 		return
 
 	if not player.is_on_floor():
+		player.coyote_timer = player.COYOTE_TIME
 		change_state(player.STATE_FALL)
 		return
 
@@ -26,7 +27,8 @@ func process(delta: float) -> void:
 		change_state(player.STATE_SPRINT)
 		return
 
-	if Input.is_action_just_pressed(&"jump"):
+	if Input.is_action_just_pressed(&"jump") or player.jump_buffer_timer > 0.0:
+		player.jump_buffer_timer = 0.0
 		change_state(player.STATE_JUMP)
 		return
 

@@ -10,6 +10,7 @@ func enter() -> void:
 		return
 	jump_hold_elapsed = 0.0
 	apex_hang_elapsed = 0.0
+	player.coyote_timer = 0.0
 	player.set_walking_effect(true)
 	player.velocity.y = player.JUMP_SPEED
 	player.reached_terminal = false

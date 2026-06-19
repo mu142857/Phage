@@ -19,9 +19,15 @@ signal screen_filter(amount: float, colour: Color)
 
 @export var follow_offset: Vector2 = Vector2(0, -20)
 @export var follow_horizontal_speed: float = 18.0
-@export var follow_vertical_down_speed: float = 18.0
-@export var follow_vertical_up_speed: float = 4.0
-@export var follow_vertical_up_deadzone: float = 12.0
+# Vertical follow only tracks the player's grounded height, so jump/fall arcs
+# do not move the camera. A single symmetric speed keeps the ease smooth.
+@export var follow_vertical_speed: float = 6.0
+# While airborne and falling, once the player drops this far below their last
+# grounded height the camera starts chasing downward so they stay on screen.
+@export var follow_fall_catchup_distance: float = 16.0
+# Safety margin (px) kept between the player and the screen edge so a fast,
+# long fall can never push the player out of view even if the smooth ease lags.
+@export var follow_screen_edge_margin: float = 8.0
 
 const CAMERA_FOLLOW_GROUP: StringName = &"camera_follow"
 const CAMERA_FIXED_GROUP: StringName = &"camera_fixed"
@@ -42,6 +48,8 @@ var rect1_colour: Color = Color(1, 1, 1, 1)
 var rect2_colour: Color = Color(1, 1, 1, 1)
 var follow_target: Node2D = null
 var follow_player: bool = true
+var last_grounded_y: float = 0.0
+var has_grounded_y: bool = false
 var default_zoom: Vector2 = Vector2.ONE
 var default_limit_left: int = 0
 var default_limit_right: int = 0
@@ -84,16 +92,35 @@ func _process(delta: float) -> void:
 	elif follow_player and is_instance_valid(follow_target):
 		var target_position := follow_target.global_position + follow_offset
 		var follow_position := global_position
-		var x_alpha := clampf(delta * follow_horizontal_speed, 0.0, 1.0)
-		follow_position.x = lerpf(follow_position.x, target_position.x, x_alpha)
-		var y_delta := target_position.y - follow_position.y
-		if y_delta > 0.0:
-			var down_alpha := clampf(delta * follow_vertical_down_speed, 0.0, 1.0)
-			follow_position.y = lerpf(follow_position.y, target_position.y, down_alpha)
-		elif y_delta < -follow_vertical_up_deadzone:
-			var up_alpha := clampf(delta * follow_vertical_up_speed, 0.0, 1.0)
-			follow_position.y = lerpf(follow_position.y, target_position.y, up_alpha)
-		global_position = follow_position
+
+		# Horizontal: frame-rate independent exponential smoothing.
+		follow_position.x = lerpf(follow_position.x, target_position.x, 1.0 - exp(-follow_horizontal_speed * delta))
+
+		# Vertical: anchor to the player's grounded height. While airborne the
+		# target stays frozen at the last grounded Y, so jump arcs produce zero
+		# vertical camera motion — no sudden accel on the way up, no snap-back on
+		# landing. The camera only eases when the player actually lands on a new
+		# height, using one symmetric speed.
+		var grounded := follow_target is Player and (follow_target as Player).is_on_floor()
+		if grounded or not has_grounded_y:
+			last_grounded_y = target_position.y
+			has_grounded_y = true
+		var target_y := last_grounded_y
+		# If the player has fallen well below the last grounded height (walked off
+		# a ledge into a drop), chase downward so they don't leave the frame.
+		if not grounded and target_position.y - last_grounded_y > follow_fall_catchup_distance:
+			target_y = target_position.y - follow_fall_catchup_distance
+		follow_position.y = lerpf(follow_position.y, target_y, 1.0 - exp(-follow_vertical_speed * delta))
+
+		# Hard safety net: regardless of how far the smooth ease lags during a
+		# fast, long fall, never let the player leave the visible area. Clamp the
+		# camera center so the player stays within (half-height - margin) of it.
+		var half_height := get_viewport_rect().size.y * 0.5 / zoom.y
+		var max_gap := maxf(half_height - follow_screen_edge_margin, 0.0)
+		var player_y := follow_target.global_position.y
+		follow_position.y = clampf(follow_position.y, player_y - max_gap, player_y + max_gap)
+
+		global_position = _clamp_to_limits(follow_position)
 	elif not follow_player:
 		global_position = Vector2.ZERO
 
@@ -122,6 +149,31 @@ func _process(delta: float) -> void:
 			blink_time_2 = max(blink_time_2 - delta, 0.0)
 		else:
 			colour_rect2.color = Color(rect2_colour.r, rect2_colour.g, rect2_colour.b, 0.0)
+
+# Clamp the camera center so the view never drifts outside the active limits.
+# Without this, the lerp keeps pushing global_position past the limit while
+# Camera2D only clamps the *displayed* image, creating a dead zone that makes
+# the camera feel stuck/laggy when the player moves back from an edge.
+func _clamp_to_limits(pos: Vector2) -> Vector2:
+	if not limit_enabled:
+		return pos
+	# Half of the visible world rect (viewport size scaled by zoom).
+	var half_extent := get_viewport_rect().size * 0.5 / zoom
+	var min_x := float(limit_left) + half_extent.x
+	var max_x := float(limit_right) - half_extent.x
+	var min_y := float(limit_top) + half_extent.y
+	var max_y := float(limit_bottom) - half_extent.y
+	# Guard against limit ranges smaller than the viewport (tiny rooms):
+	# fall back to the midpoint so the result stays stable.
+	if min_x <= max_x:
+		pos.x = clampf(pos.x, min_x, max_x)
+	else:
+		pos.x = (float(limit_left) + float(limit_right)) * 0.5
+	if min_y <= max_y:
+		pos.y = clampf(pos.y, min_y, max_y)
+	else:
+		pos.y = (float(limit_top) + float(limit_bottom)) * 0.5
+	return pos
 
 func shake_camera(amount: float) -> void:
 	screen_shake.emit(amount)

@@ -624,7 +624,7 @@ script = ExtResource("1_dqeyc")
 sprite_frames = SubResource("SpriteFrames_4eql6")
 animation = &"Idle"
 autoplay = "Idle"
-frame_progress = 0.4336635
+frame_progress = 0.698759
 offset = Vector2(-8, -46)
 
 [node name="HitBox" type="Node2D" parent="." unique_id=309636834]

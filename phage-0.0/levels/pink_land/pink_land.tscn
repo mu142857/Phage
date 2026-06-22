@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cv1ks4b2b635s" path="res://interactive/PinklandPlatform/pinkland_platform.tscn" id="2_mxx67"]
 [ext_resource type="Texture2D" uid="uid://c4b4v8myudq86" path="res://levels/pink_land/pink_land_ground.png" id="3_h607n"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="4_mxx67"]
-[ext_resource type="PackedScene" uid="uid://dmp2knbj4tnir" path="res://entities/cox/week_cox.tscn" id="8_0f480"]
+[ext_resource type="PackedScene" uid="uid://dugkvornvcbu4" path="res://entities/cox/pinkland_cox.tscn" id="7_mxx67"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_0f480"]
 
@@ -27,8 +27,17 @@ script = ExtResource("1_73p1s")
 [node name="Platforms" type="Node2D" parent="." unique_id=217525656]
 z_index = 11
 
-[node name="PinklandPlatform" parent="Platforms" unique_id=1063868611 instance=ExtResource("2_mxx67")]
+[node name="PinklandPlatform1" parent="Platforms" unique_id=1063868611 instance=ExtResource("2_mxx67")]
 position = Vector2(160, 64)
+
+[node name="PinklandPlatform2" parent="Platforms" unique_id=92173576 instance=ExtResource("2_mxx67")]
+position = Vector2(212, 50)
+
+[node name="PinklandPlatform3" parent="Platforms" unique_id=1837195041 instance=ExtResource("2_mxx67")]
+position = Vector2(265, 31)
+
+[node name="PinklandPlatform4" parent="Platforms" unique_id=1139615263 instance=ExtResource("2_mxx67")]
+position = Vector2(370, 28)
 
 [node name="Walls" type="Node2D" parent="." unique_id=726892251]
 z_index = 10
@@ -88,5 +97,5 @@ texture = SubResource("GradientTexture2D_arcvl")
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1295153456]
 color = Color(0.5370987, 0.5370987, 0.5370987, 1)
 
-[node name="WeekCox" parent="." unique_id=263783893 instance=ExtResource("8_0f480")]
-position = Vector2(93, 17)
+[node name="PinkLandCox" parent="." unique_id=263783893 instance=ExtResource("7_mxx67")]
+position = Vector2(90, -4)

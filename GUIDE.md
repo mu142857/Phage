@@ -8,7 +8,7 @@ This file gives AI assistants (Claude, Copilot, etc.) the context they need to h
 
 ## Tech Stack
 
-- Godot Godot 4.6.2.stable with GDScript 2 (NOT GDScript 1 — do not suggest legacy syntax)
+- Godot 4.6.2.stable with GDScript 2 (NOT GDScript 1 — do not suggest legacy syntax)
 - Use `TileMapLayer`, NOT the deprecated `TileMap` node
 - Renderer: Compatibility (2D project)
 

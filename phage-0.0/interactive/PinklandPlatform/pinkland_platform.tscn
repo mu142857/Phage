@@ -624,7 +624,7 @@ script = ExtResource("1_dqeyc")
 sprite_frames = SubResource("SpriteFrames_4eql6")
 animation = &"Idle"
 autoplay = "Idle"
-frame_progress = 0.92315394
+frame_progress = 0.4336635
 offset = Vector2(-8, -46)
 
 [node name="HitBox" type="Node2D" parent="." unique_id=309636834]
@@ -741,6 +741,8 @@ shape = SubResource("RectangleShape2D_e3q0l")
 debug_color = Color(0.55366164, 0.53107417, 0.51813054, 0.41960785)
 
 [node name="PlayerDetector" type="Area2D" parent="." unique_id=968377716]
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetector" unique_id=132449174]
 position = Vector2(0, -11)

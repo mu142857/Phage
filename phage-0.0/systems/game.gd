@@ -64,6 +64,9 @@ var teleport_transition_tween: Tween = null
 var teleport_transition_layer: CanvasLayer = null
 var teleport_transition_rect: ColorRect = null
 var teleport_transition_active: bool = false
+# 最后一次"安全落脚点",被地刺等危险物击中时玩家弹回这里。
+var last_safe_position: Vector2 = Vector2.ZERO
+var has_safe_position: bool = false
 
 func _ready() -> void:
 	make_current()
@@ -190,6 +193,15 @@ func filter(amount: float, colour: Color) -> void:
 func play_hit_feedback() -> void:
 	_play_hit_flash()
 	_apply_hit_stop(hit_stop_duration, hit_recover_duration)
+
+# 玩家在地面上站稳时调用,记录可供弹回的安全点。
+func record_safe_position(world_pos: Vector2) -> void:
+	last_safe_position = world_pos
+	has_safe_position = true
+
+# 切场景等需要作废旧安全点时调用。
+func invalidate_safe_position() -> void:
+	has_safe_position = false
 
 func zoom_to(target_zoom: Vector2, duration: float = 0.2) -> void:
 	if is_instance_valid(zoom_tween):
@@ -382,6 +394,11 @@ func change_scene(scene_path: String, teleport_id: int, player_light: bool) -> v
 				player.sprite.modulate = Color(1, 1, 1, 1)
 		_ensure_player_light(player, player_light)
 		_set_player_lock(true)
+		# 新场景的传送落点作为初始安全点;无传送点则清空,等玩家落地后再记录。
+		if is_instance_valid(target_teleport):
+			record_safe_position(target_position)
+		else:
+			invalidate_safe_position()
 	await _play_teleport_fade(0.0, teleport_fade_in_duration)
 	_set_player_lock(false)
 	teleport_transition_active = false

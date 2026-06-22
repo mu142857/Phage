@@ -7,6 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://c4b4v8myudq86" path="res://levels/pink_land/pink_land_ground.png" id="3_h607n"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="4_mxx67"]
 [ext_resource type="PackedScene" uid="uid://dugkvornvcbu4" path="res://entities/cox/pinkland_cox.tscn" id="7_mxx67"]
+[ext_resource type="PackedScene" uid="uid://co0lkp1i3f4xh" path="res://interactive/PinklandPlatform/pink_land_spike.tscn" id="8_0f480"]
+[ext_resource type="Texture2D" uid="uid://3lb1ms65usrp" path="res://levels/pink_land/pinkland_arrow_sign-Sheet.png" id="8_8fg2a"]
+[ext_resource type="Texture2D" uid="uid://bgsxkypwdgixs" path="res://levels/pink_land/pinkland_straight_arrow_sign-Sheet.png" id="9_arcvl"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_0f480"]
 
@@ -21,23 +24,250 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1tigx"]
+atlas = ExtResource("8_8fg2a")
+region = Rect2(0, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vh3h7"]
+atlas = ExtResource("8_8fg2a")
+region = Rect2(18, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_asdaf"]
+atlas = ExtResource("8_8fg2a")
+region = Rect2(36, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ye4hy"]
+atlas = ExtResource("8_8fg2a")
+region = Rect2(54, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2uyrb"]
+atlas = ExtResource("8_8fg2a")
+region = Rect2(72, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iqgx7"]
+atlas = ExtResource("8_8fg2a")
+region = Rect2(0, 18, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vrhra"]
+atlas = ExtResource("8_8fg2a")
+region = Rect2(18, 18, 18, 18)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_770uj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1tigx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vh3h7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_asdaf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ye4hy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2uyrb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iqgx7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vrhra")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arcvl"]
+atlas = ExtResource("9_arcvl")
+region = Rect2(0, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_228jq"]
+atlas = ExtResource("9_arcvl")
+region = Rect2(18, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bg6uo"]
+atlas = ExtResource("9_arcvl")
+region = Rect2(36, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cy6ux"]
+atlas = ExtResource("9_arcvl")
+region = Rect2(54, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kajct"]
+atlas = ExtResource("9_arcvl")
+region = Rect2(72, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_soobd"]
+atlas = ExtResource("9_arcvl")
+region = Rect2(0, 18, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_br0s6"]
+atlas = ExtResource("9_arcvl")
+region = Rect2(18, 18, 18, 18)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1tigx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arcvl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_228jq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bg6uo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cy6ux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kajct")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_soobd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_br0s6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
 [node name="PinkLand" type="Node2D" unique_id=1277756752]
 script = ExtResource("1_73p1s")
 
-[node name="Platforms" type="Node2D" parent="." unique_id=217525656]
+[node name="Platforms" type="Node2D" parent="." unique_id=367993254]
 z_index = 11
 
 [node name="PinklandPlatform1" parent="Platforms" unique_id=1063868611 instance=ExtResource("2_mxx67")]
-position = Vector2(160, 64)
+position = Vector2(65, 60)
 
-[node name="PinklandPlatform2" parent="Platforms" unique_id=92173576 instance=ExtResource("2_mxx67")]
-position = Vector2(212, 50)
+[node name="PinklandPlatform2" parent="Platforms" unique_id=1039460590 instance=ExtResource("2_mxx67")]
+position = Vector2(140, 34)
 
-[node name="PinklandPlatform3" parent="Platforms" unique_id=1837195041 instance=ExtResource("2_mxx67")]
-position = Vector2(265, 31)
+[node name="PinklandPlatform5" parent="Platforms" unique_id=1975549222 instance=ExtResource("2_mxx67")]
+position = Vector2(214, 46)
 
-[node name="PinklandPlatform4" parent="Platforms" unique_id=1139615263 instance=ExtResource("2_mxx67")]
-position = Vector2(370, 28)
+[node name="PinklandPlatform3" parent="Platforms" unique_id=1824510160 instance=ExtResource("2_mxx67")]
+position = Vector2(290, 32)
+
+[node name="PinklandPlatform9" parent="Platforms" unique_id=1659332923 instance=ExtResource("2_mxx67")]
+position = Vector2(-128, 0)
+
+[node name="PinklandPlatform19" parent="Platforms" unique_id=19710869 instance=ExtResource("2_mxx67")]
+position = Vector2(430, 4)
+
+[node name="PinklandPlatform20" parent="Platforms" unique_id=1180306524 instance=ExtResource("2_mxx67")]
+position = Vector2(482, 64)
+
+[node name="PinklandPlatform21" parent="Platforms" unique_id=622624963 instance=ExtResource("2_mxx67")]
+position = Vector2(519, 29)
+
+[node name="PinklandPlatform22" parent="Platforms" unique_id=627639156 instance=ExtResource("2_mxx67")]
+position = Vector2(555, 1)
+
+[node name="PinklandPlatform23" parent="Platforms" unique_id=1325855836 instance=ExtResource("2_mxx67")]
+position = Vector2(607, 66)
+
+[node name="PinklandPlatform33" parent="Platforms" unique_id=601489938 instance=ExtResource("2_mxx67")]
+position = Vector2(727, 47)
+
+[node name="PinklandPlatform24" parent="Platforms" unique_id=1586194416 instance=ExtResource("2_mxx67")]
+position = Vector2(649, 34)
+
+[node name="PinklandPlatform25" parent="Platforms" unique_id=1669084780 instance=ExtResource("2_mxx67")]
+position = Vector2(672, 0)
+
+[node name="PinklandPlatform26" parent="Platforms" unique_id=1131791244 instance=ExtResource("2_mxx67")]
+position = Vector2(717, 69)
+
+[node name="PinklandPlatform27" parent="Platforms" unique_id=462741457 instance=ExtResource("2_mxx67")]
+position = Vector2(751, 38)
+
+[node name="PinklandPlatform28" parent="Platforms" unique_id=1769598561 instance=ExtResource("2_mxx67")]
+position = Vector2(786, 4)
+
+[node name="PinklandPlatform10" parent="Platforms" unique_id=1767386189 instance=ExtResource("2_mxx67")]
+position = Vector2(-183, -1)
+
+[node name="PinklandPlatform11" parent="Platforms" unique_id=461471610 instance=ExtResource("2_mxx67")]
+position = Vector2(-238, -1)
+
+[node name="PinklandPlatform17" parent="Platforms" unique_id=758100611 instance=ExtResource("2_mxx67")]
+position = Vector2(-363, 1)
+
+[node name="PinklandPlatform18" parent="Platforms" unique_id=131791696 instance=ExtResource("2_mxx67")]
+position = Vector2(-306, 0)
+
+[node name="PinklandPlatform4" parent="Platforms" unique_id=929494252 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(364, 26)
+script = null
+
+[node name="PinklandPlatform6" parent="Platforms" unique_id=1634538613 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(385, 26)
+script = null
+
+[node name="PinklandPlatform29" parent="Platforms" unique_id=1066235307 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(824, 21)
+script = null
+
+[node name="PinklandPlatform30" parent="Platforms" unique_id=750678291 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(857, 41)
+script = null
+
+[node name="PinklandPlatform31" parent="Platforms" unique_id=69306052 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(888, 60)
+script = null
+
+[node name="PinklandPlatform32" parent="Platforms" unique_id=682170766 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(920, 81)
+script = null
+
+[node name="PinklandPlatform7" parent="Platforms" unique_id=1813143929 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(-62, 50)
+script = null
+
+[node name="PinklandPlatform8" parent="Platforms" unique_id=963877722 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(-40, 50)
+script = null
+
+[node name="PinklandPlatform16" parent="Platforms" unique_id=2040654187 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(9, 59)
+script = null
+
+[node name="PinklandPlatform12" parent="Platforms" unique_id=1358725597 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(-486, 81)
+script = null
+
+[node name="PinklandPlatform13" parent="Platforms" unique_id=427454376 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(-459, 63)
+script = null
+
+[node name="PinklandPlatform14" parent="Platforms" unique_id=568279809 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(-432, 45)
+script = null
+
+[node name="PinklandPlatform15" parent="Platforms" unique_id=1042134042 instance=ExtResource("2_mxx67")]
+modulate = Color(0.62152386, 0.62152386, 0.6215238, 1)
+position = Vector2(-402, 28)
+script = null
 
 [node name="Walls" type="Node2D" parent="." unique_id=726892251]
 z_index = 10
@@ -87,7 +317,7 @@ centered = false
 
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("4_mxx67")]
 modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
-position = Vector2(27, 3)
+position = Vector2(-546, 16)
 
 [node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=2118570208]
 position = Vector2(0, -7)
@@ -99,3 +329,62 @@ color = Color(0.5370987, 0.5370987, 0.5370987, 1)
 
 [node name="PinkLandCox" parent="." unique_id=263783893 instance=ExtResource("7_mxx67")]
 position = Vector2(90, -4)
+
+[node name="Respawn Point" type="Marker2D" parent="." unique_id=557414352]
+position = Vector2(-550, 69)
+
+[node name="Arrows" type="Node2D" parent="." unique_id=641772982]
+
+[node name="Arrow1" type="AnimatedSprite2D" parent="Arrows" unique_id=1514439013]
+position = Vector2(431.5, 13)
+sprite_frames = SubResource("SpriteFrames_770uj")
+autoplay = "default"
+frame_progress = 0.2086424
+
+[node name="Arrow2" type="AnimatedSprite2D" parent="Arrows" unique_id=1328547129]
+position = Vector2(556.5, 10)
+sprite_frames = SubResource("SpriteFrames_770uj")
+autoplay = "default"
+frame_progress = 0.44475615
+
+[node name="Arrow3" type="AnimatedSprite2D" parent="Arrows" unique_id=44781404]
+position = Vector2(673.5, 9)
+sprite_frames = SubResource("SpriteFrames_770uj")
+autoplay = "default"
+frame_progress = 0.44475615
+
+[node name="StraightArrow1" type="AnimatedSprite2D" parent="Arrows" unique_id=781551216]
+position = Vector2(-126.5, 9)
+sprite_frames = SubResource("SpriteFrames_1tigx")
+autoplay = "default"
+frame_progress = 0.7714282
+
+[node name="Spikes" type="Node2D" parent="." unique_id=834137341]
+position = Vector2(-8, 5)
+
+[node name="PinkLandSpike1" parent="Spikes" unique_id=1504096813 instance=ExtResource("8_0f480")]
+position = Vector2(-364, 78)
+
+[node name="PinkLandSpike2" parent="Spikes" unique_id=1747154032 instance=ExtResource("8_0f480")]
+position = Vector2(-212, 78)
+
+[node name="PinkLandSpike3" parent="Spikes" unique_id=658788110 instance=ExtResource("8_0f480")]
+position = Vector2(-60, 78)
+
+[node name="PinkLandSpike4" parent="Spikes" unique_id=923703881 instance=ExtResource("8_0f480")]
+position = Vector2(92, 78)
+
+[node name="PinkLandSpike5" parent="Spikes" unique_id=1117502272 instance=ExtResource("8_0f480")]
+position = Vector2(244, 78)
+
+[node name="PinkLandSpike6" parent="Spikes" unique_id=1547973532 instance=ExtResource("8_0f480")]
+position = Vector2(396, 78)
+
+[node name="PinkLandSpike7" parent="Spikes" unique_id=313614000 instance=ExtResource("8_0f480")]
+position = Vector2(548, 78)
+
+[node name="PinkLandSpike8" parent="Spikes" unique_id=1725675746 instance=ExtResource("8_0f480")]
+position = Vector2(700, 78)
+
+[node name="PinkLandSpike9" parent="Spikes" unique_id=148372716 instance=ExtResource("8_0f480")]
+position = Vector2(836, 78)

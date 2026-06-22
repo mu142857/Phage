@@ -8,8 +8,8 @@ extends Node2D
 ## MachineLeft 不造成伤害,而是在第 2、3 帧把平台碰撞箱切短,之后切回 Normal。
 
 @export var damage: int = 10            # 统一伤害值
-@export var trigger_delay: float = 0.1  # 踩上去到首次触发的延迟
-@export var cooldown: float = 0.8       # 一次陷阱播完到下一次的冷却
+@export var trigger_delay: float = 0.25  # 踩上去到首次触发的延迟
+@export var cooldown: float = 1.8       # 一次陷阱播完到下一次的冷却
 
 const DAMAGE_FRAME: int = 2             # 伤害帧(从 0 起计,即第三帧)
 const MACHINE_LEFT: StringName = &"MachineLeft"
@@ -34,6 +34,9 @@ var _last_trap: StringName = &""
 func _ready() -> void:
 	sprite.frame_changed.connect(_on_frame_changed)
 	_set_machine_left_collision(false)  # 默认使用 Normal 碰撞箱
+	# 把玩家真正踩的 Wall 标记为"不安全地面",这样玩家不会把陷阱平台记成重生点。
+	# (解绑本脚本后这行不执行,平台即自动变为安全地面。)
+	$Wall.add_to_group("unsafe_ground")
 
 
 func _on_player_detector_body_entered(body: Node2D) -> void:

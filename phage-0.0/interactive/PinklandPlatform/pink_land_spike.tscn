@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://co0lkp1i3f4xh"]
+
+[ext_resource type="Texture2D" uid="uid://btfuiknx6epca" path="res://levels/pink_land/pink_land_spike.png" id="1_8n6rm"]
+[ext_resource type="Script" uid="uid://d0v3dtxmie86p" path="res://interactive/PinklandPlatform/pink_land_spike.gd" id="1_clyu8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8n6rm"]
+size = Vector2(152, 19)
+
+[node name="PinkLandSpike" type="Node2D" unique_id=1504096813]
+script = ExtResource("1_clyu8")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1322543194]
+position = Vector2(0, -16)
+texture = ExtResource("1_8n6rm")
+
+[node name="HitBox" type="Area2D" parent="." unique_id=1350723144]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=307926975]
+position = Vector2(0, -9.5)
+shape = SubResource("RectangleShape2D_8n6rm")
+
+[connection signal="body_entered" from="HitBox" to="." method="_on_hit_box_body_entered"]

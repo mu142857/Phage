@@ -38,6 +38,14 @@ const MAX_FALL_SPEED: float = 600.0
 const FALL_GRAVITY_MULTIPLIER: float = 1.6
 const COYOTE_TIME: float = 0.10
 const JUMP_BUFFER_TIME: float = 0.10
+# 在地面上连续站稳这么久,当前位置才算"安全点"(避免擦着地刺滑过时被误记)。
+const SAFE_RECORD_SETTLE_TIME: float = 0.12
+# 安全点离平台左右边缘至少留这么多像素(主角半宽),免得复活在边缘直接滑落。
+const SAFE_EDGE_MARGIN: float = 2.0
+# 侧向探针在地面接触点上下各探这么多像素(够覆盖落差,又不会探到下层平台)。
+const SAFE_GROUND_PROBE_HEIGHT: float = 6.0
+
+var _grounded_time: float = 0.0
 
 # ============================================================
 # State (read by states, written by player or specific states)
@@ -72,6 +80,65 @@ func _ready() -> void:
 	set_ball_form(false)
 	clear_attack_hitboxes()
 	can_sprint = true
+
+func _physics_process(_delta: float) -> void:
+	# 持续记录最后的安全落脚点,供地刺等危险物弹回使用。
+	# 站稳一小会儿才记录;受伤无敌期间不记录(刚被弹回时别立刻覆盖);
+	# 脚下是陷阱平台(unsafe_ground 组)时不记录,免得重生在陷阱上。
+	# 只在"平台内侧"记录:脚下左右各 SAFE_EDGE_MARGIN 处都得有地面。
+	# 这样贴地走下平台时(土狼时间内中心已越过边缘的那几帧)不会被记录,
+	# 自动保留上一个内侧安全点,避免复活在悬空边缘后直接滑落。
+	if is_on_floor() and not _is_on_unsafe_ground():
+		_grounded_time += _delta
+		if _grounded_time >= SAFE_RECORD_SETTLE_TIME and not is_invincible and _is_interior_floor_spot():
+			Game.record_safe_position(global_position)
+	else:
+		_grounded_time = 0.0
+
+# 脚下左右两侧 SAFE_EDGE_MARGIN 处都有地面 → 站在平台内侧(非边缘悬空)。
+func _is_interior_floor_spot() -> bool:
+	var ground_y := _floor_contact_y()
+	if is_inf(ground_y):
+		return true  # 拿不到接触点时不阻止记录(退回原行为)
+	return _has_ground_below(global_position.x - SAFE_EDGE_MARGIN, ground_y) \
+		and _has_ground_below(global_position.x + SAFE_EDGE_MARGIN, ground_y)
+
+# 脚下地面接触点的 Y(全局),取不到返回 INF。
+func _floor_contact_y() -> float:
+	for i in get_slide_collision_count():
+		var collision := get_slide_collision(i)
+		if collision.get_normal().y < -0.5:  # 只看脚下(法线朝上)的接触面
+			return collision.get_position().y
+	return INF
+
+# 在 (x, ground_y) 附近上下各探一小段,判断该处脚下是否有地面。
+func _has_ground_below(x: float, ground_y: float) -> bool:
+	var space := get_world_2d().direct_space_state
+	var from := Vector2(x, ground_y - SAFE_GROUND_PROBE_HEIGHT)
+	var to := Vector2(x, ground_y + SAFE_GROUND_PROBE_HEIGHT)
+	var query := PhysicsRayQueryParameters2D.create(from, to, collision_mask, [get_rid()])
+	return not space.intersect_ray(query).is_empty()
+
+# 检查脚下踩着的碰撞体是否属于 "unsafe_ground" 组(陷阱平台)。
+func _is_on_unsafe_ground() -> bool:
+	for i in get_slide_collision_count():
+		var collision := get_slide_collision(i)
+		# 只看脚下(法线朝上)的接触面
+		if collision.get_normal().y < -0.5:
+			var collider := collision.get_collider()
+			if collider is Node and (collider as Node).is_in_group("unsafe_ground"):
+				return true
+	return false
+
+# 被地刺等危险物击中时调用:弹回上一个安全点,清零速度并给无敌帧。
+func respawn_to_safe() -> void:
+	if not Game.has_safe_position:
+		return
+	global_position = Game.last_safe_position
+	velocity = Vector2.ZERO
+	_grounded_time = 0.0
+	change_state(STATE_IDLE)
+	_start_invincibility()
 
 func change_state(state_id: int) -> void:
 	state_machine.change_state(state_id)

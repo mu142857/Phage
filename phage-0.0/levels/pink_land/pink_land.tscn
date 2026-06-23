@@ -6,14 +6,73 @@
 [ext_resource type="PackedScene" uid="uid://cv1ks4b2b635s" path="res://interactive/PinklandPlatform/pinkland_platform.tscn" id="2_mxx67"]
 [ext_resource type="Texture2D" uid="uid://c4b4v8myudq86" path="res://levels/pink_land/pink_land_ground.png" id="3_h607n"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="4_mxx67"]
+[ext_resource type="Texture2D" uid="uid://dph2a1e1pk4bj" path="res://entities/talktive_npc/Defective Product 6319 + A bit talkative Leaf-Sheet.png" id="6_228jq"]
+[ext_resource type="Texture2D" uid="uid://bdypk0q7gpxnx" path="res://entities/talktive_npc/GoldEgg.png" id="7_bg6uo"]
+[ext_resource type="PackedScene" uid="uid://c8pnajburl72k" path="res://interactive/Text/text.tscn" id="7_cy6ux"]
 [ext_resource type="PackedScene" uid="uid://dugkvornvcbu4" path="res://entities/cox/pinkland_cox.tscn" id="7_mxx67"]
 [ext_resource type="PackedScene" uid="uid://co0lkp1i3f4xh" path="res://interactive/PinklandPlatform/pink_land_spike.tscn" id="8_0f480"]
 [ext_resource type="Texture2D" uid="uid://3lb1ms65usrp" path="res://levels/pink_land/pinkland_arrow_sign-Sheet.png" id="8_8fg2a"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="8_kajct"]
 [ext_resource type="Texture2D" uid="uid://bgsxkypwdgixs" path="res://levels/pink_land/pinkland_straight_arrow_sign-Sheet.png" id="9_arcvl"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_0f480"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8fg2a"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_770uj"]
+atlas = ExtResource("6_228jq")
+region = Rect2(0, 0, 27, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b68xj"]
+atlas = ExtResource("6_228jq")
+region = Rect2(27, 0, 27, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cxyxy"]
+atlas = ExtResource("6_228jq")
+region = Rect2(54, 0, 27, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wyetl"]
+atlas = ExtResource("6_228jq")
+region = Rect2(81, 0, 27, 22)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cxqp3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_770uj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b68xj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cxyxy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wyetl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_228jq"]
+offsets = PackedFloat32Array(0, 0.33663365, 1)
+colors = PackedColorArray(1, 0.43565813, 0.7316264, 1, 0.18000486, 0.1800049, 0.1800048, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg6uo"]
+gradient = SubResource("Gradient_228jq")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_cy6ux"]
+colors = PackedColorArray(0.30138955, 0.30138952, 0.30138952, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kajct"]
+gradient = SubResource("Gradient_cy6ux")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
 
 [sub_resource type="Gradient" id="Gradient_ecic6"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -315,9 +374,80 @@ position = Vector2(-160, 0)
 texture = ExtResource("3_h607n")
 centered = false
 
+[node name="NPCs" type="Node2D" parent="." unique_id=1775283711]
+
+[node name="6319Leaf" type="AnimatedSprite2D" parent="NPCs" unique_id=1968836538]
+light_mask = 2
+visibility_layer = 2
+position = Vector2(-50, 29)
+sprite_frames = SubResource("SpriteFrames_cxqp3")
+autoplay = "default"
+frame_progress = 0.7958562
+
+[node name="Text" parent="NPCs/6319Leaf" unique_id=1026677927 instance=ExtResource("7_cy6ux")]
+position = Vector2(-5, 9)
+
+[node name="Label1" type="Label" parent="NPCs/6319Leaf/Text" unique_id=1026392003]
+z_index = 11
+offset_left = -16.0
+offset_top = 4.0
+offset_right = 56.0
+offset_bottom = 27.0
+theme_override_fonts/font = ExtResource("8_kajct")
+theme_override_font_sizes/font_size = 5
+text = "休息一下也可以的，
+平台不会跑!"
+
+[node name="Label2" type="Label" parent="NPCs/6319Leaf/Text" unique_id=1003152728]
+z_index = 11
+offset_left = -16.0
+offset_top = 5.0
+offset_right = 29.0
+offset_bottom = 28.0
+theme_override_fonts/font = ExtResource("8_kajct")
+theme_override_font_sizes/font_size = 5
+text = "卡在这里很久了吧？
+没关系，慢慢来!"
+
+[node name="6319Light" type="PointLight2D" parent="NPCs" unique_id=1935383105]
+light_mask = 2
+visibility_layer = 2
+position = Vector2(-54, 32)
+scale = Vector2(0.44531247, 0.44531247)
+energy = 2.0
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_bg6uo")
+
+[node name="GoldEgg" type="Sprite2D" parent="NPCs" unique_id=1772301753]
+light_mask = 2
+position = Vector2(-517, 74)
+texture = ExtResource("7_bg6uo")
+
+[node name="Text" parent="NPCs/GoldEgg" unique_id=1537383652 instance=ExtResource("7_cy6ux")]
+position = Vector2(0, 5)
+
+[node name="Label" type="Label" parent="NPCs/GoldEgg/Text" unique_id=110345624]
+z_index = 11
+offset_left = -11.0
+offset_top = -17.0
+offset_right = 61.0
+offset_bottom = 6.0
+theme_override_fonts/font = ExtResource("8_kajct")
+theme_override_font_sizes/font_size = 5
+text = "祝你好运！"
+
+[node name="GoldEggLight" type="PointLight2D" parent="NPCs" unique_id=99668707]
+light_mask = 2
+visibility_layer = 2
+position = Vector2(-517, 74)
+scale = Vector2(0.21875086, 0.24999997)
+energy = 2.0
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_kajct")
+
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("4_mxx67")]
 modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
-position = Vector2(-546, 16)
+position = Vector2(-553, 58)
 
 [node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=2118570208]
 position = Vector2(0, -7)

@@ -615,7 +615,7 @@ size = Vector2(21, 11)
 size = Vector2(11, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nmc0e"]
-size = Vector2(22, 2)
+size = Vector2(24, 3)
 
 [node name="PinklandPlatform" type="Node2D" unique_id=1063868611]
 script = ExtResource("1_dqeyc")
@@ -745,7 +745,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetector" unique_id=132449174]
-position = Vector2(0, -11)
+position = Vector2(0, -11.5)
 shape = SubResource("RectangleShape2D_nmc0e")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

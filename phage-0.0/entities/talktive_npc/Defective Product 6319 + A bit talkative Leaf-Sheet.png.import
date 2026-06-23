@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdcga0whn7547"
-path="res://.godot/imported/logo.svg-efe8e5402513a72d389cac57c6c1b54f.ctex"
+uid="uid://dph2a1e1pk4bj"
+path="res://.godot/imported/Defective Product 6319 + A bit talkative Leaf-Sheet.png-2829fc451b93da460f40ad6599cca26d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://entities/talktive_npc/logo.svg"
-dest_files=["res://.godot/imported/logo.svg-efe8e5402513a72d389cac57c6c1b54f.ctex"]
+source_file="res://entities/talktive_npc/Defective Product 6319 + A bit talkative Leaf-Sheet.png"
+dest_files=["res://.godot/imported/Defective Product 6319 + A bit talkative Leaf-Sheet.png-2829fc451b93da460f40ad6599cca26d.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

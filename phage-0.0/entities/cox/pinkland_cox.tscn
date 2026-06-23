@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dugkvornvcbu4"]
 
-[ext_resource type="Script" uid="uid://b1pnk1andcox0a" path="res://entities/cox/pinkland_cox.gd" id="1_plcox"]
+[ext_resource type="Script" uid="uid://cqji6fukuntms" path="res://entities/cox/pinkland_cox.gd" id="1_plcox"]
 [ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_7gbww"]
 [ext_resource type="Texture2D" uid="uid://dmkl3q48i3fg0" path="res://entities/cox/pink_land_cox-Sheet.png" id="3_smqg5"]
 
@@ -100,7 +100,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_im5db"]
-size = Vector2(320, 90)
+size = Vector2(190, 90)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_im5db"]
 radius = 4.1231055

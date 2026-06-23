@@ -6,6 +6,7 @@
 size = Vector2(20, 1)
 
 [node name="Text" type="Marker2D" unique_id=1026677927]
+light_mask = 0
 script = ExtResource("1_d7aon")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=2003642953]

@@ -8,8 +8,9 @@ extends Node2D
 ## MachineLeft 不造成伤害,而是在第 2、3 帧把平台碰撞箱切短,之后切回 Normal。
 
 @export var damage: int = 10            # 统一伤害值
-@export var trigger_delay: float = 0.25  # 踩上去到首次触发的延迟
+@export var trigger_delay: float = 0.2  # 踩上去到首次触发的延迟
 @export var cooldown: float = 1.8       # 一次陷阱播完到下一次的冷却
+@export var shake_strength: float = 4.0 # 陷阱在伤害帧释放时的屏幕震动强度
 
 const DAMAGE_FRAME: int = 2             # 伤害帧(从 0 起计,即第三帧)
 const MACHINE_LEFT: StringName = &"MachineLeft"
@@ -53,17 +54,20 @@ func _on_player_detector_body_exited(body: Node2D) -> void:
 	_player_inside = false
 
 
-## 陷阱主循环:首次延迟 0.1s,之后每次播完冷却 0.8s,玩家离开即停。
+## 陷阱主循环:进入后等 trigger_delay,首次触发不可取消(即使此时已离开也照触发);
+## 之后进入冷却(冷却中绝不触发),冷却结束时只要玩家还在范围内就继续强制触发。
 func _run_traps() -> void:
 	_running = true
 	await get_tree().create_timer(trigger_delay).timeout
-	while _player_inside:
+	while true:
 		_current_trap = _pick_trap()
 		_last_trap = _current_trap
 		sprite.play(_current_trap)
 		await sprite.animation_finished  # 播放期间伤害/碰撞切换由 _on_frame_changed 处理
 		_current_trap = &""
 		await get_tree().create_timer(cooldown).timeout
+		if not _player_inside:  # 冷却结束后才判定是否继续
+			break
 	_running = false
 
 
@@ -78,6 +82,9 @@ func _pick_trap() -> StringName:
 func _on_frame_changed() -> void:
 	if _current_trap == &"":
 		return
+	# 所有陷阱在释放帧(第2帧)都来一下屏幕震动
+	if sprite.frame == DAMAGE_FRAME:
+		Game.shake_camera(shake_strength)
 	if _current_trap == MACHINE_LEFT:
 		# MachineLeft:第 2、3 帧用缩短碰撞箱,其余帧用 Normal
 		_set_machine_left_collision(sprite.frame == 2 or sprite.frame == 3)

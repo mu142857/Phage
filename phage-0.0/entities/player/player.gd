@@ -81,6 +81,16 @@ func _ready() -> void:
 	clear_attack_hitboxes()
 	can_sprint = true
 
+# 像素对齐:物理体停在浮点坐标(保证移动/相机插值丝滑),
+# 只把渲染用的 sprite 节点局部偏移到整数像素,消除脚底与地板间的亚像素缝隙。
+# 只吸附 Y 轴 —— 缝隙是垂直方向的,横向不碰,避免水平移动出现像素跳动。
+# 在 _process(渲染帧)里做,不污染物理状态。
+func _process(_delta: float) -> void:
+	if not is_instance_valid(sprite):
+		return
+	# 让 sprite.global_position.y 落到整数:补偿父级(物理体)的小数残差。
+	sprite.position.y = roundf(global_position.y) - global_position.y
+
 func _physics_process(_delta: float) -> void:
 	# 持续记录最后的安全落脚点,供地刺等危险物弹回使用。
 	# 站稳一小会儿才记录;受伤无敌期间不记录(刚被弹回时别立刻覆盖);

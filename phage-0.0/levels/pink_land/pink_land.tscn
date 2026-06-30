@@ -222,7 +222,7 @@ position = Vector2(-128, 0)
 position = Vector2(430, 4)
 
 [node name="PinklandPlatform20" parent="Platforms" unique_id=1180306524 instance=ExtResource("2_mxx67")]
-position = Vector2(482, 64)
+position = Vector2(475, 54)
 
 [node name="PinklandPlatform21" parent="Platforms" unique_id=622624963 instance=ExtResource("2_mxx67")]
 position = Vector2(519, 29)

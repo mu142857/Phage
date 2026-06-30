@@ -1,0 +1,236 @@
+[gd_scene format=3 uid="uid://8ywdwik8n1tx"]
+
+[ext_resource type="Script" uid="uid://c3y58kyid33ni" path="res://levels/crimson_sanctum/crimson_sanctum.gd" id="1_cu4ki"]
+[ext_resource type="Texture2D" uid="uid://b2j8rcm4lpxij" path="res://levels/crimson_sanctum/crimson_sanctum_sculpture.png" id="2_ibwd0"]
+[ext_resource type="Texture2D" uid="uid://dwfakb6pywvr6" path="res://levels/crimson_sanctum/crimson_sanctum_bachground0.png" id="3_aw6wk"]
+[ext_resource type="Texture2D" uid="uid://dwstrlo0ac7d8" path="res://levels/crimson_sanctum/crimson_sanctum_bachground2.png" id="4_t662e"]
+[ext_resource type="Texture2D" uid="uid://dxxm72ugf7dg1" path="res://levels/crimson_sanctum/crimson_sanctum_bachground4.png" id="5_jpaia"]
+[ext_resource type="Texture2D" uid="uid://bkihod0rosvff" path="res://levels/crimson_sanctum/crimson_sanctum_bachground6.png" id="6_cav0i"]
+[ext_resource type="Texture2D" uid="uid://dldv2h4oka8or" path="res://levels/crimson_sanctum/crimson_sanctum_bachground8.png" id="7_gfdcb"]
+[ext_resource type="Texture2D" uid="uid://de0pah078uw8m" path="res://levels/crimson_sanctum/crimson_sanctum_ground.png" id="8_hjjwj"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="9_1krd8"]
+[ext_resource type="Texture2D" uid="uid://cyy2dl8l2b58a" path="res://levels/crimson_sanctum/crimson_sanctum_front.png" id="10_xotlc"]
+[ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="11_apct7"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_s7jyq"]
+
+[sub_resource type="Gradient" id="Gradient_re05l"]
+offsets = PackedFloat32Array(0.00949367, 0.68670887, 1)
+colors = PackedColorArray(0.627451, 0, 0, 1, 0.79607844, 0.25882354, 0.25882354, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6v5qj"]
+gradient = SubResource("Gradient_re05l")
+
+[sub_resource type="Gradient" id="Gradient_eq0cr"]
+offsets = PackedFloat32Array(0, 0.01898734, 0.84177214, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wqemw"]
+gradient = SubResource("Gradient_eq0cr")
+
+[sub_resource type="Curve" id="Curve_pn3i1"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.51885056), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_veux7"]
+curve = SubResource("Curve_pn3i1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_re05l"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(2, 0, 0)
+emission_shape_scale = Vector3(2, 1, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 10.0
+initial_velocity_min = 30.0
+initial_velocity_max = 50.0
+gravity = Vector3(0, 90, 0)
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_veux7")
+color_ramp = SubResource("GradientTexture1D_wqemw")
+color_initial_ramp = SubResource("GradientTexture1D_6v5qj")
+
+[sub_resource type="Gradient" id="Gradient_6v5qj"]
+colors = PackedColorArray(0.79607844, 0.25882354, 0.25882354, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_eq0cr"]
+gradient = SubResource("Gradient_6v5qj")
+
+[sub_resource type="Gradient" id="Gradient_wqemw"]
+offsets = PackedFloat32Array(0, 0.36392406, 0.65822786, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pn3i1"]
+gradient = SubResource("Gradient_wqemw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_veux7"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0.5, 0, 0)
+emission_shape_scale = Vector3(0.5, 1, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 10.0
+gravity = Vector3(0, 90, 0)
+color_ramp = SubResource("GradientTexture1D_pn3i1")
+color_initial_ramp = SubResource("GradientTexture1D_eq0cr")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7cgxf"]
+
+[sub_resource type="Gradient" id="Gradient_i5hsc"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mx8xr"]
+gradient = SubResource("Gradient_i5hsc")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="CrimsonSanctum" type="Node2D" unique_id=1076290663]
+script = ExtResource("1_cu4ki")
+
+[node name="Walls" type="Node2D" parent="." unique_id=677174986]
+z_index = 10
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=1658579035]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1082735155]
+position = Vector2(0, 80)
+shape = SubResource("WorldBoundaryShape2D_s7jyq")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1965011470]
+color = Color(0.5370987, 0.5370987, 0.5370987, 1)
+
+[node name="Buildings" type="Node2D" parent="." unique_id=837964205]
+z_index = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="Buildings" unique_id=431459206]
+position = Vector2(136, 45)
+texture = ExtResource("2_ibwd0")
+
+[node name="BloodParticles1" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=9381996]
+z_index = 2
+position = Vector2(-51, 32)
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_re05l")
+
+[node name="BloodParticles2" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=130069482]
+z_index = 2
+position = Vector2(1, 32)
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_re05l")
+
+[node name="BloodParticles3" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=982825565]
+z_index = 2
+position = Vector2(47, 32)
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_re05l")
+
+[node name="BloodParticles4" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=1984592822]
+z_index = 2
+position = Vector2(-49.5, -16)
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_veux7")
+
+[node name="BloodParticles5" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=1042730706]
+z_index = 2
+position = Vector2(2.5, -14)
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_veux7")
+
+[node name="BloodParticles6" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=70648359]
+z_index = 2
+position = Vector2(48.5, -18)
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_veux7")
+
+[node name="0point0xMoving" type="Parallax2D" parent="." unique_id=141237471]
+light_mask = 0
+scroll_scale = Vector2(0, 0)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="0point0xMoving" unique_id=535628190]
+light_mask = 0
+texture = ExtResource("3_aw6wk")
+centered = false
+
+[node name="0point2xMoving" type="Parallax2D" parent="." unique_id=463446497]
+light_mask = 2
+visibility_layer = 2
+scroll_scale = Vector2(0.2, 0.2)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving" unique_id=2118974466]
+light_mask = 0
+texture = ExtResource("4_t662e")
+centered = false
+
+[node name="0point4xMoving" type="Parallax2D" parent="." unique_id=20272788]
+scroll_scale = Vector2(0.4, 0.4)
+repeat_size = Vector2(160, 0)
+repeat_times = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving" unique_id=459805926]
+modulate = Color(0.2809047, 0.29556337, 0.29849514, 1)
+material = SubResource("CanvasItemMaterial_7cgxf")
+texture = ExtResource("5_jpaia")
+centered = false
+
+[node name="0point6xMoving" type="Parallax2D" parent="." unique_id=1654096958]
+scroll_scale = Vector2(0.6, 0.6)
+repeat_size = Vector2(160, 0)
+repeat_times = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="0point6xMoving" unique_id=1958712720]
+texture = ExtResource("6_cav0i")
+centered = false
+
+[node name="0point8xMoving" type="Parallax2D" parent="." unique_id=149702382]
+scroll_scale = Vector2(0.8, 0.8)
+repeat_size = Vector2(160, 0)
+repeat_times = 8
+
+[node name="Sprite2D" type="Sprite2D" parent="0point8xMoving" unique_id=2097741124]
+modulate = Color(0.5509582, 0.55095863, 0.5509582, 1)
+light_mask = 3
+texture = ExtResource("7_gfdcb")
+centered = false
+
+[node name="1point0xMoving" type="Parallax2D" parent="." unique_id=1995684010]
+z_index = 10
+repeat_size = Vector2(160, 0)
+repeat_times = 20
+
+[node name="Ground" type="Sprite2D" parent="1point0xMoving" unique_id=466880433]
+light_mask = 3
+position = Vector2(-160, 0)
+texture = ExtResource("8_hjjwj")
+centered = false
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("9_1krd8")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+position = Vector2(2, 3)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1839192843]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("GradientTexture2D_mx8xr")
+
+[node name="1point2xMoving" type="Parallax2D" parent="." unique_id=916675152]
+z_index = 10
+scroll_scale = Vector2(1.2, 1.2)
+repeat_size = Vector2(160, 0)
+repeat_times = 8
+
+[node name="Sprite2D" type="Sprite2D" parent="1point2xMoving" unique_id=1316742177]
+texture = ExtResource("10_xotlc")
+centered = false
+
+[node name="BackGroundSmoke" parent="." unique_id=258183138 instance=ExtResource("11_apct7")]
+light_mask = 0
+z_index = 11
+scroll_offset = Vector2(1, 0)

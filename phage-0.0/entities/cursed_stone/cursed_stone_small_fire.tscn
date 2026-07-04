@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://v5uwp827o5rm"]
+
+[ext_resource type="Script" uid="uid://ba50pc06i0wvr" path="res://entities/cursed_stone/cursed_stone_small_fire.gd" id="1_16m5f"]
+[ext_resource type="Texture2D" uid="uid://co3b663od6ukm" path="res://entities/cursed_stone/cursed_stone_small_fire-Sheet.png" id="2_j6pen"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2f6ds"]
+atlas = ExtResource("2_j6pen")
+region = Rect2(0, 0, 10, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e850x"]
+atlas = ExtResource("2_j6pen")
+region = Rect2(10, 0, 10, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5g3c"]
+atlas = ExtResource("2_j6pen")
+region = Rect2(20, 0, 10, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c52d1"]
+atlas = ExtResource("2_j6pen")
+region = Rect2(30, 0, 10, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jeml8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2f6ds")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e850x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j5g3c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c52d1")
+}],
+"loop": false,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qbg8l"]
+size = Vector2(5, 16)
+
+[node name="CursedStoneSmallFire" type="Area2D" unique_id=1421933938]
+script = ExtResource("1_16m5f")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=952790826]
+sprite_frames = SubResource("SpriteFrames_jeml8")
+autoplay = "default"
+frame = 3
+frame_progress = 1.0
+offset = Vector2(-0.5, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=461145427]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_qbg8l")
+debug_color = Color(0.7032939, 0.4433464, 0.56578004, 0.41960785)
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

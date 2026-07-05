@@ -162,18 +162,22 @@ func _check_attack_hitbox(hitbox: Area2D, damage: int) -> void:
 	if not is_instance_valid(hitbox):
 		return
 
+	# Range attack: damage every valid target overlapping the hitbox, not just the first.
+	var hit_any := false
+	var damaged: Array[Node] = []
 	for body in hitbox.get_overlapping_bodies():
-		if _try_damage_target(body, damage):
-			_apply_hit_recoil()
-			return
+		if _try_damage_target(body, damage, damaged):
+			hit_any = true
 
 	for area in hitbox.get_overlapping_areas():
-		if _try_damage_target(area, damage):
-			_apply_hit_recoil()
-			return
+		if _try_damage_target(area, damage, damaged):
+			hit_any = true
+
+	if hit_any:
+		_apply_hit_recoil()
 
 
-func _try_damage_target(target: Node, damage: int) -> bool:
+func _try_damage_target(target: Node, damage: int, damaged: Array[Node]) -> bool:
 	if target == null:
 		return false
 	if not target.is_in_group("monster") and not target.is_in_group("breakable_wall"):
@@ -181,12 +185,17 @@ func _try_damage_target(target: Node, damage: int) -> bool:
 
 	var damage_target: Node = target
 	if target.has_method("take_damage"):
-		target.call("take_damage", damage)
+		damage_target = target
 	elif target.get_parent() != null and target.get_parent().has_method("take_damage"):
 		damage_target = target.get_parent()
-		damage_target.call("take_damage", damage)
 	else:
 		return false
+
+	# Avoid double-hitting the same entity (e.g. body + its child area both overlap).
+	if damage_target in damaged:
+		return false
+	damaged.append(damage_target)
+	damage_target.call("take_damage", damage)
 
 	if damage_target is Node2D and player_ref != null:
 		var hit_x := (damage_target as Node2D).global_position.x

@@ -78,6 +78,7 @@ position = Vector2(83, 25)
 position = Vector2(18, 77)
 scene_path = "uid://8ywdwik8n1tx"
 teleport_id = 1
+active = false
 
 [node name="Label" type="Label" parent="Teleport" unique_id=1253659992]
 z_index = 100

@@ -530,6 +530,7 @@ position = Vector2(4, 78)
 scene_path = "uid://d71f5lta185c"
 teleport_id = 2
 player_light = true
+active = false
 
 [node name="Label" type="Label" parent="Silvaron" unique_id=1957081594]
 z_index = 100

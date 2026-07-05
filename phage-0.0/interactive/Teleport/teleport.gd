@@ -5,6 +5,9 @@ extends Marker2D
 @export var teleport_id: int = 0
 @export var player_light: bool = false
 @export var hint_fade_duration: float = 0.12
+## 默认是否激活。Boss 房里设为 false:未激活时不显示文字、无法交互,
+## 直到 Boss 被击败后由外部调用 activate() 打开。
+@export var active: bool = true
 
 var _player_inside: bool = false
 var _tracked_player: Player = null
@@ -21,7 +24,20 @@ func _ready() -> void:
 	set_process(false)
 
 
+## 由外部(如 Boss 被击败信号)调用,激活传送点。
+func activate() -> void:
+	if active:
+		return
+	active = true
+	# 若玩家此刻正站在传送点内且可交互,立即显示提示。
+	if _player_inside and is_instance_valid(_tracked_player) and not _tracked_player.input_locked:
+		set_process(true)
+		_set_hint_visible(true)
+
+
 func _process(_delta: float) -> void:
+	if not active:
+		return
 	if not _player_inside:
 		return
 	if not is_instance_valid(_tracked_player):
@@ -40,7 +56,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		_tracked_player = body
 		_player_inside = true
 		set_process(true)
-		if not body.input_locked:
+		if active and not body.input_locked:
 			_set_hint_visible(true)
 
 func _on_area_2d_body_exited(body: Node2D) -> void:

@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://cofbcue31d1s0"]
+
+[ext_resource type="Texture2D" uid="uid://de0pah078uw8m" path="res://levels/crimson_sanctum/crimson_sanctum_ground.png" id="1_1beab"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_nauus"]
+[ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="2_1beab"]
+[ext_resource type="PackedScene" uid="uid://brywqw6ig52fr" path="res://entities/penitent/penitent.tscn" id="3_hxnx0"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1c05a"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_8cwx5"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_b06ws"]
+
+[node name="CrimsonSanctumRoom" type="Node2D" unique_id=931264449 groups=["camera_fixed"]]
+
+[node name="Environment" type="Node2D" parent="." unique_id=1023337210]
+
+[node name="Ground" type="Sprite2D" parent="Environment" unique_id=499254987]
+light_mask = 3
+texture = ExtResource("1_1beab")
+centered = false
+
+[node name="1" type="Sprite2D" parent="Environment" unique_id=1304837322]
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment" unique_id=1252868412]
+collision_mask = 0
+
+[node name="CollisionShape2D1" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=447570193]
+position = Vector2(0, 80)
+shape = SubResource("WorldBoundaryShape2D_1c05a")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=1809014995]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_8cwx5")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=288492060]
+position = Vector2(160, 80)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_b06ws")
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("1_nauus")]
+
+[node name="BackGroundSmoke" parent="." unique_id=258183138 instance=ExtResource("2_1beab")]
+light_mask = 0
+z_index = 11
+
+[node name="ThePenitent" parent="." unique_id=1866212368 instance=ExtResource("3_hxnx0")]
+position = Vector2(36, 80)

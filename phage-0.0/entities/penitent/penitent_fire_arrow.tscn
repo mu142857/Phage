@@ -58,6 +58,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_arrow"]
+size = Vector2(5, 42)
+
 [node name="PenitentFireArrow" type="Area2D" unique_id=546777027]
 collision_layer = 0
 collision_mask = 2
@@ -67,5 +70,9 @@ script = ExtResource("1_o4o0k")
 sprite_frames = SubResource("SpriteFrames_gnbac")
 animation = &"Ready"
 offset = Vector2(0, -19.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -19.5)
+shape = SubResource("RectangleShape2D_arrow")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

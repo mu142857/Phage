@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://2lf20w05vc88"]
 
+[ext_resource type="Script" path="res://entities/penitent/scythe.gd" id="2_scythe"]
 [ext_resource type="Texture2D" uid="uid://krnx5go5p744" path="res://entities/penitent/Penitent's-scythe-Sheet.png" id="1_v0i2q"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qkwvx"]
@@ -94,6 +95,7 @@ height = 180.0
 [node name="Scythe" type="Area2D" unique_id=1163583836]
 collision_layer = 0
 collision_mask = 2
+script = ExtResource("2_scythe")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1034669465]
 sprite_frames = SubResource("SpriteFrames_tcjvl")

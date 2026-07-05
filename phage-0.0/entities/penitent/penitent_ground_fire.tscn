@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c01dwtxlci601"]
 
-[ext_resource type="Script" uid="uid://dj8hjbo0suw8" path="res://penitent_ground_fire.gd" id="1_jpdjf"]
+[ext_resource type="Script" uid="uid://dj8hjbo0suw8" path="res://entities/penitent/penitent_ground_fire.gd" id="1_jpdjf"]
 [ext_resource type="Texture2D" uid="uid://dh6jvmfm5x5nj" path="res://entities/penitent/Penitent's-Fire-Sheet.png" id="2_k763h"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fk1j2"]

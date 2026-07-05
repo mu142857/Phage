@@ -485,6 +485,8 @@ _data = {
 
 [node name="ThePenitent" type="CharacterBody2D" unique_id=1866212368]
 light_mask = 0
+collision_layer = 4
+collision_mask = 0
 script = ExtResource("1_o0g4r")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=22082512]
@@ -498,6 +500,7 @@ metadata/_edit_lock_ = true
 
 [node name="StateMachine" type="Node" parent="." unique_id=366777419]
 script = ExtResource("1_5ibpt")
+initial_state_index = 0
 
 [node name="Null(0)" type="Node" parent="StateMachine" unique_id=46761142]
 script = ExtResource("4_wmdgk")

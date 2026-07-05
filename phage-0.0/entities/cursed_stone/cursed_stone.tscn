@@ -2,7 +2,21 @@
 
 [ext_resource type="Script" uid="uid://ci2dqo3klrfxn" path="res://entities/cursed_stone/cursed_stone.gd" id="1_f3hxn"]
 [ext_resource type="Texture2D" uid="uid://br48ktg8uf64f" path="res://entities/cursed_stone/cursed_stone-Sheet.png" id="1_rdhld"]
+[ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_suvtb"]
 [ext_resource type="Script" uid="uid://bg8dd0jdo67rm" path="res://systems/state_machine/state_manager.gd" id="3_7hj4m"]
+[ext_resource type="Script" uid="uid://b6qgclxd3vwx1" path="res://entities/cursed_stone/cursed_stone_null(0).gd" id="4_wbano"]
+[ext_resource type="Script" uid="uid://2v5r6edq1e45" path="res://entities/cursed_stone/cursed_stone_small_idle(1).gd" id="5_suvtb"]
+[ext_resource type="Script" uid="uid://cmep4flb4tijc" path="res://entities/cursed_stone/cursed_stone_death(2).gd" id="6_jxekt"]
+[ext_resource type="Script" uid="uid://bvmst16q2jxwh" path="res://entities/cursed_stone/cursed_stone_small_attack(3).gd" id="7_6rn24"]
+[ext_resource type="Script" uid="uid://dp1cjqaalghh8" path="res://entities/cursed_stone/cursed_stone_small_move(4).gd" id="8_8tnbt"]
+[ext_resource type="Script" uid="uid://df3pfc37om3b8" path="res://entities/cursed_stone/cursed_stone_big_idle(5).gd" id="9_t3dal"]
+[ext_resource type="Script" uid="uid://1546jp10x4tf" path="res://entities/cursed_stone/cursed_stone_big_attack(6).gd" id="10_x5ia0"]
+[ext_resource type="Script" uid="uid://dvinsi40s4nwu" path="res://entities/cursed_stone/cursed_stone_bige_move(7).gd" id="11_4m5vl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jxekt"]
+shader = ExtResource("2_suvtb")
+shader_parameter/Enabled = true
+shader_parameter/Tint = Color(0.7588054, 0.46287936, 0.40348676, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qd0wa"]
 atlas = ExtResource("1_rdhld")
@@ -780,14 +794,16 @@ _data = {
 }
 
 [node name="CursedStone" type="CharacterBody2D" unique_id=137946063]
+light_mask = 0
+collision_layer = 4
+collision_mask = 0
 script = ExtResource("1_f3hxn")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=75616428]
+material = SubResource("ShaderMaterial_jxekt")
 sprite_frames = SubResource("SpriteFrames_7y2st")
-animation = &"BigAttack"
+animation = &"SmallIdle"
 autoplay = "SmallIdle"
-frame = 15
-frame_progress = 1.0
 offset = Vector2(-2, -30.5)
 
 [node name="CollisionShape2DSmall" type="CollisionShape2D" parent="." unique_id=848465524]
@@ -799,6 +815,7 @@ metadata/_edit_lock_ = true
 [node name="CollisionShape2DBig" type="CollisionShape2D" parent="." unique_id=1377582542]
 position = Vector2(0, -24)
 shape = SubResource("RectangleShape2D_f3hxn")
+disabled = true
 debug_color = Color(0.8039216, 0.3764706, 0.48235294, 0)
 metadata/_edit_lock_ = true
 
@@ -806,20 +823,28 @@ metadata/_edit_lock_ = true
 script = ExtResource("3_7hj4m")
 
 [node name="Null(0)" type="Node" parent="StateMachine" unique_id=291667719]
+script = ExtResource("4_wbano")
 
 [node name="SmallIdle(1)" type="Node" parent="StateMachine" unique_id=1414942744]
+script = ExtResource("5_suvtb")
 
 [node name="Death(2)" type="Node" parent="StateMachine" unique_id=1702060994]
+script = ExtResource("6_jxekt")
 
 [node name="SmallAttack(3)" type="Node" parent="StateMachine" unique_id=1788395357]
+script = ExtResource("7_6rn24")
 
 [node name="SmallMove(4)" type="Node" parent="StateMachine" unique_id=679548271]
+script = ExtResource("8_8tnbt")
 
 [node name="BigIdle(5)" type="Node" parent="StateMachine" unique_id=273680766]
+script = ExtResource("9_t3dal")
 
 [node name="BigAttack(6)" type="Node" parent="StateMachine" unique_id=555001204]
+script = ExtResource("10_x5ia0")
 
 [node name="BigeMove(7)" type="Node" parent="StateMachine" unique_id=917461910]
+script = ExtResource("11_4m5vl")
 
 [node name="PlayerCheck" type="Area2D" parent="." unique_id=1253028955]
 collision_layer = 0

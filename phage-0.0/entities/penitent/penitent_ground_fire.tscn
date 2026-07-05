@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://c01dwtxlci601"]
+
+[ext_resource type="Script" uid="uid://dj8hjbo0suw8" path="res://penitent_ground_fire.gd" id="1_jpdjf"]
+[ext_resource type="Texture2D" uid="uid://dh6jvmfm5x5nj" path="res://entities/penitent/Penitent's-Fire-Sheet.png" id="2_k763h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fk1j2"]
+atlas = ExtResource("2_k763h")
+region = Rect2(26, 0, 13, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fc72i"]
+atlas = ExtResource("2_k763h")
+region = Rect2(39, 0, 13, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aa4tx"]
+atlas = ExtResource("2_k763h")
+region = Rect2(52, 0, 13, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ivh4n"]
+atlas = ExtResource("2_k763h")
+region = Rect2(0, 47, 13, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_txd81"]
+atlas = ExtResource("2_k763h")
+region = Rect2(0, 0, 13, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lyvd3"]
+atlas = ExtResource("2_k763h")
+region = Rect2(13, 0, 13, 47)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uu66i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fk1j2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fc72i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aa4tx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ivh4n")
+}],
+"loop": false,
+"name": &"Fire",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_txd81")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lyvd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_txd81")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lyvd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_txd81")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lyvd3")
+}],
+"loop": false,
+"name": &"Ready",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jpdjf"]
+size = Vector2(12, 47)
+
+[node name="PenitentGroundFire" type="Area2D" unique_id=1985796599]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_jpdjf")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=60491429]
+sprite_frames = SubResource("SpriteFrames_uu66i")
+animation = &"Fire"
+frame = 2
+offset = Vector2(0, -23.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1587003062]
+position = Vector2(0, -23.5)
+shape = SubResource("RectangleShape2D_jpdjf")

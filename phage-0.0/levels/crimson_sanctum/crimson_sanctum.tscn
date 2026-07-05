@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="9_1krd8"]
 [ext_resource type="Texture2D" uid="uid://cyy2dl8l2b58a" path="res://levels/crimson_sanctum/crimson_sanctum_front.png" id="10_xotlc"]
 [ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="11_apct7"]
+[ext_resource type="PackedScene" uid="uid://677nk0gvwal0" path="res://entities/cursed_stone/cursed_stone.tscn" id="12_ibwd0"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_s7jyq"]
 
@@ -220,8 +221,12 @@ position = Vector2(0, -7)
 scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("GradientTexture2D_mx8xr")
 
-[node name="1point2xMoving" type="Parallax2D" parent="." unique_id=916675152]
+[node name="CursedStone" parent="." unique_id=137946063 instance=ExtResource("12_ibwd0")]
 z_index = 10
+position = Vector2(244, 80)
+
+[node name="1point2xMoving" type="Parallax2D" parent="." unique_id=916675152]
+z_index = 11
 scroll_scale = Vector2(1.2, 1.2)
 repeat_size = Vector2(160, 0)
 repeat_times = 8

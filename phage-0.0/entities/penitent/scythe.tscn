@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://2lf20w05vc88"]
+
+[ext_resource type="Texture2D" uid="uid://krnx5go5p744" path="res://entities/penitent/Penitent's-scythe-Sheet.png" id="1_v0i2q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qkwvx"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(0, 0, 241, 173)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dteuy"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(241, 0, 241, 173)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jn2uc"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(482, 0, 241, 173)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e1qeo"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(723, 0, 241, 173)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7t3ue"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(964, 0, 241, 173)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7dw2q"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(0, 173, 241, 173)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sk5ls"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(241, 173, 241, 173)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vckfv"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(482, 173, 241, 173)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kwkqr"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(723, 173, 241, 173)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1meol"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(964, 173, 241, 173)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_togml"]
+atlas = ExtResource("1_v0i2q")
+region = Rect2(0, 346, 241, 173)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tcjvl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qkwvx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dteuy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jn2uc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e1qeo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7t3ue")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7dw2q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sk5ls")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vckfv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kwkqr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1meol")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_togml")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v0i2q"]
+radius = 51.0
+height = 180.0
+
+[node name="Scythe" type="Area2D" unique_id=1163583836]
+collision_layer = 0
+collision_mask = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1034669465]
+sprite_frames = SubResource("SpriteFrames_tcjvl")
+frame = 7
+offset = Vector2(-1, -33)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1595863578]
+position = Vector2(0, -26)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_v0i2q")

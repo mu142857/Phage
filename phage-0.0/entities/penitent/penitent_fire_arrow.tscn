@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://bn2262h3sv4kl"]
+
+[ext_resource type="Script" uid="uid://brp1s4v3d8nut" path="res://entities/penitent/penitent_fire_arrow.gd" id="1_o4o0k"]
+[ext_resource type="Texture2D" uid="uid://doe42nvs4wyhe" path="res://entities/penitent/Penitent's-Spear-Sheet.png" id="1_qg7ea"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w7e0a"]
+atlas = ExtResource("1_qg7ea")
+region = Rect2(32, 0, 16, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2qu7"]
+atlas = ExtResource("1_qg7ea")
+region = Rect2(48, 0, 16, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vje00"]
+atlas = ExtResource("1_qg7ea")
+region = Rect2(16, 0, 16, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bqmrr"]
+atlas = ExtResource("1_qg7ea")
+region = Rect2(0, 0, 16, 49)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gnbac"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w7e0a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2qu7")
+}],
+"loop": false,
+"name": &"End",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vje00")
+}],
+"loop": true,
+"name": &"Loop",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bqmrr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bqmrr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bqmrr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bqmrr")
+}],
+"loop": false,
+"name": &"Ready",
+"speed": 5.0
+}]
+
+[node name="PenitentFireArrow" type="Area2D" unique_id=546777027]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_o4o0k")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=726954280]
+sprite_frames = SubResource("SpriteFrames_gnbac")
+animation = &"Ready"
+offset = Vector2(0, -19.5)
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

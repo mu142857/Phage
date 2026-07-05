@@ -40,7 +40,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qbg8l"]
-size = Vector2(5, 16)
+size = Vector2(18, 56)
 
 [node name="CursedStoneSmallFire" type="Area2D" unique_id=1421933938]
 script = ExtResource("1_16m5f")
@@ -48,8 +48,6 @@ script = ExtResource("1_16m5f")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=952790826]
 sprite_frames = SubResource("SpriteFrames_jeml8")
 autoplay = "default"
-frame = 3
-frame_progress = 1.0
 offset = Vector2(-0.5, -8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=461145427]

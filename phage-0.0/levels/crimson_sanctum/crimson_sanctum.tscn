@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://cyy2dl8l2b58a" path="res://levels/crimson_sanctum/crimson_sanctum_front.png" id="10_xotlc"]
 [ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="11_apct7"]
 [ext_resource type="PackedScene" uid="uid://677nk0gvwal0" path="res://entities/cursed_stone/cursed_stone.tscn" id="12_ibwd0"]
+[ext_resource type="Script" path="res://levels/crimson_sanctum/slime_spawner.gd" id="13_spawn"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_s7jyq"]
 
@@ -243,9 +244,37 @@ position = Vector2(0, -7)
 scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("GradientTexture2D_mx8xr")
 
-[node name="CursedStone" parent="." unique_id=137946063 instance=ExtResource("12_ibwd0")]
+[node name="CursedStone1" parent="." unique_id=137946063 instance=ExtResource("12_ibwd0")]
 z_index = 10
-position = Vector2(292, 80)
+position = Vector2(300, 80)
+
+[node name="CursedStone2" parent="." unique_id=1244622878 instance=ExtResource("12_ibwd0")]
+z_index = 10
+position = Vector2(700, 80)
+
+[node name="CursedStone3" parent="." unique_id=32259795 instance=ExtResource("12_ibwd0")]
+z_index = 10
+position = Vector2(1100, 80)
+
+[node name="CursedStone4" parent="." unique_id=277561938 instance=ExtResource("12_ibwd0")]
+z_index = 10
+position = Vector2(1500, 80)
+
+[node name="CursedStone5" parent="." unique_id=1837485723 instance=ExtResource("12_ibwd0")]
+z_index = 10
+position = Vector2(1900, 80)
+
+[node name="CursedStone6" parent="." unique_id=723854550 instance=ExtResource("12_ibwd0")]
+z_index = 10
+position = Vector2(2300, 80)
+
+[node name="CursedStone7" parent="." unique_id=1655204437 instance=ExtResource("12_ibwd0")]
+z_index = 10
+position = Vector2(2700, 80)
+
+[node name="CursedStone8" parent="." unique_id=2059180301 instance=ExtResource("12_ibwd0")]
+z_index = 10
+position = Vector2(3100, 80)
 
 [node name="1point2xMoving" type="Parallax2D" parent="." unique_id=916675152]
 z_index = 11
@@ -261,3 +290,6 @@ centered = false
 light_mask = 0
 z_index = 11
 scroll_offset = Vector2(1, 0)
+
+[node name="SlimeSpawner" type="Node" parent="." unique_id=771006001]
+script = ExtResource("13_spawn")

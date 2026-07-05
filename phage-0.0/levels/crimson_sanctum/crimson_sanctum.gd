@@ -3,7 +3,7 @@ extends Node2D
 @export var camera_limit_top: int = 0
 @export var camera_limit_bottom: int = 90
 @export var camera_limit_left: int = -80
-@export var camera_limit_right: int = 1600
+@export var camera_limit_right: int = 3200
 
 
 

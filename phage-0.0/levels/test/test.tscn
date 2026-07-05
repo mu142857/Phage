@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://dceo1silobokc"]
 
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_mucky"]
-[ext_resource type="PackedScene" uid="uid://cv1ks4b2b635s" path="res://interactive/PinklandPlatform/pinkland_platform.tscn" id="2_jtfo5"]
-[ext_resource type="Texture2D" uid="uid://btlfuik8tsvbg" path="res://interactive/PinklandPlatform/pinklandplatform-Sheet.png" id="3_mioqa"]
+[ext_resource type="PackedScene" uid="uid://buac8wwb55qaj" path="res://entities/slime/big_slime.tscn" id="2_jtfo5"]
+[ext_resource type="PackedScene" uid="uid://dn7helu251bn1" path="res://entities/slime/mid_slime.tscn" id="3_kqk0q"]
+[ext_resource type="PackedScene" uid="uid://ddtgm7qwa5rxx" path="res://entities/slime/mini_slime.tscn" id="4_twiol"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5f5au"]
 
@@ -47,30 +48,9 @@ position = Vector2(79.5, 88)
 scale = Vector2(2.703125, 1)
 texture = SubResource("GradientTexture2D_jtfo5")
 
-[node name="PinklandPlatform" parent="." unique_id=1063868611 instance=ExtResource("2_jtfo5")]
-position = Vector2(84, 39)
-script = null
+[node name="BigSlime" parent="." unique_id=604120119 instance=ExtResource("2_jtfo5")]
+position = Vector2(76, 25)
 
-[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=943166581]
-position = Vector2(279, -27)
-texture = ExtResource("3_mioqa")
-region_enabled = true
-region_rect = Rect2(389, 1230, 61, 44)
+[node name="MidSlime" parent="." unique_id=1681827966 instance=ExtResource("3_kqk0q")]
 
-[node name="Sprite2D3" type="Sprite2D" parent="." unique_id=89103608]
-position = Vector2(306, -46)
-texture = ExtResource("3_mioqa")
-region_enabled = true
-region_rect = Rect2(389, 1230, 61, 44)
-
-[node name="Sprite2D4" type="Sprite2D" parent="." unique_id=656677394]
-position = Vector2(335, -67)
-texture = ExtResource("3_mioqa")
-region_enabled = true
-region_rect = Rect2(389, 1230, 61, 44)
-
-[node name="Sprite2D5" type="Sprite2D" parent="." unique_id=738509517]
-position = Vector2(371, -87)
-texture = ExtResource("3_mioqa")
-region_enabled = true
-region_rect = Rect2(389, 1230, 61, 44)
+[node name="MiniSlime" parent="." unique_id=170462672 instance=ExtResource("4_twiol")]

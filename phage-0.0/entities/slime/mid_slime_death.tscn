@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://xw0s77pekds1"]
+
+[ext_resource type="Script" uid="uid://b0s2qp360isbk" path="res://entities/slime/mid_slime_death.gd" id="1_02d3h"]
+
+[sub_resource type="Gradient" id="Gradient_r62j1"]
+offsets = PackedFloat32Array(0.01898734, 1)
+colors = PackedColorArray(0.36602783, 0.34496912, 0.31462583, 1, 0.75594413, 0.8351969, 0.9335139, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bh0at"]
+gradient = SubResource("Gradient_r62j1")
+
+[sub_resource type="Gradient" id="Gradient_jtayy"]
+offsets = PackedFloat32Array(0, 0.20481928, 0.82530123, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ltvo8"]
+gradient = SubResource("Gradient_jtayy")
+
+[sub_resource type="Curve" id="Curve_768ej"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_kynwg"]
+curve = SubResource("Curve_768ej")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mmmcy"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(7, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 20.0
+initial_velocity_min = 50.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 300, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_kynwg")
+color_ramp = SubResource("GradientTexture1D_ltvo8")
+color_initial_ramp = SubResource("GradientTexture1D_bh0at")
+
+[node name="MidSlimeDeath" type="GPUParticles2D" unique_id=1281792815]
+z_index = 11
+emitting = false
+amount = 15
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_mmmcy")
+script = ExtResource("1_02d3h")
+
+[node name="Timer" type="Timer" parent="." unique_id=117557242]
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

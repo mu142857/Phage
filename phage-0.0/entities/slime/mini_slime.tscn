@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://ddtgm7qwa5rxx"]
+
+[ext_resource type="Script" uid="uid://by548ljnrpfv8" path="res://entities/slime/mini_slime.gd" id="1_h4vam"]
+[ext_resource type="Texture2D" uid="uid://ca7nej15y7isd" path="res://entities/slime/mini_silme.png" id="1_kimwp"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kimwp"]
+radius = 3.0
+height = 8.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h4vam"]
+radius = 2.0
+height = 6.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h4vam"]
+size = Vector2(3883, 2707)
+
+[node name="MiniSlime" type="CharacterBody2D" unique_id=170462672]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_h4vam")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=518859936]
+texture = ExtResource("1_kimwp")
+offset = Vector2(0, -2.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2033264030]
+position = Vector2(0, -2)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_kimwp")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="HitBox" type="Area2D" parent="." unique_id=2054946668]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=107577079]
+position = Vector2(0, -2)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_h4vam")
+debug_color = Color(0.9742864, 0, 0.42441753, 0)
+
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=1147111187]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=679421518]
+shape = SubResource("RectangleShape2D_h4vam")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+metadata/_edit_lock_ = true

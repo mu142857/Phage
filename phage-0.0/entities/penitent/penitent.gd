@@ -206,7 +206,7 @@ func spawn_death_effect() -> void:
 	if get_tree().current_scene == null:
 		return
 	# 死亡时在 boss 处同时放三种镰刀粒子（各自的 Timer 会自己清理）
-	for scene in [BIG_SICKLE_EFFECT, MID_SICKLE_EFFECT, SMALL_SICKLE_EFFECT]:
+	for scene: PackedScene in [BIG_SICKLE_EFFECT, MID_SICKLE_EFFECT, SMALL_SICKLE_EFFECT]:
 		if scene == null:
 			continue
 		var fx := scene.instantiate()

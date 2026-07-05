@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://buac8wwb55qaj"]
+
+[ext_resource type="Texture2D" uid="uid://5cyoxkrcfm8q" path="res://entities/slime/big_silme.png" id="1_d8gym"]
+[ext_resource type="Script" uid="uid://uaur8poqkaft" path="res://entities/slime/big_slime.gd" id="1_gdwcm"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d8gym"]
+radius = 7.0
+height = 22.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gdwcm"]
+radius = 6.0
+height = 18.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gdwcm"]
+size = Vector2(3883, 2707)
+
+[node name="BigSlime" type="CharacterBody2D" unique_id=604120119]
+script = ExtResource("1_gdwcm")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=657437598]
+texture = ExtResource("1_d8gym")
+offset = Vector2(0, -7.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=653562105]
+position = Vector2(0, -7)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_d8gym")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="HitBox" type="Area2D" parent="." unique_id=1110855133]
+rotation = -3.1415927
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=863957025]
+position = Vector2(-5.2453674e-07, 6)
+rotation = -4.712389
+shape = SubResource("CapsuleShape2D_gdwcm")
+debug_color = Color(0.9620028, 0, 0.50430644, 0)
+
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=604564181]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=744413142]
+shape = SubResource("RectangleShape2D_gdwcm")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+metadata/_edit_lock_ = true

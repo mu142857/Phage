@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://dn7helu251bn1"]
+
+[ext_resource type="Script" uid="uid://csdxpbx7ciwrb" path="res://entities/slime/mid_slime.gd" id="1_7h62h"]
+[ext_resource type="Texture2D" uid="uid://cisd1b2no8pty" path="res://entities/slime/mid_slime.png" id="1_jgubd"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jgubd"]
+radius = 4.0
+height = 14.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7h62h"]
+radius = 3.0
+height = 12.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7h62h"]
+size = Vector2(3883, 2707)
+
+[node name="MidSlime" type="CharacterBody2D" unique_id=1681827966]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_7h62h")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=682547560]
+texture = ExtResource("1_jgubd")
+offset = Vector2(0, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=549917075]
+position = Vector2(0, -4)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_jgubd")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="HitBox" type="Area2D" parent="." unique_id=1558806078]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=1693239848]
+position = Vector2(0, -4)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_7h62h")
+debug_color = Color(0.9657845, 0, 0.48161227, 0)
+
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=728863367]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=625093022]
+shape = SubResource("RectangleShape2D_7h62h")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+metadata/_edit_lock_ = true

@@ -9,16 +9,22 @@ const BIG_SCENE: PackedScene = preload("res://entities/slime/big_slime.tscn")
 
 ## 玩家附近同时存在的史莱姆上限
 @export var max_active: int = 6
-## 每隔多少秒尝试一次刷新
-@export var spawn_interval: float = 0.5
-## 每次尝试的成功概率（Terraria 也是概率刷新，避免瞬间刷满）
-@export var spawn_chance: float = 0.7
+## 刷新间隔 = interval_base + interval_per_slime * 当前史莱姆数
+## 默认：0只=0.1s，1只=0.6s，2只=1.1s，3只=1.6s，4只=2.1s，5只=2.6s，6只=3.1s
+@export var interval_base: float = 0.1
+@export var interval_per_slime: float = 0.5
+## 各级刷怪加速倍率（间隔除以它）：越后面级别刷得越多。索引 0~6 对应一~七级
+@export var level_rate_multiplier: Array[float] = [1.0, 1.2, 1.4, 1.7, 2.0, 2.4, 2.9]
+## 在玩家面向方向刷怪的概率（其余概率刷在背后），让玩家往前跑能遇到怪
+@export var facing_spawn_chance: float = 0.85
 ## 刷怪距玩家的最近/最远像素距离（屏幕外一带）
 @export var min_spawn_dist: float = 90.0
 @export var max_spawn_dist: float = 110.0
 ## 场景可行走范围；x<start 不刷怪，[start,end] 平均分 7 级
 @export var level_start_x: float = 400.0
 @export var level_end_x: float = 3200.0
+## 终点前这段像素内不刷怪（快到 3200 的最后一点）
+@export var end_no_spawn_margin: float = 160.0
 ## 地面 y（史莱姆落脚），生成时略高一点让其落下
 @export var ground_y: float = 80.0
 @export var spawn_drop_height: float = 10.0
@@ -40,21 +46,34 @@ var _time: float = 0.0
 
 func _process(delta: float) -> void:
 	_time += delta
-	if _time < spawn_interval:
+	if _time < _current_interval():
 		return
 	_time = 0.0
 	_try_spawn()
 
+## 当前刷新间隔：随屏上史莱姆数增长，再按玩家所处级别加速
+func _current_interval() -> float:
+	var n := get_tree().get_nodes_in_group("slime").size()
+	var interval := interval_base + interval_per_slime * float(n)
+	var player := _get_player()
+	if player != null:
+		interval /= _level_rate(_level_index(player.global_position.x))
+	return interval
+
+## 取该级的加速倍率（数组越界时退回 1.0）
+func _level_rate(level: int) -> float:
+	if level >= 0 and level < level_rate_multiplier.size():
+		return maxf(0.01, level_rate_multiplier[level])
+	return 1.0
+
 func _try_spawn() -> void:
-	if randf() > spawn_chance:
-		return
 	if get_tree().get_nodes_in_group("slime").size() >= max_active:
 		return
 	var player := _get_player()
 	if player == null:
 		return
 	var px := player.global_position.x
-	if px < level_start_x:
+	if px < level_start_x or px > level_end_x - end_no_spawn_margin:
 		return
 
 	var level := _level_index(px)
@@ -62,7 +81,8 @@ func _try_spawn() -> void:
 	if scene == null:
 		return
 
-	var side := 1.0 if randf() < 0.5 else -1.0
+	# 优先刷在玩家面向的方向，让往前跑的玩家能遇到怪
+	var side := _spawn_side(player)
 	var dist := randf_range(min_spawn_dist, max_spawn_dist)
 	var spawn_x := clampf(px + side * dist, 0.0, level_end_x)
 
@@ -105,6 +125,17 @@ func _pick_tint() -> Color:
 	else:
 		var base := Color("ff9484")
 		return Color.from_hsv(randf(), base.s, base.v, 1.0)
+
+## 刷怪方向：多数刷在玩家面向侧，少数刷背后
+func _spawn_side(player: Node2D) -> float:
+	var facing := 1.0
+	if "facing_direction" in player:
+		facing = signf(float(player.facing_direction))
+		if facing == 0.0:
+			facing = 1.0
+	if randf() < facing_spawn_chance:
+		return facing
+	return -facing
 
 func _get_player() -> Node2D:
 	var players := get_tree().get_nodes_in_group("player")

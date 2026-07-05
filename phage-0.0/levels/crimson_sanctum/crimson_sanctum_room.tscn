@@ -6,6 +6,8 @@
 [ext_resource type="Shader" uid="uid://dtyfaypopvdpc" path="res://asstes/shaders/silvaron.gdshader" id="2_ro5yd"]
 [ext_resource type="Texture2D" uid="uid://har3b05becxl" path="res://levels/crimson_sanctum/blood.png" id="3_4uhnd"]
 [ext_resource type="PackedScene" uid="uid://brywqw6ig52fr" path="res://entities/penitent/penitent.tscn" id="3_hxnx0"]
+[ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="7_b2i5v"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="8_hajdb"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_b2i5v"]
 seed = 52010
@@ -71,3 +73,19 @@ z_index = 11
 
 [node name="ThePenitent" parent="." unique_id=1866212368 instance=ExtResource("3_hxnx0")]
 position = Vector2(83, 25)
+
+[node name="Teleport" parent="." unique_id=1957074840 instance=ExtResource("7_b2i5v")]
+position = Vector2(18, 77)
+scene_path = "uid://8ywdwik8n1tx"
+teleport_id = 1
+
+[node name="Label" type="Label" parent="Teleport" unique_id=1253659992]
+z_index = 100
+offset_left = -10.0
+offset_top = -20.0
+offset_right = 23.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
+theme_override_fonts/font = ExtResource("8_hajdb")
+theme_override_font_sizes/font_size = 10
+text = "返回"

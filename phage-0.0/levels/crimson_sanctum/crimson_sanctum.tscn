@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c3y58kyid33ni" path="res://levels/crimson_sanctum/crimson_sanctum.gd" id="1_cu4ki"]
 [ext_resource type="Texture2D" uid="uid://b2j8rcm4lpxij" path="res://levels/crimson_sanctum/crimson_sanctum_sculpture.png" id="2_ibwd0"]
 [ext_resource type="Texture2D" uid="uid://dwfakb6pywvr6" path="res://levels/crimson_sanctum/crimson_sanctum_bachground0.png" id="3_aw6wk"]
+[ext_resource type="Texture2D" uid="uid://bc47v8ckilmad" path="res://levels/crimson_sanctum/single_crimson_sanctum_sculpture.png" id="3_cav0i"]
 [ext_resource type="Texture2D" uid="uid://dwstrlo0ac7d8" path="res://levels/crimson_sanctum/crimson_sanctum_bachground2.png" id="4_t662e"]
 [ext_resource type="Texture2D" uid="uid://dxxm72ugf7dg1" path="res://levels/crimson_sanctum/crimson_sanctum_bachground4.png" id="5_jpaia"]
 [ext_resource type="Texture2D" uid="uid://bkihod0rosvff" path="res://levels/crimson_sanctum/crimson_sanctum_bachground6.png" id="6_cav0i"]
@@ -14,9 +15,15 @@
 [ext_resource type="Texture2D" uid="uid://cyy2dl8l2b58a" path="res://levels/crimson_sanctum/crimson_sanctum_front.png" id="10_xotlc"]
 [ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="11_apct7"]
 [ext_resource type="PackedScene" uid="uid://677nk0gvwal0" path="res://entities/cursed_stone/cursed_stone.tscn" id="12_ibwd0"]
-[ext_resource type="Script" path="res://levels/crimson_sanctum/slime_spawner.gd" id="13_spawn"]
+[ext_resource type="Script" uid="uid://pshpqjsyyjq0" path="res://levels/crimson_sanctum/slime_spawner.gd" id="13_spawn"]
+[ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="17_hjjwj"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="18_1krd8"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_s7jyq"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_cav0i"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gfdcb"]
 
 [sub_resource type="Gradient" id="Gradient_re05l"]
 offsets = PackedFloat32Array(0.00949367, 0.68670887, 1)
@@ -112,9 +119,19 @@ z_index = 10
 [node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=1658579035]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1082735155]
+[node name="CollisionShape2D1" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1082735155]
 position = Vector2(0, 80)
 shape = SubResource("WorldBoundaryShape2D_s7jyq")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=733209494]
+position = Vector2(-80, 0)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_cav0i")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=671858909]
+position = Vector2(3200, 0)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_gfdcb")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1965011470]
 color = Color(0.5370987, 0.5370987, 0.5370987, 1)
@@ -122,45 +139,55 @@ color = Color(0.5370987, 0.5370987, 0.5370987, 1)
 [node name="Buildings" type="Node2D" parent="." unique_id=837964205]
 z_index = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="Buildings" unique_id=431459206]
+[node name="Sculpture1" type="Sprite2D" parent="Buildings" unique_id=431459206]
 position = Vector2(136, 45)
 texture = ExtResource("2_ibwd0")
 
-[node name="BloodParticles1" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=9381996]
+[node name="BloodParticles1" type="GPUParticles2D" parent="Buildings/Sculpture1" unique_id=9381996]
 z_index = 2
 position = Vector2(-51, 32)
 amount = 20
 process_material = SubResource("ParticleProcessMaterial_re05l")
 
-[node name="BloodParticles2" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=130069482]
+[node name="BloodParticles2" type="GPUParticles2D" parent="Buildings/Sculpture1" unique_id=130069482]
 z_index = 2
 position = Vector2(1, 32)
 amount = 20
 process_material = SubResource("ParticleProcessMaterial_re05l")
 
-[node name="BloodParticles3" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=982825565]
+[node name="BloodParticles3" type="GPUParticles2D" parent="Buildings/Sculpture1" unique_id=982825565]
 z_index = 2
 position = Vector2(47, 32)
 amount = 20
 process_material = SubResource("ParticleProcessMaterial_re05l")
 
-[node name="BloodParticles4" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=1984592822]
+[node name="BloodParticles4" type="GPUParticles2D" parent="Buildings/Sculpture1" unique_id=1984592822]
 z_index = 2
 position = Vector2(-49.5, -16)
 amount = 3
 process_material = SubResource("ParticleProcessMaterial_veux7")
 
-[node name="BloodParticles5" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=1042730706]
+[node name="BloodParticles5" type="GPUParticles2D" parent="Buildings/Sculpture1" unique_id=1042730706]
 z_index = 2
 position = Vector2(2.5, -14)
 amount = 3
 process_material = SubResource("ParticleProcessMaterial_veux7")
 
-[node name="BloodParticles6" type="GPUParticles2D" parent="Buildings/Sprite2D" unique_id=70648359]
+[node name="BloodParticles6" type="GPUParticles2D" parent="Buildings/Sculpture1" unique_id=70648359]
 z_index = 2
 position = Vector2(48.5, -18)
 amount = 3
 process_material = SubResource("ParticleProcessMaterial_veux7")
+
+[node name="Sculpture2" type="Sprite2D" parent="Buildings" unique_id=1980587959]
+position = Vector2(3195, 45)
+texture = ExtResource("3_cav0i")
+
+[node name="BloodParticles" type="GPUParticles2D" parent="Buildings/Sculpture2" unique_id=185220341]
+z_index = 2
+position = Vector2(-15, 32)
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_re05l")
 
 [node name="0point0xMoving" type="Parallax2D" parent="." unique_id=141237471]
 light_mask = 0
@@ -219,7 +246,7 @@ centered = false
 [node name="1point0xMoving" type="Parallax2D" parent="." unique_id=1995684010]
 z_index = 10
 repeat_size = Vector2(160, 0)
-repeat_times = 20
+repeat_times = 40
 
 [node name="Ground" type="Sprite2D" parent="1point0xMoving" unique_id=466880433]
 light_mask = 3
@@ -246,35 +273,35 @@ texture = SubResource("GradientTexture2D_mx8xr")
 
 [node name="CursedStone1" parent="." unique_id=137946063 instance=ExtResource("12_ibwd0")]
 z_index = 10
-position = Vector2(300, 80)
+position = Vector2(275, 80)
 
 [node name="CursedStone2" parent="." unique_id=1244622878 instance=ExtResource("12_ibwd0")]
 z_index = 10
-position = Vector2(700, 80)
+position = Vector2(675, 80)
 
 [node name="CursedStone3" parent="." unique_id=32259795 instance=ExtResource("12_ibwd0")]
 z_index = 10
-position = Vector2(1100, 80)
+position = Vector2(1075, 80)
 
 [node name="CursedStone4" parent="." unique_id=277561938 instance=ExtResource("12_ibwd0")]
 z_index = 10
-position = Vector2(1500, 80)
+position = Vector2(1475, 80)
 
 [node name="CursedStone5" parent="." unique_id=1837485723 instance=ExtResource("12_ibwd0")]
 z_index = 10
-position = Vector2(1900, 80)
+position = Vector2(1875, 80)
 
 [node name="CursedStone6" parent="." unique_id=723854550 instance=ExtResource("12_ibwd0")]
 z_index = 10
-position = Vector2(2300, 80)
+position = Vector2(2275, 80)
 
 [node name="CursedStone7" parent="." unique_id=1655204437 instance=ExtResource("12_ibwd0")]
 z_index = 10
-position = Vector2(2700, 80)
+position = Vector2(2675, 80)
 
 [node name="CursedStone8" parent="." unique_id=2059180301 instance=ExtResource("12_ibwd0")]
 z_index = 10
-position = Vector2(3100, 80)
+position = Vector2(3075, 80)
 
 [node name="1point2xMoving" type="Parallax2D" parent="." unique_id=916675152]
 z_index = 11
@@ -293,3 +320,19 @@ scroll_offset = Vector2(1, 0)
 
 [node name="SlimeSpawner" type="Node" parent="." unique_id=771006001]
 script = ExtResource("13_spawn")
+
+[node name="Teleport" parent="." unique_id=1957074840 instance=ExtResource("17_hjjwj")]
+position = Vector2(3182, 78)
+scene_path = "uid://cofbcue31d1s0"
+teleport_id = 1
+
+[node name="Label" type="Label" parent="Teleport" unique_id=1769069361]
+z_index = 100
+offset_left = -10.0
+offset_top = -20.0
+offset_right = 23.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
+theme_override_fonts/font = ExtResource("18_1krd8")
+theme_override_font_sizes/font_size = 10
+text = "献祭"

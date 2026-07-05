@@ -32,12 +32,12 @@ const STATE_BIG_ATTACK: int = 6
 const STATE_BIG_MOVE: int = 7
 
 # --- 数值 --------------------------------------------------------------------
-@export var small_max_health: int = 500
-@export var big_max_health: int = 3000
+@export var small_max_health: int = 200
+@export var big_max_health: int = 1000
 
 @export var wake_distance: float = 50.0     # 玩家靠近多少像素唤醒
 @export var retreat_distance: float = 20.0  # 小于此距离就远离玩家
-@export var transform_delay: float = 20.0   # 唤醒后固定多少秒【无条件】变大（不受距离影响）
+@export var transform_delay: float = 8.0   # 唤醒后固定多少秒【无条件】变大（不受距离影响）
 @export var ground_y: float = 80.0          # 地板高度（地火落点用）
 
 # --- 横向活动边界（防止走出场地，按关卡调）---------------------------------

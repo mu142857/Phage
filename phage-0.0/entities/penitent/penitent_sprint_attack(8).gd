@@ -1,7 +1,8 @@
 # =============================================================================
-# SprintAttack(8)  —  横向冲刺穿场，边冲边甩长镰(Scythe)，到对面边缘结束 → Idle
+# SprintAttack(8)  —  横向冲刺穿场，甩一把长镰(Scythe)，到对面边缘结束 → Idle
 # =============================================================================
-# 中段更快（acc 加速）。每当血量跨过一个阶段线，本次冲刺结束时排队一波地火。
+# 每次冲刺只甩一把长镰（进场时甩）。中段更快（acc 加速）。
+# 每当血量跨过一个阶段线，本次冲刺结束时排队一波地火。
 # =============================================================================
 extends BasicState
 
@@ -9,14 +10,12 @@ const SCYTHE_SCENE: PackedScene = preload("res://entities/penitent/scythe.tscn")
 
 @export var base_speed: float = 24.0        # 起步速度 px/s
 @export var accel_bonus: float = 34.0       # 中段最高额外速度
-@export var scythe_interval: float = 0.45   # 每隔多久甩一把长镰
-@export var scythe_scale: float = 0.25      # 长镰相对 boss 的缩放（旧版 1/4）
-@export var scythe_offset: Vector2 = Vector2(0, -20)
+@export var scythe_scale: float = 1.0       # 长镰缩放（=1 不缩小）
+@export var scythe_offset: Vector2 = Vector2(0, 0)   # 相对 boss 原点；(0,0)=和 boss 同坐标
 
 @onready var ani_2d: AnimatedSprite2D = $"../../AnimatedSprite2D"
 @onready var monster: CharacterBody2D = $"../.."
 
-var _scythe_timer: float = 0.0
 var last_health_stage: int = 1
 
 
@@ -27,16 +26,10 @@ func enter() -> void:
 	monster.apply_facing()
 	if is_instance_valid(ani_2d):
 		ani_2d.play(&"Idle")
-	_scythe_timer = 0.0  # 一进场先甩一把
+	_spawn_scythe()  # 每次冲刺只甩一把
 
 
 func process(delta: float) -> void:
-	# 甩长镰
-	_scythe_timer -= delta
-	if _scythe_timer <= 0.0:
-		_scythe_timer = scythe_interval
-		_spawn_scythe()
-
 	# 横向移动（中段加速）
 	monster.global_position.x += float(monster.direct) * _current_speed() * delta
 

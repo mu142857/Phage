@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://w74bpqlu4rl6"]
+
+[ext_resource type="Texture2D" uid="uid://cnoj2kas56fhq" path="res://entities/penitent/penitent_explossive_particle.png" id="1_hqa6c"]
+[ext_resource type="Script" uid="uid://be65iv4n1ntod" path="res://entities/penitent/mid_sickle_effect.gd" id="2_hqa6c"]
+
+[sub_resource type="Gradient" id="Gradient_ix0ag"]
+offsets = PackedFloat32Array(0, 0.46518987, 1)
+colors = PackedColorArray(0.8, 0.14509805, 0, 1, 1, 0.39215687, 0.25490198, 1, 0.9940677, 0.9407177, 0.95479137, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_opwdk"]
+gradient = SubResource("Gradient_ix0ag")
+
+[sub_resource type="Gradient" id="Gradient_erk23"]
+offsets = PackedFloat32Array(0, 0.1329114, 0.59177214, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_m4ef8"]
+gradient = SubResource("Gradient_erk23")
+
+[sub_resource type="Curve" id="Curve_jb56i"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.9945947, 0.485977), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_dfv34"]
+curve = SubResource("Curve_jb56i")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ir13g"]
+particle_flag_disable_z = true
+emission_shape = 2
+emission_sphere_radius = 6.49
+angle_min = 90.000015
+angle_max = 90.000015
+direction = Vector3(0, -1, 0)
+spread = 10.0
+initial_velocity_min = 50.0
+initial_velocity_max = 150.0
+gravity = Vector3(0, 200, 0)
+scale_curve = SubResource("CurveTexture_dfv34")
+color_ramp = SubResource("GradientTexture1D_m4ef8")
+color_initial_ramp = SubResource("GradientTexture1D_opwdk")
+
+[node name="MidSickleEffect" type="GPUParticles2D" unique_id=1245071231]
+emitting = false
+amount = 7
+texture = ExtResource("1_hqa6c")
+lifetime = 0.8
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_ir13g")
+script = ExtResource("2_hqa6c")
+
+[node name="Timer" type="Timer" parent="." unique_id=386311325]
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

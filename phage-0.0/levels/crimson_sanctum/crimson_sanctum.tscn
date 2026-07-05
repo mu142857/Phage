@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://dldv2h4oka8or" path="res://levels/crimson_sanctum/crimson_sanctum_bachground8.png" id="7_gfdcb"]
 [ext_resource type="Texture2D" uid="uid://de0pah078uw8m" path="res://levels/crimson_sanctum/crimson_sanctum_ground.png" id="8_hjjwj"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="9_1krd8"]
+[ext_resource type="Texture2D" uid="uid://har3b05becxl" path="res://levels/crimson_sanctum/blood.png" id="9_aw6wk"]
+[ext_resource type="Shader" uid="uid://dtyfaypopvdpc" path="res://asstes/shaders/silvaron.gdshader" id="9_t662e"]
 [ext_resource type="Texture2D" uid="uid://cyy2dl8l2b58a" path="res://levels/crimson_sanctum/crimson_sanctum_front.png" id="10_xotlc"]
 [ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="11_apct7"]
 [ext_resource type="PackedScene" uid="uid://677nk0gvwal0" path="res://entities/cursed_stone/cursed_stone.tscn" id="12_ibwd0"]
@@ -78,6 +80,18 @@ color_ramp = SubResource("GradientTexture1D_pn3i1")
 color_initial_ramp = SubResource("GradientTexture1D_eq0cr")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7cgxf"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jpaia"]
+seed = 52010
+frequency = 0.012
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_cav0i"]
+noise = SubResource("FastNoiseLite_jpaia")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gfdcb"]
+shader = ExtResource("9_t662e")
+shader_parameter/water_colour = Color(1, 0, 0, 0.39215687)
+shader_parameter/wave_noise = SubResource("NoiseTexture2D_cav0i")
 
 [sub_resource type="Gradient" id="Gradient_i5hsc"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -208,8 +222,16 @@ repeat_times = 20
 
 [node name="Ground" type="Sprite2D" parent="1point0xMoving" unique_id=466880433]
 light_mask = 3
-position = Vector2(-160, 0)
 texture = ExtResource("8_hjjwj")
+centered = false
+
+[node name="Blood" type="Sprite2D" parent="1point0xMoving" unique_id=681667471]
+light_mask = 0
+z_index = 1
+material = SubResource("ShaderMaterial_gfdcb")
+position = Vector2(0, 80)
+scale = Vector2(1, -0.033333343)
+texture = ExtResource("9_aw6wk")
 centered = false
 
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("9_1krd8")]
@@ -223,7 +245,7 @@ texture = SubResource("GradientTexture2D_mx8xr")
 
 [node name="CursedStone" parent="." unique_id=137946063 instance=ExtResource("12_ibwd0")]
 z_index = 10
-position = Vector2(244, 80)
+position = Vector2(292, 80)
 
 [node name="1point2xMoving" type="Parallax2D" parent="." unique_id=916675152]
 z_index = 11

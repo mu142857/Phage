@@ -30,12 +30,15 @@ const STATE_SKILL: int = 7
 const STATE_SPRINT_ATTACK: int = 8
 const STATE_UNDERGROUND_FIRE: int = 9
 
-const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/penitent/the_penitent_effect.tscn")
+# 死亡特效 = 同时放大/中/小镰刀三种粒子
+const BIG_SICKLE_EFFECT: PackedScene = preload("res://entities/penitent/big_sickle_effect.tscn")
+const MID_SICKLE_EFFECT: PackedScene = preload("res://entities/penitent/mid_sickle_effect.tscn")
+const SMALL_SICKLE_EFFECT: PackedScene = preload("res://entities/penitent/small_sickle_effect.tscn")
 const FIRE_ARROW_SCENE: PackedScene = preload("res://entities/penitent/penitent_fire_arrow.tscn")
 
 # --- 数值 --------------------------------------------------------------------
-@export var max_health: int = 300
-@export var health: int = 300
+@export var max_health: int = 4200
+@export var health: int = 4200
 
 # --- 竞技场坐标（160×90 固定场地，按需在编辑器里改）------------------------
 @export var bound_min_x: float = 12.0     # 可活动最左 x
@@ -44,6 +47,8 @@ const FIRE_ARROW_SCENE: PackedScene = preload("res://entities/penitent/penitent_
 @export var ceiling_y: float = 4.0        # 天降火矢的生成高度
 @export var hover_y: float = 34.0         # 施法时悬浮高度
 @export var edge_margin: float = 8.0      # 冲刺起手离边缘的距离
+@export var spear_min_x: float = 5.0     # 天降长矛随机落点范围（屏幕内 5~155）
+@export var spear_max_x: float = 155.0
 
 # --- 运行时 ------------------------------------------------------------------
 var direct: int = 1                       # 朝向：1=右 / -1=左
@@ -53,11 +58,10 @@ var initial_battlecry_shown: bool = false
 var ready_to_underground_fire: bool = false
 var rng := RandomNumberGenerator.new()
 
-# --- 火矢雨（并行系统，与状态机无关）----------------------------------------
-var _arrow_timer: float = 0.0
 var _hit_flash_tween: Tween
 
 @onready var ani_2d: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+@onready var boss_health_ui = get_node_or_null("BossHealthUI")
 
 
 func _ready() -> void:
@@ -69,11 +73,17 @@ func _ready() -> void:
 	health = clampi(health, 0, max_health)
 	global_position.y = floor_y
 
+	# 复制材质并关掉受击闪白 shader（每实例独立一份，默认不闪；受击时才由 HitFlash 打开）
+	if ani_2d != null and ani_2d.material != null:
+		ani_2d.material = ani_2d.material.duplicate()
+		if ani_2d.material is ShaderMaterial:
+			(ani_2d.material as ShaderMaterial).set_shader_parameter("Enabled", false)
+
 	if has_node("StateMachine"):
 		current_state_id = $StateMachine.initial_state_index
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if health <= 0:
 		return
 	# 出场前：停在 Null 里等玩家进场，玩家一出现就触发出场战吼（只一次）
@@ -83,7 +93,6 @@ func _physics_process(delta: float) -> void:
 			change_state(STATE_BATTLECRY)
 		return
 	global_position.x = clampf(global_position.x, bound_min_x, bound_max_x)
-	_update_arrow_rain(delta)
 
 
 # =============================================================================
@@ -97,20 +106,22 @@ func take_damage(value: int) -> void:
 		fighting = true
 		change_state(STATE_BATTLECRY)
 	health = clampi(health - value, 0, max_health)
+	if boss_health_ui != null:
+		boss_health_ui.refresh(health, max_health, true)   # 刷新血条 + 受击红闪
 	_play_hit_flash()
+	if fighting:
+		_drop_spears()   # 每次被成功击中 → 天降长矛
 	if health <= 0:
 		change_state(STATE_DEATH)
 
 
-# 无 shader 也能看到的轻量受击闪白（往亮里推一下再缓回）
+# 受击闪白：走 HitEffectPlayer 的 HitFlash（开一下 hurt shader 再关）
 func _play_hit_flash() -> void:
-	if not is_instance_valid(ani_2d):
+	if not has_node("HitEffectPlayer"):
 		return
-	if is_instance_valid(_hit_flash_tween):
-		_hit_flash_tween.kill()
-	ani_2d.modulate = Color(2.2, 2.2, 2.2, 1.0)
-	_hit_flash_tween = create_tween()
-	_hit_flash_tween.tween_property(ani_2d, "modulate", Color(1, 1, 1, 1), 0.12)
+	if not $HitEffectPlayer.active:
+		$HitEffectPlayer.active = true
+	$HitEffectPlayer.play("HitFlash")
 
 
 # =============================================================================
@@ -123,49 +134,18 @@ func change_state(state_id: int) -> void:
 
 
 # =============================================================================
-# 天降火矢雨：血越少发数越多、间隔越长（沿用旧 ArrowTimer 手感）
+# 天降长矛：每次玩家成功击中 boss，在屏幕内随机落 3~6 根（血越少越多）
 # =============================================================================
-func _update_arrow_rain(delta: float) -> void:
-	if not fighting:
-		return
-	if current_state_id == STATE_BATTLECRY or current_state_id == STATE_DEATH or current_state_id == STATE_NULL:
-		return
-	var player := get_player()
-	if player == null:
-		return
-	_arrow_timer -= delta
-	if _arrow_timer > 0.0:
-		return
-	_arrow_timer = _arrow_interval()
-	_fire_arrow_volley(player)
-
-
-func _fire_arrow_volley(player: Node2D) -> void:
+func _drop_spears() -> void:
 	if FIRE_ARROW_SCENE == null or get_tree().current_scene == null:
 		return
-	var px := player.global_position.x
-	for off in _arrow_offsets():
-		var arrow := FIRE_ARROW_SCENE.instantiate()
-		get_tree().current_scene.add_child(arrow)
-		if arrow is Node2D:
-			(arrow as Node2D).global_position = Vector2(clampf(px + off, bound_min_x, bound_max_x), ceiling_y)
-
-
-# 每波火矢的落点相对玩家的 x 偏移（对称左右），随血量阶段变多变宽
-func _arrow_offsets() -> Array:
-	match health_tier():
-		1: return [-7.0, 7.0]
-		2: return [-9.0, 9.0, -14.0, 14.0]
-		3: return [-10.0, 10.0, -22.0, 22.0, -28.0, 28.0]
-		_: return [-16.0, 16.0, -20.0, 20.0, -24.0, 24.0, -28.0, 28.0]
-
-
-func _arrow_interval() -> float:
-	match health_tier():
-		1: return 3.0
-		2: return 3.8
-		3: return 4.8
-		_: return 5.5
+	var count := clampi(health_tier(), 1, 3)   # 1~3 根，血越少越多
+	for i in count:
+		var x := rng.randf_range(spear_min_x, spear_max_x)
+		var spear := FIRE_ARROW_SCENE.instantiate()
+		get_tree().current_scene.add_child(spear)
+		if spear is Node2D:
+			(spear as Node2D).global_position = Vector2(x, ceiling_y)
 
 
 # =============================================================================
@@ -223,18 +203,18 @@ func spawn_in_world(node: Node) -> void:
 
 
 func spawn_death_effect() -> void:
-	if DEATH_EFFECT_SCENE == null or get_tree().current_scene == null:
+	if get_tree().current_scene == null:
 		return
-	var effect := DEATH_EFFECT_SCENE.instantiate()
-	get_tree().current_scene.add_child(effect)
-	if effect is Node2D:
-		(effect as Node2D).global_position = global_position
-	if effect is GPUParticles2D:
-		(effect as GPUParticles2D).one_shot = true
-		(effect as GPUParticles2D).emitting = true
-	# boss 随即 queue_free，用 tree 计时器托管把一次性特效清掉
-	# （effect 若提前被释放，Godot 会自动断开这个连接，安全）
-	get_tree().create_timer(3.0).timeout.connect(effect.queue_free)
+	# 死亡时在 boss 处同时放三种镰刀粒子（各自的 Timer 会自己清理）
+	for scene in [BIG_SICKLE_EFFECT, MID_SICKLE_EFFECT, SMALL_SICKLE_EFFECT]:
+		if scene == null:
+			continue
+		var fx := scene.instantiate()
+		get_tree().current_scene.add_child(fx)
+		if fx is Node2D:
+			(fx as Node2D).global_position = global_position
+		if fx is GPUParticles2D:
+			(fx as GPUParticles2D).emitting = true
 
 
 # =============================================================================

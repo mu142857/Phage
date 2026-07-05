@@ -12,8 +12,9 @@ extends BasicState
 @export var shake_amount: float = 3.0
 @export var zoom_amount: float = 1.15
 @export var zoom_duration: float = 0.2
-@export var camera_focus_position: Vector2 = Vector2(80.0, 45.0)  # 竞技场中心（160×90）
+@export var camera_focus_offset: Vector2 = Vector2(0.0, -14.0)  # 运镜聚焦点相对 boss 的偏移
 @export var camera_move_duration: float = 0.25
+@export var move_camera: bool = false   # 固定相机的竞技场默认关；开了才做聚焦+放大
 
 @onready var ani_2d: AnimatedSprite2D = $"../../AnimatedSprite2D"
 @onready var monster: CharacterBody2D = $"../.."
@@ -35,8 +36,9 @@ func enter() -> void:
 	_show_intro = not monster.initial_battlecry_shown
 	if _show_intro:
 		monster.initial_battlecry_shown = true
-		Game.set_position_override_smooth(camera_focus_position, camera_move_duration)
-		Game.zoom_to(Vector2(zoom_amount, zoom_amount), zoom_duration)
+		if move_camera:
+			Game.set_position_override_smooth(monster.global_position + camera_focus_offset, camera_move_duration)
+			Game.zoom_to(Vector2(zoom_amount, zoom_amount), zoom_duration)
 		# _set_boss_name_visible(true)   # ← 关卡里做好 Front 名字层后解开
 
 	_set_player_lock(true)
@@ -53,11 +55,12 @@ func exit() -> void:
 	_set_player_lock(false)
 	# _set_boss_name_visible(false)     # ← 同上
 	Game.stop_shake()
-	if _show_intro:
-		Game.clear_position_override_smooth(camera_move_duration)
-	else:
-		Game.clear_position_override()
-	Game.reset_zoom(zoom_duration)
+	if move_camera:
+		if _show_intro:
+			Game.clear_position_override_smooth(camera_move_duration)
+		else:
+			Game.clear_position_override()
+		Game.reset_zoom(zoom_duration)
 
 
 func _start_timer() -> void:

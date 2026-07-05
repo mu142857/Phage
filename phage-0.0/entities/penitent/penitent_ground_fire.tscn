@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c01dwtxlci601"]
 
-[ext_resource type="Script" uid="uid://dj8hjbo0suw8" path="res://entities/penitent/penitent_ground_fire.gd" id="1_jpdjf"]
+[ext_resource type="Script" uid="uid://dnwmolj8fjxtu" path="res://entities/penitent/penitent_ground_fire.gd" id="1_jpdjf"]
 [ext_resource type="Texture2D" uid="uid://dh6jvmfm5x5nj" path="res://entities/penitent/Penitent's-Fire-Sheet.png" id="2_k763h"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fk1j2"]
@@ -43,7 +43,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_ivh4n")
 }],
 "loop": false,
-"name": &"Fire",
+"name": &"GroundFire",
 "speed": 6.0
 }, {
 "frames": [{
@@ -80,10 +80,11 @@ script = ExtResource("1_jpdjf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=60491429]
 sprite_frames = SubResource("SpriteFrames_uu66i")
-animation = &"Fire"
-frame = 2
+animation = &"GroundFire"
 offset = Vector2(0, -23.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1587003062]
 position = Vector2(0, -23.5)
 shape = SubResource("RectangleShape2D_jpdjf")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -4,57 +4,57 @@
 [ext_resource type="Texture2D" uid="uid://brfh7ydbcjoxc" path="res://entities/penitent/big_sickle_sheet.png" id="2_tfaqk"]
 [ext_resource type="Script" uid="uid://1m03rq0axjlc" path="res://entities/penitent/sickle_line_2d.gd" id="3_tfaqk"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_tfaqk"]
+atlas = ExtResource("2_tfaqk")
+region = Rect2(90, 0, 30, 29)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_4dost"]
 atlas = ExtResource("2_tfaqk")
-region = Rect2(180, 0, 60, 59)
+region = Rect2(120, 0, 30, 29)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vi2su"]
 atlas = ExtResource("2_tfaqk")
-region = Rect2(240, 0, 60, 59)
+region = Rect2(0, 29, 30, 29)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j3i54"]
 atlas = ExtResource("2_tfaqk")
-region = Rect2(0, 59, 60, 59)
+region = Rect2(0, 0, 30, 29)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2b72k"]
 atlas = ExtResource("2_tfaqk")
-region = Rect2(0, 0, 60, 59)
+region = Rect2(30, 0, 30, 29)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7mgam"]
 atlas = ExtResource("2_tfaqk")
-region = Rect2(60, 0, 60, 59)
+region = Rect2(60, 0, 30, 29)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_450ca"]
 atlas = ExtResource("2_tfaqk")
-region = Rect2(120, 0, 60, 59)
+region = Rect2(30, 29, 30, 29)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fcks8"]
 atlas = ExtResource("2_tfaqk")
-region = Rect2(60, 59, 60, 59)
+region = Rect2(60, 29, 30, 29)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ohkmi"]
 atlas = ExtResource("2_tfaqk")
-region = Rect2(120, 59, 60, 59)
+region = Rect2(90, 29, 30, 29)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_13sxi"]
 atlas = ExtResource("2_tfaqk")
-region = Rect2(180, 59, 60, 59)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kxys1"]
-atlas = ExtResource("2_tfaqk")
-region = Rect2(240, 59, 60, 59)
+region = Rect2(120, 29, 30, 29)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7igqv"]
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_tfaqk")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_4dost")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vi2su")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j3i54")
 }],
 "loop": true,
 "name": &"Spin",
@@ -62,19 +62,22 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_j3i54")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_2b72k")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7mgam")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_450ca")
 }],
 "loop": false,
 "name": &"Start",
 "speed": 10.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_450ca")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fcks8")
 }, {
@@ -83,9 +86,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_13sxi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kxys1")
 }],
 "loop": false,
 "name": &"Stop",
@@ -93,7 +93,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ibs6k"]
-radius = 29.017237
+radius = 15.0
 
 [sub_resource type="Curve" id="Curve_tfaqk"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.6772152, 0.41711336), 0.95149606, 0.95149606, 0, 0, Vector2(1, 1), 1.6010908, 0.0, 0, 0]
@@ -110,7 +110,7 @@ script = ExtResource("1_s5wq0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1459197427]
 sprite_frames = SubResource("SpriteFrames_7igqv")
-animation = &"Spin"
+animation = &"Stop"
 offset = Vector2(-0.5, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1221578025]
@@ -119,7 +119,7 @@ shape = SubResource("CircleShape2D_ibs6k")
 [node name="Node" type="Node" parent="." unique_id=109075949]
 
 [node name="Line2D" type="Line2D" parent="Node" unique_id=1131497570]
-width = 60.0
+width = 15.0
 width_curve = SubResource("Curve_tfaqk")
 gradient = SubResource("Gradient_4dost")
 script = ExtResource("3_tfaqk")

@@ -1,51 +1,51 @@
 [gd_scene format=3 uid="uid://2lf20w05vc88"]
 
-[ext_resource type="Script" path="res://entities/penitent/scythe.gd" id="2_scythe"]
 [ext_resource type="Texture2D" uid="uid://krnx5go5p744" path="res://entities/penitent/Penitent's-scythe-Sheet.png" id="1_v0i2q"]
+[ext_resource type="Script" uid="uid://bbiwejy1cvyfb" path="res://entities/penitent/scythe.gd" id="2_scythe"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qkwvx"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(0, 0, 241, 173)
+region = Rect2(0, 0, 40, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dteuy"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(241, 0, 241, 173)
+region = Rect2(40, 0, 40, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jn2uc"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(482, 0, 241, 173)
+region = Rect2(80, 0, 40, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e1qeo"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(723, 0, 241, 173)
+region = Rect2(120, 0, 40, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7t3ue"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(964, 0, 241, 173)
+region = Rect2(160, 0, 40, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7dw2q"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(0, 173, 241, 173)
+region = Rect2(0, 48, 40, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sk5ls"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(241, 173, 241, 173)
+region = Rect2(40, 48, 40, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vckfv"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(482, 173, 241, 173)
+region = Rect2(80, 48, 40, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kwkqr"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(723, 173, 241, 173)
+region = Rect2(120, 48, 40, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1meol"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(964, 173, 241, 173)
+region = Rect2(160, 48, 40, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_togml"]
 atlas = ExtResource("1_v0i2q")
-region = Rect2(0, 346, 241, 173)
+region = Rect2(0, 96, 40, 48)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_tcjvl"]
 animations = [{
@@ -89,8 +89,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v0i2q"]
-radius = 51.0
-height = 180.0
+radius = 12.194368
+height = 34.754646
 
 [node name="Scythe" type="Area2D" unique_id=1163583836]
 collision_layer = 0
@@ -100,9 +100,9 @@ script = ExtResource("2_scythe")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1034669465]
 sprite_frames = SubResource("SpriteFrames_tcjvl")
 frame = 7
-offset = Vector2(-1, -33)
+offset = Vector2(0, -24)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1595863578]
-position = Vector2(0, -26)
-rotation = -1.5707964
+position = Vector2(-1.0000007, -24)
+rotation = -2.2262135
 shape = SubResource("CapsuleShape2D_v0i2q")

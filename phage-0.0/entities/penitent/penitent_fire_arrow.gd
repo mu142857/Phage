@@ -1,10 +1,13 @@
 # =============================================================================
-# penitent_fire_arrow.gd  —  天降火矢（旧「火矢.gd」重置版）
+# penitent_fire_arrow.gd  —  天降长矛（旧「火矢.gd」重置版）
 # =============================================================================
-# 天上砸下的箭：Ready(悬在高处淡入·预警) → Loop(加速下落) → 落地 End(淡出)。
-# 下落途中碰到玩家 → 造成伤害并消失。由 penitent.gd 的火矢雨系统成排生成。
+# Ready(悬在高处淡入·预警) → Loop(加速下落) → 落地 End(淡出)。
+# 下落途中碰到玩家 → 伤害并消失。落地(进 End 动画前)放粒子，和中镰刀共用 MidSickleEffect。
+# 由 penitent.gd 在玩家成功攻击 boss 时成批生成。
 # =============================================================================
 extends Area2D
+
+const LAND_EFFECT: PackedScene = preload("res://entities/penitent/mid_sickle_effect.tscn")
 
 @export var land_y: float = 80.0
 @export var fall_speed: float = 40.0     # 起始下落速度 px/s
@@ -39,6 +42,7 @@ func _physics_process(delta: float) -> void:
 			global_position.y += _speed * delta
 			_speed += fall_accel * delta
 			if global_position.y >= land_y:
+				global_position.y = land_y
 				_impact()
 		&"End":
 			modulate.a = maxf(modulate.a - fade_out_speed * delta, 0.0)
@@ -48,10 +52,21 @@ func _impact() -> void:
 	if _landed:
 		return
 	_landed = true
-	global_position.y = land_y
 	Game.shake_camera(shake_amount)
 	Game.flash(0.12, Color(1.5, 0.4, 0.4, 0.4))
+	spawn_land_effect(LAND_EFFECT)   # 落地(进 End 动画前)放粒子
 	$AnimatedSprite2D.play(&"End")
+
+
+func spawn_land_effect(scene: PackedScene) -> void:
+	if scene == null or get_tree().current_scene == null:
+		return
+	var fx := scene.instantiate()
+	get_tree().current_scene.add_child(fx)
+	if fx is Node2D:
+		(fx as Node2D).global_position = global_position
+	if fx is GPUParticles2D:
+		(fx as GPUParticles2D).emitting = true
 
 
 func _on_animated_sprite_2d_animation_finished() -> void:
@@ -66,4 +81,4 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	if body != null and body.is_in_group("player") and body.has_method("take_damage"):
 		body.take_damage(damage)
-		queue_free()
+		_impact()   # 命中也放落地特效再消失

@@ -1,9 +1,23 @@
 [gd_scene format=3 uid="uid://cofbcue31d1s0"]
 
-[ext_resource type="Texture2D" uid="uid://de0pah078uw8m" path="res://levels/crimson_sanctum/crimson_sanctum_ground.png" id="1_1beab"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_nauus"]
+[ext_resource type="Texture2D" uid="uid://c6j386nc0768p" path="res://levels/crimson_sanctum/crimson_sanctum_room_ground.png" id="1_ro5yd"]
 [ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="2_1beab"]
+[ext_resource type="Shader" uid="uid://dtyfaypopvdpc" path="res://asstes/shaders/silvaron.gdshader" id="2_ro5yd"]
+[ext_resource type="Texture2D" uid="uid://har3b05becxl" path="res://levels/crimson_sanctum/blood.png" id="3_4uhnd"]
 [ext_resource type="PackedScene" uid="uid://brywqw6ig52fr" path="res://entities/penitent/penitent.tscn" id="3_hxnx0"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_b2i5v"]
+seed = 52010
+frequency = 0.012
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_cav0i"]
+noise = SubResource("FastNoiseLite_b2i5v")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hajdb"]
+shader = ExtResource("2_ro5yd")
+shader_parameter/water_colour = Color(1, 0, 0, 0.39215687)
+shader_parameter/wave_noise = SubResource("NoiseTexture2D_cav0i")
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1c05a"]
 
@@ -17,7 +31,15 @@
 
 [node name="Ground" type="Sprite2D" parent="Environment" unique_id=499254987]
 light_mask = 3
-texture = ExtResource("1_1beab")
+texture = ExtResource("1_ro5yd")
+centered = false
+
+[node name="Blood" type="Sprite2D" parent="Environment" unique_id=536522795]
+light_mask = 0
+material = SubResource("ShaderMaterial_hajdb")
+position = Vector2(0, 90)
+scale = Vector2(1, -0.04444447)
+texture = ExtResource("3_4uhnd")
 centered = false
 
 [node name="1" type="Sprite2D" parent="Environment" unique_id=1304837322]
@@ -41,10 +63,11 @@ rotation = -1.5707964
 shape = SubResource("WorldBoundaryShape2D_b06ws")
 
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("1_nauus")]
+position = Vector2(76, 80)
 
 [node name="BackGroundSmoke" parent="." unique_id=258183138 instance=ExtResource("2_1beab")]
 light_mask = 0
 z_index = 11
 
 [node name="ThePenitent" parent="." unique_id=1866212368 instance=ExtResource("3_hxnx0")]
-position = Vector2(36, 80)
+position = Vector2(83, 25)

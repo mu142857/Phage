@@ -10,24 +10,6 @@
 
 ---
 
-## About
-
-**Phage** is a 2D fantasy action-adventure. You play a lone hero — rendered in
-extreme, deliberate low-pixel art — journeying through a strange and beautiful
-world of ruined cities, silver forests, crimson sanctums and salt-bleached
-wastes.
-
-The heart of the game is simple: **a minuscule protagonist against an enormous
-world.** The contrast between the ultra-low-resolution character and the
-atmospheric, cinematic environments is the whole point — and the main draw.
-
-And there's plenty of fighting to be done. The world is packed with **bosses** —
-big, strange, and dangerous — along with all the enemies in between. (No boss
-screenshots yet: it's hard to grab one when the framing tool keeps getting me
-killed. You'll just have to meet them in-game.)
-
----
-
 ## Gallery
 
 <div align="center">
@@ -54,6 +36,22 @@ killed. You'll just have to meet them in-game.)
 
 ---
 
+## About
+
+**Phage** is a 2D fantasy action-adventure. You play a lone hero — rendered in
+extreme, deliberate low-pixel art — journeying through a strange and beautiful
+world of ruined cities, silver forests, crimson sanctums and salt-bleached
+wastes.
+
+The heart of the game is simple: **a minuscule protagonist against an enormous
+world.** The contrast between the ultra-low-resolution character and the
+atmospheric, cinematic environments is the whole point — and the main draw.
+
+And there's plenty of fighting to be done. The world is packed with **bosses** —
+big, strange, and dangerous — along with all the enemies in between.
+
+---
+
 ## Status
 
 In active development.
@@ -67,5 +65,5 @@ In active development.
 
 ## Credits
 
-- Programming & Design: Jiamu Shangguan
-- Art: Oscar Li
+- Programming / Environment Artist / Music: Jiamu Shangguan
+- Character Animator / Narrative Designer: Oscar Li

@@ -33,8 +33,8 @@ const STATE_MOVE: int = 8
 @export var idle_only: bool = false
 
 # --- 横向活动边界 --------------------------------------------------------------
-@export var bound_min_x: float = 1010.0
-@export var bound_max_x: float = 1150.0
+@export var bound_min_x: float = 10.0
+@export var bound_max_x: float = 150.0
 
 # --- 阶段阈值（血量比例低于此值进入下一阶段）---------------------------------
 @export var phase_two_ratio: float = 0.667    # 低于 66.7% 进二阶段

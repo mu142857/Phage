@@ -10,8 +10,8 @@ signal screen_filter(amount: float, colour: Color)
 @export var max_blink_alpha_1: float = 1.0
 @export var blink_duration_2: float = 0.2
 @export var max_blink_alpha_2: float = 1.0
-@export var hit_stop_duration: float = 0.035
-@export var hit_recover_duration: float = 0.18
+@export var hit_stop_duration: float = 0.1
+@export var hit_recover_duration: float = 0.35
 @export var hit_flash_duration: float = 0.4
 @export var hit_flash_color: Color = Color(1.0, 0.1, 0.1, 0.16)
 @export var teleport_fade_duration: float = 0.08
@@ -60,6 +60,8 @@ var position_override: Vector2 = Vector2.ZERO
 var position_override_enabled: bool = false
 var position_override_tween: Tween = null
 var slowmo_token: int = 0
+# 受伤红屏优先截止(真实时间 ms):此前打中怪的滤镜(filter/screen_filter)不许覆盖红屏。
+var _hit_flash_priority_until_ms: int = 0
 var teleport_transition_tween: Tween = null
 var teleport_transition_layer: CanvasLayer = null
 var teleport_transition_rect: ColorRect = null
@@ -221,6 +223,9 @@ func _on_screen_flash(amount: float, colour: Color) -> void:
 	max_blink_alpha_1 = colour.a
 
 func _on_screen_filter(amount: float, colour: Color) -> void:
+	# 受伤红屏优先期内,忽略打中怪等滤镜,别把红屏顶掉。
+	if Time.get_ticks_msec() < _hit_flash_priority_until_ms:
+		return
 	blink_time_2 = blink_duration_2 * amount
 	rect2_colour = colour
 	max_blink_alpha_2 = colour.a
@@ -229,6 +234,9 @@ func _play_hit_flash() -> void:
 	blink_time_2 = maxf(hit_flash_duration, 0.0)
 	rect2_colour = hit_flash_color
 	max_blink_alpha_2 = hit_flash_color.a
+	# 开一段红屏优先窗口(真实时间,覆盖顿帧+慢动作回收),期间别被打怪滤镜顶掉。
+	var window := hit_flash_duration + hit_stop_duration + hit_recover_duration
+	_hit_flash_priority_until_ms = Time.get_ticks_msec() + int(window * 1000.0)
 
 func _apply_hit_stop(stop_duration: float, recover_duration: float) -> void:
 	if stop_duration <= 0.0 or recover_duration <= 0.0:

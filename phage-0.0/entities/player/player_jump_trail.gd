@@ -37,6 +37,10 @@ func _physics_process(delta: float) -> void:
 
 
 func _spawn_ghost() -> void:
+	_spawn_ghost_custom(tint, start_alpha, ghost_lifetime)
+
+
+func _spawn_ghost_custom(ghost_tint: Color, ghost_alpha: float, lifetime: float) -> void:
 	if not is_instance_valid(_sprite):
 		return
 	var frames := _sprite.sprite_frames
@@ -66,9 +70,9 @@ func _spawn_ghost() -> void:
 	if p is Node2D:
 		owner_z = (p as Node2D).z_index
 	g.z_index = owner_z + _sprite.z_index - 1
-	g.modulate = Color(tint.r, tint.g, tint.b, start_alpha)
+	g.modulate = Color(ghost_tint.r, ghost_tint.g, ghost_tint.b, ghost_alpha)
 	scene.add_child(g)
 	g.global_transform = _sprite.global_transform  # 加进树后再对齐世界位置/朝向/缩放
 	var tw := g.create_tween()
-	tw.tween_property(g, "modulate:a", 0.0, ghost_lifetime)
+	tw.tween_property(g, "modulate:a", 0.0, lifetime)
 	tw.tween_callback(g.queue_free)

@@ -240,6 +240,7 @@ func toggle_shield() -> void:
 			return  # 没有就绪的盾可拿
 		is_guarding = true
 		guard_slot = slot
+	# 切盾的视觉反馈就是外壳(Shield 动画)出现/消失,不需要额外特效。
 	_refresh_shield_visual()
 	shield_changed.emit()
 
@@ -329,7 +330,10 @@ func set_jump_trail(enabled: bool) -> void:
 
 func spawn_landing_effect() -> void:
 	# 落地特效二选一:有盾用护盾版本。
-	var scene := SHIELD_LANDING_EFFECT_SCENE if is_guarding else LANDING_EFFECT_SCENE
+	_spawn_oneshot_particles(SHIELD_LANDING_EFFECT_SCENE if is_guarding else LANDING_EFFECT_SCENE)
+
+# 在主角位置放一个一次性粒子特效,播完自动清掉。
+func _spawn_oneshot_particles(scene: PackedScene) -> void:
 	if not is_inside_tree() or scene == null:
 		return
 	var effect := scene.instantiate() as GPUParticles2D

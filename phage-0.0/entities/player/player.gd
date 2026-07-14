@@ -31,6 +31,7 @@ const LANDING_EFFECT_SCENE: PackedScene = preload("res://entities/player/player_
 const SHIELD_LANDING_EFFECT_SCENE: PackedScene = preload("res://entities/player/shield_player_jumping_effect.tscn")
 const HIT_EFFECT_SCENE: PackedScene = preload("res://entities/player/attack_effect.tscn")
 const JUMP_ATTACK_EFFECT_SCENE: PackedScene = preload("res://entities/player/jump_attack_effect.tscn")
+const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/player/player_death_effect.tscn")
 
 const STATE_NULL: int = 0
 const STATE_IDLE: int = 1
@@ -64,6 +65,7 @@ var health: int = MAX_HEALTH
 var facing_direction: int = 1  # 1 = right, -1 = left
 var can_sprint: bool = true
 var is_invincible: bool = false
+var is_dying: bool = false  # 死亡序列进行中,避免重复触发
 var is_in_ball_form: bool = false  # true when contracted; modifies hitbox + buffs
 var input_locked: bool = false
 
@@ -207,9 +209,22 @@ func take_damage(_amount: int) -> void:
 	# 无盾:直接死亡。
 	health = 0
 	health_changed.emit(health)
-	Game.play_hit_feedback()
+	_die()
+
+# 蔚蓝式死亡:原地炸开 → 冻结/隐藏 → 交给 Game 黑屏重载房间(清怪+回出生点)。
+func _die() -> void:
+	if is_dying:
+		return
+	is_dying = true
 	died.emit()
-	# Death state transition: handled by whoever listens to `died`.
+	_spawn_oneshot_particles(DEATH_EFFECT_SCENE)  # 在死亡位置炸开(先炸再隐藏)
+	set_lock(true)                                # 冻结输入/状态机
+	set_jump_trail(false)
+	set_walking_effect(false)
+	velocity = Vector2.ZERO
+	if is_instance_valid(sprite):
+		sprite.visible = false
+	Game.handle_player_death()
 
 # ============================================================
 # 护盾

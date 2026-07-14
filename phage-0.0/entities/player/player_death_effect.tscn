@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://b6s0ga4n5rm37"]
+
+[sub_resource type="Gradient" id="Gradient_init"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.937, 0.2, 0.623, 1, 0.6, 0.2, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_init"]
+gradient = SubResource("Gradient_init")
+
+[sub_resource type="Gradient" id="Gradient_life"]
+offsets = PackedFloat32Array(0, 0.75, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_life"]
+gradient = SubResource("Gradient_life")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_death"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 2.0
+direction = Vector3(0, -1, 0)
+spread = 180.0
+initial_velocity_min = 70.0
+initial_velocity_max = 160.0
+gravity = Vector3(0, 180, 0)
+scale_min = 1.0
+scale_max = 2.0
+color_ramp = SubResource("GradientTexture1D_life")
+color_initial_ramp = SubResource("GradientTexture1D_init")
+
+[node name="PlayerDeathEffect" type="GPUParticles2D"]
+z_index = 20
+emitting = false
+amount = 28
+lifetime = 0.55
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_death")

@@ -62,6 +62,7 @@ var position_override_tween: Tween = null
 var slowmo_token: int = 0
 # 受伤红屏优先截止(真实时间 ms):此前打中怪的滤镜(filter/screen_filter)不许覆盖红屏。
 var _hit_flash_priority_until_ms: int = 0
+var _player_dying: bool = false
 var teleport_transition_tween: Tween = null
 var teleport_transition_layer: CanvasLayer = null
 var teleport_transition_rect: ColorRect = null
@@ -195,6 +196,29 @@ func filter(amount: float, colour: Color) -> void:
 func play_hit_feedback() -> void:
 	_play_hit_flash()
 	_apply_hit_stop(hit_stop_duration, hit_recover_duration)
+
+# 玩家死亡:短暂停顿看清爆炸 → 淡入黑屏 → 重载当前房间(清掉所有怪/弹幕,玩家回出生点)→ 淡出。
+@export var death_burst_pause: float = 0.45
+@export var death_fade_out_duration: float = 0.25
+@export var death_fade_in_duration: float = 0.35
+func handle_player_death() -> void:
+	if _player_dying:
+		return
+	_player_dying = true
+	# 取消可能残留的顿帧/慢动作,让死亡序列在正常时间下走。
+	slowmo_token += 1
+	Engine.time_scale = 1.0
+	# 用真实时间的计时器,不受暂停/时间缩放影响。
+	await get_tree().create_timer(death_burst_pause, true, false, true).timeout
+	await _play_teleport_fade(1.0, death_fade_out_duration)  # 黑屏
+	var tree := get_tree()
+	if tree != null:
+		invalidate_safe_position()
+		tree.reload_current_scene()
+		await tree.process_frame
+		await tree.process_frame
+	await _play_teleport_fade(0.0, death_fade_in_duration)   # 亮屏
+	_player_dying = false
 
 # 玩家在地面上站稳时调用,记录可供弹回的安全点。
 func record_safe_position(world_pos: Vector2) -> void:

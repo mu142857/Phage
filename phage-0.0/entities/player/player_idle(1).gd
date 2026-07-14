@@ -8,18 +8,19 @@ func enter() -> void:
 	if player == null:
 		return
 	player.set_walking_effect(false)
+	player.set_jump_trail(false)
 	if "input_locked" in player and player.input_locked:
 		if is_instance_valid(idle_timer):
 			idle_timer.stop()
 		if is_instance_valid(player.sprite):
-			player.sprite.play(&"Idle")
+			player.play_anim(&"Idle")
 		return
 	if is_instance_valid(idle_timer):
 		idle_timer.stop()
 		idle_timer.wait_time = player.IDLE_TO_CONTRACT_TIME
 		idle_timer.start()
 	if is_instance_valid(player.sprite):
-		player.sprite.play(&"Idle")
+		player.play_anim(&"Idle")
 
 func exit() -> void:
 	if is_instance_valid(idle_timer):

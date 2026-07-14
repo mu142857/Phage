@@ -7,7 +7,7 @@ func enter() -> void:
 		return
 	player.set_walking_effect(true)
 	if is_instance_valid(player.sprite):
-		player.sprite.play(&"Fall")
+		player.play_anim(&"Fall")
 
 func process(delta: float) -> void:
 	var player := host as Player

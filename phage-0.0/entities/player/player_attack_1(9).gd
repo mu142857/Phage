@@ -6,7 +6,10 @@ const ATTACK_BURST_SPEED_AIR: float = 240.0
 const ATTACK_BRAKE_ACCEL_AIR: float = 380.0
 const ATTACK1_1_DAMAGE: int = 90
 const ATTACK1_2_DAMAGE: int = 60
-const AIR_ATTACK_INDEX: float = 3
+# 跳劈(空中攻击)永远 ×1.5;无盾时全部攻击再 ×2。
+# 于是: 有盾地面=1.0, 有盾跳劈=1.5, 无盾地面=2.0, 无盾跳劈=3.0(=原来的3倍)。
+const AIR_ATTACK_INDEX: float = 1.5
+const NO_SHIELD_DAMAGE_MULT: float = 2.0
 const ATTACK1_1_TRIGGER_FRAME: int = 1
 const ATTACK1_2_TRIGGER_FRAME: int = 1
 const ATTACK1_1_TRIGGER_TIME: float = 2.0 / 12.0
@@ -114,14 +117,17 @@ func attack1_2_check() -> void:
 	_check_attack_hitbox(attack_hitbox_2, _get_attack_damage(ATTACK1_2_DAMAGE))
 
 func _get_attack_damage(base_damage: int) -> int:
+	var dmg := float(base_damage)
 	if is_air_attack:
-		return base_damage * AIR_ATTACK_INDEX
-	return base_damage
+		dmg *= AIR_ATTACK_INDEX
+	if player_ref != null and not player_ref.is_guarding:
+		dmg *= NO_SHIELD_DAMAGE_MULT
+	return int(round(dmg))
 
 func _try_auto_attack_phases(player: Player) -> void:
 	if not is_instance_valid(player.sprite):
 		return
-	var anim := player.sprite.animation
+	var anim := player._strip_shield(player.sprite.animation)
 
 	if anim == ANIM_ATTACK1_1 or (anim == ANIM_ATTACK_LEGACY and current_phase == 1):
 		var phase_1_frame := player.sprite.frame
@@ -140,10 +146,10 @@ func _play_attack_animation(player: Player, primary: StringName, fallback: Strin
 		return
 	var frames := player.sprite.sprite_frames
 	if frames != null and frames.has_animation(primary):
-		player.sprite.play(primary)
+		player.play_anim(primary)
 		return
 	if fallback != &"" and frames != null and frames.has_animation(fallback):
-		player.sprite.play(fallback)
+		player.play_anim(fallback)
 
 func _apply_attack_surge(player: Player) -> void:
 	var burst_speed := ATTACK_BURST_SPEED if player.is_on_floor() else ATTACK_BURST_SPEED_AIR
@@ -222,7 +228,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	if not is_instance_valid(player.sprite):
 		return
 
-	var anim := player.sprite.animation
+	var anim := player._strip_shield(player.sprite.animation)
 	if anim == ANIM_ATTACK1_1 or (anim == ANIM_ATTACK_LEGACY and current_phase == 1):
 		attack1_1_check()
 		if phase_2_requested:

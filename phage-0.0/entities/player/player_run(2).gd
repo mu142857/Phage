@@ -6,8 +6,9 @@ func enter() -> void:
 	if player == null:
 		return
 	player.set_walking_effect(true)
+	player.set_jump_trail(false)
 	if is_instance_valid(player.sprite):
-		player.sprite.play(&"Run")
+		player.play_anim(&"Run")
 
 func process(delta: float) -> void:
 	var player := host as Player

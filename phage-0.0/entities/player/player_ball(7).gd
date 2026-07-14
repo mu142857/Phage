@@ -8,7 +8,7 @@ func enter() -> void:
 	player.set_ball_form(true)
 	player.velocity = Vector2.ZERO
 	if is_instance_valid(player.sprite):
-		player.sprite.play(&"Ball")
+		player.play_anim(&"Ball")
 
 func process(_delta: float) -> void:
 	var player := host as Player

@@ -26,7 +26,7 @@ func enter() -> void:
 		cooldown_timer.wait_time = player.SPRINT_COOLDOWN
 		cooldown_timer.start()
 	if is_instance_valid(player.sprite):
-		player.sprite.play(&"Sprint")
+		player.play_anim(&"Sprint")
 
 func process(delta: float) -> void:
 	var player := host as Player
@@ -44,7 +44,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		return
 	if not is_instance_valid(player.sprite):
 		return
-	if player.sprite.animation != &"Sprint":
+	if player._strip_shield(player.sprite.animation) != &"Sprint":
 		return
 
 	var move_input := Input.get_axis(&"move_left", &"move_right")

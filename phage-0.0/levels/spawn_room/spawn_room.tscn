@@ -78,7 +78,7 @@ fill_to = Vector2(0.5, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_i4v8s"]
 
-[node name="spawn_room" type="Node2D" unique_id=1159039431 groups=["camera_follow"]]
+[node name="SpawnRoom" type="Node2D" unique_id=1159039431 groups=["camera_follow"]]
 script = ExtResource("1_aun17")
 
 [node name="Walls" type="Node2D" parent="." unique_id=288094062]

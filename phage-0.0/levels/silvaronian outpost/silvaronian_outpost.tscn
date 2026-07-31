@@ -543,10 +543,6 @@ theme_override_fonts/font = ExtResource("21_3md8r")
 theme_override_font_sizes/font_size = 10
 text = "Silvaron"
 
-[node name="Player" parent="." unique_id=949587783 instance=ExtResource("13_3tuqn")]
-modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
-position = Vector2(229, -230)
-
 [node name="AzureWarlord" parent="." unique_id=1960126414 instance=ExtResource("22_3md8r")]
 position = Vector2(78, 0)
 
@@ -561,3 +557,6 @@ theme_override_font_sizes/font_size = 20
 text = "Azure Warlord"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Player" parent="." unique_id=949587783 instance=ExtResource("13_3tuqn")]
+position = Vector2(68, 81)

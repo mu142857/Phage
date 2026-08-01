@@ -24,6 +24,7 @@ color = Color(1, 1, 0.6666667, 1)
 color_ramp = SubResource("GradientTexture1D_uhql0")
 
 [node name="SpiderSpitEffect" type="GPUParticles2D" unique_id=1516146476]
+z_index = 10
 emitting = false
 amount = 15
 one_shot = true

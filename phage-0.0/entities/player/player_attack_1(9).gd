@@ -18,7 +18,11 @@ const COMBO_QUEUE_OPEN_TIME: float = 2.0 / 12.0
 const HIT_RECOIL_SPEED: float = 110.0
 const HIT_RECOIL_DURATION: float = 0.08
 const HIT_RECOIL_INPUT_SCALE: float = 0.6
-const LUNGE_SUPPRESS_DURATION: float = 0.12
+# 智能前冲:怪已在攻击范围内则不前冲(原地出刀);前冲途中怪进入判定框则立刻刹停。
+# 防止前冲把身体压进怪的接触伤害框(破盾/致死),远距离突进的观感不受影响。
+const LUNGE_SKIP_RANGE_X: float = 20.0
+const LUNGE_SKIP_BEHIND_X: float = 6.0
+const LUNGE_SKIP_RANGE_Y: float = 14.0
 
 const ANIM_ATTACK1_1: StringName = &"Attack1_1"
 const ANIM_ATTACK1_2: StringName = &"Attack1_2"
@@ -37,8 +41,6 @@ var attack_glow_tween: Tween = null
 var base_sprite_modulate: Color = Color(1, 1, 1, 1)
 var player_ref: Player = null
 var recoil_time_left: float = 0.0
-var lunge_suppress_left: float = 0.0
-var suppress_next_lunge: bool = false
 var is_air_attack: bool = false
 
 func enter() -> void:
@@ -61,9 +63,7 @@ func enter() -> void:
 	player.set_walking_effect(false)
 	player.clear_attack_hitboxes()
 	player.set_attack_hitbox(1, true)
-	if suppress_next_lunge:
-		suppress_next_lunge = false
-	else:
+	if not _enemy_already_in_range(player):
 		_apply_attack_surge(player)
 	_play_attack_glow(player)
 	_play_attack_animation(player, ANIM_ATTACK1_1, ANIM_ATTACK_LEGACY)
@@ -84,6 +84,9 @@ func process(delta: float) -> void:
 		player.velocity.x = move_toward(player.velocity.x, target_x, brake_accel * delta)
 	else:
 		player.velocity.x = move_toward(player.velocity.x, 0.0, brake_accel * delta)
+		# 前冲刹车:怪一进攻击判定框就刹停前进速度,停在刚好打得到的距离。
+		if player.velocity.x * float(attack_locked_facing) > 0.0 and _enemy_in_attack_hitbox():
+			player.velocity.x = 0.0
 	player.set_facing_direction(attack_locked_facing)
 
 	if not player.is_on_floor():
@@ -92,8 +95,6 @@ func process(delta: float) -> void:
 		player.velocity.y = 0.0
 	player.move_and_slide()
 	attack_elapsed += delta
-	if lunge_suppress_left > 0.0:
-		lunge_suppress_left = maxf(lunge_suppress_left - delta, 0.0)
 
 	# Queue phase 2 only in phase 1 and after combo window opens.
 	if current_phase == 1 and phase_1_done and not phase_2_done and attack_elapsed >= COMBO_QUEUE_OPEN_TIME:
@@ -155,6 +156,31 @@ func _apply_attack_surge(player: Player) -> void:
 	var burst_speed := ATTACK_BURST_SPEED if player.is_on_floor() else ATTACK_BURST_SPEED_AIR
 	player.velocity.x = float(attack_locked_facing) * burst_speed
 
+# 进入攻击/连击段时的贴脸检查:怪的中心已在面前近距离内就不前冲。
+# 用组扫描而不是 Area 重叠,因为判定框刚被启用,重叠数据要下一物理帧才有效。
+func _enemy_already_in_range(player: Player) -> bool:
+	for node in player.get_tree().get_nodes_in_group("monster"):
+		var monster := node as Node2D
+		if monster == null:
+			continue
+		var offset := monster.global_position - player.global_position
+		var dx := offset.x * float(attack_locked_facing)
+		if dx >= -LUNGE_SKIP_BEHIND_X and dx <= LUNGE_SKIP_RANGE_X and absf(offset.y) <= LUNGE_SKIP_RANGE_Y:
+			return true
+	return false
+
+func _enemy_in_attack_hitbox() -> bool:
+	var hitbox := attack_hitbox_1 if current_phase == 1 else attack_hitbox_2
+	if not is_instance_valid(hitbox):
+		return false
+	for body in hitbox.get_overlapping_bodies():
+		if body != null and body.is_in_group("monster"):
+			return true
+	for area in hitbox.get_overlapping_areas():
+		if area != null and area.is_in_group("monster"):
+			return true
+	return false
+
 func _play_attack_glow(player: Player) -> void:
 	if not is_instance_valid(player.sprite):
 		return
@@ -215,11 +241,9 @@ func _try_damage_target(target: Node, damage: int, damaged: Array[Node]) -> bool
 func _apply_hit_recoil() -> void:
 	if player_ref == null:
 		return
-	# Push player slightly backward to counter the lunge
+	# 命中后小幅后弹增强打击感;防撞交给智能前冲的门禁+刹车,这里不再压制下一段前冲。
 	player_ref.velocity.x = -float(attack_locked_facing) * HIT_RECOIL_SPEED
 	recoil_time_left = HIT_RECOIL_DURATION
-	lunge_suppress_left = LUNGE_SUPPRESS_DURATION
-	suppress_next_lunge = true
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	var player := host as Player
@@ -234,11 +258,11 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		if phase_2_requested:
 			current_phase = 2
 			attack_elapsed = 0.0
+			recoil_time_left = 0.0
 			player.clear_attack_hitboxes()
 			player.set_attack_hitbox(2, true)
-			if suppress_next_lunge:
-				suppress_next_lunge = false
-			else:
+			# 怪被第一段击退出范围时,这里的智能前冲会自动追上去补第二刀。
+			if not _enemy_already_in_range(player):
 				_apply_attack_surge(player)
 			_play_attack_glow(player)
 			_play_attack_animation(player, ANIM_ATTACK1_2, ANIM_ATTACK_LEGACY)

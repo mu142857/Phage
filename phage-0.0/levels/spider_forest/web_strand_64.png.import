@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://be2ikek18bmxl"
-path="res://.godot/imported/web_orb_torn.png-387b9df8241a60ff7db43d2afa1dbfbd.ctex"
+uid="uid://db7kmu72rho2t"
+path="res://.godot/imported/web_strand_64.png-3739ae59aaf45909c5b687c123c09591.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://levels/spider_forest/web_orb_torn.png"
-dest_files=["res://.godot/imported/web_orb_torn.png-387b9df8241a60ff7db43d2afa1dbfbd.ctex"]
+source_file="res://levels/spider_forest/web_strand_64.png"
+dest_files=["res://.godot/imported/web_strand_64.png-3739ae59aaf45909c5b687c123c09591.ctex"]
 
 [params]
 

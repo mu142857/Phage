@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqiugr7q7b7r5"
-path="res://.godot/imported/web_corner_big.png-979fb5dd7987ca681f581b48e6569b2d.ctex"
+uid="uid://dkx7kqubpdtiw"
+path="res://.godot/imported/web_diag_steep.png-27c69f947355ad48c1de0d79beca102d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://levels/spider_forest/web_corner_big.png"
-dest_files=["res://.godot/imported/web_corner_big.png-979fb5dd7987ca681f581b48e6569b2d.ctex"]
+source_file="res://levels/spider_forest/web_diag_steep.png"
+dest_files=["res://.godot/imported/web_diag_steep.png-27c69f947355ad48c1de0d79beca102d.ctex"]
 
 [params]
 

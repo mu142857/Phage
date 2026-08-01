@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cqrhhf36lyudl" path="res://entities/spider/spider_legs.gd" id="2_leg"]
 [ext_resource type="Texture2D" uid="uid://8fwuqrsim0t0" path="res://entities/spider/spider1.png" id="3_tex"]
 [ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="4_sha"]
-[ext_resource type="PackedScene" path="res://entities/spider/spider_spit.tscn" id="5_spit"]
+[ext_resource type="PackedScene" uid="uid://v4nmvg043iwm" path="res://entities/spider/spider_spit.tscn" id="5_spit"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_spd1"]
 resource_local_to_scene = true
@@ -61,8 +61,8 @@ size = Vector2(10, 10)
 [node name="Spider1" type="CharacterBody2D" unique_id=1617544780]
 collision_layer = 4
 script = ExtResource("1_spd")
-max_health = 120
-health = 120
+max_health = 80
+health = 80
 walk_speed = 18.0
 chase_speed = 30.0
 skill = 2

@@ -33,6 +33,13 @@ func _ready() -> void:
 			"group": i % 2,
 		})
 
+# 瞬间把所有脚收回身体当前位置（传送/垂降落地后调用，避免脚留在旧全局坐标拉伸腿）
+func reset_feet() -> void:
+	for leg in _legs:
+		leg["step"] = -1.0
+		leg["foot"] = Vector2(global_position.x + float(leg["spread"]), global_position.y + foot_y_offset)
+	queue_redraw()
+
 func _physics_process(delta: float) -> void:
 	# 腾空(跳扑/坠落)时不迈步：脚快速收拢跟随身体，避免腿被拉扯变形
 	if _body != null and not _body.is_on_floor():

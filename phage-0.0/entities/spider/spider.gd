@@ -11,6 +11,8 @@ extends CharacterBody2D
 @export var contact_damage_cooldown: float = 0.5
 @export var knockback_speed: float = 120.0
 @export var knockback_duration: float = 0.1
+## 贴图默认头朝右；素材头朝左的(如盾蛛)勾上这个
+@export var sprite_faces_left: bool = false
 
 enum Skill { NONE, POUNCE, SPIT, SHIELD }
 
@@ -23,6 +25,8 @@ enum Skill { NONE, POUNCE, SPIT, SHIELD }
 @export var pounce_speed_x_max: float = 70.0
 @export var pounce_jump_min: float = 180.0
 @export var pounce_jump_max: float = 240.0
+## 跳扑腾空时的重力倍率，<1 滞空更久更好躲
+@export var pounce_gravity_scale: float = 1.0
 @export var spit_scene: PackedScene = null
 @export var spit_flight_time: float = 0.9
 @export var spit_muzzle_offset: Vector2 = Vector2(0, -6)
@@ -67,7 +71,10 @@ func _physics_process(delta: float) -> void:
 	if health <= 0:
 		return
 	if not is_on_floor():
-		velocity.y += gravity * delta
+		var gravity_scale: float = 1.0
+		if _skill_phase == 2 and skill == Skill.POUNCE:
+			gravity_scale = pounce_gravity_scale
+		velocity.y += gravity * gravity_scale * delta
 	_contact_cd = maxf(0.0, _contact_cd - delta)
 
 	if _knock_left > 0.0:
@@ -233,7 +240,7 @@ func _start_knockback() -> void:
 
 func _update_facing() -> void:
 	if body_sprite != null:
-		body_sprite.flip_h = _dir < 0.0
+		body_sprite.flip_h = (_dir < 0.0) != sprite_faces_left
 
 func _set_flash_tint(color: Color) -> void:
 	if body_sprite != null and body_sprite.material is ShaderMaterial:

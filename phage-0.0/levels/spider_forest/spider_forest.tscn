@@ -16,16 +16,21 @@
 [ext_resource type="Texture2D" uid="uid://cui0eap7qofaa" path="res://levels/silvaron/Silvaron0.3.png" id="14_far"]
 [ext_resource type="Texture2D" uid="uid://cgmsbf67rsr18" path="res://levels/silvaron/Silvaron0.6.png" id="15_mid"]
 [ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="16_swing"]
-[ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="17_smoke"]
-[ext_resource type="PackedScene" uid="uid://dd5fmvnrmr2ub" path="res://entities/spider/spider_1.tscn" id="18_sp1"]
-[ext_resource type="PackedScene" uid="uid://odgxjrnogrwf" path="res://entities/spider/spider_2.tscn" id="19_sp2"]
-[ext_resource type="PackedScene" uid="uid://d3kdstembis3k" path="res://entities/spider/spider_3.tscn" id="20_sp3"]
-[ext_resource type="Texture2D" path="res://levels/spider_forest/web_corner_small.png" id="21_wcs"]
-[ext_resource type="Texture2D" path="res://levels/spider_forest/web_corner_big.png" id="22_wcb"]
-[ext_resource type="Texture2D" path="res://levels/spider_forest/web_orb_big.png" id="23_worb"]
-[ext_resource type="Texture2D" path="res://levels/spider_forest/web_orb_torn.png" id="24_wtorn"]
-[ext_resource type="Texture2D" path="res://levels/spider_forest/web_strand_short.png" id="25_wstr"]
-[ext_resource type="Texture2D" path="res://levels/spider_forest/web_strand_cocoon.png" id="26_wcoc"]
+[ext_resource type="Shader" path="res://asstes/shaders/silk_swing.gdshader" id="17_silk"]
+[ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="18_smoke"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_strand_28.png" id="20_ws28"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_strand_48.png" id="21_ws48"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_strand_64.png" id="22_ws64"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_strand_full.png" id="23_wsf"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_cocoon_small.png" id="24_wcs"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_strand_cocoon.png" id="25_wcb"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_cocoon_long.png" id="26_wcl"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_arc_48.png" id="27_wa48"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_arc_80.png" id="28_wa80"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_arc_120.png" id="29_wa120"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_diag_shallow.png" id="32_wds"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_diag_steep.png" id="33_wdt"]
+[ext_resource type="Texture2D" path="res://levels/spider_forest/web_giant.png" id="34_giant"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gnd"]
 
@@ -45,7 +50,7 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
 [sub_resource type="Gradient" id="Gradient_murk"]
-colors = PackedColorArray(0.05, 0.1, 0.06, 0.62, 0.05, 0.1, 0.06, 0)
+colors = PackedColorArray(0.09, 0.08, 0.02, 0.62, 0.09, 0.08, 0.02, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_murk"]
 gradient = SubResource("Gradient_murk")
@@ -61,6 +66,16 @@ shader = ExtResource("16_swing")
 shader_parameter/Strength = 1.0
 shader_parameter/Speed = 2.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_silk_soft"]
+shader = ExtResource("17_silk")
+shader_parameter/Strength = 0.7
+shader_parameter/Speed = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_silk_sway"]
+shader = ExtResource("17_silk")
+shader_parameter/Strength = 1.3
+shader_parameter/Speed = 1.6
+
 [node name="SpiderForest" type="Node2D"]
 script = ExtResource("1_script")
 
@@ -71,7 +86,7 @@ repeat_size = Vector2(160, 0)
 repeat_times = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="Sky0x"]
-modulate = Color(0.55, 0.62, 0.55, 1)
+modulate = Color(0.64, 0.58, 0.34, 1)
 light_mask = 0
 position = Vector2(0, -70)
 texture = ExtResource("3_bg")
@@ -84,7 +99,7 @@ repeat_size = Vector2(120, 0)
 repeat_times = 8
 
 [node name="Sprite2D" type="Sprite2D" parent="Far02x"]
-modulate = Color(0.3, 0.36, 0.3, 1)
+modulate = Color(0.34, 0.3, 0.15, 1)
 light_mask = 0
 position = Vector2(0, -15)
 texture = ExtResource("14_far")
@@ -96,7 +111,7 @@ repeat_size = Vector2(120, 0)
 repeat_times = 10
 
 [node name="Sprite2D" type="Sprite2D" parent="Mid045x"]
-modulate = Color(0.42, 0.48, 0.42, 1)
+modulate = Color(0.5, 0.44, 0.2, 1)
 light_mask = 0
 position = Vector2(0, -8)
 texture = ExtResource("15_mid")
@@ -105,169 +120,755 @@ texture = ExtResource("15_mid")
 light_mask = 0
 scroll_scale = Vector2(0.45, 0.45)
 
-[node name="Orb1" type="Sprite2D" parent="MidWebs045x"]
-modulate = Color(0.5, 0.55, 0.5, 0.55)
+[node name="Silk1" type="Sprite2D" parent="MidWebs045x"]
+modulate = Color(0.55, 0.54, 0.42, 0.5)
 light_mask = 0
-position = Vector2(120, 30)
-texture = ExtResource("23_worb")
-
-[node name="Orb2" type="Sprite2D" parent="MidWebs045x"]
-modulate = Color(0.5, 0.55, 0.5, 0.5)
-light_mask = 0
-position = Vector2(330, 22)
-texture = ExtResource("23_worb")
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(60, 12)
+texture = ExtResource("25_wcb")
 flip_h = true
 
-[node name="Torn1" type="Sprite2D" parent="MidWebs045x"]
-modulate = Color(0.5, 0.55, 0.5, 0.5)
+[node name="Silk2" type="Sprite2D" parent="MidWebs045x"]
+modulate = Color(0.55, 0.54, 0.42, 0.5)
 light_mask = 0
-position = Vector2(560, 34)
-texture = ExtResource("24_wtorn")
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(179, 12)
+texture = ExtResource("25_wcb")
+flip_h = true
 
-[node name="Orb3" type="Sprite2D" parent="MidWebs045x"]
-modulate = Color(0.5, 0.55, 0.5, 0.55)
+[node name="Silk3" type="Sprite2D" parent="MidWebs045x"]
+modulate = Color(0.55, 0.54, 0.42, 0.5)
 light_mask = 0
-position = Vector2(760, 26)
-texture = ExtResource("23_worb")
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(282, 8)
+texture = ExtResource("24_wcs")
 
-[node name="Strand1" type="Sprite2D" parent="MidWebs045x"]
-modulate = Color(0.5, 0.55, 0.5, 0.55)
+[node name="Silk4" type="Sprite2D" parent="MidWebs045x"]
+modulate = Color(0.55, 0.54, 0.42, 0.5)
 light_mask = 0
-position = Vector2(225, 12)
-texture = ExtResource("26_wcoc")
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(405, 8)
+texture = ExtResource("24_wcs")
 
-[node name="Strand2" type="Sprite2D" parent="MidWebs045x"]
-modulate = Color(0.5, 0.55, 0.5, 0.5)
+[node name="Silk5" type="Sprite2D" parent="MidWebs045x"]
+modulate = Color(0.55, 0.54, 0.42, 0.5)
 light_mask = 0
-position = Vector2(660, 10)
-texture = ExtResource("25_wstr")
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(509, 11)
+texture = ExtResource("25_wcb")
+flip_h = true
+
+[node name="Silk6" type="Sprite2D" parent="MidWebs045x"]
+modulate = Color(0.55, 0.54, 0.42, 0.5)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(592, 12)
+texture = ExtResource("28_wa80")
+flip_h = true
+
+[node name="Silk7" type="Sprite2D" parent="MidWebs045x"]
+modulate = Color(0.55, 0.54, 0.42, 0.5)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(690, 8)
+texture = ExtResource("20_ws28")
+
+[node name="Silk8" type="Sprite2D" parent="MidWebs045x"]
+modulate = Color(0.55, 0.54, 0.42, 0.5)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(806, 9)
+texture = ExtResource("20_ws28")
+
+[node name="SilkDiag" type="Sprite2D" parent="MidWebs045x"]
+modulate = Color(0.55, 0.54, 0.42, 0.5)
+light_mask = 0
+position = Vector2(500, 55)
+texture = ExtResource("32_wds")
 
 [node name="Near07x" type="Parallax2D" parent="."]
 light_mask = 0
 scroll_scale = Vector2(0.7, 0.7)
 
 [node name="Tree1" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.42, 0.36, 0.26, 1)
+modulate = Color(0.38, 0.32, 0.14, 1)
 light_mask = 0
-position = Vector2(-60, 47)
-texture = ExtResource("7_tree")
-
-[node name="Tree2" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.38, 0.33, 0.24, 1)
-light_mask = 0
-position = Vector2(30, 46)
+position = Vector2(-120, 51)
 texture = ExtResource("7_tree")
 flip_h = true
 
-[node name="Tree3" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.42, 0.36, 0.26, 1)
+[node name="Tree2" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
 light_mask = 0
-position = Vector2(115, 48)
+position = Vector2(-94, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree3" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(-57, 51)
 texture = ExtResource("7_tree")
 
 [node name="Tree4" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.4, 0.34, 0.25, 1)
+modulate = Color(0.46, 0.38, 0.17, 1)
 light_mask = 0
-position = Vector2(200, 47)
+position = Vector2(-31, 52)
 texture = ExtResource("7_tree")
-flip_h = true
 
 [node name="Tree5" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.38, 0.33, 0.24, 1)
+modulate = Color(0.42, 0.35, 0.15, 1)
 light_mask = 0
-position = Vector2(290, 46)
+position = Vector2(-5, 51)
 texture = ExtResource("7_tree")
 
 [node name="Tree6" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.42, 0.36, 0.26, 1)
+modulate = Color(0.38, 0.32, 0.14, 1)
 light_mask = 0
-position = Vector2(380, 48)
+position = Vector2(30, 51)
 texture = ExtResource("7_tree")
 
 [node name="Tree7" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.4, 0.34, 0.25, 1)
+modulate = Color(0.46, 0.38, 0.17, 1)
 light_mask = 0
-position = Vector2(470, 47)
+position = Vector2(65, 51)
 texture = ExtResource("7_tree")
 flip_h = true
 
 [node name="Tree8" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.38, 0.33, 0.24, 1)
+modulate = Color(0.42, 0.35, 0.15, 1)
 light_mask = 0
-position = Vector2(560, 46)
+position = Vector2(97, 52)
 texture = ExtResource("7_tree")
+flip_h = true
 
 [node name="Tree9" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.42, 0.36, 0.26, 1)
+modulate = Color(0.46, 0.38, 0.17, 1)
 light_mask = 0
-position = Vector2(650, 48)
+position = Vector2(124, 52)
 texture = ExtResource("7_tree")
 flip_h = true
 
 [node name="Tree10" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.4, 0.34, 0.25, 1)
+modulate = Color(0.38, 0.32, 0.14, 1)
 light_mask = 0
-position = Vector2(745, 47)
+position = Vector2(150, 52)
 texture = ExtResource("7_tree")
+flip_h = true
 
 [node name="Tree11" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.38, 0.33, 0.24, 1)
+modulate = Color(0.46, 0.38, 0.17, 1)
 light_mask = 0
-position = Vector2(835, 46)
+position = Vector2(190, 51)
 texture = ExtResource("7_tree")
+flip_h = true
 
 [node name="Tree12" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.42, 0.36, 0.26, 1)
+modulate = Color(0.42, 0.35, 0.15, 1)
 light_mask = 0
-position = Vector2(925, 48)
+position = Vector2(219, 51)
 texture = ExtResource("7_tree")
-flip_h = true
 
 [node name="Tree13" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.4, 0.34, 0.25, 1)
+modulate = Color(0.38, 0.32, 0.14, 1)
 light_mask = 0
-position = Vector2(1015, 47)
-texture = ExtResource("7_tree")
-
-[node name="Tree14" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.38, 0.33, 0.24, 1)
-light_mask = 0
-position = Vector2(1105, 46)
+position = Vector2(261, 51)
 texture = ExtResource("7_tree")
 flip_h = true
 
-[node name="Tree15" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.42, 0.36, 0.26, 1)
+[node name="Tree14" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
 light_mask = 0
-position = Vector2(1195, 48)
+position = Vector2(287, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree15" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
+light_mask = 0
+position = Vector2(317, 51)
 texture = ExtResource("7_tree")
 
 [node name="Tree16" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.4, 0.34, 0.25, 1)
+modulate = Color(0.46, 0.38, 0.17, 1)
 light_mask = 0
-position = Vector2(1285, 47)
+position = Vector2(356, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree17" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
+light_mask = 0
+position = Vector2(400, 51)
 texture = ExtResource("7_tree")
 
-[node name="Strand1" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.45, 0.48, 0.42, 0.8)
+[node name="Tree18" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.46, 0.38, 0.17, 1)
 light_mask = 0
-position = Vector2(250, 10)
-texture = ExtResource("25_wstr")
+position = Vector2(438, 52)
+texture = ExtResource("7_tree")
+flip_h = true
 
-[node name="Strand2" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.45, 0.48, 0.42, 0.8)
+[node name="Tree19" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
 light_mask = 0
-position = Vector2(700, 12)
-texture = ExtResource("25_wstr")
+position = Vector2(466, 52)
+texture = ExtResource("7_tree")
+flip_h = true
 
-[node name="Strand3" type="Sprite2D" parent="Near07x"]
-modulate = Color(0.45, 0.48, 0.42, 0.8)
+[node name="Tree20" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
 light_mask = 0
-position = Vector2(1150, 10)
-texture = ExtResource("25_wstr")
+position = Vector2(499, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree21" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(536, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree22" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(579, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree23" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.46, 0.38, 0.17, 1)
+light_mask = 0
+position = Vector2(614, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree24" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(640, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree25" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(673, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree26" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
+light_mask = 0
+position = Vector2(705, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree27" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.46, 0.38, 0.17, 1)
+light_mask = 0
+position = Vector2(746, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree28" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(789, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree29" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(817, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree30" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
+light_mask = 0
+position = Vector2(858, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree31" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(894, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree32" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
+light_mask = 0
+position = Vector2(935, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree33" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
+light_mask = 0
+position = Vector2(967, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree34" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
+light_mask = 0
+position = Vector2(1003, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree35" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.46, 0.38, 0.17, 1)
+light_mask = 0
+position = Vector2(1032, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree36" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.46, 0.38, 0.17, 1)
+light_mask = 0
+position = Vector2(1058, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree37" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(1089, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree38" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(1132, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree39" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.46, 0.38, 0.17, 1)
+light_mask = 0
+position = Vector2(1167, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree40" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.46, 0.38, 0.17, 1)
+light_mask = 0
+position = Vector2(1211, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree41" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(1245, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree42" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
+light_mask = 0
+position = Vector2(1285, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree43" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.46, 0.38, 0.17, 1)
+light_mask = 0
+position = Vector2(1326, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree44" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
+light_mask = 0
+position = Vector2(1357, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree45" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.38, 0.32, 0.14, 1)
+light_mask = 0
+position = Vector2(1383, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree46" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.35, 0.15, 1)
+light_mask = 0
+position = Vector2(1414, 51)
+texture = ExtResource("7_tree")
+
+[node name="Silk1" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.4, 0.3, 0.7)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(150, 4)
+texture = ExtResource("24_wcs")
+flip_h = true
+
+[node name="Silk2" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.4, 0.3, 0.7)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(480, 5)
+texture = ExtResource("20_ws28")
+
+[node name="Silk3" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.4, 0.3, 0.7)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(830, 9)
+texture = ExtResource("20_ws28")
+flip_h = true
+
+[node name="Silk4" type="Sprite2D" parent="Near07x"]
+modulate = Color(0.42, 0.4, 0.3, 0.7)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1180, 8)
+texture = ExtResource("24_wcs")
+
+[node name="Near085x" type="Parallax2D" parent="."]
+light_mask = 0
+scroll_scale = Vector2(0.85, 0.85)
+
+[node name="Tree1" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(-120, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree2" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(-79, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree3" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(-30, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree4" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(16, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree5" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(65, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree6" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(106, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree7" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(141, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree8" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(183, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree9" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(220, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree10" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(264, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree11" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(310, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree12" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(342, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree13" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(390, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree14" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(421, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree15" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(452, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree16" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(484, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree17" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(528, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree18" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(569, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree19" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(616, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree20" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(657, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree21" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(691, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree22" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(736, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree23" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(766, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree24" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(796, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree25" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(828, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree26" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(873, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree27" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(917, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree28" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(950, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree29" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(998, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree30" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(1031, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree31" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(1063, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree32" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(1111, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree33" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(1148, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree34" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(1188, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree35" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(1236, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree36" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(1273, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree37" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(1312, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree38" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(1361, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree39" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(1405, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree40" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.41, 0.17, 1)
+light_mask = 0
+position = Vector2(1445, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree41" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(1489, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree42" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.54, 0.44, 0.18, 1)
+light_mask = 0
+position = Vector2(1522, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree43" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.58, 0.48, 0.21, 1)
+light_mask = 0
+position = Vector2(1559, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="UnderBush1" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.55, 0.42, 0.11, 1)
+light_mask = 0
+position = Vector2(90, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="UnderBush2" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.55, 0.42, 0.11, 1)
+light_mask = 0
+position = Vector2(340, 76)
+texture = ExtResource("10_bushs")
+
+[node name="UnderBush3" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.6, 0.47, 0.14, 1)
+light_mask = 0
+position = Vector2(620, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="UnderBush4" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.6, 0.47, 0.14, 1)
+light_mask = 0
+position = Vector2(910, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="UnderBush5" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.48, 0.38, 0.1, 1)
+light_mask = 0
+position = Vector2(1190, 76)
+texture = ExtResource("10_bushs")
+
+[node name="UnderBush6" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.6, 0.47, 0.14, 1)
+light_mask = 0
+position = Vector2(1460, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Silk1" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.48, 0.36, 0.75)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(260, 16)
+texture = ExtResource("21_ws48")
+
+[node name="Silk2" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.48, 0.36, 0.75)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(640, 10)
+texture = ExtResource("25_wcb")
+flip_h = true
+
+[node name="Silk3" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.48, 0.36, 0.75)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1020, 9)
+texture = ExtResource("25_wcb")
+
+[node name="Silk4" type="Sprite2D" parent="Near085x"]
+modulate = Color(0.5, 0.48, 0.36, 0.75)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1400, 10)
+texture = ExtResource("25_wcb")
+flip_h = true
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.36, 0.42, 0.36, 1)
+color = Color(0.48, 0.45, 0.25, 1)
 
 [node name="Walls" type="Node2D" parent="."]
 z_index = 10
@@ -289,310 +890,1190 @@ position = Vector2(1680, 0)
 rotation = -1.5707964
 shape = SubResource("WorldBoundaryShape2D_gnd")
 
+[node name="TreesBack" type="Node2D" parent="."]
+z_index = 1
+
+[node name="Tree1" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(-70, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree2" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(-23, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree3" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(21, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree4" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(73, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree5" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(111, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree6" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(159, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree7" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(211, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree8" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(269, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree9" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(313, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree10" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.64, 0.5, 0.19, 1)
+light_mask = 0
+position = Vector2(354, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree11" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(408, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree12" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.64, 0.5, 0.19, 1)
+light_mask = 0
+position = Vector2(446, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree13" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(499, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree14" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(553, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree15" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(607, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree16" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(642, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree17" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.64, 0.5, 0.19, 1)
+light_mask = 0
+position = Vector2(699, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree18" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(755, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree19" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(805, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree20" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(851, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree21" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(893, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree22" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.64, 0.5, 0.19, 1)
+light_mask = 0
+position = Vector2(942, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree23" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(1000, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree24" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.64, 0.5, 0.19, 1)
+light_mask = 0
+position = Vector2(1036, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree25" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(1091, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree26" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(1134, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree27" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.64, 0.5, 0.19, 1)
+light_mask = 0
+position = Vector2(1185, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree28" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(1237, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree29" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(1293, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree30" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.64, 0.5, 0.19, 1)
+light_mask = 0
+position = Vector2(1339, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree31" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(1386, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree32" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.64, 0.5, 0.19, 1)
+light_mask = 0
+position = Vector2(1436, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree33" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(1494, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree34" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.64, 0.5, 0.19, 1)
+light_mask = 0
+position = Vector2(1538, 52)
+texture = ExtResource("7_tree")
+
+[node name="Tree35" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.6, 0.47, 0.17, 1)
+light_mask = 0
+position = Vector2(1574, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree36" type="Sprite2D" parent="TreesBack"]
+modulate = Color(0.55, 0.43, 0.16, 1)
+light_mask = 0
+position = Vector2(1627, 52)
+texture = ExtResource("7_tree")
+
 [node name="Trees" type="Node2D" parent="."]
 z_index = 2
 
 [node name="Tree1" type="Sprite2D" parent="Trees"]
-modulate = Color(0.68, 0.46, 0.26, 1)
+modulate = Color(0.82, 0.6, 0.22, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(-30, 47)
+position = Vector2(-50, 51)
 texture = ExtResource("7_tree")
+flip_h = true
 
 [node name="Tree2" type="Sprite2D" parent="Trees"]
-modulate = Color(0.62, 0.42, 0.24, 1)
+modulate = Color(0.82, 0.6, 0.22, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(70, 46)
+position = Vector2(19, 52)
 texture = ExtResource("7_tree")
 flip_h = true
 
 [node name="Tree3" type="Sprite2D" parent="Trees"]
-modulate = Color(0.72, 0.5, 0.3, 1)
+modulate = Color(0.76, 0.54, 0.19, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(155, 48)
-texture = ExtResource("7_tree")
-
-[node name="Tree4" type="Sprite2D" parent="Trees"]
-modulate = Color(0.58, 0.4, 0.22, 1)
-material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(250, 47)
+position = Vector2(82, 52)
 texture = ExtResource("7_tree")
 flip_h = true
 
-[node name="Tree5" type="Sprite2D" parent="Trees"]
-modulate = Color(0.68, 0.46, 0.26, 1)
+[node name="Tree4" type="Sprite2D" parent="Trees"]
+modulate = Color(0.86, 0.65, 0.26, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(330, 46)
+position = Vector2(150, 52)
 texture = ExtResource("7_tree")
 
-[node name="Tree6" type="Sprite2D" parent="Trees"]
-modulate = Color(0.64, 0.44, 0.26, 1)
+[node name="Tree5" type="Sprite2D" parent="Trees"]
+modulate = Color(0.72, 0.5, 0.17, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(430, 48)
+position = Vector2(223, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree6" type="Sprite2D" parent="Trees"]
+modulate = Color(0.86, 0.65, 0.26, 1)
+material = SubResource("ShaderMaterial_sway_tree")
+position = Vector2(289, 51)
 texture = ExtResource("7_tree")
 flip_h = true
 
 [node name="Tree7" type="Sprite2D" parent="Trees"]
-modulate = Color(0.72, 0.5, 0.3, 1)
+modulate = Color(0.72, 0.5, 0.17, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(520, 47)
+position = Vector2(379, 51)
 texture = ExtResource("7_tree")
+flip_h = true
 
 [node name="Tree8" type="Sprite2D" parent="Trees"]
-modulate = Color(0.62, 0.42, 0.24, 1)
+modulate = Color(0.82, 0.6, 0.22, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(615, 46)
+position = Vector2(441, 52)
 texture = ExtResource("7_tree")
 
 [node name="Tree9" type="Sprite2D" parent="Trees"]
-modulate = Color(0.68, 0.46, 0.26, 1)
+modulate = Color(0.76, 0.54, 0.19, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(700, 48)
+position = Vector2(502, 51)
 texture = ExtResource("7_tree")
-flip_h = true
 
 [node name="Tree10" type="Sprite2D" parent="Trees"]
-modulate = Color(0.58, 0.4, 0.22, 1)
+modulate = Color(0.72, 0.5, 0.17, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(790, 47)
-texture = ExtResource("7_tree")
-
-[node name="Willow" type="Sprite2D" parent="Trees"]
-modulate = Color(0.58, 0.46, 0.3, 1)
-material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(900, -9)
-texture = ExtResource("8_willow")
-
-[node name="Tree11" type="Sprite2D" parent="Trees"]
-modulate = Color(0.68, 0.46, 0.26, 1)
-material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(1010, 47)
+position = Vector2(569, 52)
 texture = ExtResource("7_tree")
 flip_h = true
 
-[node name="Tree12" type="Sprite2D" parent="Trees"]
-modulate = Color(0.62, 0.42, 0.24, 1)
+[node name="Tree11" type="Sprite2D" parent="Trees"]
+modulate = Color(0.82, 0.6, 0.22, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(1100, 46)
+position = Vector2(656, 51)
 texture = ExtResource("7_tree")
 
-[node name="Tree13" type="Sprite2D" parent="Trees"]
-modulate = Color(0.72, 0.5, 0.3, 1)
+[node name="Tree12" type="Sprite2D" parent="Trees"]
+modulate = Color(0.82, 0.6, 0.22, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(1190, 48)
+position = Vector2(725, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree13" type="Sprite2D" parent="Trees"]
+modulate = Color(0.72, 0.5, 0.17, 1)
+material = SubResource("ShaderMaterial_sway_tree")
+position = Vector2(790, 52)
 texture = ExtResource("7_tree")
 flip_h = true
 
 [node name="Tree14" type="Sprite2D" parent="Trees"]
-modulate = Color(0.64, 0.44, 0.26, 1)
+modulate = Color(0.86, 0.65, 0.26, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(1290, 47)
+position = Vector2(938, 52)
 texture = ExtResource("7_tree")
+flip_h = true
 
 [node name="Tree15" type="Sprite2D" parent="Trees"]
-modulate = Color(0.68, 0.46, 0.26, 1)
+modulate = Color(0.76, 0.54, 0.19, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(1380, 46)
+position = Vector2(1016, 51)
 texture = ExtResource("7_tree")
 
 [node name="Tree16" type="Sprite2D" parent="Trees"]
-modulate = Color(0.58, 0.4, 0.22, 1)
+modulate = Color(0.86, 0.65, 0.26, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(1470, 48)
+position = Vector2(1078, 52)
 texture = ExtResource("7_tree")
 flip_h = true
 
 [node name="Tree17" type="Sprite2D" parent="Trees"]
-modulate = Color(0.64, 0.45, 0.27, 1)
+modulate = Color(0.72, 0.5, 0.17, 1)
 material = SubResource("ShaderMaterial_sway_tree")
-position = Vector2(1560, 47)
+position = Vector2(1165, 52)
 texture = ExtResource("7_tree")
+
+[node name="Tree18" type="Sprite2D" parent="Trees"]
+modulate = Color(0.76, 0.54, 0.19, 1)
+material = SubResource("ShaderMaterial_sway_tree")
+position = Vector2(1240, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree19" type="Sprite2D" parent="Trees"]
+modulate = Color(0.82, 0.6, 0.22, 1)
+material = SubResource("ShaderMaterial_sway_tree")
+position = Vector2(1332, 51)
+texture = ExtResource("7_tree")
+
+[node name="Tree20" type="Sprite2D" parent="Trees"]
+modulate = Color(0.86, 0.65, 0.26, 1)
+material = SubResource("ShaderMaterial_sway_tree")
+position = Vector2(1411, 52)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree21" type="Sprite2D" parent="Trees"]
+modulate = Color(0.76, 0.54, 0.19, 1)
+material = SubResource("ShaderMaterial_sway_tree")
+position = Vector2(1478, 51)
+texture = ExtResource("7_tree")
+flip_h = true
+
+[node name="Tree22" type="Sprite2D" parent="Trees"]
+modulate = Color(0.82, 0.6, 0.22, 1)
+material = SubResource("ShaderMaterial_sway_tree")
+position = Vector2(1570, 52)
+texture = ExtResource("7_tree")
+
+[node name="Willow" type="Sprite2D" parent="Trees"]
+modulate = Color(0.95, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_tree")
+position = Vector2(900, -5)
+texture = ExtResource("8_willow")
 
 [node name="Bushes" type="Node2D" parent="."]
 z_index = 2
 
 [node name="Bush1" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.5, 0.4, 0.24, 1)
+modulate = Color(0.78, 0.7, 0.24, 1)
 material = SubResource("ShaderMaterial_sway_bush")
-position = Vector2(45, 70)
-texture = ExtResource("9_bush")
+position = Vector2(-70, 76)
+texture = ExtResource("10_bushs")
 
 [node name="Bush2" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.46, 0.37, 0.22, 1)
+modulate = Color(0.72, 0.62, 0.18, 1)
 material = SubResource("ShaderMaterial_sway_bush")
-position = Vector2(300, 70)
+position = Vector2(-31, 71)
 texture = ExtResource("9_bush")
-flip_h = true
 
 [node name="Bush3" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.5, 0.4, 0.24, 1)
+modulate = Color(0.85, 0.6, 0.15, 1)
 material = SubResource("ShaderMaterial_sway_bush")
-position = Vector2(985, 70)
-texture = ExtResource("9_bush")
-
-[node name="SmallBush1" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.5, 0.4, 0.24, 1)
-material = SubResource("ShaderMaterial_sway_bush")
-position = Vector2(210, 75)
+position = Vector2(-13, 76)
 texture = ExtResource("10_bushs")
 
-[node name="SmallBush2" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.46, 0.37, 0.22, 1)
+[node name="Bush4" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.92, 0.55, 0.14, 1)
 material = SubResource("ShaderMaterial_sway_bush")
-position = Vector2(745, 75)
+position = Vector2(23, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush5" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(43, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush6" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.62, 0.5, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(75, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush7" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.92, 0.55, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(94, 76)
 texture = ExtResource("10_bushs")
 flip_h = true
 
-[node name="SmallBush3" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.5, 0.4, 0.24, 1)
+[node name="Bush8" type="Sprite2D" parent="Bushes"]
+modulate = Color(1.05, 0.82, 0.28, 1)
 material = SubResource("ShaderMaterial_sway_bush")
-position = Vector2(1255, 75)
+position = Vector2(118, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush9" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.92, 0.55, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(141, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush10" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(174, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush11" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.78, 0.7, 0.24, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(192, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush12" type="Sprite2D" parent="Bushes"]
+modulate = Color(1.05, 0.82, 0.28, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(223, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush13" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(250, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush14" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(275, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush15" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.62, 0.5, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(293, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush16" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.78, 0.7, 0.24, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(312, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush17" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(344, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush18" type="Sprite2D" parent="Bushes"]
+modulate = Color(1.05, 0.82, 0.28, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(371, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush19" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(394, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush20" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(431, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush21" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(464, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush22" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(494, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush23" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(512, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush24" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.78, 0.7, 0.24, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(548, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush25" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(571, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush26" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(590, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush27" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(626, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush28" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.92, 0.55, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(660, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush29" type="Sprite2D" parent="Bushes"]
+modulate = Color(1.05, 0.82, 0.28, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(689, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush30" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(711, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush31" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(732, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush32" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.62, 0.5, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(768, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush33" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(795, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush34" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.62, 0.5, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(821, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush35" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.78, 0.7, 0.24, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(852, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush36" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(879, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush37" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(903, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush38" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.62, 0.5, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(943, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush39" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(973, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush40" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1002, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush41" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1025, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush42" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1046, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush43" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1071, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush44" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.78, 0.7, 0.24, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1091, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush45" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1121, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush46" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.92, 0.55, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1145, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush47" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.62, 0.5, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1164, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush48" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.78, 0.7, 0.24, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1182, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush49" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1201, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush50" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1236, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush51" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.62, 0.5, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1266, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush52" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1305, 71)
+texture = ExtResource("9_bush")
+flip_h = true
+
+[node name="Bush53" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1335, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush54" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1358, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush55" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1380, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush56" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1401, 76)
+texture = ExtResource("10_bushs")
+flip_h = true
+
+[node name="Bush57" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.78, 0.7, 0.24, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1436, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush58" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.62, 0.5, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1454, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush59" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.92, 0.55, 0.14, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1485, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush60" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1519, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush61" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.95, 0.72, 0.2, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1549, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush62" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1568, 71)
+texture = ExtResource("9_bush")
+
+[node name="Bush63" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.78, 0.7, 0.24, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1599, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush64" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.85, 0.6, 0.15, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1625, 76)
+texture = ExtResource("10_bushs")
+
+[node name="Bush65" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.72, 0.62, 0.18, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1644, 76)
 texture = ExtResource("10_bushs")
 
 [node name="Shrub1" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.48, 0.38, 0.23, 1)
+modulate = Color(0.7, 0.55, 0.16, 1)
 material = SubResource("ShaderMaterial_sway_bush")
-position = Vector2(580, 64)
+position = Vector2(580, 66)
 texture = ExtResource("11_shrub")
 
 [node name="Shrub2" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.5, 0.4, 0.25, 1)
+modulate = Color(0.62, 0.5, 0.15, 1)
 material = SubResource("ShaderMaterial_sway_bush")
-position = Vector2(1130, 64)
+position = Vector2(1130, 66)
+texture = ExtResource("11_shrub")
+
+[node name="Shrub3" type="Sprite2D" parent="Bushes"]
+modulate = Color(0.66, 0.53, 0.16, 1)
+material = SubResource("ShaderMaterial_sway_bush")
+position = Vector2(1520, 66)
 texture = ExtResource("11_shrub")
 flip_h = true
 
-[node name="Shrub3" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.48, 0.38, 0.23, 1)
-material = SubResource("ShaderMaterial_sway_bush")
-position = Vector2(1520, 64)
-texture = ExtResource("11_shrub")
-
 [node name="Stone1" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.55, 0.55, 0.5, 1)
-position = Vector2(130, 75)
+modulate = Color(0.58, 0.55, 0.45, 1)
+position = Vector2(130, 76)
 texture = ExtResource("13_stone2")
 
 [node name="Stone2" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.5, 0.5, 0.46, 1)
-position = Vector2(960, 75)
+modulate = Color(0.52, 0.5, 0.42, 1)
+position = Vector2(960, 76)
 texture = ExtResource("13_stone2")
 flip_h = true
 
 [node name="Stone3" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.55, 0.55, 0.5, 1)
-position = Vector2(1420, 75)
+modulate = Color(0.58, 0.55, 0.45, 1)
+position = Vector2(1420, 76)
 texture = ExtResource("13_stone2")
 
 [node name="Pebble1" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.55, 0.55, 0.5, 1)
-position = Vector2(380, 77)
+modulate = Color(0.58, 0.55, 0.45, 1)
+position = Vector2(380, 78)
 texture = ExtResource("12_stone1")
+flip_h = true
 
 [node name="Pebble2" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.5, 0.5, 0.46, 1)
-position = Vector2(840, 77)
+modulate = Color(0.52, 0.5, 0.42, 1)
+position = Vector2(840, 78)
 texture = ExtResource("12_stone1")
 flip_h = true
 
 [node name="Pebble3" type="Sprite2D" parent="Bushes"]
-modulate = Color(0.55, 0.55, 0.5, 1)
-position = Vector2(1580, 77)
+modulate = Color(0.58, 0.55, 0.45, 1)
+position = Vector2(1580, 78)
 texture = ExtResource("12_stone1")
+flip_h = true
 
 [node name="SpiderWebs" type="Node2D" parent="."]
 z_index = 3
 
-[node name="OrbBig1" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(24, 40)
-texture = ExtResource("23_worb")
-
-[node name="OrbBig2" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(905, 28)
-texture = ExtResource("23_worb")
-flip_h = true
-
-[node name="OrbBig3" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.85)
-position = Vector2(1345, 42)
-texture = ExtResource("23_worb")
-
-[node name="OrbTorn1" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.78, 0.82, 0.74, 0.85)
-position = Vector2(250, 44)
-texture = ExtResource("24_wtorn")
-
-[node name="OrbTorn2" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.78, 0.82, 0.74, 0.8)
-position = Vector2(700, 35)
-texture = ExtResource("24_wtorn")
-flip_h = true
-
-[node name="OrbTorn3" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.78, 0.82, 0.74, 0.85)
-position = Vector2(1060, 38)
-texture = ExtResource("24_wtorn")
-
-[node name="CornerBig1" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(24, 40)
-texture = ExtResource("22_wcb")
-
-[node name="CornerBig2" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(607, 38)
-texture = ExtResource("22_wcb")
-flip_h = true
-
-[node name="CornerBig3" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.85)
-position = Vector2(24, 40)
-texture = ExtResource("22_wcb")
-flip_h = true
-
-[node name="CornerSmall1" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(77, 74)
-texture = ExtResource("21_wcs")
-
-[node name="CornerSmall2" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(323, 74)
-texture = ExtResource("21_wcs")
-flip_h = true
-
-[node name="CornerSmall3" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.85)
-position = Vector2(1017, 74)
-texture = ExtResource("21_wcs")
-
-[node name="CocoonStrand1" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.85, 0.88, 0.8, 0.95)
-position = Vector2(870, 16)
-texture = ExtResource("26_wcoc")
-
-[node name="CocoonStrand2" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(938, 12)
-texture = ExtResource("26_wcoc")
-flip_h = true
-
 [node name="Strand1" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(500, 18)
-texture = ExtResource("25_wstr")
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(30, 25)
+texture = ExtResource("22_ws64")
+flip_h = true
 
 [node name="Strand2" type="Sprite2D" parent="SpiderWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.85)
-position = Vector2(1350, 20)
-texture = ExtResource("25_wstr")
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(98, 27)
+texture = ExtResource("22_ws64")
+flip_h = true
+
+[node name="Strand3" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(177, 16)
+texture = ExtResource("21_ws48")
+flip_h = true
+
+[node name="Strand4" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(262, 17)
+texture = ExtResource("21_ws48")
+flip_h = true
+
+[node name="Strand5" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(370, 26)
+texture = ExtResource("22_ws64")
+flip_h = true
+
+[node name="Strand6" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(443, 19)
+texture = ExtResource("21_ws48")
+
+[node name="Strand7" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(514, 16)
+texture = ExtResource("21_ws48")
+flip_h = true
+
+[node name="Strand8" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(607, 15)
+texture = ExtResource("21_ws48")
+
+[node name="Strand9" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(698, 24)
+texture = ExtResource("22_ws64")
+
+[node name="Strand10" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(781, 19)
+texture = ExtResource("21_ws48")
+
+[node name="Strand11" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(868, 6)
+texture = ExtResource("20_ws28")
+flip_h = true
+
+[node name="Strand12" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(966, 18)
+texture = ExtResource("21_ws48")
+flip_h = true
+
+[node name="Strand13" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1045, 27)
+texture = ExtResource("22_ws64")
+flip_h = true
+
+[node name="Strand14" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1139, 8)
+texture = ExtResource("20_ws28")
+flip_h = true
+
+[node name="Strand15" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1207, 15)
+texture = ExtResource("21_ws48")
+flip_h = true
+
+[node name="Strand16" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1277, 6)
+texture = ExtResource("20_ws28")
+
+[node name="Strand17" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1377, 5)
+texture = ExtResource("20_ws28")
+flip_h = true
+
+[node name="Strand18" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1452, 15)
+texture = ExtResource("21_ws48")
+flip_h = true
+
+[node name="Strand19" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1541, 27)
+texture = ExtResource("22_ws64")
+
+[node name="FullStrand1" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(350, 55)
+texture = ExtResource("23_wsf")
+flip_h = true
+
+[node name="FullStrand2" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(1075, 55)
+texture = ExtResource("23_wsf")
+flip_h = true
+
+[node name="Cocoon1" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(65, 12)
+texture = ExtResource("25_wcb")
+flip_h = true
+
+[node name="Cocoon2" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(212, 17)
+texture = ExtResource("26_wcl")
+flip_h = true
+
+[node name="Cocoon3" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(336, 4)
+texture = ExtResource("24_wcs")
+
+[node name="Cocoon4" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(448, 11)
+texture = ExtResource("25_wcb")
+flip_h = true
+
+[node name="Cocoon5" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(571, 16)
+texture = ExtResource("26_wcl")
+flip_h = true
+
+[node name="Cocoon6" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(703, 7)
+texture = ExtResource("24_wcs")
+
+[node name="Cocoon7" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(801, 10)
+texture = ExtResource("25_wcb")
+flip_h = true
+
+[node name="Cocoon8" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(949, 16)
+texture = ExtResource("26_wcl")
+flip_h = true
+
+[node name="Cocoon9" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1053, 5)
+texture = ExtResource("24_wcs")
+flip_h = true
+
+[node name="Cocoon10" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1198, 11)
+texture = ExtResource("25_wcb")
+
+[node name="Cocoon11" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1335, 18)
+texture = ExtResource("26_wcl")
+
+[node name="Cocoon12" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1431, 8)
+texture = ExtResource("24_wcs")
+
+[node name="Cocoon13" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1529, 9)
+texture = ExtResource("25_wcb")
+flip_h = true
+
+[node name="Arc1" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(120, 16)
+texture = ExtResource("27_wa48")
+flip_h = true
+
+[node name="Arc2" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(310, 15)
+texture = ExtResource("28_wa80")
+flip_h = true
+
+[node name="Arc3" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(540, 18)
+texture = ExtResource("27_wa48")
+
+[node name="Arc4" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(1000, 19)
+texture = ExtResource("28_wa80")
+
+[node name="Arc5" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(1450, 18)
+texture = ExtResource("27_wa48")
+flip_h = true
+
+[node name="DiagShallow" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+position = Vector2(600, 55)
+texture = ExtResource("32_wds")
+
+[node name="DiagSteep" type="Sprite2D" parent="SpiderWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+position = Vector2(1352, 55)
+texture = ExtResource("33_wdt")
+flip_h = true
 
 [node name="Platforms" type="Node2D" parent="."]
 z_index = 11
 
 [node name="Platform1" type="Sprite2D" parent="Platforms"]
-modulate = Color(0.6, 0.5, 0.36, 1)
+modulate = Color(0.85, 0.68, 0.36, 1)
 position = Vector2(360, 58)
 texture = ExtResource("5_plat")
 
@@ -604,7 +2085,7 @@ position = Vector2(0, -2.5)
 shape = SubResource("RectangleShape2D_plat")
 
 [node name="Platform2" type="Sprite2D" parent="Platforms"]
-modulate = Color(0.6, 0.5, 0.36, 1)
+modulate = Color(0.85, 0.68, 0.36, 1)
 position = Vector2(435, 44)
 texture = ExtResource("5_plat")
 
@@ -616,7 +2097,7 @@ position = Vector2(0, -2.5)
 shape = SubResource("RectangleShape2D_plat")
 
 [node name="Platform3" type="Sprite2D" parent="Platforms"]
-modulate = Color(0.6, 0.5, 0.36, 1)
+modulate = Color(0.85, 0.68, 0.36, 1)
 position = Vector2(515, 58)
 texture = ExtResource("5_plat")
 
@@ -628,7 +2109,7 @@ position = Vector2(0, -2.5)
 shape = SubResource("RectangleShape2D_plat")
 
 [node name="Platform4" type="Sprite2D" parent="Platforms"]
-modulate = Color(0.6, 0.5, 0.36, 1)
+modulate = Color(0.85, 0.68, 0.36, 1)
 position = Vector2(1150, 60)
 texture = ExtResource("5_plat")
 
@@ -640,7 +2121,7 @@ position = Vector2(0, -2.5)
 shape = SubResource("RectangleShape2D_plat")
 
 [node name="Platform5" type="Sprite2D" parent="Platforms"]
-modulate = Color(0.6, 0.5, 0.36, 1)
+modulate = Color(0.85, 0.68, 0.36, 1)
 position = Vector2(1225, 46)
 texture = ExtResource("5_plat")
 
@@ -652,7 +2133,7 @@ position = Vector2(0, -2.5)
 shape = SubResource("RectangleShape2D_plat")
 
 [node name="Platform6" type="Sprite2D" parent="Platforms"]
-modulate = Color(0.6, 0.5, 0.36, 1)
+modulate = Color(0.85, 0.68, 0.36, 1)
 position = Vector2(1300, 60)
 texture = ExtResource("5_plat")
 
@@ -664,7 +2145,7 @@ position = Vector2(0, -2.5)
 shape = SubResource("RectangleShape2D_plat")
 
 [node name="SmallPlatform1" type="Sprite2D" parent="Platforms"]
-modulate = Color(0.6, 0.5, 0.36, 1)
+modulate = Color(0.85, 0.68, 0.36, 1)
 position = Vector2(1240, 28)
 texture = ExtResource("6_plats")
 
@@ -678,59 +2159,35 @@ shape = SubResource("RectangleShape2D_plats")
 [node name="PlatformWebs" type="Node2D" parent="."]
 z_index = 12
 
-[node name="Corner1" type="Sprite2D" parent="PlatformWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(350, 69)
-texture = ExtResource("21_wcs")
-
-[node name="Corner2" type="Sprite2D" parent="PlatformWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(445, 55)
-texture = ExtResource("21_wcs")
-flip_h = true
-
-[node name="Corner3" type="Sprite2D" parent="PlatformWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(1140, 71)
-texture = ExtResource("21_wcs")
-
-[node name="Corner4" type="Sprite2D" parent="PlatformWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(1310, 71)
-texture = ExtResource("21_wcs")
-flip_h = true
-
 [node name="Strand1" type="Sprite2D" parent="PlatformWebs"]
-modulate = Color(0.82, 0.86, 0.78, 0.9)
-position = Vector2(519, 73)
-texture = ExtResource("25_wstr")
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(424, 65)
+texture = ExtResource("20_ws28")
 
-[node name="CocoonStrand1" type="Sprite2D" parent="PlatformWebs"]
-modulate = Color(0.85, 0.88, 0.8, 0.95)
-position = Vector2(1244, 50)
-texture = ExtResource("26_wcoc")
+[node name="Strand2" type="Sprite2D" parent="PlatformWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(447, 65)
+texture = ExtResource("20_ws28")
 
-[node name="Spiders" type="Node2D" parent="."]
+[node name="Cocoon1" type="Sprite2D" parent="PlatformWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1234, 48)
+texture = ExtResource("24_wcs")
+flip_h = true
 
-[node name="Spider1" parent="Spiders" instance=ExtResource("18_sp1")]
-z_index = 10
-position = Vector2(350, 74)
-
-[node name="Spider2" parent="Spiders" instance=ExtResource("19_sp2")]
-z_index = 10
-position = Vector2(620, 72)
-
-[node name="Spider3" parent="Spiders" instance=ExtResource("20_sp3")]
-z_index = 10
-position = Vector2(1060, 74)
-
-[node name="Spider4" parent="Spiders" instance=ExtResource("18_sp1")]
-z_index = 10
-position = Vector2(930, 74)
-
-[node name="Spider5" parent="Spiders" instance=ExtResource("19_sp2")]
-z_index = 10
-position = Vector2(1400, 72)
+[node name="Strand3" type="Sprite2D" parent="PlatformWebs"]
+modulate = Color(0.88, 0.85, 0.72, 0.9)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1248, 49)
+texture = ExtResource("20_ws28")
+flip_h = true
 
 [node name="GroundParallax" type="Parallax2D" parent="."]
 z_index = 10
@@ -738,7 +2195,7 @@ repeat_size = Vector2(160, 0)
 repeat_times = 13
 
 [node name="Ground" type="Sprite2D" parent="GroundParallax"]
-modulate = Color(0.62, 0.5, 0.32, 1)
+modulate = Color(2.2, 0.55, 0.1, 1)
 light_mask = 3
 position = Vector2(-160, 0)
 texture = ExtResource("4_ground")
@@ -754,8 +2211,8 @@ scale = Vector2(3.0664063, 1.21875)
 color = Color(0.93, 1, 0.9, 1)
 texture = SubResource("GradientTexture2D_light")
 
-[node name="BackGroundSmoke" parent="." instance=ExtResource("17_smoke")]
-modulate = Color(0.72, 0.82, 0.72, 0.9)
+[node name="BackGroundSmoke" parent="." instance=ExtResource("18_smoke")]
+modulate = Color(0.84, 0.78, 0.5, 0.9)
 light_mask = 0
 z_index = 11
 
@@ -764,36 +2221,194 @@ light_mask = 0
 z_index = 12
 scroll_scale = Vector2(1.2, 1.2)
 
-[node name="Orb1" type="Sprite2D" parent="Foreground12x"]
-modulate = Color(0.3, 0.34, 0.3, 0.75)
+[node name="Silk1" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
 light_mask = 0
-position = Vector2(200, 30)
-texture = ExtResource("23_worb")
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(-100, 13)
+texture = ExtResource("28_wa80")
 
-[node name="CocoonStrand1" type="Sprite2D" parent="Foreground12x"]
-modulate = Color(0.3, 0.34, 0.3, 0.75)
+[node name="Silk2" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
 light_mask = 0
-position = Vector2(620, 18)
-texture = ExtResource("26_wcoc")
-
-[node name="Orb2" type="Sprite2D" parent="Foreground12x"]
-modulate = Color(0.3, 0.34, 0.3, 0.7)
-light_mask = 0
-position = Vector2(980, 26)
-texture = ExtResource("23_worb")
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(93, 56)
+texture = ExtResource("23_wsf")
 flip_h = true
 
-[node name="Strand1" type="Sprite2D" parent="Foreground12x"]
-modulate = Color(0.3, 0.34, 0.3, 0.75)
+[node name="Silk3" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
 light_mask = 0
-position = Vector2(1500, 14)
-texture = ExtResource("25_wstr")
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(245, 56)
+texture = ExtResource("23_wsf")
+flip_h = true
 
-[node name="Torn1" type="Sprite2D" parent="Foreground12x"]
-modulate = Color(0.3, 0.34, 0.3, 0.7)
+[node name="Silk4" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
 light_mask = 0
-position = Vector2(1780, 32)
-texture = ExtResource("24_wtorn")
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(408, 10)
+texture = ExtResource("25_wcb")
+
+[node name="Silk5" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(613, 56)
+texture = ExtResource("23_wsf")
+
+[node name="Silk6" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(805, 7)
+texture = ExtResource("24_wcs")
+
+[node name="Silk7" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(976, 6)
+texture = ExtResource("24_wcs")
+
+[node name="Silk8" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(1116, 59)
+texture = ExtResource("23_wsf")
+flip_h = true
+
+[node name="Silk9" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1299, 17)
+texture = ExtResource("26_wcl")
+flip_h = true
+
+[node name="Silk10" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(1483, 13)
+texture = ExtResource("28_wa80")
+flip_h = true
+
+[node name="Silk11" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1693, 15)
+texture = ExtResource("26_wcl")
+flip_h = true
+
+[node name="Silk12" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(1866, 15)
+texture = ExtResource("28_wa80")
+
+[node name="Silk13" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(2025, 11)
+texture = ExtResource("25_wcb")
+flip_h = true
+
+[node name="Silk14" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.32, 0.31, 0.22, 0.8)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(2173, 10)
+texture = ExtResource("28_wa80")
+flip_h = true
+
+[node name="GiantWeb1" type="Sprite2D" parent="Foreground12x"]
+modulate = Color(0.42, 0.4, 0.3, 0.85)
+light_mask = 0
+position = Vector2(1400, 45)
+texture = ExtResource("34_giant")
+
+[node name="Foreground145x" type="Parallax2D" parent="."]
+light_mask = 0
+z_index = 13
+scroll_scale = Vector2(1.45, 1.45)
+
+[node name="Silk1" type="Sprite2D" parent="Foreground145x"]
+modulate = Color(0.24, 0.23, 0.16, 0.85)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(-150, 17)
+texture = ExtResource("26_wcl")
+
+[node name="Silk2" type="Sprite2D" parent="Foreground145x"]
+modulate = Color(0.24, 0.23, 0.16, 0.85)
+light_mask = 0
+position = Vector2(150, 55)
+texture = ExtResource("33_wdt")
+flip_h = true
+
+[node name="Silk3" type="Sprite2D" parent="Foreground145x"]
+modulate = Color(0.24, 0.23, 0.16, 0.85)
+light_mask = 0
+position = Vector2(463, 55)
+texture = ExtResource("33_wdt")
+
+[node name="Silk4" type="Sprite2D" parent="Foreground145x"]
+modulate = Color(0.24, 0.23, 0.16, 0.85)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(747, 17)
+texture = ExtResource("29_wa120")
+flip_h = true
+
+[node name="Silk5" type="Sprite2D" parent="Foreground145x"]
+modulate = Color(0.24, 0.23, 0.16, 0.85)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_soft")
+position = Vector2(1131, 56)
+texture = ExtResource("23_wsf")
+flip_h = true
+
+[node name="Silk6" type="Sprite2D" parent="Foreground145x"]
+modulate = Color(0.24, 0.23, 0.16, 0.85)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1477, 16)
+texture = ExtResource("26_wcl")
+flip_h = true
+
+[node name="Silk7" type="Sprite2D" parent="Foreground145x"]
+modulate = Color(0.24, 0.23, 0.16, 0.85)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(1826, 17)
+texture = ExtResource("26_wcl")
+flip_h = true
+
+[node name="Silk8" type="Sprite2D" parent="Foreground145x"]
+modulate = Color(0.24, 0.23, 0.16, 0.85)
+light_mask = 0
+material = SubResource("ShaderMaterial_silk_sway")
+position = Vector2(2226, 16)
+texture = ExtResource("26_wcl")
+
+[node name="GiantWeb1" type="Sprite2D" parent="Foreground145x"]
+modulate = Color(0.38, 0.36, 0.27, 0.9)
+light_mask = 0
+position = Vector2(700, 45)
+texture = ExtResource("34_giant")
+
+[node name="GiantWeb2" type="Sprite2D" parent="Foreground145x"]
+modulate = Color(0.38, 0.36, 0.27, 0.9)
+light_mask = 0
+position = Vector2(1800, 45)
+texture = ExtResource("34_giant")
+flip_h = true
 
 [node name="MurkFilter" type="Node2D" parent="."]
 z_index = 14

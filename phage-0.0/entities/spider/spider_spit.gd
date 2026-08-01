@@ -31,7 +31,6 @@ func _physics_process(delta: float) -> void:
 	elapsed += delta
 	velocity.y += projectile_gravity * delta
 	global_position += velocity * delta
-	queue_redraw()
 	for body in get_overlapping_bodies():
 		if body == null:
 			continue
@@ -48,10 +47,10 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 
 func _draw() -> void:
+	# 平滑亚像素绘制(不锁格)：跟随节点位置即可，无需每帧重绘
 	var s: float = float(size_px)
-	var cell: Vector2 = Vector2(floorf(global_position.x), floorf(global_position.y)) - global_position
-	draw_rect(Rect2(cell - Vector2(s, s) * 0.5, Vector2(s, s) + Vector2(2.0, 2.0)), rim_color)
-	draw_rect(Rect2(cell - Vector2(s, s) * 0.5 + Vector2(1.0, 1.0), Vector2(s, s)), core_color)
+	draw_rect(Rect2(Vector2(-s * 0.5 - 1.0, -s * 0.5 - 1.0), Vector2(s + 2.0, s + 2.0)), rim_color)
+	draw_rect(Rect2(Vector2(-s * 0.5, -s * 0.5), Vector2(s, s)), core_color)
 
 func _explode() -> void:
 	active = false

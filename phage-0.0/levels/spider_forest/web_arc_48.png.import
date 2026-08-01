@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c18kjx8uq0pqd"
-path="res://.godot/imported/web_orb_big.png-cb6c529e464efb03a69318ad1e682746.ctex"
+uid="uid://dwen1eftc0igt"
+path="res://.godot/imported/web_arc_48.png-d07f090bdc5f7bacdfd078df34030b57.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://levels/spider_forest/web_orb_big.png"
-dest_files=["res://.godot/imported/web_orb_big.png-cb6c529e464efb03a69318ad1e682746.ctex"]
+source_file="res://levels/spider_forest/web_arc_48.png"
+dest_files=["res://.godot/imported/web_arc_48.png-d07f090bdc5f7bacdfd078df34030b57.ctex"]
 
 [params]
 

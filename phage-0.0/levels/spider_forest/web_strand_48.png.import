@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ehnxkuvsq56u"
-path="res://.godot/imported/web_corner_small.png-2678a50567ab82f969aafe0171ed5e29.ctex"
+uid="uid://c6ahhxcho228y"
+path="res://.godot/imported/web_strand_48.png-e5f4477eaeafe4ddf30bbae719563d41.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://levels/spider_forest/web_corner_small.png"
-dest_files=["res://.godot/imported/web_corner_small.png-2678a50567ab82f969aafe0171ed5e29.ctex"]
+source_file="res://levels/spider_forest/web_strand_48.png"
+dest_files=["res://.godot/imported/web_strand_48.png-e5f4477eaeafe4ddf30bbae719563d41.ctex"]
 
 [params]
 

@@ -59,17 +59,13 @@ size = Vector2(130, 44)
 [node name="Spider2" type="CharacterBody2D" unique_id=1617544780]
 collision_layer = 4
 script = ExtResource("1_spd")
-max_health = 350
-health = 350
+max_health = 160
+health = 160
 walk_speed = 10.0
 chase_speed = 18.0
 collision_damage = 10
 knockback_speed = 60.0
-skill = 3
-skill_cooldown = 6.0
-skill_range = 60.0
-windup_time = 0.5
-shield_duration = 3.0
+sprite_faces_left = true
 
 [node name="Legs" type="Node2D" parent="." unique_id=1983562252]
 script = ExtResource("2_leg")

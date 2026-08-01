@@ -68,6 +68,9 @@ collision_damage = 5
 skill = 1
 skill_cooldown = 2.5
 skill_range = 45.0
+pounce_jump_min = 200.0
+pounce_jump_max = 250.0
+pounce_gravity_scale = 0.72
 
 [node name="Legs" type="Node2D" parent="." unique_id=1716380734]
 script = ExtResource("2_leg")

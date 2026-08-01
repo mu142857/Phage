@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://v4nmvg043iwm"]
+
+[ext_resource type="Script" uid="uid://7g1kwjnoi1ft" path="res://entities/spider/spider_spit.gd" id="1_spit"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_spit"]
+radius = 2.0
+
+[sub_resource type="Gradient" id="Gradient_cad11"]
+offsets = PackedFloat32Array(0, 0.45945945, 1)
+colors = PackedColorArray(0.3696349, 0.64884543, 0.39137492, 1, 1, 1, 1, 1, 0.78544927, 0.34959248, 0.105484806, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_uh1h4"]
+gradient = SubResource("Gradient_cad11")
+
+[sub_resource type="Gradient" id="Gradient_s4fhm"]
+offsets = PackedFloat32Array(0, 0.10810811, 0.4864865, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_r5pde"]
+gradient = SubResource("Gradient_s4fhm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_om6so"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_r5pde")
+color_initial_ramp = SubResource("GradientTexture1D_uh1h4")
+
+[node name="SpiderSpit" type="Area2D" unique_id=195670318]
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("1_spit")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=118304537]
+shape = SubResource("CircleShape2D_spit")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=711214513]
+process_material = SubResource("ParticleProcessMaterial_om6so")

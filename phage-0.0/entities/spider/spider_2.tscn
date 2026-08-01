@@ -1,7 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://odgxjrnogrwf"]
+[gd_scene format=3 uid="uid://odgxjrnogrwf"]
 
-[ext_resource type="Script" path="res://entities/spider/spider.gd" id="1_spd"]
-[ext_resource type="Script" path="res://entities/spider/spider_legs.gd" id="2_leg"]
+[ext_resource type="Script" uid="uid://k8u53isjwuon" path="res://entities/spider/spider.gd" id="1_spd"]
+[ext_resource type="Script" uid="uid://cqrhhf36lyudl" path="res://entities/spider/spider_legs.gd" id="2_leg"]
 [ext_resource type="Texture2D" uid="uid://b7a8av4368y2v" path="res://entities/spider/spider2.png" id="3_tex"]
 [ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="4_sha"]
 
@@ -10,6 +10,9 @@ resource_local_to_scene = true
 shader = ExtResource("4_sha")
 shader_parameter/Enabled = false
 shader_parameter/Tint = Color(0.7841302, 0.50126714, 0.49497557, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(16, 18)
 
 [sub_resource type="Animation" id="Animation_hit"]
 resource_name = "HitFlash"
@@ -48,14 +51,10 @@ _data = {
 &"RESET": SubResource("Animation_reset")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(16, 18)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aggro"]
 size = Vector2(130, 44)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_atk"]
-size = Vector2(20, 20)
 
 [node name="Spider2" type="CharacterBody2D" unique_id=1617544780]
 collision_layer = 4
@@ -66,10 +65,14 @@ walk_speed = 10.0
 chase_speed = 18.0
 collision_damage = 10
 knockback_speed = 60.0
+skill = 3
+skill_cooldown = 6.0
+skill_range = 60.0
+windup_time = 0.5
+shield_duration = 3.0
 
-[node name="Legs" type="Node2D" parent="."]
+[node name="Legs" type="Node2D" parent="." unique_id=1983562252]
 script = ExtResource("2_leg")
-leg_count = 6
 upper_len = 7.0
 spread = 6.0
 gap = 4.0
@@ -80,33 +83,34 @@ hip_offset = Vector2(0, -8)
 leg_color = Color(0.062745, 0.062745, 0.062745, 1)
 foot_color = Color(0.227451, 0.227451, 0.227451, 1)
 
-[node name="Body" type="Sprite2D" parent="."]
+[node name="Body" type="Sprite2D" parent="." unique_id=829285729]
 material = SubResource("ShaderMaterial_spd2")
 position = Vector2(0, -13)
 texture = ExtResource("3_tex")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=141384813]
 position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_body")
+debug_color = Color(0, 0.5950001, 0.7, 0)
 
-[node name="HitEffectPlayer" type="AnimationPlayer" parent="."]
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=1556941182]
 root_motion_local = true
 libraries/ = SubResource("AnimationLibrary_spd2")
 
-[node name="PlayerCheck" type="Area2D" parent="."]
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=1670171468]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=2120180316]
 position = Vector2(0, -10)
 shape = SubResource("RectangleShape2D_aggro")
 debug_color = Color(0, 0.6, 0.7, 0)
 
-[node name="AttackCheck" type="Area2D" parent="."]
+[node name="AttackCheck" type="Area2D" parent="." unique_id=752107619]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackCheck"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackCheck" unique_id=1962955659]
 position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_atk")
 debug_color = Color(0, 0.6, 0.7, 0)

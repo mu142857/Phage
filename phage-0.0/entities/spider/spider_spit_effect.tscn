@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://dw7u65hqg0e06"]
+
+[ext_resource type="Script" uid="uid://de54ffdb8n4uv" path="res://entities/spider/spider_spit_effect.gd" id="1_uhql0"]
+
+[sub_resource type="Gradient" id="Gradient_3b4e6"]
+offsets = PackedFloat32Array(0, 0.13114753, 0.7663934, 0.8852459, 1)
+colors = PackedColorArray(1, 1, 0.6666667, 0, 0.16426697, 0.5633789, 0.41021538, 1, 0.9853204, 0.523594, 0.4402396, 1, 1, 0.40101483, 0.6284241, 1, 0.654902, 0.56078434, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_uhql0"]
+gradient = SubResource("Gradient_3b4e6")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wdlvu"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(4, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 10.0
+initial_velocity_min = 20.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 98, 0)
+scale_min = 2.0
+scale_max = 2.0
+color = Color(1, 1, 0.6666667, 1)
+color_ramp = SubResource("GradientTexture1D_uhql0")
+
+[node name="SpiderSpitEffect" type="GPUParticles2D" unique_id=1516146476]
+emitting = false
+amount = 15
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_wdlvu")
+script = ExtResource("1_uhql0")
+
+[node name="Timer" type="Timer" parent="." unique_id=934411832]
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

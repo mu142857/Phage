@@ -34,6 +34,16 @@ func _ready() -> void:
 		})
 
 func _physics_process(delta: float) -> void:
+	# 腾空(跳扑/坠落)时不迈步：脚快速收拢跟随身体，避免腿被拉扯变形
+	if _body != null and not _body.is_on_floor():
+		for leg in _legs:
+			leg["step"] = -1.0
+			var tuck: Vector2 = Vector2(
+				global_position.x + float(leg["spread"]) * 0.8,
+				global_position.y + foot_y_offset - 1.5)
+			leg["foot"] = (leg["foot"] as Vector2).lerp(tuck, minf(20.0 * delta, 1.0))
+		queue_redraw()
+		return
 	var vel_x: float = 0.0
 	if _body != null:
 		vel_x = _body.velocity.x

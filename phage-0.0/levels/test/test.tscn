@@ -50,9 +50,13 @@ texture = SubResource("GradientTexture2D_jtfo5")
 
 [node name="Spider3" parent="." unique_id=1617544780 instance=ExtResource("2_kqk0q")]
 position = Vector2(144, 43)
+windup_time = 0.3
 
 [node name="Spider1" parent="." unique_id=2086249136 instance=ExtResource("3_twiol")]
 position = Vector2(108, 29)
 
 [node name="Spider2" parent="." unique_id=1521468396 instance=ExtResource("4_mjedn")]
 position = Vector2(72, 52)
+skill_cooldown = 4.0
+skill_range = 55.0
+shield_heal_per_sec = 25.0

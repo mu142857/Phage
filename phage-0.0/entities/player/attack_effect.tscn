@@ -31,6 +31,7 @@ color_ramp = SubResource("GradientTexture1D_jj3vg")
 color_initial_ramp = SubResource("GradientTexture1D_7of8s")
 
 [node name="AttackEffect" type="GPUParticles2D" unique_id=757667208]
+z_index = 20
 emitting = false
 lifetime = 0.5
 explosiveness = 1.0

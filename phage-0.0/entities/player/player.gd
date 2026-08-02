@@ -75,6 +75,11 @@ var shield_ready: Array[bool] = [true, true]
 var shield_recharge: Array[float] = [0.0, 0.0]
 var is_guarding: bool = false
 var guard_slot: int = -1
+
+# ---- 开发者模式 ----
+# F1(或 ` 反引号)切换:开启后不死不破盾,全身金色提示。
+# 地刺仍会把人弹回安全点(respawn_to_safe 不走 take_damage),方便继续跑图。
+var dev_god_mode: bool = false
 # 走路特效当前应否发射(有盾时改由 ShieldPlayerWalkingEffect 发射)。
 var _walking_effect_enabled: bool = false
 
@@ -121,6 +126,9 @@ func _process(_delta: float) -> void:
 	sprite.position.y = roundf(global_position.y) - global_position.y
 
 func _physics_process(_delta: float) -> void:
+	# 开发者模式切换不受 input_locked 限制,任何时候都能开关。
+	if Input.is_action_just_pressed(&"dev_god_mode"):
+		_toggle_dev_god_mode()
 	_update_shield_recharge(_delta)
 	if not input_locked and Input.is_action_just_pressed(&"Backpack"):
 		toggle_shield()
@@ -197,7 +205,17 @@ func set_lock(locked: bool) -> void:
 		state_machine.set_process(not locked)
 		state_machine.set_physics_process(not locked)
 
+func _toggle_dev_god_mode() -> void:
+	dev_god_mode = not dev_god_mode
+	# 用根节点 modulate 做金色提示,不碰 sprite.modulate(攻击发光在用它)。
+	modulate = Color(1.0, 0.85, 0.45) if dev_god_mode else Color.WHITE
+	print("[DEV] 无敌模式: ", "开" if dev_god_mode else "关")
+
 func take_damage(_amount: int) -> void:
+	if dev_god_mode:
+		# 开发者模式:不掉血不破盾,只给短无敌,免得贴着怪连帧触发。
+		_start_invincibility()
+		return
 	if is_invincible:
 		return
 	if is_guarding:

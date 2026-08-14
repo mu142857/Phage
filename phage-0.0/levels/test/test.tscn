@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://d3kdstembis3k" path="res://entities/spider/spider_3.tscn" id="2_kqk0q"]
 [ext_resource type="PackedScene" uid="uid://dd5fmvnrmr2ub" path="res://entities/spider/spider_1.tscn" id="3_twiol"]
 [ext_resource type="PackedScene" uid="uid://odgxjrnogrwf" path="res://entities/spider/spider_2.tscn" id="4_mjedn"]
+[ext_resource type="PackedScene" uid="uid://bpas7fkgx0lmi" path="res://entities/remi.tscn" id="5_twiol"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5f5au"]
 
@@ -58,5 +59,6 @@ position = Vector2(108, 29)
 [node name="Spider2" parent="." unique_id=1521468396 instance=ExtResource("4_mjedn")]
 position = Vector2(72, 52)
 skill_cooldown = 4.0
-skill_range = 55.0
-shield_heal_per_sec = 25.0
+
+[node name="Remi" parent="." unique_id=95298102 instance=ExtResource("5_twiol")]
+position = Vector2(19, 52)

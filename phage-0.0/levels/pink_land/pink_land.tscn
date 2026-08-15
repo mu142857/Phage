@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://16cyscbccy6a"]
 
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="Texture2D" uid="uid://crjxdbxwmb1rv" path="res://levels/pink_land/pink_sky.png" id="1_41qx4"]
 [ext_resource type="Script" uid="uid://w761gsmkhxa" path="res://levels/pink_land/pink_land.gd" id="1_73p1s"]
 [ext_resource type="Texture2D" uid="uid://dd5jvch1w7v2c" path="res://levels/pink_land/pink_land_support.png" id="2_73p1s"]
@@ -518,3 +519,9 @@ position = Vector2(700, 78)
 
 [node name="PinkLandSpike9" parent="Spikes" unique_id=148372716 instance=ExtResource("8_0f480")]
 position = Vector2(836, 78)
+
+[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
+weekday_text = "周四的梦"
+title_text = "盐做的山"
+story_text_1 = "睡前，盐灯亮了一整晚。"
+story_text_2 = "粉色的山比想象中软，也比想象中高。"

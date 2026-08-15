@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cfyivylrayfw6"]
 
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_0g47x"]
 [ext_resource type="Script" uid="uid://bjkobh2edaiam" path="res://levels/rust_arena/rust_city.gd" id="1_j3jog"]
 [ext_resource type="Texture2D" uid="uid://bgidn1vlfrlbp" path="res://levels/rust_city/rust_city_ground.png" id="1_tlm15"]
@@ -923,3 +924,9 @@ repeat_times = 8
 [node name="BackGroundSmoke" parent="." unique_id=258183138 instance=ExtResource("18_i5hsc")]
 light_mask = 0
 z_index = 11
+
+[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
+weekday_text = "周三的梦"
+title_text = "铁锈城"
+story_text_1 = "睡前，给铁皮人上满了发条。"
+story_text_2 = "咔哒，咔哒。整座城市都在走字。"

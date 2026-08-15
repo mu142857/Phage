@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://8ywdwik8n1tx"]
 
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="Script" uid="uid://c3y58kyid33ni" path="res://levels/crimson_sanctum/crimson_sanctum.gd" id="1_cu4ki"]
 [ext_resource type="Texture2D" uid="uid://b2j8rcm4lpxij" path="res://levels/crimson_sanctum/crimson_sanctum_sculpture.png" id="2_ibwd0"]
 [ext_resource type="Texture2D" uid="uid://dwfakb6pywvr6" path="res://levels/crimson_sanctum/crimson_sanctum_bachground0.png" id="3_aw6wk"]
@@ -336,3 +337,10 @@ theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
 theme_override_fonts/font = ExtResource("18_1krd8")
 theme_override_font_sizes/font_size = 10
 text = "献祭"
+
+[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
+weekday_text = "周日的梦"
+title_text = "礼拜日"
+story_text_1 = "夜里，老挂钟敲了十二下。数着数着，睡着了。"
+story_text_2 = "一周的终点，是一场礼拜。"
+disable_process_paths = Array[NodePath]([NodePath("../SlimeSpawner")])

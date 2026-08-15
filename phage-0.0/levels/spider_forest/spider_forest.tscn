@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="Script" path="res://levels/spider_forest/spider_forest.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
 [ext_resource type="Texture2D" uid="uid://dqfy7nayqs18q" path="res://levels/silvaron/silvaron_background.png" id="3_bg"]
@@ -2418,3 +2419,10 @@ light_mask = 0
 position = Vector2(800, 4)
 scale = Vector2(28, 1.1)
 texture = SubResource("GradientTexture2D_murk")
+
+[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
+weekday_text = "周五的梦"
+title_text = "网"
+story_text_1 = "早上，盆栽结满了蛛网。没来得及清理。"
+story_text_2 = "森林被网缠住了。网的深处，有什么织个不停。"
+disable_process_paths = Array[NodePath]([NodePath("..")])

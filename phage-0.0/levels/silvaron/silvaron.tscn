@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://d71f5lta185c"]
 
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="Script" uid="uid://b0yqm2ol2in4y" path="res://levels/silvaron/silvaron.gd" id="1_4cmem"]
 [ext_resource type="Texture2D" uid="uid://dbvrbun0815ca" path="res://levels/silvaron/silvaron_ground.png" id="1_38yq8"]
 [ext_resource type="Texture2D" uid="uid://dqfy7nayqs18q" path="res://levels/silvaron/silvaron_background.png" id="4_2rk1k"]
@@ -6792,3 +6793,9 @@ position = Vector2(236, -296)
 position = Vector2(0, -7)
 scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("GradientTexture2D_08jux")
+
+[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
+weekday_text = "周六的梦"
+title_text = "森林的谢礼"
+story_text_1 = "白天，把盆栽上的网，一点一点清干净了。"
+story_text_2 = "今夜的森林，银光透亮。"

@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://s3hdppp0km17"]
 
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="Script" uid="uid://dtq1vmfaf8lrc" path="res://levels/spawn_room/spawn_room.gd" id="1_aun17"]
 [ext_resource type="Texture2D" uid="uid://bdv6l6g0k54rr" path="res://levels/spawn_room/spawn_room_ground1.png" id="2_f6b0m"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="3_ctuyw"]
@@ -306,3 +307,9 @@ theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
 theme_override_fonts/font = ExtResource("14_0ro3w")
 theme_override_font_sizes/font_size = 7
 text = "按下←攻击"
+
+[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
+weekday_text = "周一的梦"
+title_text = "伤口"
+story_text_1 = "睡前翻书的时候，纸划破了手指。"
+story_text_2 = "那一夜的梦，是红色的。"

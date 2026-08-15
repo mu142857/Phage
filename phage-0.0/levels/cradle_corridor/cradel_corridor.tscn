@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://diojcfsu5srtp"]
 
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="Script" uid="uid://c1eqqcfj5cia5" path="res://levels/cradle_corridor/cradel_corridor.gd" id="1_js0h5"]
 [ext_resource type="Texture2D" uid="uid://dtchvx4o02bc0" path="res://levels/cradle_corridor/cradel_corridor_left_end.png" id="1_qbil3"]
 [ext_resource type="Texture2D" uid="uid://ebnc676xw8di" path="res://levels/cradle_corridor/cradel_corridor.png" id="2_kshva"]
@@ -1785,3 +1786,9 @@ theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
 theme_override_fonts/font = ExtResource("16_xvv1a")
 theme_override_font_sizes/font_size = 10
 text = "silvaron"
+
+[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
+weekday_text = "周二的梦"
+title_text = "珊瑚摇篮"
+story_text_1 = "睡前，给鱼缸换了水。珊瑚在灯下轻轻地摇。"
+story_text_2 = "梦里的水很暖。摇篮的深处，有什么在呼吸。"

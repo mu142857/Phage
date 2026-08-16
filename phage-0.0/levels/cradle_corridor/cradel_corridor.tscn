@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://diojcfsu5srtp"]
 
-[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="Script" uid="uid://c1eqqcfj5cia5" path="res://levels/cradle_corridor/cradel_corridor.gd" id="1_js0h5"]
 [ext_resource type="Texture2D" uid="uid://dtchvx4o02bc0" path="res://levels/cradle_corridor/cradel_corridor_left_end.png" id="1_qbil3"]
 [ext_resource type="Texture2D" uid="uid://ebnc676xw8di" path="res://levels/cradle_corridor/cradel_corridor.png" id="2_kshva"]
@@ -15,8 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://drbdeq7r3fmdv" path="res://levels/cradle_corridor/wall.png" id="11_nfyjk"]
 [ext_resource type="Texture2D" uid="uid://bh2siqogdaihy" path="res://levels/cradle_corridor/red_wall.png" id="12_hu8kv"]
 [ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="12_woclt"]
-[ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="15_obbm8"]
-[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="16_xvv1a"]
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a1y6q"]
 
@@ -1267,7 +1265,6 @@ texture = ExtResource("7_nfyjk")
 
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("5_l5uys")]
 modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
-z_index = 10
 position = Vector2(11, 3)
 
 [node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1585810709]
@@ -1771,24 +1768,8 @@ position = Vector2(613, 80)
 [node name="PopTopsPosition2" type="Node2D" parent="." unique_id=2025007576]
 position = Vector2(954, 80)
 
-[node name="Teleport" parent="." unique_id=1957074840 instance=ExtResource("15_obbm8")]
-position = Vector2(9, 75)
-scene_path = "uid://d71f5lta185c"
-teleport_id = 1
-player_light = true
-
-[node name="Label" type="Label" parent="Teleport" unique_id=773955237]
-offset_left = -2.0
-offset_top = -21.0
-offset_right = 31.0
-offset_bottom = -11.0
-theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
-theme_override_fonts/font = ExtResource("16_xvv1a")
-theme_override_font_sizes/font_size = 10
-text = "silvaron"
-
-[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
-weekday_text = "周二的梦"
-title_text = "珊瑚摇篮"
+[node name="DreamIntro" parent="." unique_id=94633649 instance=ExtResource("90_dreamintro")]
 story_text_1 = "睡前，给鱼缸换了水。珊瑚在灯下轻轻地摇。"
 story_text_2 = "梦里的水很暖。摇篮的深处，有什么在呼吸。"
+weekday_text = "周二的梦"
+title_text = "珊瑚摇篮"

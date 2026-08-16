@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bpas7fkgx0lmi"]
 
 [ext_resource type="Texture2D" uid="uid://dgkx0na0s0jga" path="res://entities/remi/remi-Sheet.png" id="1_0ntiy"]
+[ext_resource type="Script" uid="uid://c3gcppti0b0go" path="res://entities/remi/remi.gd" id="2_remis"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0ntiy"]
 atlas = ExtResource("1_0ntiy")
@@ -457,10 +458,22 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ntiy"]
+size = Vector2(18.5, 43)
+
 [node name="Remi" type="CharacterBody2D" unique_id=95298102]
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+light_mask = 32
+script = ExtResource("2_remis")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1213838128]
+light_mask = 32
 sprite_frames = SubResource("SpriteFrames_f8ont")
-animation = &"WolfIdle"
-frame_progress = 0.3403457
-offset = Vector2(-1, -23)
+animation = &"HumanIdle"
+autoplay = "HumanIdle"
+frame_progress = 0.15443256
+offset = Vector2(1, -23)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1864839015]
+position = Vector2(0, -21.5)
+shape = SubResource("RectangleShape2D_0ntiy")

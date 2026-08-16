@@ -1,0 +1,402 @@
+[gd_scene format=3 uid="uid://cxnxcxf1uj728"]
+
+[ext_resource type="Texture2D" uid="uid://45hkrjulpy4f" path="res://levels/remi's_room/room_bg.png" id="1_wktvi"]
+[ext_resource type="Texture2D" uid="uid://diwk4bpqi1cm0" path="res://levels/remi's_room/room_roof.png" id="2_40vaa"]
+[ext_resource type="Texture2D" uid="uid://b3p01q7nti735" path="res://levels/remi's_room/room_window.png" id="2_ql4vh"]
+[ext_resource type="Texture2D" uid="uid://u2w765h1gug8" path="res://levels/remi's_room/room_table.png" id="3_42xwg"]
+[ext_resource type="Texture2D" uid="uid://doupqnf6jw6jo" path="res://levels/remi's_room/room_yunwupaint.png" id="5_p34hg"]
+[ext_resource type="Texture2D" uid="uid://bxhsn6hj30pxd" path="res://levels/remi's_room/room_bowenpaint.png" id="6_sr741"]
+[ext_resource type="Texture2D" uid="uid://cmhanfbuvhwly" path="res://levels/remi's_room/room_plant.png" id="7_c3ct0"]
+[ext_resource type="Texture2D" uid="uid://bei4k4fwg0dwm" path="res://levels/remi's_room/room_watertank.png" id="8_dvtdn"]
+[ext_resource type="Texture2D" uid="uid://dpjaqcvf2dopd" path="res://levels/remi's_room/room_saltlight.png" id="9_iiuqx"]
+[ext_resource type="Texture2D" uid="uid://im37vakp4p6q" path="res://levels/remi's_room/room_bed.png" id="10_xxbh0"]
+[ext_resource type="Texture2D" uid="uid://b7rcfnjgqdef2" path="res://levels/remi's_room/room_bluecrystal.png" id="11_7ac2b"]
+[ext_resource type="Texture2D" uid="uid://ders2k3601kha" path="res://levels/remi's_room/room_redcrystal.png" id="12_pprmb"]
+[ext_resource type="Texture2D" uid="uid://c2jy44xsgtqld" path="res://levels/remi's_room/room_flower.png" id="13_8170c"]
+[ext_resource type="Texture2D" uid="uid://80vm6cbyo2mx" path="res://levels/remi's_room/room_light.png" id="14_bmkox"]
+[ext_resource type="PackedScene" uid="uid://bpas7fkgx0lmi" path="res://entities/remi.tscn" id="15_p34hg"]
+[ext_resource type="Script" uid="uid://bcw1ixefymupb" path="res://levels/remi's_room/clickable_item.gd" id="16_click"]
+[ext_resource type="Script" uid="uid://1vc2kdqliajd" path="res://levels/remi's_room/window_view.gd" id="17_wview"]
+[ext_resource type="Texture2D" uid="uid://co43apgiywlkm" path="res://levels/remi's_room/night_sky.png" id="18_sky"]
+[ext_resource type="Texture2D" uid="uid://dx80561h60erf" path="res://levels/remi's_room/moon_phases.png" id="19_moon"]
+[ext_resource type="Texture2D" uid="uid://1o5v8lhgcsj7" path="res://levels/remi's_room/bird.png" id="20_bird"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_p34hg"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sr741"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_c3ct0"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_add"]
+blend_mode = 1
+
+[sub_resource type="Curve" id="Curve_dustfade"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_dustfade"]
+curve = SubResource("Curve_dustfade")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dust"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(70, 34, 1)
+spread = 180.0
+initial_velocity_min = 1.0
+initial_velocity_max = 3.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+color = Color(1, 0.95, 0.8, 0.5)
+alpha_curve = SubResource("CurveTexture_dustfade")
+
+[sub_resource type="Gradient" id="Gradient_soft"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_soft"]
+gradient = SubResource("Gradient_soft")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_steep"]
+offsets = PackedFloat32Array(0, 0.33663365, 0.6188119, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.075, 0.075, 0.075, 1, 0.13, 0.13, 0.13, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_steep"]
+gradient = SubResource("Gradient_steep")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_sr741"]
+offsets = PackedFloat32Array(0, 0.47524753, 1)
+colors = PackedColorArray(0.72255445, 0.72255445, 0.72255445, 1, 0.23392546, 0.23392546, 0.23392543, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_c3ct0"]
+gradient = SubResource("Gradient_sr741")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_dvtdn"]
+offsets = PackedFloat32Array(0, 0.49257424, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.80445546, 0.80445546, 0.80445546, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_iiuqx"]
+gradient = SubResource("Gradient_dvtdn")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_xxbh0"]
+offsets = PackedFloat32Array(0, 0.30445546, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.9232673, 0.9232673, 0.9232673, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7ac2b"]
+gradient = SubResource("Gradient_xxbh0")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_c3ct0"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dvtdn"]
+gradient = SubResource("Gradient_c3ct0")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="Remi\'sRoom" type="Node2D" unique_id=1106929573 groups=["camera_fixed"]]
+
+[node name="Room" type="Node2D" parent="." unique_id=1002301956]
+
+[node name="Background" type="Sprite2D" parent="Room" unique_id=1441679056 groups=["remi_room_dimmable"]]
+texture = ExtResource("1_wktvi")
+centered = false
+
+[node name="WindowView" type="Node2D" parent="Room" unique_id=41077584 groups=["remi_room_dimmable"]]
+script = ExtResource("17_wview")
+
+[node name="Sky" type="Sprite2D" parent="Room/WindowView" unique_id=2042099311]
+position = Vector2(38, 16)
+texture = ExtResource("18_sky")
+centered = false
+
+[node name="Moon" type="Sprite2D" parent="Room/WindowView" unique_id=79158205]
+position = Vector2(72, 21)
+texture = ExtResource("19_moon")
+centered = false
+hframes = 7
+
+[node name="Bird" type="Sprite2D" parent="Room/WindowView" unique_id=804007157]
+position = Vector2(59, 26)
+texture = ExtResource("20_bird")
+centered = false
+hframes = 2
+
+[node name="FlickTimer" type="Timer" parent="Room/WindowView/Bird" unique_id=1876588335]
+one_shot = true
+
+[node name="Twinkles" type="Node2D" parent="Room/WindowView" unique_id=1856757487]
+
+[node name="Star1" type="Polygon2D" parent="Room/WindowView/Twinkles" unique_id=528300002]
+position = Vector2(62, 24)
+color = Color(0.98, 0.98, 1, 1)
+polygon = PackedVector2Array(0, 0, 1, 0, 1, 1, 0, 1)
+
+[node name="Star2" type="Polygon2D" parent="Room/WindowView/Twinkles" unique_id=1133152729]
+position = Vector2(60, 34)
+color = Color(0.85, 0.9, 1, 0.8)
+polygon = PackedVector2Array(0, 0, 1, 0, 1, 1, 0, 1)
+
+[node name="Star3" type="Polygon2D" parent="Room/WindowView/Twinkles" unique_id=921730918]
+position = Vector2(78, 40)
+color = Color(1, 0.95, 0.85, 0.8)
+polygon = PackedVector2Array(0, 0, 1, 0, 1, 1, 0, 1)
+
+[node name="Star4" type="Polygon2D" parent="Room/WindowView/Twinkles" unique_id=1608569397]
+position = Vector2(103, 25)
+color = Color(0.9, 0.93, 1, 0.85)
+polygon = PackedVector2Array(0, 0, 1, 0, 1, 1, 0, 1)
+
+[node name="Roof" type="Sprite2D" parent="Room" unique_id=39301151 groups=["remi_room_dimmable"]]
+texture = ExtResource("2_40vaa")
+centered = false
+
+[node name="Window" type="Sprite2D" parent="Room" unique_id=1989038200]
+texture = ExtResource("2_ql4vh")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Clickable" type="Area2D" parent="Room/Window" unique_id=1047362678]
+collision_mask = 0
+script = ExtResource("16_click")
+exempt_nodes = [NodePath("../../WindowView")]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/Window/Clickable" unique_id=259269467]
+polygon = PackedVector2Array(38, 16, 38, 55, 62, 55, 62, 40, 91, 40, 91, 16)
+
+[node name="Table" type="Sprite2D" parent="Room" unique_id=2054529872]
+texture = ExtResource("3_42xwg")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/Table" unique_id=1138198842]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/Table/Clickable" unique_id=1985094486]
+polygon = PackedVector2Array(31, 55, 31, 60, 108, 60, 108, 40, 62, 40, 62, 55)
+
+[node name="YunwuPaint" type="Sprite2D" parent="Room" unique_id=1534587244]
+texture = ExtResource("5_p34hg")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/YunwuPaint" unique_id=266338011]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/YunwuPaint/Clickable" unique_id=262154120]
+polygon = PackedVector2Array(108, 41, 132, 41, 132, 14, 128, 14, 119, 6, 111, 14, 106, 14, 106, 40, 108, 40)
+
+[node name="BowenPaint" type="Sprite2D" parent="Room" unique_id=1645378840]
+texture = ExtResource("6_sr741")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/BowenPaint" unique_id=826490353]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/BowenPaint/Clickable" unique_id=1991421748]
+polygon = PackedVector2Array(10, 48, 28, 48, 28, 36, 10, 36)
+
+[node name="Plant" type="Sprite2D" parent="Room" unique_id=1862745145]
+texture = ExtResource("7_c3ct0")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/Plant" unique_id=950246660]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/Plant/Clickable" unique_id=136003606]
+polygon = PackedVector2Array(22, 0, 22, 21, 31, 21, 31, 36, 0, 36, 0, 0)
+
+[node name="Watertank" type="Sprite2D" parent="Room" unique_id=1987294100]
+texture = ExtResource("8_dvtdn")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/Watertank" unique_id=1250352717]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/Watertank/Clickable" unique_id=323869183]
+polygon = PackedVector2Array(101, 60, 101, 80, 61, 80, 61, 60)
+
+[node name="SaltLight" type="Sprite2D" parent="Room" unique_id=1961678326]
+texture = ExtResource("9_iiuqx")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/SaltLight" unique_id=358854302]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/SaltLight/Clickable" unique_id=696889601]
+polygon = PackedVector2Array(108, 63, 108, 41, 117, 41, 117, 63)
+
+[node name="Bed" type="Sprite2D" parent="Room" unique_id=969166325]
+texture = ExtResource("10_xxbh0")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/Bed" unique_id=1717566651]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/Bed/Clickable" unique_id=1640833489]
+polygon = PackedVector2Array(105, 80, 105, 63, 153, 63, 153, 62, 160, 62, 160, 80)
+
+[node name="BlueCrystal" type="Sprite2D" parent="Room" unique_id=246444097]
+texture = ExtResource("11_7ac2b")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/BlueCrystal" unique_id=65844172]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/BlueCrystal/Clickable" unique_id=1545299825]
+polygon = PackedVector2Array(36, 80, 48, 80, 48, 74, 42, 70)
+
+[node name="RedCrystal" type="Sprite2D" parent="Room" unique_id=417258506]
+texture = ExtResource("12_pprmb")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/RedCrystal" unique_id=2037922696]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/RedCrystal/Clickable" unique_id=1268133622]
+polygon = PackedVector2Array(49, 80, 48, 77, 49, 73, 55, 71, 57, 80)
+
+[node name="Flower" type="Sprite2D" parent="Room" unique_id=1236498988]
+texture = ExtResource("13_8170c")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/Flower" unique_id=2015601409]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/Flower/Clickable" unique_id=1139178732]
+polygon = PackedVector2Array(0, 64, 8, 64, 8, 53, 0, 53)
+
+[node name="CopperLamp" type="Sprite2D" parent="Room" unique_id=233850683]
+texture = ExtResource("14_bmkox")
+centered = false
+
+[node name="Clickable" type="Area2D" parent="Room/CopperLamp" unique_id=612256023]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/CopperLamp/Clickable" unique_id=809019702]
+polygon = PackedVector2Array(91, 40, 101, 40, 101, 21, 91, 21)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1223413295]
+color = Color(0.58, 0.535, 0.47, 1)
+
+[node name="Collisions" type="StaticBody2D" parent="." unique_id=2111469883]
+collision_mask = 0
+
+[node name="CollisionShape2D1" type="CollisionShape2D" parent="Collisions" unique_id=1995659768]
+position = Vector2(0, 80)
+shape = SubResource("WorldBoundaryShape2D_p34hg")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Collisions" unique_id=587226061]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_sr741")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Collisions" unique_id=1326126190]
+position = Vector2(160, 80)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_c3ct0")
+
+[node name="Ambience" type="Node2D" parent="." unique_id=2066548857 groups=["remi_room_dimmable"]]
+
+[node name="WindowBeams" type="Node2D" parent="Ambience" unique_id=737895430]
+
+[node name="Beam1" type="Polygon2D" parent="Ambience/WindowBeams" unique_id=1968959710]
+material = SubResource("CanvasItemMaterial_add")
+position = Vector2(13, 0)
+polygon = PackedVector2Array(44, 18, 55, 18, 55, 80, 26, 80)
+vertex_colors = PackedColorArray(0.78, 0.86, 1, 0.37254903, 0.78, 0.86, 1, 0.31764707, 0.78, 0.86, 1, 0, 0.78, 0.86, 1, 0)
+
+[node name="Beam2" type="Polygon2D" parent="Ambience/WindowBeams" unique_id=260387756]
+modulate = Color(1, 1, 1, 0.73333335)
+material = SubResource("CanvasItemMaterial_add")
+position = Vector2(5, 0)
+polygon = PackedVector2Array(67, 18, 78, 18, 78, 80, 50, 80)
+vertex_colors = PackedColorArray(0.78, 0.86, 1, 0.38, 0.78, 0.86, 1, 0.38, 0.78, 0.86, 1, 0, 0.78, 0.86, 1, 0)
+
+[node name="Dust" type="GPUParticles2D" parent="Ambience" unique_id=1800522109]
+material = SubResource("CanvasItemMaterial_add")
+position = Vector2(79, 44)
+amount = 24
+lifetime = 7.0
+preprocess = 7.0
+process_material = SubResource("ParticleProcessMaterial_dust")
+
+[node name="Lights" type="Node2D" parent="." unique_id=156624283]
+
+[node name="WindowGlow" type="PointLight2D" parent="Lights" unique_id=1259939467]
+position = Vector2(71, 36)
+scale = Vector2(1.7, 1.25)
+color = Color(0.8, 0.87, 1, 1)
+energy = 0.4
+texture = SubResource("GradientTexture2D_soft")
+metadata/_edit_lock_ = true
+
+[node name="LampGlow" type="PointLight2D" parent="Lights" unique_id=1778825007]
+position = Vector2(96, 32)
+scale = Vector2(0.5, 0.5)
+color = Color(0.95, 0.6, 0.25, 1)
+energy = 0.5
+texture = SubResource("GradientTexture2D_steep")
+metadata/_edit_lock_ = true
+
+[node name="SaltGlow" type="PointLight2D" parent="Lights" unique_id=742147998]
+position = Vector2(113, 50)
+scale = Vector2(1.0156252, 1.0156252)
+color = Color(1, 0.55, 0.45, 1)
+energy = 0.6
+texture = SubResource("GradientTexture2D_c3ct0")
+texture_scale = 0.6
+
+[node name="TankGlow" type="PointLight2D" parent="Lights" unique_id=811506141]
+position = Vector2(81, 70.00001)
+scale = Vector2(0.76875, 0.36250004)
+color = Color(0.55, 0.5, 1, 1)
+energy = 1.6
+texture = SubResource("GradientTexture2D_soft")
+
+[node name="BlueCrystalGlow" type="PointLight2D" parent="Lights" unique_id=467322498]
+position = Vector2(43, 75.00001)
+scale = Vector2(0.39874998, 0.414375)
+color = Color(0.076363735, 0.42136762, 0.9999803, 1)
+energy = 0.7
+texture = SubResource("GradientTexture2D_iiuqx")
+texture_scale = 0.8
+
+[node name="RedCrystalGlow" type="PointLight2D" parent="Lights" unique_id=744639357]
+position = Vector2(53.000004, 76)
+scale = Vector2(0.33750013, 0.32471603)
+color = Color(0.850744, 0.13255116, 4.428029e-06, 1)
+energy = 0.7
+texture = SubResource("GradientTexture2D_7ac2b")
+
+[node name="FlowerGlow" type="PointLight2D" parent="Lights" unique_id=1191186440]
+position = Vector2(6, 55)
+scale = Vector2(0.33750013, 0.32471603)
+color = Color(0.8291334, 0.6157599, 0.45062244, 1)
+energy = 0.7
+texture = SubResource("GradientTexture2D_dvtdn")
+
+[node name="Remi" parent="." unique_id=95298102 instance=ExtResource("15_p34hg")]
+position = Vector2(25, 80)

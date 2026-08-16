@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://dmgxhq4ie2at0"]
+
+[ext_resource type="Texture2D" uid="uid://bklln81hfyqas" path="res://levels/remi's_room/Venus.png" id="1_ipmtm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m6yuf"]
+atlas = ExtResource("1_ipmtm")
+region = Rect2(0, 0, 64, 59)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jn86v"]
+atlas = ExtResource("1_ipmtm")
+region = Rect2(64, 0, 64, 59)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fqnya"]
+atlas = ExtResource("1_ipmtm")
+region = Rect2(128, 0, 64, 59)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fqakd"]
+atlas = ExtResource("1_ipmtm")
+region = Rect2(192, 0, 64, 59)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3142u"]
+atlas = ExtResource("1_ipmtm")
+region = Rect2(256, 0, 64, 59)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ro7jy"]
+atlas = ExtResource("1_ipmtm")
+region = Rect2(0, 59, 64, 59)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_r3you"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m6yuf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jn86v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fqnya")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fqakd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3142u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ro7jy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="Venus" type="CharacterBody2D" unique_id=2006637476]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=544413111]
+sprite_frames = SubResource("SpriteFrames_r3you")
+autoplay = "default"
+frame_progress = 0.6391735

@@ -1,9 +1,6 @@
 [gd_scene format=3 uid="uid://dceo1silobokc"]
 
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_mucky"]
-[ext_resource type="PackedScene" uid="uid://d3kdstembis3k" path="res://entities/spider/spider_3.tscn" id="2_kqk0q"]
-[ext_resource type="PackedScene" uid="uid://dd5fmvnrmr2ub" path="res://entities/spider/spider_1.tscn" id="3_twiol"]
-[ext_resource type="PackedScene" uid="uid://odgxjrnogrwf" path="res://entities/spider/spider_2.tscn" id="4_mjedn"]
 [ext_resource type="PackedScene" uid="uid://bpas7fkgx0lmi" path="res://entities/remi.tscn" id="5_twiol"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5f5au"]
@@ -27,7 +24,7 @@ offset_bottom = 124.0
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=122847418]
-position = Vector2(0, 56)
+position = Vector2(0, 80)
 shape = SubResource("WorldBoundaryShape2D_5f5au")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1688946771]
@@ -45,20 +42,9 @@ position = Vector2(32, 23)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1819601604]
 modulate = Color(0.43712005, 0.43712005, 0.43712005, 1)
-position = Vector2(79.5, 88)
-scale = Vector2(2.703125, 1)
+position = Vector2(79.5, 100)
+scale = Vector2(2.703125, 0.62499994)
 texture = SubResource("GradientTexture2D_jtfo5")
 
-[node name="Spider3" parent="." unique_id=1617544780 instance=ExtResource("2_kqk0q")]
-position = Vector2(144, 43)
-windup_time = 0.3
-
-[node name="Spider1" parent="." unique_id=2086249136 instance=ExtResource("3_twiol")]
-position = Vector2(108, 29)
-
-[node name="Spider2" parent="." unique_id=1521468396 instance=ExtResource("4_mjedn")]
-position = Vector2(72, 52)
-skill_cooldown = 4.0
-
 [node name="Remi" parent="." unique_id=95298102 instance=ExtResource("5_twiol")]
-position = Vector2(19, 52)
+position = Vector2(16, 80)

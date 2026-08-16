@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://d71f5lta185c"]
 
-[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="Script" uid="uid://b0yqm2ol2in4y" path="res://levels/silvaron/silvaron.gd" id="1_4cmem"]
 [ext_resource type="Texture2D" uid="uid://dbvrbun0815ca" path="res://levels/silvaron/silvaron_ground.png" id="1_38yq8"]
 [ext_resource type="Texture2D" uid="uid://dqfy7nayqs18q" path="res://levels/silvaron/silvaron_background.png" id="4_2rk1k"]
@@ -44,6 +43,7 @@
 [ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="41_r8omv"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="42_ik2bl"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="42_uivn3"]
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 
 [sub_resource type="Gradient" id="Gradient_aiehn"]
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
@@ -6751,23 +6751,6 @@ position = Vector2(1058, 285)
 [node name="Cox3" parent="Monsrers" unique_id=1057159235 instance=ExtResource("36_jbuho")]
 position = Vector2(715, 17)
 
-[node name="Teleport" parent="." unique_id=1957074840 instance=ExtResource("41_r8omv")]
-position = Vector2(234, -207)
-scene_path = "uid://diojcfsu5srtp"
-teleport_id = 1
-player_light = true
-
-[node name="Label" type="Label" parent="Teleport" unique_id=2054507442]
-z_index = 100
-offset_left = -10.0
-offset_top = -18.0
-offset_right = 23.0
-offset_bottom = -8.0
-theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
-theme_override_fonts/font = ExtResource("42_ik2bl")
-theme_override_font_sizes/font_size = 10
-text = "back"
-
 [node name="OutPost" parent="." unique_id=1641434446 instance=ExtResource("41_r8omv")]
 position = Vector2(1397, 23)
 scene_path = "uid://7g2w8ch1g23a"
@@ -6794,8 +6777,8 @@ position = Vector2(0, -7)
 scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("GradientTexture2D_08jux")
 
-[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
-weekday_text = "周六的梦"
-title_text = "森林的谢礼"
+[node name="DreamIntro" parent="." unique_id=1759448695 instance=ExtResource("90_dreamintro")]
 story_text_1 = "白天，把盆栽上的网，一点一点清干净了。"
 story_text_2 = "今夜的森林，银光透亮。"
+weekday_text = "周六的梦"
+title_text = "森林的谢礼"

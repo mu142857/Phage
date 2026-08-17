@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://co43apgiywlkm" path="res://levels/remi's_room/night_sky.png" id="18_sky"]
 [ext_resource type="Texture2D" uid="uid://dx80561h60erf" path="res://levels/remi's_room/moon_phases.png" id="19_moon"]
 [ext_resource type="Texture2D" uid="uid://1o5v8lhgcsj7" path="res://levels/remi's_room/bird.png" id="20_bird"]
+[ext_resource type="Texture2D" uid="uid://dsoi52bc7a06g" path="res://levels/spider_forest/spider_queen.png" id="21_7ac2b"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_p34hg"]
 
@@ -172,7 +173,6 @@ metadata/_edit_lock_ = true
 [node name="Clickable" type="Area2D" parent="Room/Window" unique_id=1047362678]
 collision_mask = 0
 script = ExtResource("16_click")
-exempt_nodes = [NodePath("../../WindowView")]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/Window/Clickable" unique_id=259269467]
 polygon = PackedVector2Array(38, 16, 38, 55, 62, 55, 62, 40, 91, 40, 91, 16)
@@ -286,6 +286,17 @@ script = ExtResource("16_click")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/Flower/Clickable" unique_id=1139178732]
 polygon = PackedVector2Array(0, 64, 8, 64, 8, 53, 0, 53)
+
+[node name="SpiderQueenDoll" type="Sprite2D" parent="Room" unique_id=1596404250]
+position = Vector2(140, 58)
+texture = ExtResource("21_7ac2b")
+
+[node name="Clickable" type="Area2D" parent="Room/SpiderQueenDoll" unique_id=973259812]
+collision_mask = 0
+script = ExtResource("16_click")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Room/SpiderQueenDoll/Clickable" unique_id=1998060295]
+polygon = PackedVector2Array(-5, 5, 5, 5, 5, -7, -5, -7)
 
 [node name="CopperLamp" type="Sprite2D" parent="Room" unique_id=233850683]
 texture = ExtResource("14_bmkox")

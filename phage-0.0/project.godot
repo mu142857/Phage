@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Phage 0.0"
-run/main_scene="uid://cqt2fjhakn32x"
+run/main_scene="uid://cxnxcxf1uj728"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 Game="*uid://c2yemnc4mhkny"
 MapElementCounting="*uid://b8cf6rjmgt0bu"
+Dialogue="*res://systems/dialogue/dialogue.gd"
+Story="*res://systems/story.gd"
 
 [display]
 

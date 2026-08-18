@@ -930,3 +930,4 @@ story_text_1 = "睡前，给铁皮人上满了发条。"
 story_text_2 = "咔哒，咔哒。整座城市都在走字。"
 weekday_text = "周三的梦"
 title_text = "铁锈城"
+title_color = Color(0.84, 0.66, 0.47, 1)

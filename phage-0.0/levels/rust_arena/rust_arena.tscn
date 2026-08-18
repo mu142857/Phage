@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_1c05a"]
 [ext_resource type="PackedScene" uid="uid://bkxhs53x3r0g3" path="res://entities/rust_goat/rust_goat.tscn" id="3_8cwx5"]
 [ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="4_b06ws"]
+[ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="90_dreamend"]
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="91_dreamintro"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1c05a"]
 
@@ -44,3 +46,13 @@ position = Vector2(86, 80)
 [node name="BackGroundSmoke" parent="." unique_id=258183138 instance=ExtResource("4_b06ws")]
 light_mask = 0
 z_index = 11
+
+[node name="DreamEnd" parent="." instance=ExtResource("90_dreamend")]
+watch_path = NodePath("../RustGOAT")
+
+[node name="DreamIntro" parent="." instance=ExtResource("91_dreamintro")]
+story_text_1 = "睡前，给铁皮人上满了发条。"
+story_text_2 = "咔哒，咔哒。整座城市都在走字。"
+weekday_text = "周三的梦"
+title_text = "铁锈城"
+title_color = Color(0.84, 0.66, 0.47, 1)

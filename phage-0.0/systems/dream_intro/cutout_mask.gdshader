@@ -10,6 +10,7 @@ shader_type canvas_item;
 uniform sampler2D mask_tex: filter_nearest;
 uniform float mask_enabled = 0.0;
 uniform float glyph_white = 0.0;
+uniform vec3 glyph_color = vec3(1.0);
 
 void fragment() {
 	// COLOR 进来时已含 ColorRect.color 与 modulate(整体淡入淡出靠 modulate:a)
@@ -20,7 +21,7 @@ void fragment() {
 		float m = texture(mask_tex, UV).a;
 		if (m > 0.5) {
 			// 字的内部:白色滤镜,浓度由 glyph_white 控制
-			rgb = vec3(1.0);
+			rgb = glyph_color;
 			alpha = glyph_white;
 		}
 	}

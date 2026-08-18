@@ -14,8 +14,9 @@ static var _played: Dictionary = {}
 
 @export_multiline var story_text_1 := ""  ## 纯黑阶段:昨晚睡前发生的事
 @export_multiline var story_text_2 := ""  ## 微亮阶段:关于这个梦的一句引子
-@export var weekday_text := ""            ## 标题第一行(白色小字):周几的梦
+@export var weekday_text := ""            ## 标题第一行(小字):周几的梦
 @export var title_text := ""              ## 标题第二行(镂空大字):这一夜的名字
+@export var title_color := Color(0.92, 0.92, 0.92)  ## 标题字色,每夜配场景(别用太鲜艳的纯色)
 @export_range(0.0, 1.0) var dim_brightness := 0.4
 @export var title_hold := 3.5
 ## 开场期间要 set_process(false) 的节点(相对本节点的路径)。
@@ -49,6 +50,10 @@ var _tint_tween: Tween = null
 
 
 func _ready() -> void:
+	# 回顾梦(从房间物品重进旧梦)不播字卡,直接开打
+	if Story.replay_mode:
+		queue_free()
+		return
 	var level := get_parent()
 	var key: String = level.scene_file_path if level != null else "?"
 	if _played.get(key, false):
@@ -94,23 +99,27 @@ func _setup(level: Node) -> void:
 	if _canvas_modulate == null:
 		_canvas_modulate = CanvasModulate.new()
 		_canvas_modulate.name = "CanvasModulate"
-		level.add_child(_canvas_modulate)
+		# _ready 时关卡根还在装配子节点,直接 add_child 会被拒绝
+		level.add_child.call_deferred(_canvas_modulate)
 	_original_tint = _canvas_modulate.color
 	_canvas_modulate.color = _dim_color()
 
+	# 黑幕在编辑器里是隐藏的(不挡关卡编辑),运行时才打开
+	$Overlay.visible = true
 	var mat := _cutout.material as ShaderMaterial
 	mat.set_shader_parameter("mask_tex", _viewport.get_texture())
 	mat.set_shader_parameter("mask_enabled", 0.0)
 	mat.set_shader_parameter("glyph_white", 0.0)
+	mat.set_shader_parameter("glyph_color", title_color)
 	_cutout.modulate.a = 1.0
 
 	_title.text = title_text
-	# 字体按 11px 网格设计,字号必须用 11 的整倍数,否则像素网格会被碾碎
-	var title_size := 44
-	if title_text.length() > 2:
-		title_size = 33
-	if title_text.length() > 4:
-		title_size = 22
+	# 这套像素字的设计格是 14(em=1024,笔画全在 1024/14 网格上,fontTools 实测)。
+	# 字号必须是 14 的整倍数,否则设计像素被渲成不等宽碎块,镂空边缘就脏了。
+	# 从 56 起按 14 一档往下降,直到整行宽度(汉字=方块,宽≈字号)不超过 150,保证不出屏。
+	var title_size := 56
+	while title_size > 14 and title_size * title_text.length() > 150:
+		title_size -= 14
 	_title.add_theme_font_size_override("font_size", title_size)
 	_weekday.text = weekday_text
 	_weekday.visible = false
@@ -173,9 +182,9 @@ func _run() -> void:
 	# ③ 第二段剧情
 	await _type_text(story_text_2)
 	_story.text = ""
-	# ④ 咚!镂空标题
+	# ④ 咚!镂空标题:播放期间不可跳过,播完也不自动走,等玩家点一下
 	_show_title_card()
-	await _wait(title_hold)
+	await _hold_title_then_wait_click()
 	# ⑤ 哗!变黑
 	await _blackout()
 	# ⑥ 球形态现身 → 站起 → 全亮 → 开战
@@ -200,6 +209,20 @@ func _type_text(text: String) -> void:
 		await get_tree().process_frame
 	_story.visible_characters = -1
 	await _wait(1.4)
+
+
+# 标题卡专用:前 title_hold 秒无视一切按键(不可跳过),
+# 之后停在原地等一次按键/点击才继续。
+func _hold_title_then_wait_click() -> void:
+	var t := 0.0
+	while t < title_hold:
+		_advance = false  # 播放期间按键作废
+		await get_tree().process_frame
+		t += get_process_delta_time()
+	_advance = false
+	while not _advance:
+		await get_tree().process_frame
+	_advance = false
 
 
 func _wait(duration: float) -> void:

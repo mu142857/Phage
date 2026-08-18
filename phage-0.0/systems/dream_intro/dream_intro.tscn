@@ -19,23 +19,25 @@ size = Vector2i(160, 90)
 render_target_update_mode = 4
 
 [node name="TitleLabel" type="Label" parent="MaskViewport"]
+offset_top = 24.0
 offset_right = 160.0
 offset_bottom = 90.0
 theme_override_fonts/font = ExtResource("3_font")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 56
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="WeekdayLabel" type="Label" parent="MaskViewport"]
 visible = false
-offset_top = 10.0
+offset_top = 4.0
 offset_right = 160.0
-offset_bottom = 24.0
+offset_bottom = 20.0
 theme_override_fonts/font = ExtResource("3_font")
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 
 [node name="Overlay" type="CanvasLayer" parent="."]
+visible = false
 layer = 3000
 
 [node name="Cutout" type="ColorRect" parent="Overlay"]

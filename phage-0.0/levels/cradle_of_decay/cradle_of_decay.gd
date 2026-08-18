@@ -30,6 +30,8 @@ func _start_intro() -> void:
 		_set_player_lock(true)
 
 	await _shake_sequence()
+	if not is_inside_tree():
+		return
 	_spawn_actinos()
 	await _drop_actinos()
 
@@ -38,16 +40,24 @@ func _start_intro() -> void:
 
 func _shake_sequence() -> void:
 	await _do_shake(light_shake, light_duration)
+	if not is_inside_tree():
+		return
 	await get_tree().create_timer(pause_duration).timeout
 	await _do_shake(medium_shake, medium_duration)
+	if not is_inside_tree():
+		return
 	await get_tree().create_timer(pause_duration).timeout
 	await _do_shake(heavy_shake, heavy_duration)
 
+# 场景可能在演出中途被切走(通关/死亡),每次 await 回来都要确认自己还在树里
 func _do_shake(amount: float, duration: float) -> void:
-	var timer := get_tree().create_timer(duration)
-	while timer.time_left > 0.0:
+	var elapsed := 0.0
+	while elapsed < duration:
+		if not is_inside_tree():
+			return
 		Game.shake_camera(amount)
 		await get_tree().process_frame
+		elapsed += get_process_delta_time()
 
 func _spawn_actinos() -> void:
 	if actinos_scene == null:
@@ -56,6 +66,8 @@ func _spawn_actinos() -> void:
 	if actinos_instance == null:
 		return
 	add_child(actinos_instance)
+	# boss 是运行时才生成的,DreamEnd 盯不到,在这儿挂"死亡=梦完成"
+	actinos_instance.tree_exited.connect(func() -> void: Story.complete_dream())
 	actinos_instance.global_position = spawn_position
 	var sprite := actinos_instance.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if is_instance_valid(sprite):
@@ -107,4 +119,8 @@ func _set_player_lock(locked: bool) -> void:
 
 
 func _on_timer_timeout() -> void:
+	# 入梦字卡在播时,等它演完(它结束会 queue_free 自己)再放 boss 出场
+	var dream_intro := get_node_or_null("DreamIntro")
+	if dream_intro != null:
+		await dream_intro.tree_exited
 	call_deferred("_start_intro")

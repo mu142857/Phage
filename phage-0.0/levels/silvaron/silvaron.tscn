@@ -6782,3 +6782,4 @@ story_text_1 = "白天，把盆栽上的网，一点一点清干净了。"
 story_text_2 = "今夜的森林，银光透亮。"
 weekday_text = "周六的梦"
 title_text = "森林的谢礼"
+title_color = Color(0.62, 0.8, 0.62, 1)

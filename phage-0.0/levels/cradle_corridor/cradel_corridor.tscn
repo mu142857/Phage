@@ -1773,3 +1773,4 @@ story_text_1 = "睡前，给鱼缸换了水。珊瑚在灯下轻轻地摇。"
 story_text_2 = "梦里的水很暖。摇篮的深处，有什么在呼吸。"
 weekday_text = "周二的梦"
 title_text = "珊瑚摇篮"
+title_color = Color(0.6, 0.82, 0.78, 1)

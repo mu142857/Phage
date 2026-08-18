@@ -341,6 +341,7 @@ text = "献祭"
 [node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
 weekday_text = "周日的梦"
 title_text = "礼拜日"
+title_color = Color(0.8, 0.5, 0.48, 1)
 story_text_1 = "夜里，老挂钟敲了十二下。数着数着，睡着了。"
 story_text_2 = "一周的终点，是一场礼拜。"
 disable_process_paths = Array[NodePath]([NodePath("../SlimeSpawner")])

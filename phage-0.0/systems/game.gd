@@ -202,6 +202,10 @@ func play_hit_feedback() -> void:
 @export var death_fade_out_duration: float = 0.25
 @export var death_fade_in_duration: float = 0.35
 func handle_player_death() -> void:
+	# 在梦里(七夜主循环)死亡:不重载关卡,交给 Story 播"梦境破碎"并惊醒回房间。
+	if Story.in_dream:
+		Story.fail_dream()
+		return
 	if _player_dying:
 		return
 	_player_dying = true
@@ -471,6 +475,11 @@ func _ensure_player_light(player: Player, enabled: bool) -> void:
 	player.add_child(light)
 	if light is Node2D:
 		(light as Node2D).position = Vector2.ZERO
+
+
+# 给 Story/房间用的公开遮罩:铺黑/撤黑换场景,duration=0 即瞬间到位。
+func fade_cover(target_alpha: float, duration: float) -> void:
+	await _play_teleport_fade(target_alpha, duration)
 
 
 func _play_teleport_fade(target_alpha: float, duration: float) -> void:

@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://dmp2knbj4tnir" path="res://entities/cox/week_cox.tscn" id="12_a46js"]
 [ext_resource type="PackedScene" uid="uid://c8pnajburl72k" path="res://interactive/Text/text.tscn" id="13_hsfmc"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="14_0ro3w"]
+[ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="90_dreamend"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_n5t8k"]
 b = Vector2(541, -1)
@@ -311,5 +312,9 @@ text = "按下←攻击"
 [node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
 weekday_text = "周一的梦"
 title_text = "伤口"
+title_color = Color(0.82, 0.55, 0.52, 1)
 story_text_1 = "睡前翻书的时候，纸划破了手指。"
 story_text_2 = "那一夜的梦，是红色的。"
+
+[node name="DreamEnd" parent="." instance=ExtResource("90_dreamend")]
+position = Vector2(590, 0)

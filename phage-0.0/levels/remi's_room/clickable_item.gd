@@ -8,6 +8,9 @@ extends Area2D
 
 signal clicked(item: ClickableItem)
 
+# 房间演出/对话期间整组关掉点击与悬停(remi_room.gd 控制)
+static var interaction_enabled := true
+
 const HIGHLIGHT_SHADER: Shader = preload("res://levels/remi's_room/highlight.gdshader")
 const GROUP: StringName = &"remi_room_clickable"
 # 非可点的背景节点(Background/Roof/WindowView/Ambience 等)加进这个组,
@@ -24,6 +27,9 @@ static var _active: ClickableItem = null
 @export var target: CanvasItem = null                    # 留空 = 用父节点(物体 Sprite2D)
 # 悬停自己时不跟着压暗的背景节点(比如窗户豁免 WindowView:窗外夜空是窗户的一部分)
 @export var exempt_nodes: Array[NodePath] = []
+# 跟着 target 一起提亮/压暗的附属视觉(比如窗户的 WindowView:窗外和窗框同呼吸)。
+# 附属节点会被挂上同款高亮材质,其无材质的子孙自动 use_parent_material 继承。
+@export var extra_brighten: Array[NodePath] = []
 @export_range(0.0, 1.0) var hover_strength: float = 0.3  # 悬停时自己提亮多少
 @export_range(0.0, 1.0) var dim_strength: float = 0.5    # 别人被悬停时自己压暗多少
 @export var rise_time: float = 0.15
@@ -31,6 +37,7 @@ static var _active: ClickableItem = null
 
 var _tween: Tween = null
 var _amount: float = 0.0  # 当前亮度值(tween 起点)
+var _extra_materials: Array[ShaderMaterial] = []
 
 func _ready() -> void:
 	add_to_group(GROUP)
@@ -43,15 +50,37 @@ func _ready() -> void:
 			target.material = mat
 		elif not (target.material is ShaderMaterial and (target.material as ShaderMaterial).shader == HIGHLIGHT_SHADER):
 			push_warning("ClickableItem: %s 已有别的材质,悬停提亮不会生效" % target.name)
+	for path in extra_brighten:
+		var node := get_node_or_null(path) as CanvasItem
+		if node == null:
+			continue
+		var mat := ShaderMaterial.new()
+		mat.shader = HIGHLIGHT_SHADER
+		node.material = mat
+		_inherit_material_recursive(node)
+		_extra_materials.append(mat)
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 
+
+# 无材质的子孙统一继承附属节点的高亮材质
+func _inherit_material_recursive(node: Node) -> void:
+	for child in node.get_children():
+		var canvas := child as CanvasItem
+		if canvas != null and canvas.material == null:
+			canvas.use_parent_material = true
+		_inherit_material_recursive(child)
+
 func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> void:
+	if not interaction_enabled or Dialogue.is_open:
+		return
 	var mb := event as InputEventMouseButton
 	if mb != null and mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
 		clicked.emit(self)
 
 func _on_mouse_entered() -> void:
+	if not interaction_enabled or Dialogue.is_open:
+		return
 	_active = self
 	_tween_highlight(hover_strength, rise_time)
 	for item: ClickableItem in get_tree().get_nodes_in_group(GROUP):
@@ -96,3 +125,5 @@ func _tween_highlight(amount: float, duration: float) -> void:
 func _apply_amount(value: float) -> void:
 	_amount = value
 	(target.material as ShaderMaterial).set_shader_parameter(&"highlight_amount", value)
+	for mat in _extra_materials:
+		mat.set_shader_parameter(&"highlight_amount", value)

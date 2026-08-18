@@ -10,6 +10,8 @@
 [ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="5_lqaxi"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="9_0ul3c"]
 
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="91_dreamintro"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ul3c"]
 shader = ExtResource("3_4iulq")
 shader_parameter/WindStrength = 10.0
@@ -100,5 +102,12 @@ vertical_alignment = 1
 wait_time = 0.1
 one_shot = true
 autostart = true
+
+[node name="DreamIntro" parent="." instance=ExtResource("91_dreamintro")]
+story_text_1 = "睡前，给鱼缸换了水。珊瑚在灯下轻轻地摇。"
+story_text_2 = "梦里的水很暖。摇篮的深处，有什么在呼吸。"
+weekday_text = "周二的梦"
+title_text = "珊瑚摇篮"
+title_color = Color(0.6, 0.82, 0.78, 1)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

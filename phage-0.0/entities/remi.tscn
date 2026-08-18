@@ -462,7 +462,7 @@ animations = [{
 size = Vector2(18.5, 43)
 
 [node name="Remi" type="CharacterBody2D" unique_id=95298102]
-modulate = Color(1.353256, 1.353256, 1.353256, 1)
+modulate = Color(1.4369954, 1.4369954, 1.4369954, 1)
 light_mask = 32
 script = ExtResource("2_remis")
 

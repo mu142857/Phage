@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://3lb1ms65usrp" path="res://levels/pink_land/pinkland_arrow_sign-Sheet.png" id="8_8fg2a"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="8_kajct"]
 [ext_resource type="Texture2D" uid="uid://bgsxkypwdgixs" path="res://levels/pink_land/pinkland_straight_arrow_sign-Sheet.png" id="9_arcvl"]
+[ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="90_dreamend"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_0f480"]
 
@@ -523,5 +524,9 @@ position = Vector2(836, 78)
 [node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
 weekday_text = "周四的梦"
 title_text = "盐做的山"
+title_color = Color(0.88, 0.72, 0.78, 1)
 story_text_1 = "睡前，盐灯亮了一整晚。"
 story_text_2 = "粉色的山比想象中软，也比想象中高。"
+
+[node name="DreamEnd" parent="." instance=ExtResource("90_dreamend")]
+position = Vector2(1580, 0)

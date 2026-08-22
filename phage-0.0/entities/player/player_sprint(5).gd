@@ -44,7 +44,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		return
 	if not is_instance_valid(player.sprite):
 		return
-	if player._strip_shield(player.sprite.animation) != &"Sprint":
+	if player.sprite.animation != &"Sprint":
 		return
 
 	var move_input := Input.get_axis(&"move_left", &"move_right")

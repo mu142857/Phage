@@ -4,7 +4,7 @@
 # 跟 penitent 镰刀(sickle_line_2d.gd)同款做法:每隔一小段就把主角当前帧复制成
 # 一个淡出的 Sprite2D,天然像素化。挂在 Player 下,与 AnimatedSprite2D 同级。
 # 由跳跃状态调用 set_active(true) 打开,落地(进 Idle/Run)时关闭。
-# 残影直接用主角当前帧,所以拿盾时会自然显示带盾外壳。
+# 残影用主角当前帧;拿盾时把 ShieldOverlay 的当前帧作为子精灵一起复制,外壳不丢。
 # =============================================================================
 extends Node2D
 
@@ -16,6 +16,7 @@ extends Node2D
 var active: bool = false
 var _t: float = 0.0
 @onready var _sprite: AnimatedSprite2D = get_node_or_null("../AnimatedSprite2D") as AnimatedSprite2D
+@onready var _overlay: AnimatedSprite2D = get_node_or_null("../AnimatedSprite2D/ShieldOverlay") as AnimatedSprite2D
 
 
 func set_active(value: bool) -> void:
@@ -64,6 +65,14 @@ func _spawn_ghost_custom(ghost_tint: Color, ghost_alpha: float, lifetime: float)
 	g.texture = draw_tex
 	g.offset = _sprite.offset
 	g.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	# 拿盾时:盾壳当前帧作为子精灵叠上,跟着父级一起淡出。
+	var overlay_tex := _current_overlay_texture()
+	if overlay_tex != null:
+		var og := Sprite2D.new()
+		og.texture = overlay_tex
+		og.offset = _overlay.offset
+		og.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		g.add_child(og)
 	# 残影加进场景根,z_index 是绝对值:用主角(父节点)的 z 作基准,排在主角身后一层。
 	var owner_z := 0
 	var p := get_parent()
@@ -76,3 +85,20 @@ func _spawn_ghost_custom(ghost_tint: Color, ghost_alpha: float, lifetime: float)
 	var tw := g.create_tween()
 	tw.tween_property(g, "modulate:a", 0.0, lifetime)
 	tw.tween_callback(g.queue_free)
+
+
+# 盾壳 overlay 当前帧贴图(不可见/没有对应动画时返回 null),同样做防渗色处理。
+func _current_overlay_texture() -> Texture2D:
+	if not is_instance_valid(_overlay) or not _overlay.visible:
+		return null
+	var frames := _overlay.sprite_frames
+	if frames == null or not frames.has_animation(_overlay.animation):
+		return null
+	var tex := frames.get_frame_texture(_overlay.animation, _overlay.frame)
+	if tex is AtlasTexture:
+		var clipped := AtlasTexture.new()
+		clipped.atlas = (tex as AtlasTexture).atlas
+		clipped.region = (tex as AtlasTexture).region
+		clipped.filter_clip = true
+		return clipped
+	return tex

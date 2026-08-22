@@ -17,7 +17,6 @@ const INVINCIBLE_DURATION: float = 0.3
 # 切盾键(Backpack): 有盾时收起(进入无盾伤害加成),无盾时拿出下一个就绪的盾。
 const SHIELD_COUNT: int = 2
 const SHIELD_RECHARGE_TIME: float = 10.0
-const SHIELD_ANIM_SUFFIX: String = "(Shield)"
 const RUN_SPEED: float = 70.0 #(100.0)
 const SPRINT_SPEED: float = 220.0
 const SPRINT_COOLDOWN: float = 0.75
@@ -87,6 +86,7 @@ var _walking_effect_enabled: bool = false
 # Node references
 # ============================================================
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var shield_overlay: AnimatedSprite2D = $AnimatedSprite2D/ShieldOverlay
 @onready var collision_normal: CollisionShape2D = $CollisionNormal
 @onready var collision_ball: CollisionShape2D = $CollisionBall
 @onready var walking_effect: GPUParticles2D = $PlayerWalkingEffect
@@ -110,9 +110,13 @@ func _ready() -> void:
 	set_ball_form(false)
 	clear_attack_hitboxes()
 	can_sprint = true
+	# 盾壳是独立的 overlay 精灵,被动跟随本体的动画帧(不自己 play)。
+	sprite.animation_changed.connect(_sync_shield_overlay)
+	sprite.frame_changed.connect(_sync_shield_overlay)
 	# 出生默认拿出 0 号盾,否则一出生被碰就死。
 	is_guarding = true
 	guard_slot = 0
+	_refresh_shield_visual()
 	shield_changed.emit()
 
 # 像素对齐:物理体停在浮点坐标(保证移动/相机插值丝滑),
@@ -273,7 +277,7 @@ func toggle_shield() -> void:
 			return  # 没有就绪的盾可拿
 		is_guarding = true
 		guard_slot = slot
-	# 切盾的视觉反馈就是外壳(Shield 动画)出现/消失,不需要额外特效。
+	# 切盾的视觉反馈就是盾壳 overlay 出现/消失,不需要额外特效。
 	_refresh_shield_visual()
 	shield_changed.emit()
 
@@ -286,43 +290,31 @@ func _break_guard_shield() -> void:
 	_refresh_shield_visual()
 	shield_changed.emit()
 
-# 统一的播放动画入口:拿出护盾且存在 "(Shield)" 变体时,自动播放带盾版本。
+# 统一的播放动画入口(盾壳 overlay 靠信号自动跟帧,这里只管本体)。
 func play_anim(anim_name: StringName) -> void:
 	if not is_instance_valid(sprite):
 		return
-	sprite.play(_resolve_anim(anim_name))
+	sprite.play(anim_name)
 
-func _resolve_anim(anim_name: StringName) -> StringName:
-	if not is_guarding:
-		return anim_name
-	var shielded := StringName(String(anim_name) + SHIELD_ANIM_SUFFIX)
-	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation(shielded):
-		return shielded
-	return anim_name
-
-func _strip_shield(anim_name: StringName) -> StringName:
-	var s := String(anim_name)
-	if s.ends_with(SHIELD_ANIM_SUFFIX):
-		s = s.substr(0, s.length() - SHIELD_ANIM_SUFFIX.length())
-	return StringName(s)
-
-# 护盾拿出/收起后,就地把当前动画切换到对应的带盾/不带盾版本,保持姿势不跳帧。
+# 护盾拿出/收起:盾壳 overlay 显示/隐藏,本体动画不动,姿势天然不跳帧。
 func _refresh_shield_visual() -> void:
 	_apply_walking_effect()  # 护盾切换时走路特效也跟着二选一
-	if not is_instance_valid(sprite):
+	if not is_instance_valid(shield_overlay):
 		return
-	var base := _strip_shield(sprite.animation)
-	var target := _resolve_anim(base)
-	if target == sprite.animation:
+	shield_overlay.visible = is_guarding
+	if is_guarding:
+		_sync_shield_overlay()
+
+# 盾壳跟随本体当前动画帧。overlay 从不自己 play,全靠本体的
+# animation_changed / frame_changed 信号驱动,不存在漂移。
+func _sync_shield_overlay() -> void:
+	if not is_instance_valid(shield_overlay) or not shield_overlay.visible:
 		return
-	var frame := sprite.frame
-	var frame_progress := sprite.frame_progress
-	var was_playing := sprite.is_playing()
-	sprite.play(target)
-	sprite.frame = frame
-	sprite.frame_progress = frame_progress
-	if not was_playing:
-		sprite.pause()
+	var anim := sprite.animation
+	if shield_overlay.sprite_frames == null or not shield_overlay.sprite_frames.has_animation(anim):
+		return
+	shield_overlay.animation = anim
+	shield_overlay.frame = sprite.frame
 
 func _start_invincibility() -> void:
 	is_invincible = true

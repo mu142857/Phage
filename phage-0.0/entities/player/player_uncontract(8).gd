@@ -21,7 +21,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		return
 	if not is_instance_valid(player.sprite):
 		return
-	if player._strip_shield(player.sprite.animation) != &"Uncontract":
+	if player.sprite.animation != &"Uncontract":
 		return
 	player.exit_ball_form()
 	change_state(player.STATE_IDLE)

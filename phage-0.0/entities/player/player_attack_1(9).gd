@@ -128,7 +128,7 @@ func _get_attack_damage(base_damage: int) -> int:
 func _try_auto_attack_phases(player: Player) -> void:
 	if not is_instance_valid(player.sprite):
 		return
-	var anim := player._strip_shield(player.sprite.animation)
+	var anim := player.sprite.animation
 
 	if anim == ANIM_ATTACK1_1 or (anim == ANIM_ATTACK_LEGACY and current_phase == 1):
 		var phase_1_frame := player.sprite.frame
@@ -252,7 +252,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	if not is_instance_valid(player.sprite):
 		return
 
-	var anim := player._strip_shield(player.sprite.animation)
+	var anim := player.sprite.animation
 	if anim == ANIM_ATTACK1_1 or (anim == ANIM_ATTACK_LEGACY and current_phase == 1):
 		attack1_1_check()
 		if phase_2_requested:

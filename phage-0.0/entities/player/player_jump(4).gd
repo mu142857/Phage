@@ -64,7 +64,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		return
 	# StartJump 播完后,若还在上升(仍处于跳跃状态),切到循环 Jump。
 	# 若已到顶点转入 Fall,此时动画已是 Fall,下面的判断会自然跳过。
-	if player._strip_shield(player.sprite.animation) != &"StartJump":
+	if player.sprite.animation != &"StartJump":
 		return
 	if player.velocity.y < 0.0:
 		player.play_anim(&"Jump")

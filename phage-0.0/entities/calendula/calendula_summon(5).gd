@@ -23,9 +23,11 @@ extends BasicState
 @export var left_x: float = 25.0            # 左侧召唤点
 @export var right_x: float = 135.0          # 右侧召唤点
 @export var center_x: float = 80.0          # 中间召唤点（跳跃蜘蛛）
-@export var max_alive: int = 5              # 场上召唤物上限
+@export var max_alive: int = 4              # 场上召唤物上限
+@export var summon_shake: float = 1.5       # 召唤瞬间震屏（没有 Summon 帧时的重要 tell）
 @export var bob_amplitude: float = 2.5      # 攻击中轻微浮动幅度
 @export var bob_speed: float = 2.5          # 浮动角速度
+@export var bob_y_max: float = 45.0         # 高度铁律：root y ≤ 45（贴图下探 35，不进地面）
 
 # 垂降参数（同 spider_forest）
 const SPAWN_START_Y: float = -25.0
@@ -54,10 +56,6 @@ func enter() -> void:
 	_base_y = monster.global_position.y
 	_time = 0.0
 
-	if monster.has_method("face_player"):
-		monster.face_player()
-	_apply_facing()
-
 	if _has_animation(summon_animation):
 		ani_2d.play(summon_animation)
 		if not ani_2d.animation_finished.is_connected(_on_animation_finished):
@@ -72,7 +70,7 @@ func enter() -> void:
 func process(delta: float) -> void:
 	# 轻微上下浮动：金盏没有真正的静止
 	_time += delta
-	monster.global_position.y = _base_y + sin(_time * bob_speed) * bob_amplitude
+	monster.global_position.y = minf(_base_y + sin(_time * bob_speed) * bob_amplitude, bob_y_max)
 
 
 func exit() -> void:
@@ -80,7 +78,6 @@ func exit() -> void:
 	if is_instance_valid(ani_2d):
 		if ani_2d.animation_finished.is_connected(_on_animation_finished):
 			ani_2d.animation_finished.disconnect(_on_animation_finished)
-		ani_2d.scale.x = maxf(absf(ani_2d.scale.x), 1.0)
 
 
 func _on_animation_finished() -> void:
@@ -116,6 +113,9 @@ func _do_summon() -> void:
 	_minions = _minions.filter(func(m: Object) -> bool: return is_instance_valid(m))
 	if _minions.size() >= max_alive:
 		return
+	# 召唤 tell：Summon 帧还没切时 boss 只会播 Idle，全靠这一下震屏告诉玩家「它干了什么」
+	if summon_shake > 0.0:
+		Game.shake_camera(summon_shake)
 
 	match summon_cycle % 3:
 		0:  # 盾蜘蛛：左右各一
@@ -179,11 +179,3 @@ func _descend_step(y: float, spider: CharacterBody2D, line: Sprite2D, x: float) 
 func _has_animation(anim: StringName) -> bool:
 	return is_instance_valid(ani_2d) and ani_2d.sprite_frames != null \
 			and ani_2d.sprite_frames.has_animation(anim)
-
-
-func _apply_facing() -> void:
-	if not is_instance_valid(ani_2d):
-		return
-	var d: int = monster.direct if "direct" in monster else 1
-	var s := maxf(absf(ani_2d.scale.x), 1.0)
-	ani_2d.scale.x = -s if d > 0 else s  # 翻转方向按你素材改

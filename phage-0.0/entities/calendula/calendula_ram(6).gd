@@ -1,36 +1,49 @@
 # =============================================================================
-# calendula_ram(6).gd  —  冲撞（6 号）：对高横扫（参考空洞骑士·复仇蝇之王）
+# calendula_ram(6).gd  —  冲刺（6 号）：轰炸机航线 + 唯一的换边时机
 # =============================================================================
-# 流程（process 驱动的四段）：
-#   0 对高：缓慢漂浮到玩家当前高度（持续追踪，最多 max_align_time 秒）
-#   1 预备：停 telegraph_time 秒（微震屏 = 前摇提示，给玩家反应窗口）
-#   2 冲扫：锁定方向，横着全速扫到对面场地边界，RamHitbox 里的玩家吃一次伤害
-#   3 收招：停 recover_time 秒 → 问大脑
+# 流程（process 驱动）：
+#   0 撤离：从当前悬浮位【缓慢】朝本侧上角飘出屏幕（off_screen_x 已算上
+#     81px 宽贴图的半宽，越线 = 整个身子真的看不见了）
+#   1 屏外整备（pre_sweep_wait）：短暂消失，然后【换边】——
+#     monster.set_side(-side)，整个角色 scale.x 翻转，这是全场唯一的翻转时机
+#   2 轰炸横扫：从对侧屏外进场，沿 y=sweep_y(20，玩家够不到) 匀速略加速扫过全屏，
+#     全程震屏；途经投弹线时，网弹从屏幕顶(y=-10)以 vx=0,vy=0 纯重力落下
+#   3 清网留白：扫出对面屏外后【在屏幕外待 off_screen_wait(6s)】——
+#     强制留白给玩家清理刚炸下来的网 → 问大脑 → Idle 平滑拉回新侧悬浮位
 #
-# Ram 动画建议【循环】（整个冲撞期间一直播，不靠 animation_finished）。
+# Ram 动画建议【循环】（整个冲刺期间一直播，不靠 animation_finished）。
 # =============================================================================
 
 extends BasicState
 
 @export var ram_animation: StringName = &"Ram"
-@export var align_speed: float = 32.0      # 对高的缓慢垂直速度
-@export var align_y_min: float = 24.0      # 对高上限（别飞出屏）
-@export var align_y_max: float = 72.0      # 对高下限（贴地扫，别插进地板）
-@export var max_align_time: float = 2.5    # 玩家一直乱跳就强制开冲
-@export var telegraph_time: float = 0.35   # 前摇停顿
-@export var telegraph_shake: float = 1.0   # 前摇微震（0=不震）
-@export var dash_speed: float = 230.0      # 横扫速度
-@export var recover_time: float = 0.25     # 收招停顿
-@export var damage_amount: int = 12        # 命中伤害
-@export var hit_shake: float = 2.0         # 命中震屏（0=不震）
+@export var exit_speed: float = 55.0         # 撤离段的缓慢速度
+@export var exit_y: float = 8.0              # 撤离目标高度（朝上角飘）
+# 越过这条线才算真出屏：房间半宽 80 + 贴图半宽 ~41 + 余量
+@export var off_screen_x: float = 135.0
+@export var pre_sweep_wait: float = 0.8      # 屏外整备（换边）的短停
+@export var off_screen_wait: float = 4.0     # 扫完后的屏外留白（玩家清网时间）
+@export var return_y: float = 40.0           # 留白结束后从新边屏外回场的高度
+@export var sweep_y: float = 20.0            # 轰炸航线高度（玩家打不到）
+@export var sweep_speed_start: float = 100.0 # 起扫速度（基本匀速的基准）
+@export var sweep_speed_max: float = 160.0   # 扫程中的速度上限
+@export var sweep_accel: float = 60.0        # 扫程加速度（只在扫的时候加速）
+@export var sweep_shake: float = 1.5         # 横扫全程震屏（压迫感）
+@export var bomb_drop_xs: Array[float] = [-48.0, -16.0, 16.0, 48.0]  # 四枚炸弹的投放线
+@export var bomb_spawn_y: float = -10.0      # 炸弹从屏幕顶这个高度落下
+@export var damage_amount: int = 10          # 航线上撞到玩家的伤害（基本撞不到）
+@export var hit_shake: float = 2.0           # 命中额外震屏（0=不震）
+
+const BOLT_SCENE: PackedScene = preload("res://entities/calendula/calendula_web_bolt.tscn")
 
 @onready var ani_2d: AnimatedSprite2D = $"../../AnimatedSprite2D"
 @onready var monster: CharacterBody2D = $"../.."
 
 var stage: int = 0
 var stage_time: float = 0.0
-var dash_dir: float = 1.0
-var dash_target_x: float = 0.0
+var sweep_dir: float = 1.0
+var sweep_speed: float = 0.0
+var _drop_queue: Array[float] = []
 var damage_applied: bool = false
 
 
@@ -39,51 +52,53 @@ func enter() -> void:
 	stage = 0
 	stage_time = 0.0
 	damage_applied = false
-
-	if monster.has_method("face_player"):
-		monster.face_player()
-	_apply_facing()
-
+	# 撤离段是慢悠悠飘出去，播 Idle；带拖尾的 Ram 动画等真正开扫再切
 	if is_instance_valid(ani_2d):
-		ani_2d.play(ram_animation)
+		ani_2d.play(&"Idle")
 
 
 func process(delta: float) -> void:
 	stage_time += delta
+	var side: int = monster.side if "side" in monster else 1
 	match stage:
-		0:  # 对高：缓慢贴向玩家高度（持续追踪）
-			var player: Node2D = monster._get_player() if monster.has_method("_get_player") else null
-			var target_y: float = monster.global_position.y
-			if player != null:
-				target_y = clampf(player.global_position.y, align_y_min, align_y_max)
-			var dy := target_y - monster.global_position.y
-			var step := align_speed * delta
-			if absf(dy) <= step:
-				monster.global_position.y = target_y
+		0:  # 撤离：缓慢朝本侧上角飘出屏幕（整个贴图完全离屏才算）
+			var target := Vector2(float(side) * (off_screen_x + 8.0), exit_y)
+			var to_target := target - monster.global_position
+			if to_target.length() <= exit_speed * delta:
+				monster.global_position = target
 			else:
-				monster.global_position.y += signf(dy) * step
-			if monster.has_method("face_player"):
-				monster.face_player()
-			_apply_facing()
-			if absf(dy) <= 1.5 or stage_time >= max_align_time:
+				monster.global_position += to_target.normalized() * exit_speed * delta
+			if absf(monster.global_position.x) >= off_screen_x:
 				_next_stage(1)
-		1:  # 预备：前摇停顿
-			if telegraph_shake > 0.0:
-				Game.shake_camera(telegraph_shake)
-			if stage_time >= telegraph_time:
-				Game.stop_shake()
-				_lock_dash()
+		1:  # 屏外整备：短停后换边 + 摆到对侧屏外的航线起点
+			if stage_time >= pre_sweep_wait:
+				var new_side: int = -side
+				if monster.has_method("set_side"):
+					monster.set_side(new_side)
+				sweep_dir = -float(new_side)  # 新边在左(-1)就从左往右扫，反之亦然
+				monster.global_position = Vector2(-sweep_dir * (off_screen_x + 8.0), sweep_y)
+				sweep_speed = sweep_speed_start
+				_prepare_drop_queue()
+				if is_instance_valid(ani_2d):
+					ani_2d.play(ram_animation)  # 开扫才用带拖尾的冲刺动画
 				_next_stage(2)
-		2:  # 冲扫：横着全速扫过去
-			monster.global_position.x += dash_dir * dash_speed * delta
+		2:  # 轰炸横扫：匀速略加速，全程震屏，途经投放线丢弹
+			sweep_speed = minf(sweep_speed + sweep_accel * delta, sweep_speed_max)
+			monster.global_position.x += sweep_dir * sweep_speed * delta
+			monster.global_position.y = sweep_y
+			if sweep_shake > 0.0:
+				Game.shake_camera(sweep_shake)
+			_drop_bombs_passed()
 			if not damage_applied:
 				_try_damage_player()
-			if (dash_dir > 0.0 and monster.global_position.x >= dash_target_x) \
-					or (dash_dir < 0.0 and monster.global_position.x <= dash_target_x):
-				monster.global_position.x = dash_target_x
+			if monster.global_position.x * sweep_dir >= off_screen_x:
+				Game.stop_shake()
 				_next_stage(3)
-		3:  # 收招
-			if stage_time >= recover_time:
+		3:  # 清网留白：在屏幕外老实待够 off_screen_wait 秒再回场
+			if stage_time >= off_screen_wait:
+				# 扫完落在对侧屏外，直接（屏外无感）挪到自己新边的屏外入口，
+				# Idle 从自己那边正脸滑进来——不许倒着横穿全场回家，很诡异
+				monster.global_position = Vector2(float(side) * (off_screen_x + 8.0), return_y)
 				stage = -1  # 防止重复问大脑
 				if monster.has_method("get_next_attack_state"):
 					change_state(int(monster.get_next_attack_state()))
@@ -100,23 +115,31 @@ func _next_stage(next: int) -> void:
 	stage_time = 0.0
 
 
-# 锁定冲刺方向和终点：朝玩家所在的那一侧，扫到对面边界
-func _lock_dash() -> void:
-	var player: Node2D = monster._get_player() if monster.has_method("_get_player") else null
-	if player != null:
-		dash_dir = signf(player.global_position.x - monster.global_position.x)
+# 投放队列按扫的方向排好序，扫过一条线丢一枚
+func _prepare_drop_queue() -> void:
+	_drop_queue = bomb_drop_xs.duplicate()
+	_drop_queue.sort()
+	if sweep_dir < 0.0:
+		_drop_queue.reverse()
+
+
+func _drop_bombs_passed() -> void:
+	while not _drop_queue.is_empty() \
+			and (monster.global_position.x - _drop_queue[0]) * sweep_dir >= 0.0:
+		var x: float = _drop_queue.pop_front()
+		_spawn_bomb(x)
+
+
+# 炸弹：从屏幕顶垂直落下，vx=0 vy=0 只吃重力（不从 boss 身上出）
+func _spawn_bomb(x: float) -> void:
+	if BOLT_SCENE == null or get_tree().current_scene == null:
+		return
+	var bolt := BOLT_SCENE.instantiate()
+	get_tree().current_scene.add_child(bolt)
+	if bolt.has_method("setup_arc"):
+		bolt.setup_arc(Vector2(x, bomb_spawn_y), Vector2.ZERO)
 	else:
-		dash_dir = float(monster.direct)
-	if dash_dir == 0.0:
-		dash_dir = float(monster.direct)
-	var min_x: float = monster.bound_min_x if "bound_min_x" in monster else 10.0
-	var max_x: float = monster.bound_max_x if "bound_max_x" in monster else 150.0
-	dash_target_x = max_x if dash_dir > 0.0 else min_x
-	if dash_dir > 0.0:
-		monster.face_right()
-	else:
-		monster.face_left()
-	_apply_facing()
+		bolt.global_position = Vector2(x, bomb_spawn_y)
 
 
 func _try_damage_player() -> void:
@@ -132,11 +155,3 @@ func _try_damage_player() -> void:
 		if hit_shake > 0.0:
 			Game.shake_camera(hit_shake)
 		break
-
-
-func _apply_facing() -> void:
-	if not is_instance_valid(ani_2d):
-		return
-	var d: int = monster.direct if "direct" in monster else 1
-	var s := maxf(absf(ani_2d.scale.x), 1.0)
-	ani_2d.scale.x = -s if d > 0 else s  # 翻转方向按你素材改

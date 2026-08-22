@@ -16,6 +16,7 @@ extends BasicState
 @onready var monster: CharacterBody2D = $"../.."
 
 var is_active: bool = false
+var _frozen_minions: Array = []
 
 
 func enter() -> void:
@@ -29,6 +30,7 @@ func enter() -> void:
 		monster.initial_battlecry_shown = true
 
 	_set_player_lock(true)
+	_freeze_minions(true)
 	_start_timer()
 
 
@@ -40,6 +42,7 @@ func process(_delta: float) -> void:
 func exit() -> void:
 	is_active = false
 	_set_player_lock(false)
+	_freeze_minions(false)
 	Game.stop_shake()
 
 
@@ -61,3 +64,22 @@ func _set_player_lock(locked: bool) -> void:
 		return
 	if players[0].has_method("set_lock"):
 		players[0].set_lock(locked)
+
+
+# 战吼锁玩家的同时也冻住场上小怪（含落地网）：
+# 只锁玩家不锁小蜘蛛 = 白挨咬，不公平。只解冻自己冻的，不碰垂降中本来就冻着的。
+func _freeze_minions(freeze: bool) -> void:
+	if freeze:
+		_frozen_minions.clear()
+		for m in get_tree().get_nodes_in_group("monster"):
+			var node := m as Node
+			if node == null or node == monster:
+				continue
+			if node.process_mode != Node.PROCESS_MODE_DISABLED:
+				node.process_mode = Node.PROCESS_MODE_DISABLED
+				_frozen_minions.append(node)
+	else:
+		for node in _frozen_minions:
+			if is_instance_valid(node):
+				(node as Node).process_mode = Node.PROCESS_MODE_INHERIT
+		_frozen_minions.clear()

@@ -268,6 +268,9 @@ func _try_damage_target(target: Node, damage: int, damaged: Array[Node]) -> bool
 func _apply_hit_recoil() -> void:
 	if player_ref == null:
 		return
+	# 被金盏的网缠身时不后弹:网跟着人一起弹会很怪,原地砍就好
+	if player_ref.web_snared:
+		return
 	# 命中后小幅后弹增强打击感;防撞交给智能前冲的门禁+刹车,这里不再压制下一段前冲。
 	player_ref.velocity.x = -float(attack_locked_facing) * HIT_RECOIL_SPEED
 	recoil_time_left = HIT_RECOIL_DURATION

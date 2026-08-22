@@ -42,13 +42,9 @@ func enter() -> void:
 	if monster.has_method("hide_health_ui"):
 		monster.hide_health_ui()
 
-	# 朝更近的屏幕边缘逃（160 宽屏，中线 80）
-	charge_dir = -1.0 if monster.global_position.x < 80.0 else 1.0
-	if charge_dir > 0.0 and monster.has_method("face_right"):
-		monster.face_right()
-	elif monster.has_method("face_left"):
-		monster.face_left()
-	_apply_facing()
+	# 朝脸面对的方向逃（-side：右侧位朝左脸就往左冲），不转向不翻转
+	var side: int = monster.side if "side" in monster else 1
+	charge_dir = -float(side)
 
 	if is_instance_valid(ani_2d):
 		if ani_2d.sprite_frames != null and ani_2d.sprite_frames.has_animation(&"Ram"):
@@ -63,8 +59,7 @@ func process(delta: float) -> void:
 	if not is_active or stage != 1:
 		return
 	monster.global_position.x += charge_dir * charge_speed * delta
-	if monster.global_position.x < -exit_margin \
-			or monster.global_position.x > 160.0 + exit_margin:
+	if absf(monster.global_position.x) > 80.0 + exit_margin:
 		_exit_screen_and_free()
 
 
@@ -119,11 +114,3 @@ func _disable_area(path: String) -> void:
 		area.monitorable = false
 		area.collision_layer = 0
 		area.collision_mask = 0
-
-
-func _apply_facing() -> void:
-	if not is_instance_valid(ani_2d):
-		return
-	var d: int = monster.direct if "direct" in monster else 1
-	var s := maxf(absf(ani_2d.scale.x), 1.0)
-	ani_2d.scale.x = -s if d > 0 else s  # 翻转方向按你素材改

@@ -32,9 +32,9 @@ const STATE_RAM: int = 6
 @export var health: int = 5000
 @export var idle_only: bool = false
 
-# --- 横向活动边界 --------------------------------------------------------------
-@export var bound_min_x: float = 10.0
-@export var bound_max_x: float = 150.0
+# --- 横向活动边界（[-80,80] 的蛛网森林 boss 房；换场地记得连 Idle 驻点一起调）---
+@export var bound_min_x: float = -70.0
+@export var bound_max_x: float = 70.0
 
 # --- 阶段阈值（血量比例低于此值进入下一阶段）---------------------------------
 @export var phase_two_ratio: float = 0.667    # 低于 66.7% 进二阶段
@@ -71,6 +71,9 @@ var phase_scripts: Dictionary = {
 
 # --- 运行时状态 --------------------------------------------------------------
 var direct: int = 1
+# 侧位：1 = 待在玩家右上（素材默认朝左，不翻转）；-1 = 待在玩家左上（整个角色 scale.x=-1）。
+# 金盏在场上【永不翻转】——只有冲刺飞出屏幕期间才允许换边，这是唯一的翻转时机。
+var side: int = 1
 var phase: int = PHASE_ONE
 var hittable: bool = true
 var initial_battlecry_shown: bool = false
@@ -113,8 +116,14 @@ func _ready() -> void:
 		$StateMachine.set_physics_process(true)
 
 
-func _physics_process(_delta: float) -> void:
-	global_position.x = clampf(global_position.x, bound_min_x, bound_max_x)
+# 注意：主体不做横向 clamp——冲刺(飞出屏幕换边)和死亡(冲出屏幕)都要越界，
+# 场内边界由 Idle 等状态自己夹。
+
+# 换边（只许冲刺在屏幕外调用）：翻转的是【整个角色】，
+# 子节点(嘴的释放点/判定框)跟着镜像，不需要任何手动坐标换算。
+func set_side(new_side: int) -> void:
+	side = signi(new_side) if new_side != 0 else 1
+	scale.x = float(side)
 
 
 # =============================================================================

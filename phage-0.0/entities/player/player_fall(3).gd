@@ -17,7 +17,7 @@ func process(delta: float) -> void:
 	player.coyote_timer = maxf(player.coyote_timer - delta, 0.0)
 	player.jump_buffer_timer = maxf(player.jump_buffer_timer - delta, 0.0)
 
-	if Input.is_action_just_pressed(&"jump"):
+	if Input.is_action_just_pressed(&"jump") and not player.web_snared:
 		if player.coyote_timer > 0.0:
 			player.coyote_timer = 0.0
 			player.jump_buffer_timer = 0.0
@@ -26,7 +26,7 @@ func process(delta: float) -> void:
 		player.jump_buffer_timer = player.JUMP_BUFFER_TIME
 
 	var move_input := Input.get_axis(&"move_left", &"move_right")
-	player.velocity.x = move_input * player.RUN_SPEED
+	player.velocity.x = move_input * player.run_speed()
 	player.apply_gravity(delta, player.FALL_GRAVITY_MULTIPLIER)
 
 	if move_input > 0.0:
@@ -38,7 +38,7 @@ func process(delta: float) -> void:
 		change_state(player.STATE_ATTACK_1)
 		return
 
-	if Input.is_action_just_pressed(&"sprint") and player.can_sprint:
+	if Input.is_action_just_pressed(&"sprint") and player.can_sprint and not player.web_snared:
 		change_state(player.STATE_SPRINT)
 		return
 
@@ -52,7 +52,7 @@ func process(delta: float) -> void:
 		player.reached_terminal = false
 		player.spawn_landing_effect()
 
-		if player.jump_buffer_timer > 0.0:
+		if player.jump_buffer_timer > 0.0 and not player.web_snared:
 			player.jump_buffer_timer = 0.0
 			change_state(player.STATE_JUMP)
 			return

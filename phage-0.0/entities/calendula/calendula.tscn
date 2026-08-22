@@ -152,9 +152,6 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(73.76965, 26)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_check"]
 size = Vector2(4000, 3000)
 
@@ -199,6 +196,7 @@ _data = {
 size = Vector2(39, 29)
 
 [node name="Calendula" type="CharacterBody2D" unique_id=889928608]
+modulate = Color(0.83889705, 0.83889705, 0.838897, 1)
 z_index = 10
 collision_layer = 4
 collision_mask = 0
@@ -207,17 +205,11 @@ script = ExtResource("1_body")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=289312451]
 material = SubResource("ShaderMaterial_hurt")
 sprite_frames = SubResource("SpriteFrames_cal")
-animation = &"Idle"
+animation = &"WebShot"
 autoplay = "Idle"
-frame_progress = 0.12990937
+frame = 7
+frame_progress = 1.0
 offset = Vector2(-8, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1676385802]
-modulate = Color(1, 1, 1, 0.1)
-position = Vector2(-0.34445524, 1.881299)
-rotation = -0.79845726
-scale = Vector2(0.99999994, 0.99999994)
-shape = SubResource("RectangleShape2D_body")
 
 [node name="StateMachine" type="Node" parent="." unique_id=852637470]
 script = ExtResource("3_sm")
@@ -294,3 +286,9 @@ vertical_alignment = 1
 
 [node name="BossHealthUI" type="Node" parent="." unique_id=2129135551]
 script = ExtResource("15_hpui")
+
+[node name="CalendulaWebBoltPoint" type="Node2D" parent="." unique_id=432405893]
+position = Vector2(-45, 14)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=575464359]
+polygon = PackedVector2Array(-35, 29, -27, 32, -21, 26, -22, 14, -17, 13, -10, 20, 0, 24, 2, 23, 2, 16, 22, 0, 29, -16, 24, -28, 10, -25, -13, -4, -10, 5, -12, 8, -21, 5, -32, 17, -36, 24)

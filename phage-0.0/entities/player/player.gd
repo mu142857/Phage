@@ -44,6 +44,7 @@ const LAMP_IGNITE_EFFECT_SCENE: PackedScene = preload("res://entities/player/Buf
 const RUN_SPEED: float = 70.0 #(100.0)
 const SPRINT_SPEED: float = 220.0
 const SPRINT_COOLDOWN: float = 0.75
+const WEB_SNARE_SPEED_MULT: float = 0.12  # 被金盏的网粘住时的移速倍率（基本动不了）
 const JUMP_SPEED: float = -200.0
 const MAX_JUMP_HOLD_TIME: float = 0.14
 const JUMP_HOLD_GRAVITY_MULTIPLIER: float = 0.35
@@ -91,6 +92,8 @@ var is_invincible: bool = false
 var is_dying: bool = false  # 死亡序列进行中,避免重复触发
 var is_in_ball_form: bool = false  # true when contracted; modifies hitbox + buffs
 var input_locked: bool = false
+# 被金盏的网粘住:禁跳跃/禁冲刺/移速打折,把网打破(3下)才解除。
+var web_snared: bool = false
 
 # 护盾状态: shield_ready[i] 是否就绪; shield_recharge[i] 剩余充能秒数。
 # is_guarding = 当前是否拿出了护盾(显示外壳); guard_slot = 拿出的是哪个盾(-1=无)。
@@ -261,6 +264,14 @@ func set_lock(locked: bool) -> void:
 	if is_instance_valid(state_machine):
 		state_machine.set_process(not locked)
 		state_machine.set_physics_process(not locked)
+
+## 蛛网缠身开关(金盏网弹调用):true=禁跳/禁冲/减速,false=解除。
+func set_web_snared(snared: bool) -> void:
+	web_snared = snared
+
+## 当前水平移速(Run/Fall 状态用),缠身时打折。
+func run_speed() -> float:
+	return RUN_SPEED * (WEB_SNARE_SPEED_MULT if web_snared else 1.0)
 
 func _toggle_dev_god_mode() -> void:
 	dev_god_mode = not dev_god_mode

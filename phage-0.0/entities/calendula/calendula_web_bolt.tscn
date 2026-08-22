@@ -1,24 +1,84 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://duc5mvgpyk2iw"]
 
-[ext_resource type="Script" path="res://entities/calendula/calendula_web_bolt.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://entities/calendula/calendula-bullet-Sheet.png" id="2_sheet"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bolt"]
-atlas = ExtResource("2_sheet")
-region = Rect2(0, 0, 24, 24)
+[ext_resource type="Script" uid="uid://cie4yqfsvt1rn" path="res://entities/calendula/calendula_web_bolt.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://882jidmtcdkn" path="res://entities/calendula/calendula-bullet-Sheet.png" id="2_sheet"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bolt"]
 radius = 3.0
 
-[node name="CalendulaWebBolt" type="Area2D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_a1rk1"]
+atlas = ExtResource("2_sheet")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cs36s"]
+atlas = ExtResource("2_sheet")
+region = Rect2(96, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_77g8g"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l66ax"]
+atlas = ExtResource("2_sheet")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qf061"]
+atlas = ExtResource("2_sheet")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nd0sy"]
+atlas = ExtResource("2_sheet")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqyyf"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dqyyf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a1rk1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cs36s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_77g8g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l66ax")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qf061")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nd0sy")
+}],
+"loop": false,
+"name": &"Explode",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dqyyf")
+}],
+"loop": true,
+"name": &"Flying",
+"speed": 5.0
+}]
+
+[node name="CalendulaWebBolt" type="Area2D" unique_id=1572020864]
 z_index = 15
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_script")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = SubResource("AtlasTexture_bolt")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=725647893]
 shape = SubResource("CircleShape2D_bolt")
 debug_color = Color(0.9, 0.8, 0.3, 0.1)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=853570301]
+sprite_frames = SubResource("SpriteFrames_dqyyf")
+animation = &"Flying"
+offset = Vector2(0, 1)

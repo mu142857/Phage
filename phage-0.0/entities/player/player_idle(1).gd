@@ -40,11 +40,11 @@ func process(delta: float) -> void:
 		change_state(player.STATE_ATTACK_1)
 		return
 
-	if Input.is_action_just_pressed(&"sprint") and player.can_sprint:
+	if Input.is_action_just_pressed(&"sprint") and player.can_sprint and not player.web_snared:
 		change_state(player.STATE_SPRINT)
 		return
 
-	if Input.is_action_just_pressed(&"jump") or player.jump_buffer_timer > 0.0:
+	if (Input.is_action_just_pressed(&"jump") or player.jump_buffer_timer > 0.0) and not player.web_snared:
 		player.jump_buffer_timer = 0.0
 		change_state(player.STATE_JUMP)
 		return

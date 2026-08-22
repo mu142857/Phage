@@ -23,7 +23,7 @@ const LURE_TRIGGER_DIST: float = 22.0
 const LURE_HOIST_TIME: float = 1.3
 const WALL_START_X: float = 1640.0
 const WALL_SPEED: float = 48.0      # 步行(70)被追上，冲刺(220)能逃
-const WALL_MIN_X: float = 160.0     # 蔓延到这就停：凝固成 boss 房右墙
+const WALL_MIN_X: float = 80.0      # 蔓延到这就停：凝固成 boss 房右墙
 const ESCAPE_SPAWN_INTERVAL: float = 3.4
 const ESCAPE_MAX_ALIVE: int = 3
 # 逃亡期只刷轻量蜘蛛(绿橙/蓝眼)，不刷肉墙狼蛛
@@ -32,10 +32,19 @@ const ESCAPE_SPIDER_INDICES: Array[int] = [0, 2]
 const ESCAPE_BLOCKER_AHEAD_MIN: float = 55.0
 const ESCAPE_BLOCKER_AHEAD_MAX: float = 90.0
 
-# ---- Boss 房（网墙停下后锁出的 [0,160]×[0,90] 固定房间）----
-const ARENA_LEFT_FACE_X: float = 8.0    # 左侧硬网内壁（帘子占 0~8）
-const ARENA_RIGHT_FACE_X: float = 160.0 # 右侧硬网内壁（= 网墙停点）
-const BOSS_SPAWN_X: float = 116.0
+# ---- Boss 房（[-80,80] 正好一屏，相机中心锁死 (0,45) = 真 fixed）----
+const ARENA_RIGHT_FACE_X: float = 80.0  # 右侧硬网内壁（= 网墙停点）
+const LEFT_CURTAIN_X: float = -72.0     # 左缘网帘（纯视觉，实体墙是关卡的 -80）
+const ARENA_MIN_X: float = -80.0
+const ARENA_MAX_X: float = 80.0
+const EARLY_TRIGGER_X: float = 0.0      # 逃亡中玩家过这条线 → 网墙加速封死，提前开打
+const WALL_RUSH_SPEED: float = 900.0    # 提前触发后网墙的封死速度
+const BOSS_BOUND_MIN_X: float = -70.0   # 金盏在这间房里的活动边界
+const BOSS_BOUND_MAX_X: float = 70.0
+const SUMMON_LEFT_X: float = -55.0      # 召唤点位（房间左/右/中）
+const SUMMON_RIGHT_X: float = 55.0
+const SUMMON_CENTER_X: float = 0.0
+const BOSS_SPAWN_X: float = 36.0
 const BOSS_SPAWN_Y: float = 42.0
 
 const SPAWN_START_Y: float = -25.0
@@ -66,9 +75,9 @@ var _wall_x: float = 0.0
 var _wall: Node2D = null
 var _escape_accum: float = 0.0
 var _escape_beat_blocker: bool = false  # 逃亡刷怪：拦路/垂降轮着来（减半密度）
+var _wall_rush: bool = false            # 玩家提前过线，网墙加速封死中
 var _arena_started: bool = false
 var _left_curtain: Node2D = null
-var _arena_left_body: StaticBody2D = null
 var _arena_right_body: StaticBody2D = null
 var _boss: CharacterBody2D = null
 
@@ -210,26 +219,15 @@ func _check_lure_trigger() -> void:
 	_lure_triggered = true
 	_lure_sequence()
 
-# 靠近诱饵：全场静止 -> 「她一动不动」「看起来像一个诱饵」-> 唯一选项「快跑」-> 吊起
+# 靠近诱饵：全局暂停（和 boss 字卡一个待遇）-> 「她一动不动」「看起来像一个诱饵」
+# -> 唯一选项「快跑」-> 恢复时间 -> 吊起。
+# 必须真暂停：光冻结现有蜘蛛不够，刷怪和垂降 tween 还在跑，小蜘蛛会趁机围殴锁住的玩家。
+# Dialogue 是 PROCESS_MODE_ALWAYS，暂停中照常打字/收输入。
 func _lure_sequence() -> void:
-	var player := get_node_or_null("Player")
-	_freeze_spiders(true)
-	if player != null and player.has_method("set_lock"):
-		player.set_lock(true)
-
+	get_tree().paused = true
 	await Dialogue.ask(["她一动不动", "看起来像一个诱饵"], ["快跑"])
-
-	if is_instance_valid(player) and player.has_method("set_lock"):
-		player.set_lock(false)
-	_freeze_spiders(false)
+	get_tree().paused = false
 	_hoist_lure()
-
-func _freeze_spiders(frozen: bool) -> void:
-	_spiders = _spiders.filter(func(s: Object) -> bool: return is_instance_valid(s))
-	for s in _spiders:
-		var sp := s as Node
-		if sp != null:
-			sp.process_mode = Node.PROCESS_MODE_DISABLED if frozen else Node.PROCESS_MODE_INHERIT
 
 func _hoist_lure() -> void:
 	# 丝线锚在屏幕上方，女孩被拽上去时丝线跟着缩短
@@ -270,11 +268,15 @@ func _start_escape() -> void:
 	_wall.call("setup", WALL_START_X)
 
 func _update_escape(delta: float) -> void:
-	_wall_x = maxf(_wall_x - WALL_SPEED * delta, WALL_MIN_X)
+	var wall_speed: float = WALL_RUSH_SPEED if _wall_rush else WALL_SPEED
+	_wall_x = maxf(_wall_x - wall_speed * delta, WALL_MIN_X)
 	if is_instance_valid(_wall):
 		_wall.set("front_x", _wall_x)
 
 	var player := get_node_or_null("Player") as Node2D
+	# 玩家提前跑过触发线：不等网慢慢爬，加速把路封死直接开打
+	if not _wall_rush and player != null and player.global_position.x <= EARLY_TRIGGER_X:
+		_wall_rush = true
 	if player != null and player.global_position.x >= _wall_x - 1.0:
 		if player.has_method("_die"):
 			player.call("_die")
@@ -340,20 +342,20 @@ func _try_escape_spawn(player: Node2D) -> void:
 			return
 
 # ============================================================
-# Boss 房：硬网封场 -> 相机锁 [0,160] -> 杂兵四散 -> 金盏登场 -> 字卡开打
+# Boss 房：硬网封场 -> 相机收 [-80,160] -> 杂兵四散 -> 金盏登场 -> 字卡开打
 # ============================================================
 
 func _begin_boss_arena() -> void:
 	_spawn_arena_walls()
-	_scatter_spiders()
+	_kill_spiders()
 
-	# 相机平滑推到房间中心，再把限制收成 [0,160]（=fixed camera），无缝交接
-	Game.set_position_override_smooth(Vector2(80.0, 45.0), 0.6)
+	# 相机平滑推到 (0,45) 后把右限收到 80：[-80,80] 正好一屏，
+	# 跟随相机被夹死在唯一合法中心 = 真正的 fixed camera，交接无跳变
+	Game.set_position_override_smooth(Vector2(0.0, 45.0), 0.6)
 	await get_tree().create_timer(0.7).timeout
 	if not is_inside_tree():
 		return
-	camera_limit_left = 0
-	camera_limit_right = 160
+	camera_limit_right = 80
 	Game.clear_position_override()
 
 	await _summon_boss()
@@ -368,16 +370,16 @@ func _begin_boss_arena() -> void:
 	_boss.tree_exited.connect(_on_boss_defeated)
 	await intro.call("play_for", _boss)
 
-# 左右硬墙（layer 1，玩家撞得上）+ 左侧网帘视觉（右墙视觉就是停下的封锁网）
+# 右侧硬墙（layer 1，玩家撞得上；视觉就是停下的封锁网）
+# 左边界用关卡自带的 LeftWall(-80)，只贴一道网帘视觉，不再加实体墙（防把玩家关外面）
 func _spawn_arena_walls() -> void:
 	_arena_right_body = _make_wall_body(Vector2(ARENA_RIGHT_FACE_X + 6.0, 45.0))
-	_arena_left_body = _make_wall_body(Vector2(ARENA_LEFT_FACE_X - 6.0, 45.0))
 
 	_left_curtain = WEB_WALL_SCRIPT.new() as Node2D
 	_left_curtain.z_index = 20
 	add_child(_left_curtain)
-	_left_curtain.call("setup", ARENA_LEFT_FACE_X)
-	_left_curtain.set("front_x", 0.0)
+	_left_curtain.call("setup", LEFT_CURTAIN_X)
+	_left_curtain.set("front_x", ARENA_MIN_X)
 
 func _make_wall_body(pos: Vector2) -> StaticBody2D:
 	var body := StaticBody2D.new()
@@ -392,19 +394,18 @@ func _make_wall_body(pos: Vector2) -> StaticBody2D:
 	add_child(body)
 	return body
 
-# 杂兵四散而逃：冻结 AI，各自朝更近的屏幕边缘窜出去
-func _scatter_spiders() -> void:
+# 金盏一登场，场上残余小蜘蛛全部当场死亡（顶级捕猎者的威压）
+func _kill_spiders() -> void:
 	_spiders = _spiders.filter(func(s: Object) -> bool: return is_instance_valid(s))
 	for s in _spiders:
-		var sp := s as Node2D
-		if sp == null:
-			continue
-		sp.process_mode = Node.PROCESS_MODE_DISABLED
-		var exit_x: float = -30.0 if sp.global_position.x < 80.0 else 190.0
-		var tw := create_tween()
-		tw.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		tw.tween_property(sp, "global_position:x", exit_x, _rng.randf_range(0.45, 0.75))
-		tw.tween_callback(sp.queue_free)
+		var sp := s as Node
+		if sp != null and sp.has_method("take_damage"):
+			sp.call("take_damage", 99999)
+	# 盾蛛开盾时免伤还回血，缓一拍后补刀强制清场
+	await get_tree().create_timer(0.6).timeout
+	for s in _spiders:
+		if is_instance_valid(s):
+			(s as Node).queue_free()
 	_spiders.clear()
 
 # 金盏从屏幕上方缓缓飘落入场（冻结本体，只让贴图动）
@@ -414,6 +415,14 @@ func _summon_boss() -> void:
 		return
 	_boss.position = Vector2(BOSS_SPAWN_X, -60.0)
 	add_child(_boss)
+	# 场地几何是关卡的知识：活动边界和召唤点位按这间 [-80,160] 房间覆写
+	_boss.set("bound_min_x", BOSS_BOUND_MIN_X)
+	_boss.set("bound_max_x", BOSS_BOUND_MAX_X)
+	var summon_state := _boss.get_node_or_null("StateMachine/Summon(5)")
+	if summon_state != null:
+		summon_state.set("left_x", SUMMON_LEFT_X)
+		summon_state.set("right_x", SUMMON_RIGHT_X)
+		summon_state.set("center_x", SUMMON_CENTER_X)
 	if _boss.has_method("change_state"):
 		_boss.call("change_state", 0)
 	_boss.process_mode = Node.PROCESS_MODE_DISABLED
@@ -432,9 +441,8 @@ func _on_boss_defeated() -> void:
 	_dissolve_webs()
 
 func _dissolve_webs() -> void:
-	for body in [_arena_left_body, _arena_right_body]:
-		if is_instance_valid(body):
-			body.queue_free()
+	if is_instance_valid(_arena_right_body):
+		_arena_right_body.queue_free()
 	var last_tween: Tween = null
 	for node: Node2D in [_wall, _left_curtain]:
 		if is_instance_valid(node):

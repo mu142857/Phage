@@ -87,6 +87,10 @@ var _walking_effect_enabled: bool = false
 # ============================================================
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var shield_overlay: AnimatedSprite2D = $AnimatedSprite2D/ShieldOverlay
+# 技能特效层(默认隐藏,技能系统开关):蓝水晶包裹/铜灯火光/水族箱水花。
+@onready var blue_crystal_overlay: AnimatedSprite2D = $AnimatedSprite2D/BlueCrystalOverlay
+@onready var fire_attack_overlay: AnimatedSprite2D = $AnimatedSprite2D/FireAttackOverlay
+@onready var water_tank_overlay: AnimatedSprite2D = $AnimatedSprite2D/WaterTankOverlay
 @onready var collision_normal: CollisionShape2D = $CollisionNormal
 @onready var collision_ball: CollisionShape2D = $CollisionBall
 @onready var walking_effect: GPUParticles2D = $PlayerWalkingEffect
@@ -110,9 +114,9 @@ func _ready() -> void:
 	set_ball_form(false)
 	clear_attack_hitboxes()
 	can_sprint = true
-	# 盾壳是独立的 overlay 精灵,被动跟随本体的动画帧(不自己 play)。
-	sprite.animation_changed.connect(_sync_shield_overlay)
-	sprite.frame_changed.connect(_sync_shield_overlay)
+	# 盾壳/技能特效都是独立的 overlay 精灵,被动跟随本体的动画帧(不自己 play)。
+	sprite.animation_changed.connect(_sync_overlays)
+	sprite.frame_changed.connect(_sync_overlays)
 	# 出生默认拿出 0 号盾,否则一出生被碰就死。
 	is_guarding = true
 	guard_slot = 0
@@ -299,22 +303,31 @@ func play_anim(anim_name: StringName) -> void:
 # 护盾拿出/收起:盾壳 overlay 显示/隐藏,本体动画不动,姿势天然不跳帧。
 func _refresh_shield_visual() -> void:
 	_apply_walking_effect()  # 护盾切换时走路特效也跟着二选一
-	if not is_instance_valid(shield_overlay):
-		return
-	shield_overlay.visible = is_guarding
-	if is_guarding:
-		_sync_shield_overlay()
+	set_effect_overlay(shield_overlay, is_guarding)
 
-# 盾壳跟随本体当前动画帧。overlay 从不自己 play,全靠本体的
+# 技能特效层开关(蓝水晶包裹/铜灯火光/水族箱水花…同样适用盾壳):
+# 开的瞬间立即对齐当前帧,避免露一帧旧画面。
+func set_effect_overlay(overlay: AnimatedSprite2D, on: bool) -> void:
+	if not is_instance_valid(overlay):
+		return
+	overlay.visible = on
+	if on:
+		_sync_one_overlay(overlay)
+
+# 所有 overlay 跟随本体当前动画帧。overlay 从不自己 play,全靠本体的
 # animation_changed / frame_changed 信号驱动,不存在漂移。
-func _sync_shield_overlay() -> void:
-	if not is_instance_valid(shield_overlay) or not shield_overlay.visible:
-		return
+func _sync_overlays() -> void:
+	for child in sprite.get_children():
+		var overlay := child as AnimatedSprite2D
+		if overlay != null and overlay.visible:
+			_sync_one_overlay(overlay)
+
+func _sync_one_overlay(overlay: AnimatedSprite2D) -> void:
 	var anim := sprite.animation
-	if shield_overlay.sprite_frames == null or not shield_overlay.sprite_frames.has_animation(anim):
+	if overlay.sprite_frames == null or not overlay.sprite_frames.has_animation(anim):
 		return
-	shield_overlay.animation = anim
-	shield_overlay.frame = sprite.frame
+	overlay.animation = anim
+	overlay.frame = sprite.frame
 
 func _start_invincibility() -> void:
 	is_invincible = true

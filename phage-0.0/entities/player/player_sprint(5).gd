@@ -27,6 +27,7 @@ func enter() -> void:
 		cooldown_timer.start()
 	if is_instance_valid(player.sprite):
 		player.play_anim(&"Sprint")
+	player.on_sprint_started()  # 蓝水晶:可用则本次冲刺被水晶包裹(无敌)
 
 func process(delta: float) -> void:
 	var player := host as Player
@@ -55,6 +56,14 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 			change_state(player.STATE_IDLE)
 	else:
 		change_state(player.STATE_FALL)
+
+
+func exit() -> void:
+	var player := host as Player
+	if player == null:
+		return
+	# 蓝水晶包裹结束进冷却;珊瑚潮汐给下一击充能
+	player.on_sprint_ended()
 
 
 func _on_timer_timeout() -> void:

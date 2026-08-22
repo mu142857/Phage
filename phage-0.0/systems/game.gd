@@ -34,6 +34,7 @@ const CAMERA_FIXED_GROUP: StringName = &"camera_fixed"
 const TELEPORT_GROUP: StringName = &"teleport"
 const PLAYER_SCENE: PackedScene = preload("res://entities/player/player.tscn")
 const PLAYER_LIGHT_SCENE: PackedScene = preload("res://entities/player/player_light.tscn")
+const BUFF_HOLD_SCENE: PackedScene = preload("res://interactive/BuffHold/buff_hold.tscn")
 const ANCHOR_FOLLOW: int = Camera2D.ANCHOR_MODE_DRAG_CENTER
 const ANCHOR_FIXED: int = Camera2D.ANCHOR_MODE_FIXED_TOP_LEFT
 
@@ -65,6 +66,8 @@ var _hit_flash_priority_until_ms: int = 0
 var _player_dying: bool = false
 var teleport_transition_tween: Tween = null
 var teleport_transition_layer: CanvasLayer = null
+# 左上角持有 buff 的 HUD(转场演出会调它的 fade_out/fade_in)
+var buff_hold: CanvasLayer = null
 var teleport_transition_rect: ColorRect = null
 var teleport_transition_active: bool = false
 # 最后一次"安全落脚点",被地刺等危险物击中时玩家弹回这里。
@@ -89,6 +92,9 @@ func _ready() -> void:
 		colour_rect2.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if is_instance_valid(flash_layer) and not flash_layer.visible:
 		flash_layer.visible = true
+	# 左上角持有 buff 的 HUD,常驻(跟着 Game autoload 跨场景)
+	buff_hold = BUFF_HOLD_SCENE.instantiate()
+	add_child(buff_hold)
 
 func _process(delta: float) -> void:
 	_update_camera_mode()

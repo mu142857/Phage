@@ -77,6 +77,28 @@ func refresh(health: int, max_health: int, trigger_flash: bool = false) -> void:
 		else:
 			flash_on_hit()   # 触发受击红闪
 
+# Boss 开场字卡用:从全透明快速淡入。show_ui(true) 的黑→灰调色渐变在
+# 暗场景里看不出"渐显",这里走真正的 alpha 淡入。
+func show_ui_fade(duration: float = 0.35) -> void:
+	_resolve_nodes()
+	_kill_tweens()
+	var start_tint := Color(base_tint.r, base_tint.g, base_tint.b, 0.0)
+	if _health_bar != null:
+		_health_bar.visible = true
+		_health_bar.scale = Vector2.ONE
+		_health_bar.modulate = start_tint
+	if _health_label != null:
+		_health_label.visible = true
+		_health_label.scale = Vector2.ONE
+		_health_label.modulate = start_tint
+	_ui_tween = create_tween()
+	_ui_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	if _health_bar != null:
+		_ui_tween.parallel().tween_property(_health_bar, "modulate", base_tint, duration)
+	if _health_label != null:
+		_ui_tween.parallel().tween_property(_health_label, "modulate", base_tint, duration)
+
+
 func show_ui(animate: bool = true) -> void:
 	_resolve_nodes()
 	_kill_tweens()

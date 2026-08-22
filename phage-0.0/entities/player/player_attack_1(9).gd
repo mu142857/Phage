@@ -10,6 +10,10 @@ const ATTACK1_2_DAMAGE: int = 60
 # 于是: 有盾地面=1.0, 有盾跳劈=1.5, 无盾地面=2.0, 无盾跳劈=3.0(=原来的3倍)。
 const AIR_ATTACK_INDEX: float = 1.5
 const NO_SHIELD_DAMAGE_MULT: float = 2.0
+# Buff 改动量:山的重量=跳劈再×1.3;红水晶=无盾倍率升到2.5、二段伤害=一段;
+# 花(绽放的代价)=有盾也按无盾倍率算。
+const SALT_AIR_MULT: float = 1.3
+const RED_CRYSTAL_NO_SHIELD_MULT: float = 2.5
 const ATTACK1_1_TRIGGER_FRAME: int = 1
 const ATTACK1_2_TRIGGER_FRAME: int = 1
 const ATTACK1_1_TRIGGER_TIME: float = 2.0 / 12.0
@@ -67,6 +71,9 @@ func enter() -> void:
 		_apply_attack_surge(player)
 	_play_attack_glow(player)
 	_play_attack_animation(player, ANIM_ATTACK1_1, ANIM_ATTACK_LEGACY)
+	# 攻速增益(铜灯火光/窗边的晨光)只作用在攻击动画上
+	if is_instance_valid(player.sprite):
+		player.sprite.speed_scale = player.attack_speed_multiplier()
 
 func process(delta: float) -> void:
 	var player := host as Player
@@ -107,7 +114,9 @@ func attack1_1_check() -> void:
 	if phase_1_done:
 		return
 	phase_1_done = true
-	_check_attack_hitbox(attack_hitbox_1, _get_attack_damage(ATTACK1_1_DAMAGE))
+	if _check_attack_hitbox(attack_hitbox_1, _get_attack_damage(ATTACK1_1_DAMAGE)) \
+			and player_ref != null:
+		player_ref.on_attack_landed()
 
 func attack1_2_check() -> void:
 	if not phase_2_requested:
@@ -115,14 +124,31 @@ func attack1_2_check() -> void:
 	if phase_2_done:
 		return
 	phase_2_done = true
-	_check_attack_hitbox(attack_hitbox_2, _get_attack_damage(ATTACK1_2_DAMAGE))
+	# 红水晶:连击第二段不再衰减,伤害与第一段相同。
+	var base := ATTACK1_2_DAMAGE
+	if player_ref != null and player_ref.has_buff(&"RedCrystal"):
+		base = ATTACK1_1_DAMAGE
+	if _check_attack_hitbox(attack_hitbox_2, _get_attack_damage(base)) \
+			and player_ref != null:
+		player_ref.on_attack_landed()
 
 func _get_attack_damage(base_damage: int) -> int:
 	var dmg := float(base_damage)
 	if is_air_attack:
 		dmg *= AIR_ATTACK_INDEX
-	if player_ref != null and not player_ref.is_guarding:
-		dmg *= NO_SHIELD_DAMAGE_MULT
+		if player_ref != null and player_ref.has_buff(&"SaltLight"):
+			dmg *= SALT_AIR_MULT  # 山的重量:跳劈再+30%
+	# 花:有盾也按破盾伤害算;红水晶:破盾倍率更高。
+	var as_broken := player_ref != null \
+		and (not player_ref.is_guarding or player_ref.has_buff(&"Flower"))
+	if as_broken:
+		var mult := NO_SHIELD_DAMAGE_MULT
+		if player_ref.has_buff(&"RedCrystal"):
+			mult = RED_CRYSTAL_NO_SHIELD_MULT
+		dmg *= mult
+	# 加法叠加的攻击力增益(珊瑚潮汐的冲刺强化等)。
+	if player_ref != null:
+		dmg *= 1.0 + player_ref.attack_damage_bonus()
 	return int(round(dmg))
 
 func _try_auto_attack_phases(player: Player) -> void:
@@ -190,9 +216,9 @@ func _play_attack_glow(player: Player) -> void:
 	attack_glow_tween.tween_property(player.sprite, "modulate", Color(1.6, 1.6, 1.6, base_sprite_modulate.a), 0.05)
 	attack_glow_tween.tween_property(player.sprite, "modulate", base_sprite_modulate, 0.10)
 
-func _check_attack_hitbox(hitbox: Area2D, damage: int) -> void:
+func _check_attack_hitbox(hitbox: Area2D, damage: int) -> bool:
 	if not is_instance_valid(hitbox):
-		return
+		return false
 
 	# Range attack: damage every valid target overlapping the hitbox, not just the first.
 	var hit_any := false
@@ -207,6 +233,7 @@ func _check_attack_hitbox(hitbox: Area2D, damage: int) -> void:
 
 	if hit_any:
 		_apply_hit_recoil()
+	return hit_any
 
 
 func _try_damage_target(target: Node, damage: int, damaged: Array[Node]) -> bool:
@@ -266,6 +293,8 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 				_apply_attack_surge(player)
 			_play_attack_glow(player)
 			_play_attack_animation(player, ANIM_ATTACK1_2, ANIM_ATTACK_LEGACY)
+			# 第一段命中可能刚点燃火光,二段攻速要跟着刷新
+			player.sprite.speed_scale = player.attack_speed_multiplier()
 			return
 		player.finish_attack()
 		return
@@ -283,6 +312,7 @@ func exit() -> void:
 		attack_glow_tween = null
 	if is_instance_valid(player.sprite):
 		player.sprite.modulate = base_sprite_modulate
+		player.sprite.speed_scale = 1.0
 	player.clear_attack_hitboxes()
 	player_ref = null
 	recoil_time_left = 0.0

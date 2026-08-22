@@ -24,6 +24,7 @@ var _root: Control = null
 var _label: Label = null
 var _options_panel: ColorRect = null
 var _options_box: VBoxContainer = null
+var _inline_icon: TextureRect = null
 
 
 func _ready() -> void:
@@ -73,6 +74,14 @@ func _ready() -> void:
 	_options_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_options_panel.add_child(_options_box)
 
+	# 行内小图标(获得 buff 用):打完字后贴在文字末尾
+	_inline_icon = TextureRect.new()
+	_inline_icon.stretch_mode = TextureRect.STRETCH_KEEP
+	_inline_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_inline_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_inline_icon.visible = false
+	_root.add_child(_inline_icon)
+
 	visible = false
 
 
@@ -108,10 +117,88 @@ func ask(lines: Array, options: Array) -> int:
 	return index
 
 
+## 获得 buff 演出:打出 line 后把图标贴进 "{icon}" 占位符的位置(文字里预留了
+## 等宽空隙);line 里没有占位符就贴在整行末尾。按键后再打一行介绍。
+## 用法: await Dialogue.say_gain("获得 buff「{icon}森林的谢礼」", BuffDefs.icon(&"Plant"), "……")
+const ICON_MARK := "{icon}"
+
+func say_gain(line: String, icon: Texture2D, desc: String) -> void:
+	_open()
+	var shown := line
+	var prefix := line      # 图标插槽左侧的文字;无占位符时=整行(图标贴末尾)
+	var gap := ""
+	if icon != null and line.contains(ICON_MARK):
+		var parts := line.split(ICON_MARK, true, 1)
+		prefix = parts[0]
+		var suffix: String = parts[1] if parts.size() > 1 else ""
+		gap = _icon_gap_text(icon)
+		shown = prefix + gap + suffix
+	# 图标位置先定好但不显示;打字机扫到插槽时它像被"打出来"一样弹出。
+	_prepare_inline_icon(shown, prefix, gap, icon)
+	await _type_line(shown, prefix.length() if icon != null else -1)
+	await _wait_advance()
+	_inline_icon.visible = false
+	await _type_line(desc)
+	await _wait_advance()
+	close()
+
+
+# 宽度足够塞下图标的空格串(占位符换成它,文字排版就给图标留了缝)。
+func _icon_gap_text(icon: Texture2D) -> String:
+	var font := _label.get_theme_font("font")
+	var font_size := _label.get_theme_font_size("font_size")
+	var space_width := font.get_string_size(" ", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	var count := maxi(1, ceili((icon.get_width() + 2.0) / maxf(space_width, 1.0)))
+	return " ".repeat(count)
+
+
+# 图标定位到空隙正中(先不显示,由打字机进度揭示);gap 为空表示贴在末行末尾。
+# 支持手动 \n 换行(带图标的行要保证自身不触发自动换行,调用方控制行宽)。
+func _prepare_inline_icon(shown: String, prefix: String, gap: String, icon: Texture2D) -> void:
+	if icon == null:
+		return
+	_inline_icon.texture = icon
+	var font := _label.get_theme_font("font")
+	var font_size := _label.get_theme_font_size("font_size")
+	var center := _label.get_global_rect().get_center()
+	var lines := shown.split("\n")
+	var x: float
+	var icon_line: int
+	if gap.is_empty():
+		icon_line = lines.size() - 1
+		var last_width := font.get_string_size(
+			lines[icon_line], HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+		x = center.x + last_width / 2.0 + 3.0
+	else:
+		icon_line = prefix.count("\n")
+		var newline_at := prefix.rfind("\n")
+		var prefix_in_line := prefix.substr(newline_at + 1) if newline_at >= 0 else prefix
+		var line_width := font.get_string_size(
+			lines[icon_line], HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+		var prefix_width := font.get_string_size(
+			prefix_in_line, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+		var gap_width := font.get_string_size(gap, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+		x = center.x - line_width / 2.0 + prefix_width + (gap_width - icon.get_width()) / 2.0
+	var y := _line_center_y(center.y, lines.size(), icon_line, font, font_size) \
+		- icon.get_height() / 2.0
+	_inline_icon.position = Vector2(roundf(x), roundf(y))
+	_inline_icon.visible = false
+
+
+# 垂直居中的多行文本里,第 line_index 行的中心 y。
+func _line_center_y(center_y: float, line_count: int, line_index: int,
+		font: Font, font_size: int) -> float:
+	var line_height := font.get_height(font_size)
+	var spacing := float(_label.get_theme_constant("line_spacing"))
+	var total := line_height * float(line_count) + spacing * float(line_count - 1)
+	return center_y - total / 2.0 + (line_height + spacing) * float(line_index) + line_height / 2.0
+
+
 func close() -> void:
 	is_open = false
 	visible = false
 	_label.text = ""
+	_inline_icon.visible = false
 	_clear_options()
 
 
@@ -121,7 +208,8 @@ func _open() -> void:
 	_clear_options()
 
 
-func _type_line(text: String) -> void:
+# reveal_icon_at >= 0 时:打字进度扫过该字符数就让行内图标现身(按键跳过也会带出来)。
+func _type_line(text: String, reveal_icon_at: int = -1) -> void:
 	_advance = false
 	_label.text = text
 	_label.visible_characters = 0
@@ -133,8 +221,13 @@ func _type_line(text: String) -> void:
 		while acc >= 1.0 and _label.visible_characters < text.length():
 			_label.visible_characters += 1
 			acc -= 1.0
+		if reveal_icon_at >= 0 and _label.visible_characters >= reveal_icon_at:
+			_inline_icon.visible = true
+			reveal_icon_at = -1
 		await get_tree().process_frame
 	_label.visible_characters = -1
+	if reveal_icon_at >= 0:
+		_inline_icon.visible = true
 	_advance = false
 
 

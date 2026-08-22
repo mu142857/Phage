@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="4_b06ws"]
 [ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="90_dreamend"]
 [ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="91_dreamintro"]
+[ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="92_bossintro"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1c05a"]
 
@@ -56,3 +57,9 @@ story_text_2 = "咔哒，咔哒。整座城市都在走字。"
 weekday_text = "周三的梦"
 title_text = "铁锈城"
 title_color = Color(0.84, 0.66, 0.47, 1)
+
+[node name="BossIntro" parent="." instance=ExtResource("92_bossintro")]
+boss_path = NodePath("../RustGOAT")
+title_text = "锈都拳王"
+boss_name_text = "老大史莱姆"
+appear_mode = 0

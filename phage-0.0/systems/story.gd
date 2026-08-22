@@ -20,6 +20,7 @@ const SAVE_PATH := "user://phage_save.cfg"
 
 var nights_completed := 0    # 已做完几个梦(0-7)
 var is_night := false        # 房间时刻:false=白天;true=夜晚(梦里死了惊醒)
+var buffs_owned: Array = []  # 已获得的 buff id(= 房间物品节点名,定义见 BuffDefs)
 var in_dream := false
 var replay_mode := false     # 点旧物品"回到梦里"的回顾模式:不推进度、跳过字卡
 var current_dream_night := 0 # 正在做第几夜的梦(1-7)
@@ -27,6 +28,9 @@ var wake_kind := ""          # 回到房间要播的醒来演出:"" / "morning" 
 
 var _dream_settled := false  # 当前梦已判定过通关/失败,防止双触发
 var _shatter_layer: CanvasLayer = null
+
+## 获得新 buff 时发出,供技能系统/HUD 接。
+signal buff_gained(id: StringName)
 
 
 func _ready() -> void:
@@ -48,6 +52,8 @@ func _input(event: InputEvent) -> void:
 		print("[Story] F12 清空进度,回到第一夜")
 		nights_completed = 0
 		is_night = false
+		buffs_owned = []
+		buff_removed.emit(&"")  # 让 BuffHold 等监听方刷新(id 无意义)
 		in_dream = false
 		replay_mode = false
 		current_dream_night = 0
@@ -118,6 +124,7 @@ func _goto_room() -> void:
 	in_dream = false
 	replay_mode = false
 	current_dream_night = 0
+	set_muzi_broken(false)  # 回到房间,守望复原
 	get_tree().change_scene_to_file(ROOM_SCENE)
 
 
@@ -186,12 +193,61 @@ func _play_shatter() -> void:
 
 
 # ============================================================
+# Buff(定义见 BuffDefs,id = 房间物品节点名)
+# 同时最多持有 MAX_BUFFS 个;放下后物品会重新提供"收下"选项。
+# ============================================================
+const MAX_BUFFS: int = 2
+
+## 放下 buff 时发出,供 HUD/技能系统接。
+signal buff_removed(id: StringName)
+
+# 沐子的守望本场尝试已用掉(HUD 显示成"破碎的守望")。运行态,不入存档;
+# 每次主角出生(新梦/死亡重试)和回房间时复原。
+var muzi_broken := false
+signal muzi_broken_changed
+
+
+func set_muzi_broken(broken: bool) -> void:
+	if muzi_broken == broken:
+		return
+	muzi_broken = broken
+	muzi_broken_changed.emit()
+
+
+func has_buff(id: StringName) -> bool:
+	return String(id) in buffs_owned
+
+
+## 获得 buff 并立即存档。已拥有或手里已满返回 false。
+func grant_buff(id: StringName) -> bool:
+	if has_buff(id):
+		return false
+	if buffs_owned.size() >= MAX_BUFFS:
+		return false
+	buffs_owned.append(String(id))
+	save_game()
+	buff_gained.emit(id)
+	return true
+
+
+## 放下 buff 并立即存档。未持有返回 false。
+func remove_buff(id: StringName) -> bool:
+	if not has_buff(id):
+		return false
+	buffs_owned.erase(String(id))
+	save_game()
+	buff_removed.emit(id)
+	return true
+
+
+# ============================================================
 # 存档
 # ============================================================
 func save_game() -> void:
 	var config := ConfigFile.new()
 	config.set_value("progress", "nights_completed", nights_completed)
 	config.set_value("progress", "is_night", is_night)
+	config.set_value("progress", "buffs_owned", buffs_owned)
 	config.save(SAVE_PATH)
 
 
@@ -201,3 +257,4 @@ func load_save() -> void:
 		return
 	nights_completed = int(config.get_value("progress", "nights_completed", 0))
 	is_night = bool(config.get_value("progress", "is_night", false))
+	buffs_owned = config.get_value("progress", "buffs_owned", []) as Array

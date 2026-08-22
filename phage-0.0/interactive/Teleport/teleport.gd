@@ -35,6 +35,15 @@ func activate() -> void:
 		_set_hint_visible(true)
 
 
+## Boss 开打时由 BossIntro 调用,关闭传送点(不可交互并收起提示)。
+func deactivate() -> void:
+	if not active:
+		return
+	active = false
+	if _hint_visible:
+		_set_hint_visible(false)
+
+
 func _process(_delta: float) -> void:
 	if not active:
 		return

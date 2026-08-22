@@ -8,9 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://dhmb2fbwnqnoa" path="res://levels/cradle_of_decay/tree2.png" id="4_4iulq"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="5_hklc7"]
 [ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="5_lqaxi"]
-[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="9_0ul3c"]
 
 [ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="91_dreamintro"]
+[ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="92_bossintro"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ul3c"]
 shader = ExtResource("3_4iulq")
@@ -85,19 +85,6 @@ shape = SubResource("WorldBoundaryShape2D_pgmxn")
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("5_hklc7")]
 position = Vector2(68, 81)
 
-[node name="Front" type="CanvasLayer" parent="." unique_id=1668978567]
-visible = false
-
-[node name="Label" type="Label" parent="Front" unique_id=263063248]
-z_index = 100
-offset_right = 160.0
-offset_bottom = 80.0
-theme_override_fonts/font = ExtResource("9_0ul3c")
-theme_override_font_sizes/font_size = 30
-text = "Actinos"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Timer" type="Timer" parent="." unique_id=379900041]
 wait_time = 0.1
 one_shot = true
@@ -109,5 +96,11 @@ story_text_2 = "梦里的水很暖。摇篮的深处，有什么在呼吸。"
 weekday_text = "周二的梦"
 title_text = "珊瑚摇篮"
 title_color = Color(0.6, 0.82, 0.78, 1)
+
+[node name="BossIntro" parent="." instance=ExtResource("92_bossintro")]
+auto_start = false
+title_text = "摇篮里的心跳"
+boss_name_text = "阿克缇诺斯"
+card_animation = &"Battlecry"
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

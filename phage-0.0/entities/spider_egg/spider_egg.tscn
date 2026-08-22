@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://du75vskaltrpw"]
+
+[ext_resource type="Script" uid="uid://dfc7ij5dkajos" path="res://entities/spider_egg/spider_egg.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://j880b0awxh6n" path="res://entities/spider_egg/SpiderEgg-Sheet.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 0, 35, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1"]
+atlas = ExtResource("2_sheet")
+region = Rect2(35, 0, 35, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2"]
+atlas = ExtResource("2_sheet")
+region = Rect2(70, 0, 35, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3"]
+atlas = ExtResource("2_sheet")
+region = Rect2(105, 0, 35, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_egg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f3")
+}],
+"loop": true,
+"name": &"Float",
+"speed": 10.0
+}]
+
+[node name="SpiderEgg" type="Node2D" unique_id=975680599]
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1478282560]
+sprite_frames = SubResource("SpriteFrames_egg")
+animation = &"Float"
+autoplay = "Float"
+frame_progress = 0.3266066
+offset = Vector2(1.5, 0)

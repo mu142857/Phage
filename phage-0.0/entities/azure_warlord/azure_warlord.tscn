@@ -799,19 +799,6 @@ vertical_alignment = 1
 [node name="BossHealthUI" type="Node" parent="." unique_id=2085244191]
 script = ExtResource("13_bossui")
 
-[node name="Front" type="CanvasLayer" parent="." unique_id=1186615163]
-visible = false
-
-[node name="Label" type="Label" parent="Front" unique_id=706698832]
-z_index = 100
-offset_right = 160.0
-offset_bottom = 80.0
-theme_override_fonts/font = ExtResource("16_fmv45")
-theme_override_font_sizes/font_size = 20
-text = "Azure Warlord"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Sprint(2)" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Attack(3)" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/Crystallization(4)" method="_on_animated_sprite_2d_animation_finished"]

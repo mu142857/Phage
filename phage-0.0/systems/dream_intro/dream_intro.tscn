@@ -47,6 +47,7 @@ offset_bottom = 90.0
 color = Color(0, 0, 0, 1)
 
 [node name="TextLayer" type="CanvasLayer" parent="."]
+visible = false
 layer = 3001
 
 [node name="StoryLabel" type="Label" parent="TextLayer"]

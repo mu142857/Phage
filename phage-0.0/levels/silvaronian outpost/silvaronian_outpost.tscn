@@ -22,6 +22,8 @@
 [ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="20_uadtp"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="21_3md8r"]
 [ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="90_dreamend"]
+[ext_resource type="PackedScene" uid="uid://d3ocflqruuwjd" path="res://entities/azure_warlord/azure_warlord.tscn" id="91_azure"]
+[ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="92_bossintro"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_k0aww"]
 
@@ -543,19 +545,18 @@ theme_override_fonts/font = ExtResource("21_3md8r")
 theme_override_font_sizes/font_size = 10
 text = "Silvaron"
 
-[node name="Front" type="CanvasLayer" parent="." unique_id=798526350]
-
-[node name="Label" type="Label" parent="Front" unique_id=63663653]
-z_index = 100
-offset_right = 160.0
-offset_bottom = 80.0
-theme_override_fonts/font = ExtResource("21_3md8r")
-theme_override_font_sizes/font_size = 20
-text = "Azure Warlord"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="AzureWarlord" parent="." instance=ExtResource("91_azure")]
+position = Vector2(118, 80)
 
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("13_3tuqn")]
 position = Vector2(68, 81)
 
 [node name="DreamEnd" parent="." unique_id=985730723 instance=ExtResource("90_dreamend")]
+watch_path = NodePath("../AzureWarlord")
+
+[node name="BossIntro" parent="." instance=ExtResource("92_bossintro")]
+boss_path = NodePath("../AzureWarlord")
+title_text = "森林的创口"
+boss_name_text = "蓝晶"
+appear_mode = 0
+reveal_animation = &"Fall"

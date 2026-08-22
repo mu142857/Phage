@@ -11,12 +11,36 @@ const IDLE_TO_CONTRACT_TIME: float = 3.0
 const INVINCIBLE_DURATION: float = 0.3
 
 # ---- 护盾机制 ----
-# 两个独立护盾,各挡一次伤害,破掉后 10 秒各自充能。
+# 两个独立护盾,各挡一次伤害,破掉后 10 秒各自充能(可无限循环)。
 # 有盾(拿出护盾)时被碰:破当前盾、进短无敌、不掉血。
 # 无盾(没拿出护盾)时被碰:直接死亡。
-# 切盾键(Backpack): 有盾时收起(进入无盾伤害加成),无盾时拿出下一个就绪的盾。
+# 开盾键 E(Backpack): 无盾且有就绪的盾时拿出;有盾时按了没反应。
+# 破盾键 R(ShieldBreak): 有盾时主动敲碎当前盾——照常进充能、照常触发
+# 破盾特效(珊瑚水刺等),但不给无敌(无敌只属于挨打)。
 const SHIELD_COUNT: int = 2
 const SHIELD_RECHARGE_TIME: float = 10.0
+
+# ---- Buff 数值(定义/文案见 BuffDefs;获得状态在 Story.buffs_owned) ----
+const TABLE_BREAK_INVINCIBLE: float = 1.0   # 愈合的伤口:破盾后无敌延长
+const PLANT_RECHARGE_TIME: float = 7.0      # 森林的谢礼:护盾充能加速
+const CRYSTAL_DASH_COOLDOWN: float = 8.0    # 蓝水晶的力量:包裹冲刺冷却
+const LAMP_ENERGY_MAX: int = 8              # 城市的心跳:攒满所需命中次数
+const LAMP_FIRE_DURATION: float = 6.0       # 城市的心跳:火光持续时间
+const LAMP_ATTACK_SPEED: float = 1.5        # 城市的心跳:火光期攻速倍率
+const WINDOW_RAMP_RATE: float = 0.05        # 窗边的晨光:满盾时每秒+5%攻速
+const WINDOW_RAMP_MAX_TIME: float = 8.0     # 窗边的晨光:8秒到顶(+40%)
+const TIDE_DAMAGE_BONUS: float = 0.2        # 珊瑚潮汐:冲刺后下一击+20%(加法叠加)
+const TIDE_SPIKE_DAMAGE: int = 60           # 珊瑚潮汐:破盾水刺单发伤害
+const TIDE_SPIKE_SCALE: float = 1.5         # 珊瑚潮汐:水刺整体放大(更显眼)
+const TIDE_RING_BONUS_HITS: int = 4         # 珊瑚潮汐:命中≥这么多根触发下一击强化
+const TIDE_ALL_HIT_BONUS: float = 0.5       # 珊瑚潮汐:水刺够数命中→下一击+50%(加法叠加)
+const MUZI_REVIVE_INVINCIBLE: float = 1.2   # 沐子的守望:复活后无敌
+const TIDE_SPIKE_SCENE: PackedScene = preload("res://entities/player/BuffEffect/water_tank_bullet.tscn")
+const EGG_SCENE: PackedScene = preload("res://entities/spider_egg/spider_egg.tscn")
+# Buff 时刻的粒子(落地粒子的变色副本,配方见 BuffEffect 目录)
+const MUZI_REVIVE_EFFECT_SCENE: PackedScene = preload("res://entities/player/BuffEffect/muzi_revive_effect.tscn")
+const CRYSTAL_DASH_EFFECT_SCENE: PackedScene = preload("res://entities/player/BuffEffect/crystal_dash_effect.tscn")
+const LAMP_IGNITE_EFFECT_SCENE: PackedScene = preload("res://entities/player/BuffEffect/lamp_ignite_effect.tscn")
 const RUN_SPEED: float = 70.0 #(100.0)
 const SPRINT_SPEED: float = 220.0
 const SPRINT_COOLDOWN: float = 0.75
@@ -75,6 +99,19 @@ var shield_recharge: Array[float] = [0.0, 0.0]
 var is_guarding: bool = false
 var guard_slot: int = -1
 
+# ---- Buff 运行态(战斗内临时状态,进梦重置) ----
+var tide_next_hit: bool = false        # 珊瑚潮汐:冲刺后的下一击强化,命中即消耗
+var tide_ring_bonus: bool = false      # 珊瑚潮汐:水刺全中的下一击强化,命中即消耗
+var crystal_dash_active: bool = false  # 蓝水晶:本次冲刺被水晶包裹(完全免疫)
+var _tide_ring_pending: int = 0        # 还在飞的水刺数
+var _tide_ring_hits: int = 0
+var _egg: Node2D = null                # 蜘蛛的伪装:常驻漂浮卵(格林之子式)
+var _crystal_cooldown: float = 0.0
+var _lamp_energy: int = 0
+var _lamp_fire_left: float = 0.0
+var _window_ramp: float = 0.0
+var _invincibility_token: int = 0
+
 # ---- 开发者模式 ----
 # F1(或 ` 反引号)切换:开启后不死不破盾,全身金色提示。
 # 地刺仍会把人弹回安全点(respawn_to_safe 不走 take_damage),方便继续跑图。
@@ -117,6 +154,15 @@ func _ready() -> void:
 	# 盾壳/技能特效都是独立的 overlay 精灵,被动跟随本体的动画帧(不自己 play)。
 	sprite.animation_changed.connect(_sync_overlays)
 	sprite.frame_changed.connect(_sync_overlays)
+	# 按持有的 buff 决定护盾层数(花=1/树=3/默认2),出生全部充满。
+	_apply_shield_layout()
+	# 中途放下/拿起 buff(左上角 HUD 右键)时,护盾布局和铜灯状态要跟上。
+	Story.buff_gained.connect(_on_buffs_changed)
+	Story.buff_removed.connect(_on_buffs_changed)
+	# 蜘蛛的伪装常驻卵:等场景就位后自动出场(current_scene 此刻可能还没赋值)。
+	_update_egg_companion.call_deferred()
+	# 每次出生(新梦/死亡重试)守望都完好如初。
+	Story.set_muzi_broken(false)
 	# 出生默认拿出 0 号盾,否则一出生被碰就死。
 	is_guarding = true
 	guard_slot = 0
@@ -138,8 +184,11 @@ func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed(&"dev_god_mode"):
 		_toggle_dev_god_mode()
 	_update_shield_recharge(_delta)
+	_update_buff_timers(_delta)
 	if not input_locked and Input.is_action_just_pressed(&"Backpack"):
-		toggle_shield()
+		raise_shield()
+	if not input_locked and Input.is_action_just_pressed(&"ShieldBreak"):
+		manual_break_shield()
 
 	# 持续记录最后的安全落脚点,供地刺等危险物弹回使用。
 	# 站稳一小会儿才记录;受伤无敌期间不记录(刚被弹回时别立刻覆盖);
@@ -224,15 +273,20 @@ func take_damage(_amount: int) -> void:
 		# 开发者模式:不掉血不破盾,只给短无敌,免得贴着怪连帧触发。
 		_start_invincibility()
 		return
+	if crystal_dash_active:
+		return  # 蓝水晶:水晶包裹的冲刺,完全免疫
 	if is_invincible:
 		return
 	if is_guarding:
-		# 有盾:破当前盾、开始充能、进入无盾(不掉血)。
+		# 有盾:破当前盾、开始充能、进入无盾(不掉血)。愈合的伤口把无敌延长到 1 秒。
 		_break_guard_shield()
 		Game.play_hit_feedback()
-		_start_invincibility()
+		_start_invincibility(TABLE_BREAK_INVINCIBLE if has_buff(&"Table") else INVINCIBLE_DURATION)
 		return
-	# 无盾:直接死亡。
+	# 无盾:沐子的守望可以带盾再站起来一次(之后破碎,本次尝试内无效),否则直接死亡。
+	if has_buff(&"MuziPaint") and not Story.muzi_broken:
+		_muzi_revive()
+		return
 	health = 0
 	health_changed.emit(health)
 	_die()
@@ -270,29 +324,38 @@ func _first_ready_shield() -> int:
 			return i
 	return -1
 
-# 切盾键:有盾时收起(进无盾伤害加成),无盾时拿出下一个就绪的盾。
-func toggle_shield() -> void:
+# 开盾键 E:无盾时拿出下一个就绪的盾;已有盾时无事发生。
+# (收盾没有免费出口——想进无盾伤害加成,用 R 敲碎它,付一个盾的代价。)
+func raise_shield() -> void:
 	if is_guarding:
-		is_guarding = false
-		guard_slot = -1
-	else:
-		var slot := _first_ready_shield()
-		if slot == -1:
-			return  # 没有就绪的盾可拿
-		is_guarding = true
-		guard_slot = slot
-	# 切盾的视觉反馈就是盾壳 overlay 出现/消失,不需要额外特效。
+		return
+	var slot := _first_ready_shield()
+	if slot == -1:
+		return  # 没有就绪的盾可拿
+	is_guarding = true
+	guard_slot = slot
+	# 开盾的视觉反馈就是盾壳 overlay 出现,不需要额外特效。
 	_refresh_shield_visual()
 	shield_changed.emit()
+
+# 破盾键 R:主动敲碎当前盾。走和挨打完全一样的破盾流程(充能、珊瑚水刺等
+# 破盾特效),区别只在不给无敌帧——无敌是挨打的补偿,不是按键白送的。
+func manual_break_shield() -> void:
+	if not is_guarding:
+		return
+	_break_guard_shield()
+	Game.shake_camera(2)
 
 func _break_guard_shield() -> void:
 	if guard_slot >= 0 and guard_slot < shield_ready.size():
 		shield_ready[guard_slot] = false
-		shield_recharge[guard_slot] = SHIELD_RECHARGE_TIME
+		shield_recharge[guard_slot] = shield_recharge_time()
 	is_guarding = false
 	guard_slot = -1
 	_refresh_shield_visual()
 	shield_changed.emit()
+	if has_buff(&"Watertank"):
+		_fire_tide_ring()
 
 # 统一的播放动画入口(盾壳 overlay 靠信号自动跟帧,这里只管本体)。
 func play_anim(anim_name: StringName) -> void:
@@ -329,10 +392,198 @@ func _sync_one_overlay(overlay: AnimatedSprite2D) -> void:
 	overlay.animation = anim
 	overlay.frame = sprite.frame
 
-func _start_invincibility() -> void:
+# 时长可变(愈合的伤口/复活),token 防止旧的短无敌把新的长无敌提前掐掉。
+func _start_invincibility(duration: float = INVINCIBLE_DURATION) -> void:
+	_invincibility_token += 1
+	var token := _invincibility_token
 	is_invincible = true
-	await get_tree().create_timer(INVINCIBLE_DURATION).timeout
-	is_invincible = false
+	await get_tree().create_timer(duration).timeout
+	if token == _invincibility_token:
+		is_invincible = false
+
+
+# ============================================================
+# Buff 效果(获得/文案在 BuffDefs+Story,这里只管战斗内表现)
+# ============================================================
+func has_buff(id: StringName) -> bool:
+	return Story.has_buff(id)
+
+
+## 护盾层数:花(绽放的代价)=1 层;树(森林的谢礼)=3 层;默认 2 层。
+func _apply_shield_layout() -> void:
+	var count := SHIELD_COUNT
+	if has_buff(&"Flower"):
+		count = 1
+	elif has_buff(&"Plant"):
+		count = 3
+	shield_ready.clear()
+	shield_recharge.clear()
+	for i in count:
+		shield_ready.append(true)
+		shield_recharge.append(0.0)
+
+
+func shield_recharge_time() -> float:
+	return PLANT_RECHARGE_TIME if has_buff(&"Plant") else SHIELD_RECHARGE_TIME
+
+
+## 持有 buff 变化(HUD 右键放下等):护盾布局重算(重置为全满),铜灯没了就熄火,
+## 蜘蛛卵随 buff 出现/收回。
+func _on_buffs_changed(_id: StringName) -> void:
+	_apply_shield_layout()
+	if guard_slot >= shield_ready.size():
+		guard_slot = shield_ready.size() - 1
+	if not has_buff(&"CopperLamp"):
+		_lamp_energy = 0
+		_lamp_fire_left = 0.0
+		set_effect_overlay(fire_attack_overlay, false)
+	_update_egg_companion()
+	shield_changed.emit()
+
+
+func _update_buff_timers(delta: float) -> void:
+	if _crystal_cooldown > 0.0:
+		_crystal_cooldown -= delta
+	# 城市的心跳:火光倒计时,烧完熄灭
+	if _lamp_fire_left > 0.0:
+		_lamp_fire_left -= delta
+		if _lamp_fire_left <= 0.0:
+			set_effect_overlay(fire_attack_overlay, false)
+	# 窗边的晨光:护盾全满时攻速逐秒上涨,缺盾立刻清零
+	if has_buff(&"Window") and shield_ready.all(func(ready: bool) -> bool: return ready):
+		_window_ramp = minf(_window_ramp + delta, WINDOW_RAMP_MAX_TIME)
+	else:
+		_window_ramp = 0.0
+
+
+## 攻击动画速度倍率(攻击状态套到 sprite.speed_scale 上)。
+func attack_speed_multiplier() -> float:
+	var mult := 1.0
+	if _lamp_fire_left > 0.0:
+		mult *= LAMP_ATTACK_SPEED
+	if has_buff(&"Window"):
+		mult *= 1.0 + WINDOW_RAMP_RATE * _window_ramp
+	return mult
+
+
+## 攻击力加法增益(设计要求加法叠加,攻击状态算伤害时乘 (1+总和))。
+func attack_damage_bonus() -> float:
+	var bonus := 0.0
+	if tide_next_hit:
+		bonus += TIDE_DAMAGE_BONUS
+	if tide_ring_bonus:
+		bonus += TIDE_ALL_HIT_BONUS
+	return bonus
+
+
+## 攻击命中(至少打中一个目标)回调:消耗潮汐强化、给铜灯攒心跳。
+func on_attack_landed() -> void:
+	tide_next_hit = false
+	tide_ring_bonus = false
+	if has_buff(&"CopperLamp") and _lamp_fire_left <= 0.0:
+		_lamp_energy += 1
+		if _lamp_energy >= LAMP_ENERGY_MAX:
+			_lamp_energy = 0
+			_lamp_fire_left = LAMP_FIRE_DURATION
+			set_effect_overlay(fire_attack_overlay, true)
+			_spawn_oneshot_particles(LAMP_IGNITE_EFFECT_SCENE)  # 橙色升腾:心跳点燃
+
+
+## 冲刺开始/结束(Sprint 状态调用)。
+func on_sprint_started() -> void:
+	if has_buff(&"BlueCrystal") and _crystal_cooldown <= 0.0:
+		crystal_dash_active = true
+		set_effect_overlay(blue_crystal_overlay, true)
+		_spawn_oneshot_particles(CRYSTAL_DASH_EFFECT_SCENE)  # 冰蓝迸发:水晶成形
+
+
+func on_sprint_ended() -> void:
+	if crystal_dash_active:
+		crystal_dash_active = false
+		_crystal_cooldown = CRYSTAL_DASH_COOLDOWN
+		set_effect_overlay(blue_crystal_overlay, false)
+	if has_buff(&"Watertank"):
+		tide_next_hit = true
+
+
+## 珊瑚潮汐:破盾时朝上半圈射出扇形 7 根水刺(以正上为 0°,每 30° 一根,
+## 从左平射扫到右平射)。向下那根打地板没意义,砍掉了。
+## 命中 ≥ TIDE_RING_BONUS_HITS 根 → 下一击再+50%(与冲刺强化加法叠加;
+## 扇形大半朝天,"全中"不现实,改成够数即触发)。
+func _fire_tide_ring() -> void:
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+	_tide_ring_hits = 0
+	_tide_ring_pending = 0
+	for deg in [-90, -60, -30, 0, 30, 60, 90]:
+		var rad := deg_to_rad(float(deg))
+		var dir := Vector2(sin(rad), -cos(rad))
+		var spike := TIDE_SPIKE_SCENE.instantiate() as Area2D
+		scene.add_child(spike)
+		spike.global_position = global_position
+		spike.call("setup", dir, TIDE_SPIKE_DAMAGE)
+		spike.scale *= TIDE_SPIKE_SCALE  # setup 里可能镜像了 scale.x,只能乘不能盖
+		spike.connect("hit_landed", _on_tide_spike_hit)
+		spike.tree_exited.connect(_on_tide_spike_gone)
+		_tide_ring_pending += 1
+	# 潮汐涌出的反馈:淡青色闪屏,让破盾瞬间一眼可见。
+	Game.flash(0.18, Color(0.55, 0.9, 1.0, 0.5))
+
+
+func _on_tide_spike_hit() -> void:
+	_tide_ring_hits += 1
+
+
+func _on_tide_spike_gone() -> void:
+	if not is_inside_tree():
+		return  # 换场景的连锁销毁,别再结算
+	_tide_ring_pending -= 1
+	if _tide_ring_pending == 0 and _tide_ring_hits >= TIDE_RING_BONUS_HITS:
+		tide_ring_bonus = true
+
+
+## 蜘蛛的伪装:有 buff 就自动带着漂浮卵(格林之子式常驻仆从),放下即收回。
+func _update_egg_companion() -> void:
+	if has_buff(&"SpiderQueenDoll"):
+		if is_instance_valid(_egg):
+			return
+		var scene := get_tree().current_scene
+		if scene == null:
+			return
+		_egg = EGG_SCENE.instantiate() as Node2D
+		scene.add_child(_egg)
+		_egg.call("setup", self)
+	elif is_instance_valid(_egg):
+		_egg.call("despawn")
+		_egg = null
+
+
+## 召唤物快照用:主角此刻的单发攻击力(一段基础伤 × 破盾/花/红水晶倍率)。
+func snapshot_attack_power() -> int:
+	var attack_state: Node = state_machine.get_node(^"Attack1(9)")
+	var power: float = float(attack_state.ATTACK1_1_DAMAGE)
+	if not is_guarding or has_buff(&"Flower"):
+		var mult: float = attack_state.RED_CRYSTAL_NO_SHIELD_MULT \
+			if has_buff(&"RedCrystal") else attack_state.NO_SHIELD_DAMAGE_MULT
+		power *= mult
+	return int(round(power))
+
+
+## 沐子的守望:无盾被碰不死,带一层盾原地站起来。用掉后守望"破碎"
+## (HUD 图标换成碎的),直到下一次出生才复原。
+func _muzi_revive() -> void:
+	Story.set_muzi_broken(true)
+	is_guarding = true
+	guard_slot = 0
+	shield_ready[0] = true
+	shield_recharge[0] = 0.0
+	_refresh_shield_visual()
+	shield_changed.emit()
+	_spawn_oneshot_particles(MUZI_REVIVE_EFFECT_SCENE)  # 红色迸发:守望碎裂
+	Game.flash(0.35, Color(1.0, 1.0, 1.0, 1.0))
+	Game.shake_camera(3)
+	_start_invincibility(MUZI_REVIVE_INVINCIBLE)
 
 var reached_terminal: bool = false
 var coyote_timer: float = 0.0

@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://brywqw6ig52fr" path="res://entities/penitent/penitent.tscn" id="3_hxnx0"]
 [ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="7_b2i5v"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="8_hajdb"]
+[ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="92_bossintro"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_b2i5v"]
 seed = 52010
@@ -90,3 +91,10 @@ theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
 theme_override_fonts/font = ExtResource("8_hajdb")
 theme_override_font_sizes/font_size = 10
 text = "返回"
+
+[node name="BossIntro" parent="." instance=ExtResource("92_bossintro")]
+boss_path = NodePath("../ThePenitent")
+title_text = "礼拜日的狂信徒"
+boss_name_text = "忏悔者"
+appear_mode = 1
+card_animation = &"Battlecry"

@@ -1,0 +1,296 @@
+[gd_scene format=3 uid="uid://b1q4sv3mrmqk6"]
+
+[ext_resource type="Script" uid="uid://dvy8ewsl414ae" path="res://entities/calendula/calendula.gd" id="1_body"]
+[ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_hurt"]
+[ext_resource type="Texture2D" uid="uid://v8xosxo1xer4" path="res://entities/calendula/calendula-Sheet.png" id="3_ruxeb"]
+[ext_resource type="Script" uid="uid://bg8dd0jdo67rm" path="res://systems/state_machine/state_manager.gd" id="3_sm"]
+[ext_resource type="Script" uid="uid://1aqqaa7faebb" path="res://entities/calendula/calendula_null(0).gd" id="4_null"]
+[ext_resource type="Script" uid="uid://ctu228puiwuy6" path="res://entities/calendula/calendula_idle(1).gd" id="5_idle"]
+[ext_resource type="Script" uid="uid://dna7kvac1m6ls" path="res://entities/calendula/calendula_death(2).gd" id="6_death"]
+[ext_resource type="Script" uid="uid://bd8yv3uv078nd" path="res://entities/calendula/calendula_battlecry(3).gd" id="7_cry"]
+[ext_resource type="Script" uid="uid://daqgfu5rljyb4" path="res://entities/calendula/calendula_web_shot(4).gd" id="8_shot"]
+[ext_resource type="Script" uid="uid://d3guiq2vrwhj6" path="res://entities/calendula/calendula_summon(5).gd" id="9_summon"]
+[ext_resource type="Script" uid="uid://chf50ujftt6ln" path="res://entities/calendula/calendula_ram(6).gd" id="10_ram"]
+[ext_resource type="Texture2D" uid="uid://f38snynqn6ng" path="res://entities/rust_goat/rust_goat_health_bar_under.png" id="11_under"]
+[ext_resource type="Texture2D" uid="uid://dbi715w3wibyl" path="res://entities/rust_goat/rust_goat_health_bar_over.png" id="12_over"]
+[ext_resource type="Texture2D" uid="uid://bujp3g4bnu6vd" path="res://entities/rust_goat/rust_goat_health_bar_progerss.png" id="13_prog"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="14_font"]
+[ext_resource type="Script" uid="uid://cts6rntwen0yp" path="res://systems/ui/boss_health_ui.gd" id="15_hpui"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hurt"]
+shader = ExtResource("2_hurt")
+shader_parameter/Enabled = true
+shader_parameter/Tint = Color(0.745361, 0.56660295, 0.2824169, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ruxeb"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(324, 124, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qj5ya"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(0, 186, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3fpig"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(81, 186, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uc4ng"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(162, 186, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2f1rq"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(324, 62, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_861c1"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(0, 124, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehqa5"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(81, 124, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sc4my"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(162, 124, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vt1x1"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(0, 0, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eh0yy"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(81, 0, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0saie"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(162, 0, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h2o0n"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(243, 0, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tuq4l"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(324, 0, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ausl6"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(0, 62, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3iogb"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(81, 62, 81, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2tkpv"]
+atlas = ExtResource("3_ruxeb")
+region = Rect2(162, 62, 81, 62)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cal"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ruxeb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qj5ya")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3fpig")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uc4ng")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2f1rq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_861c1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ehqa5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sc4my")
+}],
+"loop": true,
+"name": &"Ram",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vt1x1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eh0yy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0saie")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h2o0n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tuq4l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ausl6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3iogb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2tkpv")
+}],
+"loop": false,
+"name": &"WebShot",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(73.76965, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_check"]
+size = Vector2(4000, 3000)
+
+[sub_resource type="Animation" id="Animation_hitflash"]
+resource_name = "HitFlash"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cal"]
+_data = {
+&"HitFlash": SubResource("Animation_hitflash"),
+&"RESET": SubResource("Animation_reset")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ram"]
+size = Vector2(39, 29)
+
+[node name="Calendula" type="CharacterBody2D" unique_id=889928608]
+z_index = 10
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_body")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=289312451]
+material = SubResource("ShaderMaterial_hurt")
+sprite_frames = SubResource("SpriteFrames_cal")
+animation = &"Idle"
+autoplay = "Idle"
+frame_progress = 0.12990937
+offset = Vector2(-8, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1676385802]
+modulate = Color(1, 1, 1, 0.1)
+position = Vector2(-0.34445524, 1.881299)
+rotation = -0.79845726
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="StateMachine" type="Node" parent="." unique_id=852637470]
+script = ExtResource("3_sm")
+
+[node name="Null(0)" type="Node" parent="StateMachine" unique_id=886981197]
+script = ExtResource("4_null")
+
+[node name="Idle(1)" type="Node" parent="StateMachine" unique_id=1348150975]
+script = ExtResource("5_idle")
+
+[node name="Death(2)" type="Node" parent="StateMachine" unique_id=302151422]
+script = ExtResource("6_death")
+
+[node name="Battlecry(3)" type="Node" parent="StateMachine" unique_id=289604213]
+script = ExtResource("7_cry")
+
+[node name="WebShot(4)" type="Node" parent="StateMachine" unique_id=335130121]
+script = ExtResource("8_shot")
+
+[node name="Summon(5)" type="Node" parent="StateMachine" unique_id=1520920644]
+script = ExtResource("9_summon")
+
+[node name="Ram(6)" type="Node" parent="StateMachine" unique_id=2004020360]
+script = ExtResource("10_ram")
+
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=1558964038]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=27220482]
+shape = SubResource("RectangleShape2D_check")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+metadata/_edit_lock_ = true
+
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=636624807]
+libraries/ = SubResource("AnimationLibrary_cal")
+
+[node name="RamHitbox" type="Area2D" parent="." unique_id=1752638722]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RamHitbox" unique_id=716482864]
+position = Vector2(-8.5, 14.5)
+shape = SubResource("RectangleShape2D_ram")
+debug_color = Color(0.9, 0.75, 0.2, 0.1)
+
+[node name="BulletReleasePoint" type="Node2D" parent="." unique_id=400342341]
+position = Vector2(0, -10)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1826094913]
+layer = 2000
+
+[node name="HealthBar" type="TextureProgressBar" parent="CanvasLayer" unique_id=1464888898]
+offset_left = 15.0
+offset_top = 85.0
+offset_right = 145.0
+offset_bottom = 93.0
+texture_under = ExtResource("11_under")
+texture_over = ExtResource("12_over")
+texture_progress = ExtResource("13_prog")
+
+[node name="HealthLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=1912323140]
+modulate = Color(0.7254902, 0.7254902, 0.7254902, 1)
+offset_left = 21.0
+offset_top = 83.0
+offset_right = 97.0
+offset_bottom = 91.0
+theme_override_fonts/normal_font = ExtResource("14_font")
+theme_override_font_sizes/normal_font_size = 7
+text = "5000
+"
+vertical_alignment = 1
+
+[node name="BossHealthUI" type="Node" parent="." unique_id=2129135551]
+script = ExtResource("15_hpui")

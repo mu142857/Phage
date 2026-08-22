@@ -50,13 +50,15 @@ var _tint_tween: Tween = null
 
 
 func _ready() -> void:
-	# 回顾梦(从房间物品重进旧梦)不播字卡,直接开打
+	# 回顾梦(从房间物品重进旧梦)不播字卡,直接开打;buff HUD 跟着普通淡入回来
 	if Story.replay_mode:
+		Game.buff_hold.fade_in(0.35)
 		queue_free()
 		return
 	var level := get_parent()
 	var key: String = level.scene_file_path if level != null else "?"
 	if _played.get(key, false):
+		Game.buff_hold.fade_in(0.35)
 		queue_free()
 		return
 	_played[key] = true
@@ -104,8 +106,9 @@ func _setup(level: Node) -> void:
 	_original_tint = _canvas_modulate.color
 	_canvas_modulate.color = _dim_color()
 
-	# 黑幕在编辑器里是隐藏的(不挡关卡编辑),运行时才打开
+	# 黑幕和文字层在编辑器里是隐藏的(不挡关卡编辑、不抢鼠标点选),运行时才打开
 	$Overlay.visible = true
+	$TextLayer.visible = true
 	var mat := _cutout.material as ShaderMaterial
 	mat.set_shader_parameter("mask_tex", _viewport.get_texture())
 	mat.set_shader_parameter("mask_enabled", 0.0)
@@ -316,6 +319,8 @@ func _finale() -> void:
 		_player.play_anim(&"Ball")
 	var tw := create_tween()
 	tw.tween_property(_cutout, "modulate:a", 0.0, 0.5)
+	# 字卡结束、世界显形的同一拍,buff HUD 淡回来
+	Game.buff_hold.fade_in(0.5)
 	await tw.finished
 	await get_tree().create_timer(0.35).timeout
 	if _player != null:

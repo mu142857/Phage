@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://c8pnajburl72k" path="res://interactive/Text/text.tscn" id="13_hsfmc"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="14_0ro3w"]
 [ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="90_dreamend"]
+[ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="92_bossintro"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_n5t8k"]
 b = Vector2(541, -1)
@@ -318,3 +319,12 @@ story_text_2 = "那一夜的梦，是红色的。"
 
 [node name="DreamEnd" parent="." instance=ExtResource("90_dreamend")]
 position = Vector2(590, 0)
+
+[node name="BossIntro" parent="." instance=ExtResource("92_bossintro")]
+boss_path = NodePath("../WeekCox")
+title_text = "羸弱之翼"
+boss_name_text = "球克"
+appear_mode = 1
+trigger_distance = 110.0
+pre_delay = 0.5
+fight_state = -1

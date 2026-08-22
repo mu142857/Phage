@@ -170,6 +170,9 @@ func _ready() -> void:
 	for area: ClickableItem in get_tree().get_nodes_in_group(ClickableItem.GROUP):
 		area.clicked.connect(_on_item_clicked)
 
+	# 兜底:入梦演出把 HUD 隐了但中途折返(或死在字卡里)时,回房间必须能看见
+	Game.buff_hold.show_now()
+
 	match Story.wake_kind:
 		"morning":
 			_wake_up(false)
@@ -216,8 +219,9 @@ func _build_night_sky_rect() -> void:
 
 func _apply_collected() -> void:
 	for night: int in COLLECT_BY_NIGHT:
-		var owned: bool = night <= Story.nights_completed
 		for item_name: String in COLLECT_BY_NIGHT[night]:
+			# 开发者面板(Dev)可以逐件覆盖显隐,没覆盖就跟随进度
+			var owned: bool = Dev.item_visible(item_name, night <= Story.nights_completed)
 			var item := _room.get_node_or_null(NodePath(item_name)) as CanvasItem
 			if item == null:
 				continue
@@ -254,7 +258,8 @@ func _apply_time(night: bool) -> void:
 		var blocker := _room.get_node_or_null(NodePath(blocker_name)) as CanvasItem
 		if blocker == null:
 			continue
-		var owned: bool = Story.nights_completed >= NIGHT_BY_ITEM[blocker_name]
+		var owned: bool = Dev.item_visible(
+			blocker_name, Story.nights_completed >= NIGHT_BY_ITEM[blocker_name])
 		blocker.visible = owned and not night
 		var area := blocker.get_node_or_null(^"Clickable") as Area2D
 		if area != null:
@@ -336,6 +341,8 @@ func _bed_flow() -> void:
 ## 入睡演出:房间飞快压黑(只留窗户和窗光)→ 窗外入夜 → 全黑 → Venus 引路 → 入梦。
 func _sleep_cutscene() -> void:
 	var fast := 0.35
+	# 左上角 buff HUD 跟着一起沉入黑暗,字卡结束后由 DreamIntro 叫回来
+	Game.buff_hold.fade_out(fast)
 	# ① 除了窗户、窗外和窗光,全部飞快压黑;挡窗家具(桌子、铜灯)直接淡没
 	var blockers: Array[CanvasItem] = []
 	for blocker_name in WINDOW_BLOCKERS:
@@ -498,7 +505,14 @@ func _item_flow(item: Node2D) -> void:
 
 	while true:
 		var options: Array = []
+		# 物品对应的 buff 还没拿 → 第一个选项就是"收下"
+		var buff_id := StringName(String(item.name))
+		var buff_index := -1
+		if BuffDefs.has_buff_def(buff_id) and not Story.has_buff(buff_id):
+			buff_index = options.size()
+			options.append("收下这份力量")
 		var flavor: Array = talk["flavor"]
+		var flavor_base: int = options.size()
 		for entry: Array in flavor:
 			options.append(entry[0])
 		var replay_text: String = talk["replay"]
@@ -512,12 +526,23 @@ func _item_flow(item: Node2D) -> void:
 		var pick := await Dialogue.ask([], options)
 		if pick == leave_index or pick < 0:
 			break
+		if pick == buff_index:
+			if Story.buffs_owned.size() >= Story.MAX_BUFFS:
+				await Dialogue.say(["手里已经握着两份力量了。", "得先放下一个,才能接住新的。"])
+				continue
+			Story.grant_buff(buff_id)
+			await Dialogue.say_gain(
+				"获得 buff\n「{icon}%s」" % BuffDefs.display_name(buff_id),
+				BuffDefs.icon(buff_id),
+				BuffDefs.desc(buff_id))
+			continue
 		if pick == replay_index:
 			_focus_item(item, false)
+			Game.buff_hold.fade_out(0.45)  # 回顾梦没有字卡,DreamIntro 的跳过分支会叫回来
 			await Game.fade_cover(1.0, 0.45)
 			Story.start_dream(NIGHT_BY_ITEM[String(item.name)], true)
 			return
-		await Dialogue.say([flavor[pick][1]])
+		await Dialogue.say([flavor[pick - flavor_base][1]])
 
 	_focus_item(item, false)
 	_end_interaction()

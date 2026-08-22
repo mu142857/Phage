@@ -91,11 +91,17 @@ func _start_battlecry() -> void:
 	if actinos_instance == null:
 		return
 	Game.stop_shake()
+	if intro_lock_player:
+		_set_player_lock(false)
+	# 字卡(头衔+名字)交给 BossIntro,播完它会亮血条并把状态机切进战斗
+	var intro := get_node_or_null("BossIntro")
+	if intro != null and intro.has_method("play_for"):
+		await intro.play_for(actinos_instance)
+		return
+	# 兜底:没挂 BossIntro 就按旧路子直接开战吼
 	var state_machine := actinos_instance.get_node_or_null("StateMachine")
 	if state_machine != null and state_machine.has_method("change_state"):
 		state_machine.call("change_state", 4)
-	if intro_lock_player:
-		_set_player_lock(false)
 
 func _spawn_landing_effect() -> void:
 	if ACTINOS_JUMP_EFFECT == null:

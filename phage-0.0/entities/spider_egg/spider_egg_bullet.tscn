@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bjkaxndm24i6v"]
 
-[ext_resource type="Script" path="res://entities/player/BuffEffect/player_line_bullet.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://entities/spider_egg/spider-egg-bullet-Sheet.png" id="2_sheet"]
+[ext_resource type="Script" uid="uid://cq5njcatmcbe2" path="res://entities/player/BuffEffect/player_line_bullet.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://crjwhp8gxws8r" path="res://entities/spider_egg/spider-egg-bullet-Sheet.png" id="2_sheet"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f0"]
 atlas = ExtResource("2_sheet")
@@ -44,14 +44,16 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="SpiderEggBullet" type="Area2D"]
+[node name="SpiderEggBullet" type="Area2D" unique_id=233894963]
 z_index = 10
 collision_layer = 8
 collision_mask = 4
 script = ExtResource("1_script")
+causes_knockback = false
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1479210235]
 sprite_frames = SubResource("SpriteFrames_bullet")
 animation = &"Fly"
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1585586297]
+polygon = PackedVector2Array(-6, 0, -2, 1, 2, 0, -2, -2)

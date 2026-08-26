@@ -11,36 +11,42 @@ const IDLE_TO_CONTRACT_TIME: float = 3.0
 const INVINCIBLE_DURATION: float = 0.3
 
 # ---- 护盾机制 ----
-# 两个独立护盾,各挡一次伤害,破掉后 10 秒各自充能(可无限循环)。
+# 基础一层护盾;森林的谢礼再附加两层(共3),充能排队制。
 # 有盾(拿出护盾)时被碰:破当前盾、进短无敌、不掉血。
 # 无盾(没拿出护盾)时被碰:直接死亡。
 # 开盾键 E(Backpack): 无盾且有就绪的盾时拿出;有盾时按了没反应。
+# 自动开盾(床边选项 Story.auto_shield):有就绪盾就自动拿出,E 变成纯手动备份。
 # 破盾键 R(ShieldBreak): 有盾时主动敲碎当前盾——照常进充能、照常触发
 # 破盾特效(珊瑚水刺等),但不给无敌(无敌只属于挨打)。
-const SHIELD_COUNT: int = 2
-const SHIELD_RECHARGE_TIME: float = 10.0
+const SHIELD_COUNT: int = 1
+const SHIELD_RECHARGE_TIME: float = 5.0    # 基础盾(槽0)充能秒数(2026-08-22 从10砍半)
 
 # ---- Buff 数值(定义/文案见 BuffDefs;获得状态在 Story.buffs_owned) ----
-const TABLE_BREAK_INVINCIBLE: float = 1.0   # 愈合的伤口:破盾后无敌延长
-const PLANT_RECHARGE_TIME: float = 7.0      # 森林的谢礼:护盾充能加速
-const CRYSTAL_DASH_COOLDOWN: float = 8.0    # 蓝水晶的力量:包裹冲刺冷却
+const TABLE_BREAK_INVINCIBLE: float = 2.0   # 愈合的伤口:破盾后无敌时长
+const GREEN_RECHARGE_MULT: float = 3.0      # 森林的谢礼:附加绿盾充能是基础的3倍慢
+const FLOWER_RECHARGE_MULT: float = 3.0     # 绽放的代价:全部护盾恢复时间×3
 const LAMP_ENERGY_MAX: int = 8              # 城市的心跳:攒满所需命中次数
 const LAMP_FIRE_DURATION: float = 6.0       # 城市的心跳:火光持续时间
-const LAMP_ATTACK_SPEED: float = 1.5        # 城市的心跳:火光期攻速倍率
-const WINDOW_RAMP_RATE: float = 0.05        # 窗边的晨光:满盾时每秒+5%攻速
-const WINDOW_RAMP_MAX_TIME: float = 8.0     # 窗边的晨光:8秒到顶(+40%)
+const LAMP_ATTACK_SPEED_BONUS: float = 0.3  # 城市的心跳:火光期攻速+30%(加法池)
+const WINDOW_RAMP_RATE: float = 0.05        # 窗边的晨光:持盾时每秒+5%攻速
+const WINDOW_RAMP_MAX_TIME: float = 4.0     # 窗边的晨光:4秒到顶(+20%)
 const TIDE_DAMAGE_BONUS: float = 0.2        # 珊瑚潮汐:冲刺后下一击+20%(加法叠加)
-const TIDE_SPIKE_DAMAGE: int = 60           # 珊瑚潮汐:破盾水刺单发伤害
+const TIDE_SPIKE_DAMAGE: int = 40           # 珊瑚潮汐:水刺单发伤害(开盾也放后从60下调)
 const TIDE_SPIKE_SCALE: float = 1.5         # 珊瑚潮汐:水刺整体放大(更显眼)
 const TIDE_RING_BONUS_HITS: int = 4         # 珊瑚潮汐:命中≥这么多根触发下一击强化
 const TIDE_ALL_HIT_BONUS: float = 0.5       # 珊瑚潮汐:水刺够数命中→下一击+50%(加法叠加)
 const MUZI_REVIVE_INVINCIBLE: float = 1.2   # 沐子的守望:复活后无敌
+const MIST_DURATION: float = 2.0            # 礼拜日的云雾:隐身无敌时长
+const MIST_COOLDOWN: float = 5.0            # 礼拜日的云雾:冷却(从雾散那刻起算)
+const MIST_ALPHA: float = 0.5               # 雾中的半透明度
 const TIDE_SPIKE_SCENE: PackedScene = preload("res://entities/player/BuffEffect/water_tank_bullet.tscn")
 const EGG_SCENE: PackedScene = preload("res://entities/spider_egg/spider_egg.tscn")
 # Buff 时刻的粒子(落地粒子的变色副本,配方见 BuffEffect 目录)
 const MUZI_REVIVE_EFFECT_SCENE: PackedScene = preload("res://entities/player/BuffEffect/muzi_revive_effect.tscn")
+const SHIELD_READY_EFFECT_SCENE: PackedScene = preload("res://entities/player/BuffEffect/shield_ready_effect.tscn")
 const CRYSTAL_DASH_EFFECT_SCENE: PackedScene = preload("res://entities/player/BuffEffect/crystal_dash_effect.tscn")
 const LAMP_IGNITE_EFFECT_SCENE: PackedScene = preload("res://entities/player/BuffEffect/lamp_ignite_effect.tscn")
+const GREEN_BREAK_EFFECT_SCENE: PackedScene = preload("res://entities/player/BuffEffect/green_shield_break_effect.tscn")
 const RUN_SPEED: float = 70.0 #(100.0)
 const SPRINT_SPEED: float = 220.0
 const SPRINT_COOLDOWN: float = 0.75
@@ -109,11 +115,14 @@ var crystal_dash_active: bool = false  # 蓝水晶:本次冲刺被水晶包裹(�
 var _tide_ring_pending: int = 0        # 还在飞的水刺数
 var _tide_ring_hits: int = 0
 var _egg: Node2D = null                # 蜘蛛的伪装:常驻漂浮卵(格林之子式)
-var _crystal_cooldown: float = 0.0
 var _lamp_energy: int = 0
 var _lamp_fire_left: float = 0.0
 var _window_ramp: float = 0.0
 var _invincibility_token: int = 0
+var _blink_time: float = 0.0           # 无敌期闪烁计时
+var mist_active: bool = false          # 礼拜日的云雾:雾中(半透明+完全无敌)
+var mist_cooldown_left: float = 0.0    # 雾的冷却(HUD 读它换图标)
+var _mist_left: float = 0.0
 
 # ---- 开发者模式 ----
 # F1(或 ` 反引号)切换:开启后不死不破盾,全身金色提示。
@@ -135,6 +144,9 @@ var _walking_effect_enabled: bool = false
 @onready var collision_ball: CollisionShape2D = $CollisionBall
 @onready var walking_effect: GPUParticles2D = $PlayerWalkingEffect
 @onready var shield_walking_effect: GPUParticles2D = $ShieldPlayerWalkingEffect
+# 持续状态的身体光环:铜灯火刀期的火焰 / 珊瑚强化未打出时的水珠
+@onready var fire_aura: GPUParticles2D = $FireAuraEffect
+@onready var tide_aura: GPUParticles2D = $TideAuraEffect
 @onready var jump_trail: Node2D = $JumpTrail
 @onready var attack_hitbox_1: Area2D = $HitBox/Attack1_1
 @onready var attack_hitbox_2: Area2D = $HitBox/Attack1_2
@@ -157,7 +169,7 @@ func _ready() -> void:
 	# 盾壳/技能特效都是独立的 overlay 精灵,被动跟随本体的动画帧(不自己 play)。
 	sprite.animation_changed.connect(_sync_overlays)
 	sprite.frame_changed.connect(_sync_overlays)
-	# 按持有的 buff 决定护盾层数(花=1/树=3/默认2),出生全部充满。
+	# 按持有的 buff 决定护盾层数(默认1/树=1+2绿),出生全部充满。
 	_apply_shield_layout()
 	# 中途放下/拿起 buff(左上角 HUD 右键)时,护盾布局和铜灯状态要跟上。
 	Story.buff_gained.connect(_on_buffs_changed)
@@ -166,10 +178,12 @@ func _ready() -> void:
 	_update_egg_companion.call_deferred()
 	# 每次出生(新梦/死亡重试)守望都完好如初。
 	Story.set_muzi_broken(false)
-	# 出生默认拿出 0 号盾,否则一出生被碰就死。
+	# 出生默认拿出一个盾(绿盾优先顶上,基础盾留最后),否则一出生被碰就死。
 	is_guarding = true
-	guard_slot = 0
+	guard_slot = _first_ready_shield()
 	_refresh_shield_visual()
+	# 左上角 HUD 的护盾计数跟着本实例走
+	Game.buff_hold.call("bind_player", self)
 	shield_changed.emit()
 
 # 像素对齐:物理体停在浮点坐标(保证移动/相机插值丝滑),
@@ -181,6 +195,16 @@ func _process(_delta: float) -> void:
 		return
 	# 让 sprite.global_position.y 落到整数:补偿父级(物理体)的小数残差。
 	sprite.position.y = roundf(global_position.y) - global_position.y
+	# 雾中恒定半透明;无敌期闪烁(桌子的长无敌全靠它读出来,挨打短无敌也生效)。
+	# 用 self_modulate 不碰 modulate(攻击发光在用)也不影响盾壳等子层。
+	if mist_active:
+		sprite.self_modulate.a = MIST_ALPHA
+	elif is_invincible and not dev_god_mode:
+		_blink_time += _delta
+		sprite.self_modulate.a = 0.45 if fmod(_blink_time, 0.16) < 0.08 else 1.0
+	elif sprite.self_modulate.a < 1.0:
+		sprite.self_modulate.a = 1.0
+		_blink_time = 0.0
 
 func _physics_process(_delta: float) -> void:
 	# 开发者模式切换不受 input_locked 限制,任何时候都能开关。
@@ -190,6 +214,11 @@ func _physics_process(_delta: float) -> void:
 	_update_buff_timers(_delta)
 	if not input_locked and Input.is_action_just_pressed(&"Backpack"):
 		raise_shield()
+	# 自动开盾(床边选项):有就绪的盾就自动拿出
+	if Story.auto_shield and not input_locked and not is_guarding and not is_dying:
+		raise_shield()
+	if not input_locked and Input.is_action_just_pressed(&"Mist"):
+		_try_start_mist()
 	if not input_locked and Input.is_action_just_pressed(&"ShieldBreak"):
 		manual_break_shield()
 
@@ -286,6 +315,8 @@ func take_damage(_amount: int) -> void:
 		return
 	if crystal_dash_active:
 		return  # 蓝水晶:水晶包裹的冲刺,完全免疫
+	if mist_active:
+		return  # 礼拜日的云雾:雾中完全免疫
 	if is_invincible:
 		return
 	if is_guarding:
@@ -320,6 +351,8 @@ func _die() -> void:
 # ============================================================
 # 护盾
 # ============================================================
+# 排队充能:同一时间只有一个盾在充(编号小的先),充完才轮到下一个。
+# 三层盾同时回会太超标(用户拍板)。
 func _update_shield_recharge(delta: float) -> void:
 	for i in shield_recharge.size():
 		if shield_ready[i]:
@@ -327,10 +360,14 @@ func _update_shield_recharge(delta: float) -> void:
 		shield_recharge[i] = maxf(shield_recharge[i] - delta, 0.0)
 		if shield_recharge[i] <= 0.0:
 			shield_ready[i] = true
+			# 充能完成的绿光一闪:没有它,"盾回来了"只能靠猜
+			_spawn_oneshot_particles(SHIELD_READY_EFFECT_SCENE)
 			shield_changed.emit()
+		break  # 只充这一个,后面的排队
 
+# 开盾取"编号最大的就绪盾":绿盾先顶上去挨打,最上面的基础盾留到最后。
 func _first_ready_shield() -> int:
-	for i in shield_ready.size():
+	for i in range(shield_ready.size() - 1, -1, -1):
 		if shield_ready[i]:
 			return i
 	return -1
@@ -348,6 +385,9 @@ func raise_shield() -> void:
 	# 开盾的视觉反馈就是盾壳 overlay 出现,不需要额外特效。
 	_refresh_shield_visual()
 	shield_changed.emit()
+	# 珊瑚潮汐:开盾也激起水刺(和破盾同款扇形)
+	if has_buff(&"Watertank"):
+		_fire_tide_ring()
 
 # 破盾键 R:主动敲碎当前盾。走和挨打完全一样的破盾流程(充能、珊瑚水刺等
 # 破盾特效),区别只在不给无敌帧——无敌是挨打的补偿,不是按键白送的。
@@ -360,7 +400,10 @@ func manual_break_shield() -> void:
 func _break_guard_shield() -> void:
 	if guard_slot >= 0 and guard_slot < shield_ready.size():
 		shield_ready[guard_slot] = false
-		shield_recharge[guard_slot] = shield_recharge_time()
+		shield_recharge[guard_slot] = shield_recharge_time(guard_slot)
+		if guard_slot >= 1:
+			# 绿盾(森林附加层)碎裂:绿色方粒子从主角身上向上飘散
+			_spawn_oneshot_particles(GREEN_BREAK_EFFECT_SCENE)
 	is_guarding = false
 	guard_slot = -1
 	_refresh_shield_visual()
@@ -420,12 +463,11 @@ func has_buff(id: StringName) -> bool:
 	return Story.has_buff(id)
 
 
-## 护盾层数:花(绽放的代价)=1 层;树(森林的谢礼)=3 层;默认 2 层。
+## 护盾层数:默认 1 层;树(森林的谢礼)=1+附加2层(共3)。
+## 花不再影响层数(它的代价是恢复变慢,见 shield_recharge_time)。
 func _apply_shield_layout() -> void:
 	var count := SHIELD_COUNT
-	if has_buff(&"Flower"):
-		count = 1
-	elif has_buff(&"Plant"):
+	if has_buff(&"Plant"):
 		count = 3
 	shield_ready.clear()
 	shield_recharge.clear()
@@ -434,8 +476,14 @@ func _apply_shield_layout() -> void:
 		shield_recharge.append(0.0)
 
 
-func shield_recharge_time() -> float:
-	return PLANT_RECHARGE_TIME if has_buff(&"Plant") else SHIELD_RECHARGE_TIME
+## 每个盾位自己的充能时长:槽0(基础)=5s,槽1/2(绿盾)=3倍慢;花再整体×3。
+func shield_recharge_time(slot: int = 0) -> float:
+	var time := SHIELD_RECHARGE_TIME
+	if slot >= 1:
+		time *= GREEN_RECHARGE_MULT
+	if has_buff(&"Flower"):
+		time *= FLOWER_RECHARGE_MULT
+	return time
 
 
 ## 持有 buff 变化(HUD 右键放下等):护盾布局重算(重置为全满),铜灯没了就熄火,
@@ -448,33 +496,46 @@ func _on_buffs_changed(_id: StringName) -> void:
 		_lamp_energy = 0
 		_lamp_fire_left = 0.0
 		set_effect_overlay(fire_attack_overlay, false)
+		fire_aura.emitting = false
+	if not has_buff(&"YunwuPaint"):
+		mist_active = false
+		mist_cooldown_left = 0.0
 	_update_egg_companion()
 	shield_changed.emit()
 
 
 func _update_buff_timers(delta: float) -> void:
-	if _crystal_cooldown > 0.0:
-		_crystal_cooldown -= delta
 	# 城市的心跳:火光倒计时,烧完熄灭
 	if _lamp_fire_left > 0.0:
 		_lamp_fire_left -= delta
 		if _lamp_fire_left <= 0.0:
 			set_effect_overlay(fire_attack_overlay, false)
-	# 窗边的晨光:护盾全满时攻速逐秒上涨,缺盾立刻清零
-	if has_buff(&"Window") and shield_ready.all(func(ready: bool) -> bool: return ready):
+			fire_aura.emitting = false
+	# 礼拜日的云雾:无敌倒计时;冷却从雾散后才开始走(不含无敌时间)
+	if mist_active:
+		_mist_left -= delta
+		if _mist_left <= 0.0:
+			_end_mist()
+	elif mist_cooldown_left > 0.0:
+		mist_cooldown_left = maxf(mist_cooldown_left - delta, 0.0)
+	# 珊瑚强化在身未打出 → 身上滴水珠
+	tide_aura.emitting = tide_next_hit or tide_ring_bonus
+	# 窗边的晨光:护盾在身(拿着盾)时攻速逐秒上涨,盾没了立刻清零
+	if has_buff(&"Window") and is_guarding:
 		_window_ramp = minf(_window_ramp + delta, WINDOW_RAMP_MAX_TIME)
 	else:
 		_window_ramp = 0.0
 
 
 ## 攻击动画速度倍率(攻击状态套到 sprite.speed_scale 上)。
+## 攻速加成走加法池(火刀+30%、窗户至多+20%,同带=+50%),不做乘法。
 func attack_speed_multiplier() -> float:
-	var mult := 1.0
+	var bonus := 0.0
 	if _lamp_fire_left > 0.0:
-		mult *= LAMP_ATTACK_SPEED
+		bonus += LAMP_ATTACK_SPEED_BONUS
 	if has_buff(&"Window"):
-		mult *= 1.0 + WINDOW_RAMP_RATE * _window_ramp
-	return mult
+		bonus += WINDOW_RAMP_RATE * _window_ramp
+	return 1.0 + bonus
 
 
 ## 攻击力加法增益(设计要求加法叠加,攻击状态算伤害时乘 (1+总和))。
@@ -497,12 +558,15 @@ func on_attack_landed() -> void:
 			_lamp_energy = 0
 			_lamp_fire_left = LAMP_FIRE_DURATION
 			set_effect_overlay(fire_attack_overlay, true)
+			fire_aura.emitting = true  # 火刀期身上一直冒火苗(站着也冒)
 			_spawn_oneshot_particles(LAMP_IGNITE_EFFECT_SCENE)  # 橙色升腾:心跳点燃
 
 
 ## 冲刺开始/结束(Sprint 状态调用)。
 func on_sprint_started() -> void:
-	if has_buff(&"BlueCrystal") and _crystal_cooldown <= 0.0:
+	_end_mist()  # 冲刺破雾
+	# 蓝水晶:每次冲刺都被水晶包裹(原来带8s冷却,太弱,2026-08-25去掉)
+	if has_buff(&"BlueCrystal"):
 		crystal_dash_active = true
 		set_effect_overlay(blue_crystal_overlay, true)
 		_spawn_oneshot_particles(CRYSTAL_DASH_EFFECT_SCENE)  # 冰蓝迸发:水晶成形
@@ -511,7 +575,6 @@ func on_sprint_started() -> void:
 func on_sprint_ended() -> void:
 	if crystal_dash_active:
 		crystal_dash_active = false
-		_crystal_cooldown = CRYSTAL_DASH_COOLDOWN
 		set_effect_overlay(blue_crystal_overlay, false)
 	if has_buff(&"Watertank"):
 		tide_next_hit = true
@@ -573,12 +636,27 @@ func _update_egg_companion() -> void:
 ## 召唤物快照用:主角此刻的单发攻击力(一段基础伤 × 破盾/花/红水晶倍率)。
 func snapshot_attack_power() -> int:
 	var attack_state: Node = state_machine.get_node(^"Attack1(9)")
-	var power: float = float(attack_state.ATTACK1_1_DAMAGE)
+	var base: float = float(attack_state.ATTACK1_1_DAMAGE)
+	var bonus: float = 0.0
 	if not is_guarding or has_buff(&"Flower"):
-		var mult: float = attack_state.RED_CRYSTAL_NO_SHIELD_MULT \
-			if has_buff(&"RedCrystal") else attack_state.NO_SHIELD_DAMAGE_MULT
-		power *= mult
-	return int(round(power))
+		bonus = attack_state.RED_CRYSTAL_NO_SHIELD_BONUS \
+			if has_buff(&"RedCrystal") else attack_state.NO_SHIELD_BONUS
+	return int(round(base * (1.0 + bonus)))
+
+
+## 礼拜日的云雾:F 隐入雾中(半透明+完全无敌),攻击/冲刺立刻破雾。
+func _try_start_mist() -> void:
+	if not has_buff(&"YunwuPaint") or mist_active or mist_cooldown_left > 0.0:
+		return
+	mist_active = true
+	_mist_left = MIST_DURATION
+
+
+func _end_mist() -> void:
+	if not mist_active:
+		return
+	mist_active = false
+	mist_cooldown_left = MIST_COOLDOWN
 
 
 ## 沐子的守望:无盾被碰不死,带一层盾原地站起来。用掉后守望"破碎"
@@ -705,6 +783,7 @@ func exit_ball_form() -> void:
 	set_ball_form(false)
 
 func start_attack() -> void:
+	_end_mist()  # 出手破雾
 	clear_attack_hitboxes()
 	change_state(STATE_ATTACK_1)
 

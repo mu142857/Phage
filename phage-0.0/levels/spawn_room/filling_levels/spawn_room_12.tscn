@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://levels/spawn_room/spawn_room_filling_levels_background/12.png" id="1_bg"]
+[ext_resource type="Script" path="res://levels/spawn_room/filling_levels/filling_room.gd" id="2_script"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="4_teleport"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="5_font"]
+
+[node name="SpawnRoom12" type="Node2D" groups=["camera_follow"]]
+script = ExtResource("2_script")
+camera_limit_right = 271
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("1_bg")
+centered = false
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector2(30, 70)
+
+[node name="TeleportLeft" parent="." instance=ExtResource("4_teleport")]
+position = Vector2(10, 78)
+scene_path = "res://levels/spawn_room/filling_levels/spawn_room_11.tscn"
+teleport_id = 1
+
+[node name="Label" type="Label" parent="TeleportLeft"]
+z_index = 100
+offset_left = -10.0
+offset_top = -20.0
+offset_right = 23.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(0.733, 0.733, 0.733, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 10
+text = "返回"
+
+[node name="TeleportRight" parent="." instance=ExtResource("4_teleport")]
+position = Vector2(261, 78)
+scene_path = "res://levels/spawn_room/filling_levels/spawn_room_14.tscn"
+teleport_id = 2
+
+[node name="Label" type="Label" parent="TeleportRight"]
+z_index = 100
+offset_left = -10.0
+offset_top = -20.0
+offset_right = 23.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(0.733, 0.733, 0.733, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 10
+text = "前进"

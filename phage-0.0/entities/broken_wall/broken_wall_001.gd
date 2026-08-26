@@ -17,6 +17,9 @@ var _is_broken: bool = false
 
 func _ready() -> void:
 	add_to_group("monster")
+	# 挂 monster 只是为了吃主角攻击的判定/前冲逻辑,不是真怪:
+	# 召唤物(蛛卵等)索敌时按这个组跳过,别对着门开火。
+	add_to_group("summon_ignore")
 	collision_layer = 1
 	collision_mask = 2
 	if is_instance_valid(attack_area):

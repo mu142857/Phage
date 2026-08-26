@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://x6rctyqm3y4o"]
+
+[ext_resource type="Script" uid="uid://b1xnjknuyu548" path="res://entities/spider/spider_death.gd" id="1_sdth"]
+
+[sub_resource type="Gradient" id="Gradient_init"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.153, 0.153, 0.212, 1, 0.078, 0.161, 0.929, 1, 0.694, 0.867, 0.482, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_init"]
+gradient = SubResource("Gradient_init")
+
+[sub_resource type="Gradient" id="Gradient_alpha"]
+offsets = PackedFloat32Array(0, 0.20481928, 0.82530123, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_alpha"]
+gradient = SubResource("Gradient_alpha")
+
+[sub_resource type="Curve" id="Curve_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_scale"]
+curve = SubResource("Curve_scale")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sdth"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0, -5, 0)
+emission_shape = 3
+emission_box_extents = Vector3(4, 2, 1)
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 300, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_scale")
+color_ramp = SubResource("GradientTexture1D_alpha")
+color_initial_ramp = SubResource("GradientTexture1D_init")
+
+[node name="Spider3Death" type="GPUParticles2D" unique_id=1596346945]
+z_index = 11
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_sdth")
+script = ExtResource("1_sdth")
+
+[node name="Timer" type="Timer" parent="." unique_id=1355423477]
+wait_time = 1.1
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

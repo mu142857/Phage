@@ -320,18 +320,24 @@ func _bed_flow() -> void:
 		_end_interaction()
 		return
 
-	var pick: int
+	# 选项里带一个"自动开盾"开关,切换后留在原对话继续选
+	var lines: Array
 	if Story.is_night:
-		pick = await Dialogue.ask([
-			"……心跳还没停下来。",
-			"没事的。只是个梦。",
-			"得回去,把它做完。",
-		], ["再睡一次", "缓一缓"])
+		lines = ["……心跳还没停下来。", "没事的。只是个梦。", "得回去,把它做完。"]
 	else:
-		pick = await Dialogue.ask([
-			"……窗外都安静下来了。",
-			"今晚,又会梦见什么呢。",
-		], ["钻进被窝", "再待一会儿"])
+		lines = ["……窗外都安静下来了。", "今晚,又会梦见什么呢。"]
+	var sleep_label: String = "再睡一次" if Story.is_night else "钻进被窝"
+	var leave_label: String = "缓一缓" if Story.is_night else "再待一会儿"
+	var pick: int
+	while true:
+		var auto_label := "自动开盾:开" if Story.auto_shield else "自动开盾:关"
+		pick = await Dialogue.ask(lines, [sleep_label, auto_label, leave_label])
+		if pick == 1:
+			Story.auto_shield = not Story.auto_shield
+			Story.save_game()
+			lines = []  # 切开关后不再重打前面的话,直接回到选项
+			continue
+		break
 	if pick != 0:
 		_end_interaction()
 		return

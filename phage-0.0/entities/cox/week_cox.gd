@@ -172,6 +172,8 @@ func _play_hit_flash() -> void:
 		hit_effect_player.play(&"HitFlash")
 
 func _start_knockback() -> void:
+	if Game.suppress_hit_knockback:
+		return  # 召唤物等软伤害:掉血但不位移
 	var knockback_direction := -1.0
 	var players := get_tree().get_nodes_in_group("player")
 	if not players.is_empty():

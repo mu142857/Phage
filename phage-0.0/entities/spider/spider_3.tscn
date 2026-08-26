@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cqrhhf36lyudl" path="res://entities/spider/spider_legs.gd" id="2_leg"]
 [ext_resource type="Texture2D" uid="uid://c1uq8k5jw6a55" path="res://entities/spider/spider3.png" id="3_tex"]
 [ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="4_sha"]
+[ext_resource type="PackedScene" path="res://entities/spider/spider_3_death.tscn" id="5_death"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_spd3"]
 resource_local_to_scene = true
@@ -71,6 +72,7 @@ skill_range = 45.0
 pounce_jump_min = 200.0
 pounce_jump_max = 250.0
 pounce_gravity_scale = 0.72
+death_effect_scene = ExtResource("5_death")
 
 [node name="Legs" type="Node2D" parent="." unique_id=1716380734]
 script = ExtResource("2_leg")

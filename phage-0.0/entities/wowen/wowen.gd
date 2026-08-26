@@ -83,6 +83,8 @@ func _apply_gravity(delta: float) -> void:
 		velocity.y = 0.0
 
 func _start_knockback() -> void:
+	if Game.suppress_hit_knockback:
+		return  # 召唤物等软伤害:掉血但不位移
 	var knockback_direction := -float(direct)
 	var players := get_tree().get_nodes_in_group("player")
 	if not players.is_empty():

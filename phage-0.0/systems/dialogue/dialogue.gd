@@ -40,8 +40,9 @@ func _ready() -> void:
 	_label.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_label.offset_left = 10.0
 	_label.offset_right = -10.0
-	_label.offset_top = 6.0
-	_label.offset_bottom = -56.0
+	# 顶部让开左上角的 buff/护盾 HUD(高约30px),文字区整体下移
+	_label.offset_top = 26.0
+	_label.offset_bottom = -30.0
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

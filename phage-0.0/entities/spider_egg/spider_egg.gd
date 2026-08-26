@@ -1,14 +1,14 @@
 # res://entities/spider_egg/spider_egg.gd
 # 蜘蛛的伪装:格林之子式常驻仆从。有 buff 就一直陪着(player 负责生成/收回),
 # 出场从主角身上弹出来(缩放 tween),漂浮跟在身后,朝射程内最近的怪快速吐弹。
-# 每发伤害 = 开火瞬间主角攻击力的 1/4(破盾时它也跟着变痛)。
+# 每发伤害 = 开火瞬间主角攻击力的 1/6(破盾时它也跟着变痛)。
 # 不需要碰撞体:它不承伤也不挡路,Node2D 就够。
 extends Node2D
 
 const BULLET_SCENE: PackedScene = preload("res://entities/spider_egg/spider_egg_bullet.tscn")
 
 @export var fire_interval: float = 0.4
-@export var fallback_damage: int = 22   # 拿不到主角时的保底伤害(=有盾一发 90/4)
+@export var fallback_damage: int = 15   # 拿不到主角时的保底伤害(=有盾一发 90/6)
 @export var target_range: float = 90.0
 @export var follow_offset: Vector2 = Vector2(-12, -14)  # 主角身后偏上
 @export var follow_lerp: float = 5.0
@@ -54,6 +54,9 @@ func _physics_process(delta: float) -> void:
 	_follow(delta)
 	if _despawning:
 		return
+	# 主角被锁(字卡/战吼/对话等演出)时停火:主人不动手,卵也不动手
+	if is_instance_valid(_player) and _player.input_locked:
+		return
 	_fire_cooldown -= delta
 	if _fire_cooldown <= 0.0:
 		var target := _nearest_monster()
@@ -79,6 +82,13 @@ func _nearest_monster() -> Node2D:
 		var monster := node as Node2D
 		if monster == null or not is_instance_valid(monster):
 			continue
+		# 还没登场(隐身)或被演出冻结的怪不算目标(Boss 出场前/战吼中别开火)
+		if not monster.is_visible_in_tree() \
+				or monster.process_mode == Node.PROCESS_MODE_DISABLED:
+			continue
+		# 挂着 monster 组但不是真怪的东西(暗门等)明确豁免
+		if monster.is_in_group("summon_ignore"):
+			continue
 		var distance := global_position.distance_squared_to(monster.global_position)
 		if distance < best_distance:
 			best_distance = distance
@@ -92,7 +102,7 @@ func _shoot(target: Node2D) -> void:
 		return
 	var damage := fallback_damage
 	if is_instance_valid(_player):
-		damage = maxi(1, _player.snapshot_attack_power() / 4)
+		damage = maxi(1, _player.snapshot_attack_power() / 6)
 	var bullet := BULLET_SCENE.instantiate() as Area2D
 	scene.add_child(bullet)
 	bullet.global_position = global_position

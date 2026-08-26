@@ -21,6 +21,7 @@ const SAVE_PATH := "user://phage_save.cfg"
 var nights_completed := 0    # 已做完几个梦(0-7)
 var is_night := false        # 房间时刻:false=白天;true=夜晚(梦里死了惊醒)
 var buffs_owned: Array = []  # 已获得的 buff id(= 房间物品节点名,定义见 BuffDefs)
+var auto_shield := false     # 自动开盾(床边选项):有就绪盾就自动拿出,E 变手动备份
 var in_dream := false
 var replay_mode := false     # 点旧物品"回到梦里"的回顾模式:不推进度、跳过字卡
 var current_dream_night := 0 # 正在做第几夜的梦(1-7)
@@ -248,6 +249,7 @@ func save_game() -> void:
 	config.set_value("progress", "nights_completed", nights_completed)
 	config.set_value("progress", "is_night", is_night)
 	config.set_value("progress", "buffs_owned", buffs_owned)
+	config.set_value("progress", "auto_shield", auto_shield)
 	config.save(SAVE_PATH)
 
 
@@ -258,3 +260,4 @@ func load_save() -> void:
 	nights_completed = int(config.get_value("progress", "nights_completed", 0))
 	is_night = bool(config.get_value("progress", "is_night", false))
 	buffs_owned = config.get_value("progress", "buffs_owned", []) as Array
+	auto_shield = bool(config.get_value("progress", "auto_shield", false))

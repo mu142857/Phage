@@ -68,6 +68,8 @@ var teleport_transition_tween: Tween = null
 var teleport_transition_layer: CanvasLayer = null
 # 左上角持有 buff 的 HUD(转场演出会调它的 fade_out/fade_in)
 var buff_hold: CanvasLayer = null
+# 软伤害标记:召唤物子弹结算伤害前竖起、结算完放下,怪的 _start_knockback 查它跳过
+var suppress_hit_knockback := false
 var teleport_transition_rect: ColorRect = null
 var teleport_transition_active: bool = false
 # 最后一次"安全落脚点",被地刺等危险物击中时玩家弹回这里。

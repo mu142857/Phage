@@ -6,14 +6,15 @@ const ATTACK_BURST_SPEED_AIR: float = 240.0
 const ATTACK_BRAKE_ACCEL_AIR: float = 380.0
 const ATTACK1_1_DAMAGE: int = 90
 const ATTACK1_2_DAMAGE: int = 60
-# 跳劈(空中攻击)永远 ×1.5;无盾时全部攻击再 ×2。
-# 于是: 有盾地面=1.0, 有盾跳劈=1.5, 无盾地面=2.0, 无盾跳劈=3.0(=原来的3倍)。
-const AIR_ATTACK_INDEX: float = 1.5
-const NO_SHIELD_DAMAGE_MULT: float = 2.0
-# Buff 改动量:山的重量=跳劈再×1.3;红水晶=无盾倍率升到2.5、二段伤害=一段;
-# 花(绽放的代价)=有盾也按无盾倍率算。
-const SALT_AIR_MULT: float = 1.3
-const RED_CRYSTAL_NO_SHIELD_MULT: float = 2.5
+# 伤害公式(2026-08-22 改为加法制):每种增幅都按"基础伤害的百分比"单独算,
+# 全部相加后一次结算:最终 = 基础 × (1 + 加成总和)。
+# 旧乘法连乘会指数爆炸(盐灯×无盾×跳劈=×3.9,叠珊瑚红水晶可到×8),加法封顶可控。
+# 例:无盾跳劈 = 90 × (1 + 1.0 + 0.5) = 225(旧版 270)。
+const AIR_ATTACK_BONUS: float = 0.5             # 跳劈:+基础的50%
+const NO_SHIELD_BONUS: float = 1.0              # 无盾:+基础的100%
+const SALT_AIR_BONUS: float = 0.3               # 山的重量:跳劈时再+基础的30%
+const RED_CRYSTAL_NO_SHIELD_BONUS: float = 1.1  # 红水晶:无盾加成 100%→110%(主价值是二段=一段,加伤只是点缀)
+# 红水晶另一半效果:二段伤害=一段(见 attack1_2_check);花:有盾也吃无盾加成。
 const ATTACK1_1_TRIGGER_FRAME: int = 1
 const ATTACK1_2_TRIGGER_FRAME: int = 1
 const ATTACK1_1_TRIGGER_TIME: float = 2.0 / 12.0
@@ -51,6 +52,7 @@ func enter() -> void:
 	var player := host as Player
 	if player == null:
 		return
+	player._end_mist()  # 按下攻击的瞬间就破雾(各状态都直切攻击态,不走 start_attack)
 	player_ref = player
 	recoil_time_left = 0.0
 	phase_1_done = false
@@ -133,23 +135,19 @@ func attack1_2_check() -> void:
 		player_ref.on_attack_landed()
 
 func _get_attack_damage(base_damage: int) -> int:
-	var dmg := float(base_damage)
+	var bonus := 0.0
 	if is_air_attack:
-		dmg *= AIR_ATTACK_INDEX
+		bonus += AIR_ATTACK_BONUS
 		if player_ref != null and player_ref.has_buff(&"SaltLight"):
-			dmg *= SALT_AIR_MULT  # 山的重量:跳劈再+30%
-	# 花:有盾也按破盾伤害算;红水晶:破盾倍率更高。
-	var as_broken := player_ref != null \
-		and (not player_ref.is_guarding or player_ref.has_buff(&"Flower"))
-	if as_broken:
-		var mult := NO_SHIELD_DAMAGE_MULT
-		if player_ref.has_buff(&"RedCrystal"):
-			mult = RED_CRYSTAL_NO_SHIELD_MULT
-		dmg *= mult
-	# 加法叠加的攻击力增益(珊瑚潮汐的冲刺强化等)。
+			bonus += SALT_AIR_BONUS
 	if player_ref != null:
-		dmg *= 1.0 + player_ref.attack_damage_bonus()
-	return int(round(dmg))
+		# 花:有盾也吃无盾加成;红水晶:无盾加成更高
+		if not player_ref.is_guarding or player_ref.has_buff(&"Flower"):
+			bonus += RED_CRYSTAL_NO_SHIELD_BONUS if player_ref.has_buff(&"RedCrystal") \
+				else NO_SHIELD_BONUS
+		# 珊瑚潮汐等攻击力增益,同一个加法池
+		bonus += player_ref.attack_damage_bonus()
+	return int(round(float(base_damage) * (1.0 + bonus)))
 
 func _try_auto_attack_phases(player: Player) -> void:
 	if not is_instance_valid(player.sprite):

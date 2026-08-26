@@ -11,6 +11,7 @@ signal hit_landed
 @export var speed: float = 140.0
 @export var lifetime: float = 0.7
 @export var damage: int = 20
+@export var causes_knockback: bool = true  # 蛛卵弹关掉:仆从火力不该把怪推飞
 
 var _dir: Vector2 = Vector2.RIGHT
 var _flying: bool = true
@@ -65,7 +66,10 @@ func _on_hit_node(node: Node) -> void:
 	if target in _damaged:
 		return
 	_damaged.append(target)
+	if not causes_knockback:
+		Game.suppress_hit_knockback = true
 	target.call("take_damage", damage)
+	Game.suppress_hit_knockback = false
 	hit_landed.emit()
 	_explode()
 

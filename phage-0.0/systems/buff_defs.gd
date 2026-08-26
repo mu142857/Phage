@@ -9,17 +9,23 @@ const ICON_DIR := "res://entities/player/BuffIcon/"
 const DEFS: Dictionary = {
 	&"Table": {
 		"name": "愈合的伤口",
-		"desc": "破盾后的无敌时间,延长到一秒。",
+		"desc": "破盾后的无敌时间,延长到两秒。",
 		"tags": [],
 	},
 	&"Watertank": {
 		"name": "珊瑚潮汐",
-		"desc": "冲刺后的下一击更重;破盾时激起一圈水刺。",
+		"desc": "冲刺后的下一击更重;开盾和破盾时激起水刺。",
 		"tags": [],
 	},
 	&"CopperLamp": {
 		"name": "城市的心跳",
 		"desc": "攻击积攒心跳,攒满时燃起火光,出手更快。",
+		"tags": [],
+	},
+	# 火光燃烧中的显示变体(判定见 player._lamp_fire_left)
+	&"CopperLampActive": {
+		"name": "城市的心跳",
+		"desc": "心跳攒满了——火光燃烧中,出手更快。",
 		"tags": [],
 	},
 	&"SaltLight": {
@@ -39,12 +45,12 @@ const DEFS: Dictionary = {
 	},
 	&"Flower": {
 		"name": "绽放的代价",
-		"desc": "每一击都全力绽放,但护盾只剩一层。",
+		"desc": "每一击都全力绽放,但护盾恢复变得很慢。",
 		"tags": [],
 	},
 	&"BlueCrystal": {
 		"name": "蓝水晶的力量",
-		"desc": "每隔一阵,冲刺时被水晶包裹,无懈可击。",
+		"desc": "冲刺时被水晶包裹,无懈可击。",
 		"tags": ["crystal"],
 	},
 	&"RedCrystal": {
@@ -54,7 +60,13 @@ const DEFS: Dictionary = {
 	},
 	&"YunwuPaint": {
 		"name": "礼拜日的云雾",
-		"desc": "生成一团雾藏身其中;出手会破雾。",
+		"desc": "按 F 隐入云雾,无懈可击;出手或冲刺便会破雾。",
+		"tags": [],
+	},
+	# 云雾冷却中的显示变体(不是可持有 buff,判定见 player.mist_cooldown_left)
+	&"YunwuPaintInactive": {
+		"name": "礼拜日的云雾",
+		"desc": "云雾散尽,正在重新聚拢。(冷却中)",
 		"tags": [],
 	},
 	&"MuziPaint": {
@@ -71,7 +83,7 @@ const DEFS: Dictionary = {
 	},
 	&"Window": {
 		"name": "窗边的晨光",
-		"desc": "护盾全满时,出手越来越快。",
+		"desc": "护盾在身时,出手越来越快。",
 		"tags": [],
 	},
 }

@@ -13,6 +13,8 @@ extends CharacterBody2D
 @export var knockback_duration: float = 0.1
 ## 贴图默认头朝右；素材头朝左的(如盾蛛)勾上这个
 @export var sprite_faces_left: bool = false
+## 死亡粒子爆炸(与 wowen 同款做法)，三个变体各配一套配色
+@export var death_effect_scene: PackedScene = null
 
 enum Skill { NONE, POUNCE, SPIT, SHIELD }
 
@@ -199,7 +201,20 @@ func take_damage(value: int) -> void:
 		hit_effect_player.play(&"HitFlash")
 	_start_knockback()
 	if health <= 0:
+		_spawn_death_effect()
 		queue_free()
+
+func _spawn_death_effect() -> void:
+	if death_effect_scene == null:
+		return
+	if get_tree().current_scene == null:
+		return
+	var effect := death_effect_scene.instantiate()
+	get_tree().current_scene.add_child(effect)
+	if effect is Node2D:
+		(effect as Node2D).global_position = global_position
+	if effect is GPUParticles2D:
+		(effect as GPUParticles2D).emitting = true
 
 func _get_detected_player() -> Node2D:
 	if player_check == null:
@@ -229,6 +244,8 @@ func _try_damage_player() -> void:
 			return
 
 func _start_knockback() -> void:
+	if Game.suppress_hit_knockback:
+		return  # 召唤物等软伤害:掉血但不位移
 	var direction: float = -1.0
 	var players := get_tree().get_nodes_in_group("player")
 	if not players.is_empty() and players[0] is Node2D:

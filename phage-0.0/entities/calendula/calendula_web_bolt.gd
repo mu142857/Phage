@@ -131,6 +131,8 @@ func _attach(player: Node2D) -> void:
 func _become_hittable(radius: float, break_hits: int) -> void:
 	hits_left = break_hits
 	add_to_group("monster")
+	# 挂 monster 是为了能被主角攻击打破;召唤物别自动帮忙清网(见 spider_egg)
+	add_to_group("summon_ignore")
 	collision_layer = 4
 	if is_instance_valid(hit_shape):
 		# CircleShape2D 是场景共享资源，必须先 duplicate 再改，不然改了所有网弹

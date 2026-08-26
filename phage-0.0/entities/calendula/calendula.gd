@@ -47,25 +47,28 @@ const PHASE_THREE: int = 2
 # =============================================================================
 # ★ 剧本表 —— 改打法只改这里 ★
 # =============================================================================
-# 一阶段：三招各来一遍，节奏舒缓，教玩家认招
-# 二阶段：冲撞变频，压走位
-# 三阶段：全招式随机连轴转，Idle（悬浮）当衔接
+# 用户钦定循环（召唤是金盏唯一的真正攻击手段，每放一个技能都跟一次召唤）：
+#   吐网 → 召唤 → 吐网 → 召唤 → 轰炸 → 召唤 → 循环
+# 每招之间都插待机（待机一定要的）。三个阶段同一套剧本，
+# 压迫感升级靠 Idle 时长随血量缩短 + 阶段战吼。
 var phase_scripts: Dictionary = {
 	PHASE_ONE: {
 		"mode": "sequence",
 		"list": [STATE_WEB_SHOT, STATE_IDLE, STATE_SUMMON, STATE_IDLE,
-				STATE_RAM, STATE_IDLE, STATE_WEB_SHOT, STATE_IDLE],
+				STATE_WEB_SHOT, STATE_IDLE, STATE_SUMMON, STATE_IDLE,
+				STATE_RAM, STATE_IDLE, STATE_SUMMON, STATE_IDLE],
 	},
 	PHASE_TWO: {
 		"mode": "sequence",
-		"list": [STATE_RAM, STATE_IDLE, STATE_WEB_SHOT, STATE_IDLE,
-				STATE_SUMMON, STATE_IDLE, STATE_RAM, STATE_IDLE,
-				STATE_WEB_SHOT, STATE_IDLE],
+		"list": [STATE_WEB_SHOT, STATE_IDLE, STATE_SUMMON, STATE_IDLE,
+				STATE_WEB_SHOT, STATE_IDLE, STATE_SUMMON, STATE_IDLE,
+				STATE_RAM, STATE_IDLE, STATE_SUMMON, STATE_IDLE],
 	},
 	PHASE_THREE: {
-		"mode": "random_link",
-		"list": [STATE_WEB_SHOT, STATE_SUMMON, STATE_RAM],
-		"link": STATE_IDLE,
+		"mode": "sequence",
+		"list": [STATE_WEB_SHOT, STATE_IDLE, STATE_SUMMON, STATE_IDLE,
+				STATE_WEB_SHOT, STATE_IDLE, STATE_SUMMON, STATE_IDLE,
+				STATE_RAM, STATE_IDLE, STATE_SUMMON, STATE_IDLE],
 	},
 }
 

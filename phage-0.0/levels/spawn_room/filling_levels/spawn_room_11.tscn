@@ -1,36 +1,100 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://bhbqd5j86myaf"]
 
-[ext_resource type="Texture2D" path="res://levels/spawn_room/spawn_room_filling_levels_background/11.png" id="1_bg"]
+[ext_resource type="Texture2D" uid="uid://jpynxdgmnedu" path="res://levels/spawn_room/spawn_room_filling_levels_background/11.png" id="1_bg"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
-[ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="3_teleport"]
-[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="4_font"]
+[ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
 
-[node name="SpawnRoom11" type="Node2D" groups=["camera_fixed"]]
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_wuuri"]
 
-[node name="Background" type="Sprite2D" parent="."]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wuuri"]
+size = Vector2(5, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p555v"]
+size = Vector2(5, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7w5xj"]
+size = Vector2(63, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_io3i6"]
+size = Vector2(65, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_221av"]
+size = Vector2(19, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0jfsy"]
+size = Vector2(19, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_side"]
+size = Vector2(2, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_top"]
+size = Vector2(22, 1)
+
+[node name="SpawnRoom11" type="Node2D" unique_id=1850910310 groups=["camera_fixed"]]
+
+[node name="Background" type="Sprite2D" parent="." unique_id=219243271]
 texture = ExtResource("1_bg")
 centered = false
 
-[node name="Walls" type="Node2D" parent="."]
+[node name="Walls" type="Node2D" parent="." unique_id=809556168]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=1078461454]
 collision_mask = 0
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=164395232]
+position = Vector2(0, 80)
+shape = SubResource("WorldBoundaryShape2D_wuuri")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1960768060]
+position = Vector2(2.5, 40)
+shape = SubResource("RectangleShape2D_wuuri")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=801556047]
+position = Vector2(157.5, 32)
+shape = SubResource("RectangleShape2D_p555v")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1301729856]
+position = Vector2(123.5, 1.5)
+shape = SubResource("RectangleShape2D_7w5xj")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=246353472]
+position = Vector2(37.5, 1.5)
+shape = SubResource("RectangleShape2D_io3i6")
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=132106620]
+position = Vector2(79.5, 28)
+shape = SubResource("RectangleShape2D_221av")
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=6974265]
+position = Vector2(47.5, 57)
+shape = SubResource("RectangleShape2D_0jfsy")
+
+[node name="Player" parent="." unique_id=325554583 instance=ExtResource("2_player")]
 position = Vector2(20, 70)
 
-[node name="TeleportRight" parent="." instance=ExtResource("3_teleport")]
-position = Vector2(150, 78)
+[node name="DoorRight" type="Area2D" parent="." unique_id=543534793]
+position = Vector2(157, 62)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_auto")
 scene_path = "res://levels/spawn_room/filling_levels/spawn_room_12.tscn"
 teleport_id = 1
+spawn_offset = Vector2(-7, 8)
 
-[node name="Label" type="Label" parent="TeleportRight"]
-z_index = 100
-offset_left = -10.0
-offset_top = -20.0
-offset_right = 23.0
-offset_bottom = -10.0
-theme_override_colors/font_color = Color(0.733, 0.733, 0.733, 1)
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 10
-text = "前进"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorRight" unique_id=572503987]
+position = Vector2(2, 10)
+shape = SubResource("RectangleShape2D_door_side")
+
+[node name="DoorTop" type="Area2D" parent="." unique_id=196430293]
+position = Vector2(81, 6)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_auto")
+scene_path = "res://levels/spawn_room/spawn_room.tscn"
+teleport_id = 6
+spawn_offset = Vector2(0, 10)
+require_velocity = Vector2(0, -1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorTop" unique_id=880582214]
+position = Vector2(0, -5.5)
+shape = SubResource("RectangleShape2D_door_top")

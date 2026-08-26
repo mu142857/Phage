@@ -20,8 +20,9 @@ const ROSTER: Array[Dictionary] = [
 		"overrides": {"center_x": 80.0, "bound_min_x": 10.0, "bound_max_x": 150.0}},
 	{"name": "蓝晶", "title": "森林的创口", "scene": "res://entities/azure_warlord/azure_warlord.tscn",
 		"pos": Vector2(118, 80)},
+	# 忏悔者:字卡期间藏在地里(hidden_intro),开打从 Prominence(6) 升起 → 镰刀冲砍 → 正常循环
 	{"name": "忏悔者", "title": "礼拜日的狂信徒", "scene": "res://entities/penitent/penitent.tscn",
-		"pos": Vector2(83, 25), "card_animation": &"Battlecry"},
+		"pos": Vector2(140, 80), "fight_state": 6, "hidden_intro": true},
 ]
 
 @export var start_index := 0    # 从第几个 boss 开打(0 起),想单练后期 boss 改这里
@@ -97,7 +98,16 @@ func _spawn(entry: Dictionary) -> Node2D:
 	add_child(boss)
 	# 状态机按回 Null:_ready 里 Idle 可能已入场并排了攻击计时
 	_change_boss_state(boss, 0)
-	Game.flash(0.25, Color(1.0, 1.0, 1.0))
+	# 朝向先摆好(忏悔者的 Prominence/冲砍用 apply_facing,不自己找玩家)
+	if boss.has_method("face_player"):
+		boss.call("face_player")
+	elif boss.has_method("set_facing_from_player"):
+		boss.call("set_facing_from_player")
+	# hidden_intro:字卡期间藏着(如忏悔者在地里),开打状态自己 show()
+	if entry.get("hidden_intro", false):
+		boss.visible = false
+	else:
+		Game.flash(0.25, Color(1.0, 1.0, 1.0))
 	return boss
 
 
@@ -108,7 +118,7 @@ func _play_intro(entry: Dictionary, boss: Node2D) -> void:
 	intro.title_text = entry["title"]
 	intro.boss_name_text = entry["name"]
 	intro.card_animation = entry.get("card_animation", &"")
-	intro.fight_state = fight_state
+	intro.fight_state = int(entry.get("fight_state", fight_state))
 	add_child(intro)
 	BossIntroScript._played.erase(get_tree().current_scene.scene_file_path)
 	await intro.play_for(boss)

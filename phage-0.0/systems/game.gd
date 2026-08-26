@@ -425,6 +425,10 @@ func change_scene(scene_path: String, teleport_id: int, player_light: bool) -> v
 	var target_position := Vector2.ZERO
 	if is_instance_valid(target_teleport):
 		target_position = target_teleport.global_position
+		# 自动过门(auto_teleport)可以把落点从触发区里偏移出去,防止落地即回传。
+		var teleport_spawn_offset = target_teleport.get("spawn_offset")
+		if teleport_spawn_offset is Vector2:
+			target_position += teleport_spawn_offset
 	var player := _find_player_in_current_scene(current_scene)
 	if not is_instance_valid(player):
 		player = PLAYER_SCENE.instantiate() as Player

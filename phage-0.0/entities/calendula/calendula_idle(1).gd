@@ -13,8 +13,8 @@
 extends BasicState
 
 # 待机时长区间（血越少 Idle 越短，攻击越密）
-@export var idle_time_full_health: float = 4.4
-@export var idle_time_low_health: float = 2.2
+@export var idle_time_full_health: float = 4.0
+@export var idle_time_low_health: float = 1.5
 
 # --- 悬浮参数 ----------------------------------------------------------------
 # ★ 高度铁律：贴图从原点往下延伸 ~35px，任何时刻 root y ≤ 45，

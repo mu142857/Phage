@@ -1,52 +1,118 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://i3jwojef4g3j"]
 
-[ext_resource type="Texture2D" path="res://levels/spawn_room/spawn_room_filling_levels_background/14.png" id="1_bg"]
+[ext_resource type="Texture2D" uid="uid://cyvny2myb3sqg" path="res://levels/spawn_room/spawn_room_filling_levels_background/14.png" id="1_bg"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
-[ext_resource type="PackedScene" uid="uid://ygejeoso67uf" path="res://interactive/Teleport/teleport.tscn" id="3_teleport"]
-[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="4_font"]
+[ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
 
-[node name="SpawnRoom14" type="Node2D" groups=["camera_fixed"]]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pc8hn"]
+size = Vector2(128, 10)
 
-[node name="Background" type="Sprite2D" parent="."]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rwmg3"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yqefp"]
+size = Vector2(5, 61)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_puhwq"]
+size = Vector2(160, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m4uek"]
+size = Vector2(5, 77)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e632e"]
+size = Vector2(11, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ws12k"]
+size = Vector2(98, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ptkn2"]
+size = Vector2(33, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_memjt"]
+size = Vector2(5, 61)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_side"]
+size = Vector2(2, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_down"]
+size = Vector2(16, 3)
+
+[node name="SpawnRoom14" type="Node2D" unique_id=454656702 groups=["camera_fixed"]]
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1017479722]
 texture = ExtResource("1_bg")
 centered = false
 
-[node name="Walls" type="Node2D" parent="."]
+[node name="Walls" type="Node2D" parent="." unique_id=1257316514]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=339650822]
 collision_mask = 0
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector2(30, 70)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=504894370]
+position = Vector2(64, 85)
+shape = SubResource("RectangleShape2D_pc8hn")
 
-[node name="TeleportLeft" parent="." instance=ExtResource("3_teleport")]
-position = Vector2(10, 78)
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=327427628]
+position = Vector2(152, 85)
+shape = SubResource("RectangleShape2D_rwmg3")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=221388788]
+position = Vector2(2.5, 33.5)
+shape = SubResource("RectangleShape2D_yqefp")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=604464195]
+position = Vector2(80, 1.5)
+shape = SubResource("RectangleShape2D_puhwq")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=357705332]
+position = Vector2(157.5, 41.5)
+shape = SubResource("RectangleShape2D_m4uek")
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1499055482]
+position = Vector2(10.5, 46)
+shape = SubResource("RectangleShape2D_e632e")
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=373689581]
+position = Vector2(92, 62)
+shape = SubResource("RectangleShape2D_ws12k")
+
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1339654961]
+position = Vector2(125, 40)
+shape = SubResource("RectangleShape2D_ptkn2")
+
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1791006250]
+position = Vector2(76.5, 17)
+shape = SubResource("RectangleShape2D_ptkn2")
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1219185767]
+position = Vector2(78.5, 49.5)
+shape = SubResource("RectangleShape2D_memjt")
+
+[node name="Player" parent="." unique_id=2063501963 instance=ExtResource("2_player")]
+position = Vector2(12, 73)
+
+[node name="DoorLeft" type="Area2D" parent="." unique_id=1257679086]
+position = Vector2(3, 62)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_auto")
 scene_path = "res://levels/spawn_room/filling_levels/spawn_room_12.tscn"
 teleport_id = 2
+spawn_offset = Vector2(7, 8)
 
-[node name="Label" type="Label" parent="TeleportLeft"]
-z_index = 100
-offset_left = -10.0
-offset_top = -20.0
-offset_right = 23.0
-offset_bottom = -10.0
-theme_override_colors/font_color = Color(0.733, 0.733, 0.733, 1)
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 10
-text = "返回"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorLeft" unique_id=243131173]
+position = Vector2(-2, 10)
+shape = SubResource("RectangleShape2D_door_side")
 
-[node name="TeleportDown" parent="." instance=ExtResource("3_teleport")]
-position = Vector2(81, 78)
+[node name="DoorDown" type="Area2D" parent="." unique_id=1796808023]
+position = Vector2(81, 88)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_auto")
 scene_path = "res://levels/spawn_room/filling_levels/spawn_room_13.tscn"
 teleport_id = 3
+spawn_offset = Vector2(-46, -18)
 
-[node name="Label" type="Label" parent="TeleportDown"]
-z_index = 100
-offset_left = -10.0
-offset_top = -20.0
-offset_right = 23.0
-offset_bottom = -10.0
-theme_override_colors/font_color = Color(0.733, 0.733, 0.733, 1)
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 10
-text = "前进"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorDown" unique_id=2052647255]
+position = Vector2(55, 3.5)
+shape = SubResource("RectangleShape2D_door_down")

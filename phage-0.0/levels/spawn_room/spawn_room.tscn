@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://s3hdppp0km17"]
 
-[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="Script" uid="uid://dtq1vmfaf8lrc" path="res://levels/spawn_room/spawn_room.gd" id="1_aun17"]
 [ext_resource type="Texture2D" uid="uid://bdv6l6g0k54rr" path="res://levels/spawn_room/spawn_room_ground1.png" id="2_f6b0m"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="3_ctuyw"]
@@ -17,7 +16,10 @@
 [ext_resource type="PackedScene" uid="uid://c8pnajburl72k" path="res://interactive/Text/text.tscn" id="13_hsfmc"]
 [ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="14_0ro3w"]
 [ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="90_dreamend"]
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="92_bossintro"]
+[ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="95_auto"]
+[ext_resource type="Script" path="res://interactive/Platform/drop_through_platform.gd" id="96_dropplat"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_n5t8k"]
 b = Vector2(541, -1)
@@ -64,11 +66,14 @@ size = Vector2(8, 73)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ukcda"]
 size = Vector2(8, 73)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_egpqp"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_520u8"]
 size = Vector2(15, 4)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p7yjn"]
 size = Vector2(8, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_egpqp"]
+size = Vector2(30, 2)
 
 [sub_resource type="Gradient" id="Gradient_ctaym"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -80,6 +85,12 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_i4v8s"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_filling"]
+size = Vector2(30, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_drop_detect"]
+size = Vector2(30, 8)
 
 [node name="SpawnRoom" type="Node2D" unique_id=1159039431 groups=["camera_follow"]]
 script = ExtResource("1_aun17")
@@ -165,10 +176,10 @@ z_index = 11
 position = Vector2(583, 89.5)
 shape = SubResource("RectangleShape2D_ukcda")
 
-[node name="Platform11" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=56370406]
+[node name="Platform11" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=935704353]
 z_index = 11
 position = Vector2(564.5, 80)
-shape = SubResource("RectangleShape2D_egpqp")
+shape = SubResource("RectangleShape2D_520u8")
 
 [node name="Platform12" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=788662627]
 z_index = 11
@@ -177,6 +188,24 @@ shape = SubResource("RectangleShape2D_p7yjn")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Walls/StaticBody2D" unique_id=1114493311]
 polygon = PackedVector2Array(10, 89, 6, 81, 6, 79, 5, 78, 5, 75, 4, 74, 4, 72, 3, 71, 3, 68, 0, 10, 0, 89)
+
+[node name="DropPlatform13" type="StaticBody2D" parent="Walls" unique_id=497160820]
+collision_mask = 0
+script = ExtResource("96_dropplat")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/DropPlatform13"]
+z_index = 11
+position = Vector2(564, 54)
+shape = SubResource("RectangleShape2D_egpqp")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/DropPlatform13"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/DropPlatform13/Area2D"]
+position = Vector2(564, 50)
+shape = SubResource("RectangleShape2D_drop_detect")
 
 [node name="Ground1" type="Sprite2D" parent="Walls" unique_id=1671977831]
 texture = ExtResource("2_f6b0m")
@@ -191,6 +220,7 @@ centered = false
 position = Vector2(440, -1)
 texture = ExtResource("4_n5t8k")
 centered = false
+metadata/_edit_lock_ = true
 
 [node name="LeftEnd" type="Sprite2D" parent="Walls" unique_id=531490342]
 position = Vector2(-169, 0)
@@ -264,7 +294,8 @@ position = Vector2(0, 26)
 texture = ExtResource("6_hqcya")
 
 [node name="WeekCox" parent="." unique_id=263783893 instance=ExtResource("12_a46js")]
-position = Vector2(399, 16)
+position = Vector2(402, 38)
+metadata/_edit_lock_ = true
 
 [node name="Guide" type="Node2D" parent="." unique_id=2102713541]
 
@@ -310,21 +341,34 @@ theme_override_fonts/font = ExtResource("14_0ro3w")
 theme_override_font_sizes/font_size = 7
 text = "按下←攻击"
 
-[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
+[node name="DreamIntro" parent="." unique_id=2049734742 instance=ExtResource("90_dreamintro")]
+story_text_1 = "睡前翻书的时候，纸划破了手指。"
+story_text_2 = "那一夜的梦，是红色的。"
 weekday_text = "周一的梦"
 title_text = "伤口"
 title_color = Color(0.82, 0.55, 0.52, 1)
-story_text_1 = "睡前翻书的时候，纸划破了手指。"
-story_text_2 = "那一夜的梦，是红色的。"
 
-[node name="DreamEnd" parent="." instance=ExtResource("90_dreamend")]
+[node name="DreamEnd" parent="." unique_id=1966226527 instance=ExtResource("90_dreamend")]
 position = Vector2(590, 0)
 
-[node name="BossIntro" parent="." instance=ExtResource("92_bossintro")]
+[node name="BossIntro" parent="." unique_id=1862789569 instance=ExtResource("92_bossintro")]
 boss_path = NodePath("../WeekCox")
 title_text = "羸弱之翼"
 boss_name_text = "球克"
-appear_mode = 1
 trigger_distance = 110.0
 pre_delay = 0.5
+appear_mode = 1
 fight_state = -1
+
+[node name="DoorFillingLevels" type="Area2D" parent="." unique_id=1340731983]
+position = Vector2(300, 92)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("95_auto")
+scene_path = "res://levels/spawn_room/filling_levels/spawn_room_11.tscn"
+teleport_id = 6
+spawn_offset = Vector2(264, -14)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorFillingLevels" unique_id=126505151]
+position = Vector2(264, 6)
+shape = SubResource("RectangleShape2D_door_filling")

@@ -59,7 +59,8 @@ func process(delta: float) -> void:
 	if not is_active or stage != 1:
 		return
 	monster.global_position.x += charge_dir * charge_speed * delta
-	if absf(monster.global_position.x) > 80.0 + exit_margin:
+	var center: float = monster.center_x if "center_x" in monster else 0.0
+	if absf(monster.global_position.x - center) > 80.0 + exit_margin:
 		_exit_screen_and_free()
 
 

@@ -48,18 +48,17 @@ position = Vector2(86, 80)
 light_mask = 0
 z_index = 11
 
-[node name="DreamEnd" parent="." instance=ExtResource("90_dreamend")]
+[node name="DreamEnd" parent="." unique_id=381005242 instance=ExtResource("90_dreamend")]
 watch_path = NodePath("../RustGOAT")
 
-[node name="DreamIntro" parent="." instance=ExtResource("91_dreamintro")]
+[node name="DreamIntro" parent="." unique_id=1372698363 instance=ExtResource("91_dreamintro")]
 story_text_1 = "睡前，给铁皮人上满了发条。"
 story_text_2 = "咔哒，咔哒。整座城市都在走字。"
 weekday_text = "周三的梦"
 title_text = "铁锈城"
 title_color = Color(0.84, 0.66, 0.47, 1)
 
-[node name="BossIntro" parent="." instance=ExtResource("92_bossintro")]
+[node name="BossIntro" parent="." unique_id=588714817 instance=ExtResource("92_bossintro")]
 boss_path = NodePath("../RustGOAT")
 title_text = "锈都拳王"
 boss_name_text = "老大史莱姆"
-appear_mode = 0

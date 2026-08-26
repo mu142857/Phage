@@ -28,13 +28,16 @@ const STATE_SUMMON: int = 5
 const STATE_RAM: int = 6
 
 # --- 基础数值 ----------------------------------------------------------------
-@export var max_health: int = 5000
-@export var health: int = 5000
+@export var max_health: int = 6000
+@export var health: int = 6000
 @export var idle_only: bool = false
 
 # --- 横向活动边界（[-80,80] 的蛛网森林 boss 房；换场地记得连 Idle 驻点一起调）---
 @export var bound_min_x: float = -70.0
 @export var bound_max_x: float = 70.0
+
+# 场地中心 x:半场认领/出屏判定/投弹线都以它为原点(蛛网森林=0,0~160 的房间=80)
+@export var center_x: float = 0.0
 
 # --- 阶段阈值（血量比例低于此值进入下一阶段）---------------------------------
 @export var phase_two_ratio: float = 0.667    # 低于 66.7% 进二阶段

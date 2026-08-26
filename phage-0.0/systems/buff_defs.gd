@@ -27,6 +27,7 @@ const DEFS: Dictionary = {
 		"name": "城市的心跳",
 		"desc": "心跳攒满了——火光燃烧中,出手更快。",
 		"tags": [],
+		"variant": true,
 	},
 	&"SaltLight": {
 		"name": "山的重量",
@@ -68,6 +69,7 @@ const DEFS: Dictionary = {
 		"name": "礼拜日的云雾",
 		"desc": "云雾散尽,正在重新聚拢。(冷却中)",
 		"tags": [],
+		"variant": true,
 	},
 	&"MuziPaint": {
 		"name": "沐子的守望",
@@ -80,6 +82,7 @@ const DEFS: Dictionary = {
 		"name": "破碎的守望",
 		"desc": "已经替你站起来过一次。这场梦里,不会再有了。",
 		"tags": [],
+		"variant": true,
 	},
 	&"Window": {
 		"name": "窗边的晨光",
@@ -107,3 +110,8 @@ static func icon(id: StringName) -> Texture2D:
 
 static func has_tag(id: StringName, tag: String) -> bool:
 	return DEFS.has(id) and tag in (DEFS[id]["tags"] as Array)
+
+
+## 显示用状态变体(破碎守望/冷却云雾/燃烧铜灯):不是可持有的技能,列表要跳过。
+static func is_variant(id: StringName) -> bool:
+	return DEFS.has(id) and bool(DEFS[id].get("variant", false))

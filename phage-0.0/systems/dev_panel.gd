@@ -165,6 +165,14 @@ func _reload_scene() -> void:
 	_run_after_close(func() -> void: get_tree().reload_current_scene())
 
 
+# Boss Rush 测试场:不进剧情,in_dream 关掉让死亡走"重载重打"而不是惊醒回房间
+func _goto_boss_rush() -> void:
+	_run_after_close(func() -> void:
+		Story.in_dream = false
+		Engine.time_scale = 1.0
+		get_tree().change_scene_to_file("res://levels/boss_rush_test/boss_rush_test.tscn"))
+
+
 ## 等价 F12:清空进度回第一夜白天,顺带清掉面板自己的物品覆盖。
 func _reset_progress() -> void:
 	item_override.clear()
@@ -301,6 +309,7 @@ func _build_jump_column(col: VBoxContainer) -> void:
 	_replay_check = _check(col, "回顾模式(不推进度)", func(_on: bool) -> void: pass)
 	for night in range(1, 8):
 		_button(col, NIGHT_TITLES[night - 1], _jump_dream.bind(night))
+	_button(col, "Boss Rush 测试场", _goto_boss_rush)
 
 
 func _build_items_column(col: VBoxContainer) -> void:
@@ -312,8 +321,19 @@ func _build_items_column(col: VBoxContainer) -> void:
 
 
 func _build_buffs_column(col: VBoxContainer) -> void:
+	# 技能会越来越多:列表放进滚动区,往下划;"清空"按钮固定在滚动区外。
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	col.add_child(scroll)
+	var list := VBoxContainer.new()
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list.add_theme_constant_override("separation", 4)
+	scroll.add_child(list)
 	for id: StringName in BuffDefs.DEFS:
-		var check := _check(col, BuffDefs.display_name(id), _on_buff_toggled.bind(id))
+		if BuffDefs.is_variant(id):
+			continue  # 状态显示变体不是可持有技能,别列出来
+		var check := _check(list, BuffDefs.display_name(id), _on_buff_toggled.bind(id))
 		_buff_checks[id] = check
 	_button(col, "清空 Buff", _clear_buffs)
 

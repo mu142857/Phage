@@ -30,6 +30,9 @@ var attack_batch_index: int = 0
 var attacks_left_in_batch: int = 0
 var crystallization_active: bool = false
 var intro_shown: bool = false
+# 死亡闸门:血量归零后 take_damage 再进(召唤物/灼烧还在打尸体)会反复重进死亡状态,
+# 把 2 秒清场计时器一直重置;排队中的旧状态转换也可能把它从死亡状态拉出来。
+var dying: bool = false
 
 func _ready() -> void:
 	velocity = Vector2.ZERO
@@ -59,6 +62,8 @@ func get_idle_time() -> float:
 	return maxf(t, idle_min_limit)
 
 func change_state(state_id: int) -> void:
+	if dying and state_id != STATE_DEATH:
+		return
 	if has_node("StateMachine"):
 		$StateMachine.change_state(state_id)
 
@@ -122,7 +127,7 @@ func finish_trampling() -> void:
 	change_state(STATE_IDLE)
 
 func take_damage(value: int) -> void:
-	if crystallization_active:
+	if crystallization_active or dying:
 		return
 	health -= value
 	health = clampi(health, 0, max_health)
@@ -131,6 +136,7 @@ func take_damage(value: int) -> void:
 	if has_node("HitEffectPlayer"):
 		$HitEffectPlayer.play("HitFlash")
 	if health <= 0:
+		dying = true
 		change_state(STATE_DEATH)
 
 func show_health_ui() -> void:

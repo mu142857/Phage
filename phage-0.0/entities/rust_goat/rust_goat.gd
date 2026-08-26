@@ -9,6 +9,9 @@
 #   sequence    按列表顺序循环播（Idle 也是列表里的普通条目）
 #   random_link 从列表随机挑（不连续重复），每招之间插一个 link 状态衔接
 #
+# ★ 濒死锁血复活（一次性）：血量被打到 1 → 锁血 → 战吼 → 连喝 3 瓶冰红茶
+#   回满 2400 → 之后永远停在 PHASE_FINAL（三阶段剧本去掉回血，也不再战吼）
+#
 # ★ 配套规则（全项目统一）：所有状态结束时不再写死 change_state(1)，
 #   而是 change_state(monster.get_next_attack_state())——「演完问大脑」。
 #   需要把 state_shoot / state_melee / state_dash_attack / state_battlecry /
@@ -43,6 +46,11 @@ const STATE_MOVE: int = 8
 const PHASE_ONE: int = 0
 const PHASE_TWO: int = 1
 const PHASE_THREE: int = 2
+const PHASE_FINAL: int = 3   # 锁血复活后的永久最终阶段（无回血、无战吼）
+
+# --- 濒死锁血复活（一次性）------------------------------------------------------
+# 血量被打到 1 → 锁血（掉不下去）→ 战吼 → 连喝 3 瓶冰红茶回满 → 永久 PHASE_FINAL
+const RESURRECT_HEAL_COUNT: int = 3
 
 # =============================================================================
 # ★ 剧本表 —— 改打法只改这里 ★
@@ -56,14 +64,22 @@ var phase_scripts: Dictionary = {
 		"list": [STATE_SHOOT, STATE_IDLE, STATE_ELBOW_STRIKE, STATE_IDLE,
 				STATE_MOVE, STATE_HEAL, STATE_MOVE],
 	},
+	# 二阶段：肘击、躲避投篮（Dodge=闪避+篮球天降）为主，直接投篮只留一手
 	PHASE_TWO: {
 		"mode": "sequence",
-		"list": [STATE_SHOOT, STATE_MOVE, STATE_SHOOT, STATE_MOVE,
-				STATE_HEAL, STATE_MOVE],
+		"list": [STATE_ELBOW_STRIKE, STATE_MOVE, STATE_DODGE, STATE_MOVE,
+				STATE_ELBOW_STRIKE, STATE_MOVE, STATE_SHOOT, STATE_MOVE,
+				STATE_DODGE, STATE_MOVE, STATE_HEAL, STATE_MOVE],
 	},
 	PHASE_THREE: {
 		"mode": "random_link",
 		"list": [STATE_SHOOT, STATE_HEAL, STATE_ELBOW_STRIKE],
+		"link": STATE_MOVE,
+	},
+	# 复活后：三阶段原样去掉回血
+	PHASE_FINAL: {
+		"mode": "random_link",
+		"list": [STATE_SHOOT, STATE_ELBOW_STRIKE],
 		"link": STATE_MOVE,
 	},
 }
@@ -85,6 +101,10 @@ var current_state_id: int = 0        # 当前状态号（闪避判定要知道�
 var battlecry_done_p2: bool = true  # 二阶段战吼只插一次
 var battlecry_done_p3: bool = true  # 三阶段战吼只插一次
 var pending_battlecry: int = 0
+
+var final_stand_done: bool = false      # 锁血复活只触发一次
+var hp_locked: bool = false             # 锁血中：受击只闪白不掉血
+var pending_resurrect_heals: int = 0    # 复活流程还要连喝几瓶
 
 # --- 剧本播放指针 --------------------------------------------------------------
 var seq_index: int = 0       # sequence 模式：播到列表第几个
@@ -131,23 +151,49 @@ func take_damage(value: int) -> void:
 	if not hittable:
 		return
 
+	# ★ 锁血复活中：血掉不下去，只给受击闪白反馈
+	if hp_locked:
+		_play_hit_flash()
+		return
+
 	# ★ 反应闪避：Idle/Move 中被打有概率直接闪掉这一下
 	if _try_reactive_dodge():
 		return
 
 	health -= value
 	health = clampi(health, 0, max_health)
+
+	# ★ 濒死锁血（一次性）：被打到 1 血及以下 → 锁在 1 血，战吼 + 连喝回满
+	if health <= 1 and not final_stand_done:
+		health = 1
 	if boss_health_ui != null:
 		boss_health_ui.refresh(health, max_health, true)
 	_update_phase()
+	_play_hit_flash()
 
+	if health <= 1 and not final_stand_done:
+		_start_final_stand()
+	elif health <= 0:
+		change_state(STATE_DEATH)
+
+
+func _play_hit_flash() -> void:
 	if has_node("HitEffectPlayer"):
 		if not $HitEffectPlayer.active:
 			$HitEffectPlayer.active = true
 		$HitEffectPlayer.play("HitFlash")
 
-	if health <= 0:
-		change_state(STATE_DEATH)
+
+# 锁血复活流程启动：锁血 → 立刻战吼 → 战吼完由 get_next_attack_state 连排 3 瓶回血
+func _start_final_stand() -> void:
+	final_stand_done = true
+	hp_locked = true
+	pending_resurrect_heals = RESURRECT_HEAL_COUNT
+	# 复活后不再有任何战吼插播
+	battlecry_done_p2 = true
+	battlecry_done_p3 = true
+	pending_battlecry = 0
+	change_state(STATE_BATTLECRY)
 
 
 # 闪避判定：成功返回 true（外面直接 return，不结算伤害）
@@ -163,6 +209,9 @@ func _try_reactive_dodge() -> bool:
 
 
 func heal(value: int) -> void:
+	# 复活连喝：每瓶固定回 1/3 总血量（3 瓶正好回满），不用 Heal 状态自带的数值
+	if hp_locked:
+		value = int(ceilf(float(max_health) / float(RESURRECT_HEAL_COUNT)))
 	health = clampi(health + value, 0, max_health)
 	if boss_health_ui != null:
 		boss_health_ui.refresh(health, max_health, true)
@@ -200,6 +249,17 @@ func face_player() -> void:
 # 决策核心：剧本播放器
 # =============================================================================
 func get_next_attack_state() -> int:
+	# 0. 锁血复活流程：战吼完连喝 3 瓶（中间不插 link，一瓶接一瓶）
+	if pending_resurrect_heals > 0:
+		pending_resurrect_heals -= 1
+		return STATE_HEAL
+	if hp_locked:
+		# 3 瓶喝完：解锁、血保证回满，往下走 PHASE_FINAL 剧本
+		hp_locked = false
+		health = max_health
+		if boss_health_ui != null:
+			boss_health_ui.refresh(health, max_health)
+
 	_update_phase()
 
 	# 1. 阶段战吼插播优先（不动剧本指针，战吼完回来接着播）
@@ -237,6 +297,9 @@ func get_next_attack_state() -> int:
 # 阶段计算（换阶段时剧本指针归零，从新剧本头开始播）
 # =============================================================================
 func _calc_phase() -> int:
+	# 复活后血虽回满，但永远停在最终阶段
+	if final_stand_done:
+		return PHASE_FINAL
 	if max_health <= 0:
 		return PHASE_ONE
 	var ratio := float(health) / float(max_health)

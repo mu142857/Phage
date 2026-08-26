@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://csn8u0gsnlwqu"]
+
+[ext_resource type="Script" uid="uid://dm0pb3vgktqqq" path="res://levels/boss_rush_test/boss_rush_test.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://kwls34uva2eu" path="res://levels/rust_arena/rust_arena.png" id="2_bg"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="3_player"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="4_font"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WBS_floor"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WBS_left"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WBS_right"]
+
+[node name="BossRushTest" type="Node2D" unique_id=964063164 groups=["camera_fixed"]]
+script = ExtResource("1_script")
+
+[node name="Environment" type="Node2D" parent="." unique_id=1520382126]
+
+[node name="Background" type="Sprite2D" parent="Environment" unique_id=1380181572]
+texture = ExtResource("2_bg")
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment" unique_id=1920587293]
+collision_mask = 0
+
+[node name="Floor" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=1807454734]
+position = Vector2(0, 80)
+shape = SubResource("WBS_floor")
+
+[node name="WallLeft" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=165764401]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WBS_left")
+
+[node name="WallRight" type="CollisionShape2D" parent="Environment/StaticBody2D" unique_id=454949235]
+position = Vector2(160, 80)
+rotation = -1.5707964
+shape = SubResource("WBS_right")
+
+[node name="Player" parent="." unique_id=73729602 instance=ExtResource("3_player")]
+position = Vector2(20, 70)
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1964580510]
+layer = 90
+
+[node name="InfoLabel" type="Label" parent="HUD" unique_id=776438024]
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 158.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 7
+horizontal_alignment = 2

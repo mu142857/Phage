@@ -49,6 +49,9 @@ const FIRE_ARROW_SCENE: PackedScene = preload("res://entities/penitent/penitent_
 @export var edge_margin: float = 8.0      # 冲刺起手离边缘的距离
 @export var spear_min_x: float = 5.0     # 天降长矛随机落点范围（屏幕内 5~155）
 @export var spear_max_x: float = 155.0
+# 掉矛限速：两波矛的最短间隔。上限对齐玩家召唤卵的攻速（spider_egg fire_interval = 0.4s），
+# 玩家攻速再快，掉矛也不能比卵射得还快。
+@export var spear_drop_interval: float = 0.4
 
 # --- 运行时 ------------------------------------------------------------------
 var direct: int = 1                       # 朝向：1=右 / -1=左
@@ -56,6 +59,7 @@ var current_state_id: int = 1
 var fighting: bool = false                # 出场战吼后置 true，火矢雨才开始
 var initial_battlecry_shown: bool = false
 var ready_to_underground_fire: bool = false
+var _spear_drop_cooldown: float = 0.0     # 掉矛限速计时（>0 期间挨打不掉矛）
 var rng := RandomNumberGenerator.new()
 
 var _hit_flash_tween: Tween
@@ -83,9 +87,10 @@ func _ready() -> void:
 		current_state_id = $StateMachine.initial_state_index
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if health <= 0:
 		return
+	_spear_drop_cooldown = maxf(_spear_drop_cooldown - delta, 0.0)
 	# 出场前：停在 Null 里等玩家进场，玩家一出现就触发出场战吼（只一次）
 	if not fighting:
 		if get_player() != null:
@@ -134,11 +139,15 @@ func change_state(state_id: int) -> void:
 
 
 # =============================================================================
-# 天降长矛：每次玩家成功击中 boss，在屏幕内随机落 3~6 根（血越少越多）
+# 天降长矛：玩家击中 boss 时在屏幕内随机落 1~3 根（血越少越多）。
+# 带限速：两波之间至少隔 spear_drop_interval，连击太快时中间的击中不掉矛。
 # =============================================================================
 func _drop_spears() -> void:
+	if _spear_drop_cooldown > 0.0:
+		return   # 限速中：这一下不掉矛
 	if FIRE_ARROW_SCENE == null or get_tree().current_scene == null:
 		return
+	_spear_drop_cooldown = spear_drop_interval
 	var count := clampi(health_tier(), 1, 3)   # 1~3 根，血越少越多
 	for i in count:
 		var x := rng.randf_range(spear_min_x, spear_max_x)

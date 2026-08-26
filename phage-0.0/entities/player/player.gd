@@ -23,8 +23,8 @@ const SHIELD_RECHARGE_TIME: float = 5.0    # 基础盾(槽0)充能秒数(2026-08
 
 # ---- Buff 数值(定义/文案见 BuffDefs;获得状态在 Story.buffs_owned) ----
 const TABLE_BREAK_INVINCIBLE: float = 2.0   # 愈合的伤口:破盾后无敌时长
-const GREEN_RECHARGE_MULT: float = 3.0      # 森林的谢礼:附加绿盾充能是基础的3倍慢
-const FLOWER_RECHARGE_MULT: float = 3.0     # 绽放的代价:全部护盾恢复时间×3
+const GREEN_RECHARGE_EXTRA: float = 10.0    # 森林的谢礼:附加绿盾充能+10s(5→15)
+const FLOWER_RECHARGE_EXTRA: float = 10.0   # 绽放的代价:全部护盾充能+10s
 const LAMP_ENERGY_MAX: int = 8              # 城市的心跳:攒满所需命中次数
 const LAMP_FIRE_DURATION: float = 6.0       # 城市的心跳:火光持续时间
 const LAMP_ATTACK_SPEED_BONUS: float = 0.3  # 城市的心跳:火光期攻速+30%(加法池)
@@ -351,10 +351,14 @@ func _die() -> void:
 # ============================================================
 # 护盾
 # ============================================================
-# 排队充能:同一时间只有一个盾在充(编号小的先),充完才轮到下一个。
-# 三层盾同时回会太超标(用户拍板)。
+# 排队充能:同一时间只充一个。顺序=绿盾优先(从上往下:槽1→槽2),基础盾(槽0)垫底——
+# 否则基础盾5s抢跑会变成"棕盾循环挨打",绿盾被饿死(实测踩过坑)。
 func _update_shield_recharge(delta: float) -> void:
-	for i in shield_recharge.size():
+	var order: Array[int] = []
+	for i in range(1, shield_recharge.size()):
+		order.append(i)
+	order.append(0)
+	for i in order:
 		if shield_ready[i]:
 			continue
 		shield_recharge[i] = maxf(shield_recharge[i] - delta, 0.0)
@@ -362,8 +366,20 @@ func _update_shield_recharge(delta: float) -> void:
 			shield_ready[i] = true
 			# 充能完成的绿光一闪:没有它,"盾回来了"只能靠猜
 			_spawn_oneshot_particles(SHIELD_READY_EFFECT_SCENE)
+			_realign_guard_slot()  # 绿盾充好了就顶到基础盾前面挨打
 			shield_changed.emit()
 		break  # 只充这一个,后面的排队
+
+## 守护槽对齐:任何时刻都让编号最大的就绪盾顶在前面(绿盾先挨打,基础盾垫后)。
+## 只换"举着哪个",不消耗任何东西;层数变化和充能完成后都要过一遍。
+func _realign_guard_slot() -> void:
+	if not is_guarding:
+		return
+	var best := _first_ready_shield()
+	if best != -1 and best != guard_slot:
+		guard_slot = best
+		shield_changed.emit()
+
 
 # 开盾取"编号最大的就绪盾":绿盾先顶上去挨打,最上面的基础盾留到最后。
 func _first_ready_shield() -> int:
@@ -404,6 +420,10 @@ func _break_guard_shield() -> void:
 		if guard_slot >= 1:
 			# 绿盾(森林附加层)碎裂:绿色方粒子从主角身上向上飘散
 			_spawn_oneshot_particles(GREEN_BREAK_EFFECT_SCENE)
+		# 破盾打断恢复:所有还在充能的盾进度清空,从头再充(挨打会拖垮整条恢复线)
+		for i in shield_ready.size():
+			if not shield_ready[i]:
+				shield_recharge[i] = shield_recharge_time(i)
 	is_guarding = false
 	guard_slot = -1
 	_refresh_shield_visual()
@@ -478,11 +498,12 @@ func _apply_shield_layout() -> void:
 
 ## 每个盾位自己的充能时长:槽0(基础)=5s,槽1/2(绿盾)=3倍慢;花再整体×3。
 func shield_recharge_time(slot: int = 0) -> float:
+	# 减速效果是加法叠(各+10s),不做乘法:基础5/绿盾15/花15/花+绿=25(不是45)。
 	var time := SHIELD_RECHARGE_TIME
 	if slot >= 1:
-		time *= GREEN_RECHARGE_MULT
+		time += GREEN_RECHARGE_EXTRA
 	if has_buff(&"Flower"):
-		time *= FLOWER_RECHARGE_MULT
+		time += FLOWER_RECHARGE_EXTRA
 	return time
 
 
@@ -490,8 +511,7 @@ func shield_recharge_time(slot: int = 0) -> float:
 ## 蜘蛛卵随 buff 出现/收回。
 func _on_buffs_changed(_id: StringName) -> void:
 	_apply_shield_layout()
-	if guard_slot >= shield_ready.size():
-		guard_slot = shield_ready.size() - 1
+	_realign_guard_slot()  # 层数变了(比如中途拿到森林):绿盾要立刻顶到前面
 	if not has_buff(&"CopperLamp"):
 		_lamp_energy = 0
 		_lamp_fire_left = 0.0

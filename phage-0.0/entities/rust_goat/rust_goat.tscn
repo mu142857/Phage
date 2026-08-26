@@ -682,7 +682,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7lmhp"]
-size = Vector2(90, 28)
+size = Vector2(90, 26)
 
 [node name="RustGOAT" type="CharacterBody2D" unique_id=2060703585]
 z_index = 10
@@ -752,7 +752,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ElbowStrikeHitbox" unique_id=2042074938]
-position = Vector2(1, -14)
+position = Vector2(1, -13)
 shape = SubResource("RectangleShape2D_7lmhp")
 debug_color = Color(0.35253903, 0.4822746, 1, 0.1)
 

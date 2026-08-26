@@ -298,6 +298,48 @@ animations = [{
 "texture": SubResource("AtlasTexture_wtxio")
 }, {
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_mx56h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tboik")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d5tvl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y8jc2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x2yv7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_byxom")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wtxio")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mx56h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tboik")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d5tvl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y8jc2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x2yv7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_byxom")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wtxio")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_atq3r")
 }, {
 "duration": 1.0,
@@ -577,8 +619,9 @@ script = ExtResource("1_o0g4r")
 light_mask = 0
 material = SubResource("ShaderMaterial_rbcv2")
 sprite_frames = SubResource("SpriteFrames_useyf")
-animation = &"Idle"
-frame_progress = 0.44218782
+animation = &"Battlecry"
+frame = 29
+frame_progress = 1.0
 offset = Vector2(0, -14.5)
 
 [node name="StateMachine" type="Node" parent="." unique_id=366777419]

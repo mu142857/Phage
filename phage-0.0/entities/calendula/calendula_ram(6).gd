@@ -62,13 +62,13 @@ func process(delta: float) -> void:
 	var side: int = monster.side if "side" in monster else 1
 	match stage:
 		0:  # 撤离：缓慢朝本侧上角飘出屏幕（整个贴图完全离屏才算）
-			var target := Vector2(float(side) * (off_screen_x + 8.0), exit_y)
+			var target := Vector2(_center() + float(side) * (off_screen_x + 8.0), exit_y)
 			var to_target := target - monster.global_position
 			if to_target.length() <= exit_speed * delta:
 				monster.global_position = target
 			else:
 				monster.global_position += to_target.normalized() * exit_speed * delta
-			if absf(monster.global_position.x) >= off_screen_x:
+			if absf(monster.global_position.x - _center()) >= off_screen_x:
 				_next_stage(1)
 		1:  # 屏外整备：短停后换边 + 摆到对侧屏外的航线起点
 			if stage_time >= pre_sweep_wait:
@@ -76,7 +76,7 @@ func process(delta: float) -> void:
 				if monster.has_method("set_side"):
 					monster.set_side(new_side)
 				sweep_dir = -float(new_side)  # 新边在左(-1)就从左往右扫，反之亦然
-				monster.global_position = Vector2(-sweep_dir * (off_screen_x + 8.0), sweep_y)
+				monster.global_position = Vector2(_center() - sweep_dir * (off_screen_x + 8.0), sweep_y)
 				sweep_speed = sweep_speed_start
 				_prepare_drop_queue()
 				if is_instance_valid(ani_2d):
@@ -91,14 +91,14 @@ func process(delta: float) -> void:
 			_drop_bombs_passed()
 			if not damage_applied:
 				_try_damage_player()
-			if monster.global_position.x * sweep_dir >= off_screen_x:
+			if (monster.global_position.x - _center()) * sweep_dir >= off_screen_x:
 				Game.stop_shake()
 				_next_stage(3)
 		3:  # 清网留白：在屏幕外老实待够 off_screen_wait 秒再回场
 			if stage_time >= off_screen_wait:
 				# 扫完落在对侧屏外，直接（屏外无感）挪到自己新边的屏外入口，
 				# Idle 从自己那边正脸滑进来——不许倒着横穿全场回家，很诡异
-				monster.global_position = Vector2(float(side) * (off_screen_x + 8.0), return_y)
+				monster.global_position = Vector2(_center() + float(side) * (off_screen_x + 8.0), return_y)
 				stage = -1  # 防止重复问大脑
 				if monster.has_method("get_next_attack_state"):
 					change_state(int(monster.get_next_attack_state()))
@@ -115,12 +115,19 @@ func _next_stage(next: int) -> void:
 	stage_time = 0.0
 
 
-# 投放队列按扫的方向排好序，扫过一条线丢一枚
+# 投放队列按扫的方向排好序，扫过一条线丢一枚（投放线以场地中心为原点，入队转成世界 x）
 func _prepare_drop_queue() -> void:
-	_drop_queue = bomb_drop_xs.duplicate()
+	_drop_queue.clear()
+	for x in bomb_drop_xs:
+		_drop_queue.append(_center() + x)
 	_drop_queue.sort()
 	if sweep_dir < 0.0:
 		_drop_queue.reverse()
+
+
+# 场地中心 x（蛛网森林=0，0~160 的房间=80），出屏/航线判定都以它为原点
+func _center() -> float:
+	return monster.center_x if "center_x" in monster else 0.0
 
 
 func _drop_bombs_passed() -> void:

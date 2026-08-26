@@ -69,7 +69,8 @@ func process(delta: float) -> void:
 
 	# 横向：慢悠悠飘回自己半场的驻点，驻点上叠慢速左右游移
 	var side: int = monster.side if "side" in monster else 1
-	var target_x: float = float(side) * hover_home_x + sin(_time * wander_speed) * wander_amplitude
+	var center: float = monster.center_x if "center_x" in monster else 0.0
+	var target_x: float = center + float(side) * hover_home_x + sin(_time * wander_speed) * wander_amplitude
 	var min_x: float = monster.bound_min_x if "bound_min_x" in monster else 10.0
 	var max_x: float = monster.bound_max_x if "bound_max_x" in monster else 150.0
 	target_x = clampf(target_x, min_x, max_x)

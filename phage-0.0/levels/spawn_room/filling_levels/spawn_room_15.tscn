@@ -3,6 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://bukvrjqnm7r0i" path="res://levels/spawn_room/spawn_room_filling_levels_background/15.png" id="1_bg"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
 [ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
+[ext_resource type="PackedScene" uid="uid://m3vsfg3834f7" path="res://entities/bloodworm/bloodworm.tscn" id="4_worm"]
+[ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="5_intro"]
+[ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="6_dreamend"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_8kt16"]
 
@@ -62,3 +65,16 @@ spawn_offset = Vector2(7, 8)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorLeft" unique_id=819680018]
 position = Vector2(-2.5, 10)
 shape = SubResource("RectangleShape2D_door_side")
+
+[node name="Bloodworm" parent="." unique_id=206008735 instance=ExtResource("4_worm")]
+position = Vector2(34.5, 80)
+
+[node name="BossIntro" parent="." unique_id=998340085 instance=ExtResource("5_intro")]
+title_text = "伤口里的新住客"
+boss_name_text = "小红丝虫"
+auto_start = false
+card_animation = &"Battlecry"
+
+[node name="DreamEnd" parent="." unique_id=136661337 instance=ExtResource("6_dreamend")]
+position = Vector2(210, 45)
+watch_path = NodePath("../Bloodworm")

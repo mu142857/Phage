@@ -141,7 +141,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aggro"]
-size = Vector2(40, 30)
+size = Vector2(40, 10)
 
 [node name="SpikeTentacle" type="CharacterBody2D" unique_id=799252900]
 collision_layer = 4
@@ -168,7 +168,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=1152518089]
-position = Vector2(0, -8)
+position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_aggro")
 debug_color = Color(0, 0.6, 0.7, 0)
 

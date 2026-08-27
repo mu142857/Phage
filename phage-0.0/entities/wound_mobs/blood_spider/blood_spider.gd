@@ -1,38 +1,36 @@
-# 血蛛：地面巡逻 + 发现玩家追击 + 近距离跳扑 + 接触伤害。
-# 逻辑参考 entities/spider/spider.gd 的 POUNCE 变体，但用 AnimatedSprite2D 而非程序腿。
-# 动画名约定：Walk(循环，巡逻/追击通用)、Attack(跳扑腾空时)。
+# 血蛛：本关的接触伤害坦克(450血)。Idle 时完全不动；发现玩家后不停地小步
+# 走位——每段 2/3 概率朝玩家走、1/3 概率反向走，段与段之间不停顿，一直摇。
+# 速度不快(主角跑速的 1/3 左右)，靠血厚和贴身蹭人恶心人。
+# 翻转包括一切判定：AnimatedSprite2D 和 AttackCheck 的 scale.x 一起取反。
+# 动画名：Idle(站定循环)、Move(移动循环)。
 extends CharacterBody2D
 
 const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/wound_mobs/blood_spider/blood_spider_death.tscn")
 
-@export var max_health: int = 70
-@export var health: int = 70
+@export var max_health: int = 450
+@export var health: int = 450
 @export var gravity: float = 850.0
-@export var walk_speed: float = 18.0
-@export var chase_speed: float = 32.0
-@export var patrol_range: float = 30.0
+@export var move_speed: float = 23.0       # 约主角 RUN_SPEED(70) 的 1/3
 @export var collision_damage: int = 6
 @export var contact_damage_cooldown: float = 0.5
 @export var knockback_speed: float = 120.0
 @export var knockback_duration: float = 0.1
-## 贴图默认头朝右；素材头朝左就勾上
-@export var sprite_faces_left: bool = false
+## 贴图默认头朝左；素材头朝右就取消勾选
+@export var sprite_faces_left: bool = true
 
-@export_group("Pounce")
-@export var pounce_cooldown: float = 2.5
-@export var pounce_range: float = 45.0
-@export var pounce_speed_x_min: float = 40.0
-@export var pounce_speed_x_max: float = 70.0
-@export var pounce_jump_min: float = 160.0
-@export var pounce_jump_max: float = 220.0
+@export_group("Move Cycle")
+@export var approach_chance: float = 0.667  # 朝玩家走的概率(其余是反向走)
+@export var move_time_min: float = 0.6      # 每段位移的时长区间(段间不停顿)
+@export var move_time_max: float = 1.2
 
-var _spawn_x: float = 0.0
+enum Phase { IDLE, MOVE }
+
+var _phase: Phase = Phase.IDLE
 var _dir: float = 1.0
+var _phase_timer: float = 0.0
 var _contact_cd: float = 0.0
 var _knock_left: float = 0.0
 var _knock_vx: float = 0.0
-var _pounce_cd: float = 0.0
-var _pouncing: bool = false
 
 @onready var ani_2d: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 @onready var hit_effect_player: AnimationPlayer = get_node_or_null("HitEffectPlayer") as AnimationPlayer
@@ -45,7 +43,6 @@ func _ready() -> void:
 	health = clampi(health, 0, max_health)
 	if health <= 0:
 		health = max_health
-	_spawn_x = global_position.x
 	if ani_2d != null and ani_2d.material != null:
 		ani_2d.material = ani_2d.material.duplicate()
 		if ani_2d.material is ShaderMaterial:
@@ -58,56 +55,47 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	_contact_cd = maxf(0.0, _contact_cd - delta)
-	_pounce_cd = maxf(0.0, _pounce_cd - delta)
+	_phase_timer = maxf(0.0, _phase_timer - delta)
 
 	if _knock_left > 0.0:
 		_knock_left = maxf(0.0, _knock_left - delta)
 		velocity.x = _knock_vx
 		if _knock_left <= 0.0:
 			velocity.x = 0.0
-	elif _pouncing:
-		# 腾空段：保持起跳时的速度，落地即结束
-		_play_anim(&"Attack")
-		if is_on_floor() and velocity.y >= 0.0:
-			_pouncing = false
-			velocity.x = 0.0
-			_pounce_cd = pounce_cooldown
 	else:
-		var player := _get_detected_player()
-		if player != null:
-			var dx: float = player.global_position.x - global_position.x
-			if _pounce_cd <= 0.0 and is_on_floor() and absf(dx) <= pounce_range:
-				_start_pounce(dx)
-			elif absf(dx) > 4.0:
-				_dir = signf(dx)
-				velocity.x = _dir * chase_speed
-			else:
+		match _phase:
+			Phase.IDLE:
 				velocity.x = 0.0
-		else:
-			if global_position.x > _spawn_x + patrol_range:
-				_dir = -1.0
-			elif global_position.x < _spawn_x - patrol_range:
-				_dir = 1.0
-			elif is_on_wall():
-				_dir = -_dir
-			velocity.x = _dir * walk_speed
-		_play_anim(&"Walk")
-		_update_facing()
+				_play_anim(&"Idle")
+				if _get_detected_player() != null:
+					_decide_move()
+			Phase.MOVE:
+				velocity.x = _dir * move_speed
+				_play_anim(&"Move")
+				# 一段走完(或撞墙)直接摇下一段，不停顿
+				if is_on_wall() or _phase_timer <= 0.0:
+					if _get_detected_player() != null:
+						_decide_move()
+					else:
+						_phase = Phase.IDLE
 
 	move_and_slide()
 	_try_contact_damage()
 
 
-func _start_pounce(dx: float) -> void:
-	var jump_dir: float = signf(dx)
-	if jump_dir == 0.0:
-		jump_dir = _dir
-	_dir = jump_dir
-	_update_facing()
-	_pouncing = true
-	velocity = Vector2(
-		jump_dir * randf_range(pounce_speed_x_min, pounce_speed_x_max),
-		-randf_range(pounce_jump_min, pounce_jump_max))
+# 2/3 朝玩家走，1/3 反向走，走一段
+func _decide_move() -> void:
+	var player := _get_detected_player()
+	if player == null:
+		_phase = Phase.IDLE
+		return
+	var to_player: float = signf(player.global_position.x - global_position.x)
+	if to_player == 0.0:
+		to_player = 1.0
+	_dir = to_player if randf() < approach_chance else -to_player
+	_apply_facing()
+	_phase = Phase.MOVE
+	_phase_timer = randf_range(move_time_min, move_time_max)
 
 
 func take_damage(value: int) -> void:
@@ -156,9 +144,15 @@ func _get_detected_player() -> Node2D:
 	return null
 
 
-func _update_facing() -> void:
+# 翻转=贴图和判定一起镜像(素材默认朝左)
+func _apply_facing() -> void:
+	var flip: float = _dir * (-1.0 if sprite_faces_left else 1.0)
+	if flip == 0.0:
+		flip = 1.0
 	if ani_2d != null:
-		ani_2d.flip_h = (_dir < 0.0) != sprite_faces_left
+		ani_2d.scale.x = absf(ani_2d.scale.x) * flip
+	if attack_check != null:
+		attack_check.scale.x = absf(attack_check.scale.x) * flip
 
 
 func _play_anim(anim: StringName) -> void:

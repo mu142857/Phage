@@ -3,6 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://cyvny2myb3sqg" path="res://levels/spawn_room/spawn_room_filling_levels_background/14.png" id="1_bg"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
 [ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
+[ext_resource type="PackedScene" uid="uid://c1tfhs4bg3xf3" path="res://entities/wound_mobs/blood_mage/blood_mage.tscn" id="4_rwmg3"]
+[ext_resource type="PackedScene" uid="uid://br78ko2n4l2p8" path="res://entities/wound_mobs/spike_tentacle/spike_tentacle.tscn" id="5_puhwq"]
+[ext_resource type="PackedScene" uid="uid://bn2bfybne7ufp" path="res://entities/wound_mobs/spitter_tentacle/spitter_tentacle.tscn" id="6_puhwq"]
+[ext_resource type="PackedScene" uid="uid://c7rvd26m4p7sp" path="res://entities/wound_mobs/blood_maggot/blood_maggot.tscn" id="7_e632e"]
+[ext_resource type="PackedScene" uid="uid://rto2ii4ps3nr" path="res://entities/wound_mobs/blood_spider/blood_spider.tscn" id="8_ws12k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pc8hn"]
 size = Vector2(128, 10)
@@ -119,3 +124,23 @@ spawn_offset = Vector2(-16, -14)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorDown" unique_id=2052647255]
 position = Vector2(0, 3.5)
 shape = SubResource("RectangleShape2D_door_down")
+
+[node name="Monster" type="Node2D" parent="." unique_id=2058809114]
+
+[node name="BloodMage" parent="Monster" unique_id=1044644046 instance=ExtResource("4_rwmg3")]
+position = Vector2(106, 38)
+
+[node name="SpikeTentacle" parent="Monster" unique_id=799252900 instance=ExtResource("5_puhwq")]
+position = Vector2(65, 60)
+
+[node name="SpikeTentacle2" parent="Monster" unique_id=244648533 instance=ExtResource("5_puhwq")]
+position = Vector2(72, 80)
+
+[node name="SpitterTentacle" parent="Monster" unique_id=1962045138 instance=ExtResource("6_puhwq")]
+position = Vector2(150, 38)
+
+[node name="BloodMaggot" parent="Monster" unique_id=1424852672 instance=ExtResource("7_e632e")]
+position = Vector2(115, 60)
+
+[node name="BloodSpider" parent="Monster" unique_id=357900899 instance=ExtResource("8_ws12k")]
+position = Vector2(110, 80)

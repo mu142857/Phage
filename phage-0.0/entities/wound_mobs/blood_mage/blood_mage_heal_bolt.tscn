@@ -1,9 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://entities/wound_mobs/blood_mage/blood_mage_bolt.gd" id="1_script"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_bolt"]
-size = Vector2(2, 2)
+[ext_resource type="Script" path="res://entities/wound_mobs/blood_mage/blood_mage_heal_bolt.gd" id="1_script"]
 
 [sub_resource type="Gradient" id="Gradient_alpha"]
 offsets = PackedFloat32Array(0, 0.2, 0.8, 1)
@@ -28,17 +25,12 @@ gravity = Vector3(0, 0, 0)
 scale_min = 0.8
 scale_max = 1.2
 scale_curve = SubResource("CurveTexture_grow")
-color = Color(1, 0.78, 0.42, 1)
+color = Color(0.55, 0.85, 1, 1)
 color_ramp = SubResource("GradientTexture1D_alpha")
 
-[node name="BloodMageBolt" type="Area2D"]
+[node name="BloodMageHealBolt" type="Node2D"]
 z_index = 10
-collision_layer = 0
-collision_mask = 2
 script = ExtResource("1_script")
-
-[node name="ScreenNotifier" type="VisibleOnScreenNotifier2D" parent="."]
-rect = Rect2(-6, -6, 12, 12)
 
 [node name="TrailParticles" type="GPUParticles2D" parent="."]
 z_index = -2
@@ -48,8 +40,4 @@ process_material = SubResource("ParticleProcessMaterial_trail")
 
 [node name="Square" type="Polygon2D" parent="."]
 polygon = PackedVector2Array(-1, -1, 1, -1, 1, 1, -1, 1)
-color = Color(1, 0.25, 0.25, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_bolt")
-debug_color = Color(0.9, 0.2, 0.2, 0)
+color = Color(0.35, 0.9, 0.45, 1)

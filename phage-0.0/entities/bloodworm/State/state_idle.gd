@@ -2,8 +2,8 @@
 # 决策全在 bloodworm.gd 的 get_next_attack_state()，别在这写打法。
 extends BasicState
 
-@export var idle_time_full_health: float = 1.8
-@export var idle_time_low_health: float = 0.9
+@export var idle_time_full_health: float = 2.2
+@export var idle_time_low_health: float = 1.2
 
 @onready var ani_2d: AnimatedSprite2D = $"../../AnimatedSprite2D"
 @onready var monster: CharacterBody2D = $"../.."

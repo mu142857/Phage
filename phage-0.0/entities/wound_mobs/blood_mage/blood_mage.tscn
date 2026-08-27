@@ -1,7 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://c1tfhs4bg3xf3"]
 
-[ext_resource type="Script" path="res://entities/wound_mobs/blood_mage/blood_mage.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://clmmx6img6c03" path="res://entities/wound_mobs/blood_mage/blood_mage.gd" id="1_script"]
 [ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_shader"]
+[ext_resource type="Texture2D" uid="uid://bq5dd3m8alo0s" path="res://entities/wound_mobs/blood_mage/blood_mage-Sheet.png" id="3_0bt0c"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hurt"]
 resource_local_to_scene = true
@@ -9,7 +10,114 @@ shader = ExtResource("2_shader")
 shader_parameter/Enabled = false
 shader_parameter/Tint = Color(0.784, 0.501, 0.495, 1)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_rutkc"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(0, 0, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_psvfu"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(20, 0, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0jhyx"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(40, 0, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_50ts2"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(60, 0, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iac2o"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(80, 0, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k7t4f"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(0, 17, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ro7s"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(20, 17, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yufuk"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(40, 17, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0bt0c"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(80, 17, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jwqr1"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(0, 34, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwngq"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(20, 34, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7jtu3"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(40, 34, 20, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6x6l7"]
+atlas = ExtResource("3_0bt0c")
+region = Rect2(0, 51, 20, 17)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_empty"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rutkc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_psvfu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0jhyx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_50ts2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iac2o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k7t4f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ro7s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yufuk")
+}],
+"loop": false,
+"name": &"Attack",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0bt0c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jwqr1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wwngq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7jtu3")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6x6l7")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 10.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(8, 14)
@@ -52,42 +160,34 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aggro"]
-size = Vector2(110, 50)
+size = Vector2(372, 339)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_contact"]
-size = Vector2(8, 14)
-
-[node name="BloodMage" type="CharacterBody2D"]
+[node name="BloodMage" type="CharacterBody2D" unique_id=1044644046]
 collision_layer = 4
 script = ExtResource("1_script")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=615788806]
 material = SubResource("ShaderMaterial_hurt")
-position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_empty")
+animation = &"Attack"
+frame = 6
+offset = Vector2(0, -6.5)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1521309596]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_body")
 debug_color = Color(0, 0.6, 0.7, 0)
 
-[node name="HitEffectPlayer" type="AnimationPlayer" parent="."]
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=1476755356]
 libraries/ = SubResource("AnimationLibrary_hit")
 
-[node name="PlayerCheck" type="Area2D" parent="."]
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=1621898939]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 6
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck"]
-position = Vector2(0, -10)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=2048643665]
 shape = SubResource("RectangleShape2D_aggro")
 debug_color = Color(0, 0.6, 0.7, 0)
 
-[node name="AttackCheck" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackCheck"]
-position = Vector2(0, -7)
-shape = SubResource("RectangleShape2D_contact")
-debug_color = Color(0, 0.6, 0.7, 0)
+[node name="Muzzle" type="Node2D" parent="." unique_id=163857223]
+position = Vector2(-7, -7)

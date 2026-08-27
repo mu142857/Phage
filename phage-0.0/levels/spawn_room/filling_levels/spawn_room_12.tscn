@@ -1,13 +1,16 @@
 [gd_scene format=3 uid="uid://cfj2r22cvcjt8"]
 
-[ext_resource type="Texture2D" path="res://levels/spawn_room/spawn_room_filling_levels_background/12_10.png" id="1_bg"]
-[ext_resource type="Texture2D" path="res://levels/spawn_room/spawn_room_filling_levels_background/12_0.png" id="5_p0"]
-[ext_resource type="Texture2D" path="res://levels/spawn_room/spawn_room_filling_levels_background/12_2.png" id="6_p2"]
-[ext_resource type="Texture2D" path="res://levels/spawn_room/spawn_room_filling_levels_background/12_4.png" id="7_p4"]
-[ext_resource type="Texture2D" path="res://levels/spawn_room/spawn_room_filling_levels_background/12_6.png" id="8_p6"]
+[ext_resource type="Texture2D" uid="uid://dyllmdi6majon" path="res://levels/spawn_room/spawn_room_filling_levels_background/12_10.png" id="1_bg"]
 [ext_resource type="Script" uid="uid://6bybplvddrd7" path="res://levels/spawn_room/filling_levels/filling_room.gd" id="2_script"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="3_player"]
 [ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="4_auto"]
+[ext_resource type="Texture2D" uid="uid://uyw5rh65yb8f" path="res://levels/spawn_room/spawn_room_filling_levels_background/12_0.png" id="5_p0"]
+[ext_resource type="Texture2D" uid="uid://64i5h715qw47" path="res://levels/spawn_room/spawn_room_filling_levels_background/12_2.png" id="6_p2"]
+[ext_resource type="Texture2D" uid="uid://dpgqmgkskfswk" path="res://levels/spawn_room/spawn_room_filling_levels_background/12_4.png" id="7_p4"]
+[ext_resource type="Texture2D" uid="uid://bfyxskax80yuj" path="res://levels/spawn_room/spawn_room_filling_levels_background/12_6.png" id="8_p6"]
+[ext_resource type="PackedScene" uid="uid://br78ko2n4l2p8" path="res://entities/wound_mobs/spike_tentacle/spike_tentacle.tscn" id="9_hl28t"]
+[ext_resource type="PackedScene" uid="uid://bn2bfybne7ufp" path="res://entities/wound_mobs/spitter_tentacle/spitter_tentacle.tscn" id="10_fnui6"]
+[ext_resource type="PackedScene" uid="uid://rto2ii4ps3nr" path="res://entities/wound_mobs/blood_spider/blood_spider.tscn" id="11_fnui6"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_7mnmy"]
 
@@ -27,43 +30,43 @@ size = Vector2(2, 16)
 script = ExtResource("2_script")
 camera_limit_right = 271
 
-[node name="0point0xMoving" type="Parallax2D" parent="."]
+[node name="0point0xMoving" type="Parallax2D" parent="." unique_id=53035760]
 scroll_scale = Vector2(0, 0)
 scroll_offset = Vector2(-55.5, 0)
 repeat_size = Vector2(271, 0)
 repeat_times = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="0point0xMoving"]
+[node name="Sprite2D" type="Sprite2D" parent="0point0xMoving" unique_id=1612967806]
 texture = ExtResource("5_p0")
 centered = false
 
-[node name="0point2xMoving" type="Parallax2D" parent="."]
+[node name="0point2xMoving" type="Parallax2D" parent="." unique_id=1200943895]
 scroll_scale = Vector2(0.2, 0.2)
 scroll_offset = Vector2(-44.4, 0)
 repeat_size = Vector2(271, 0)
 repeat_times = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving"]
+[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving" unique_id=845289159]
 texture = ExtResource("6_p2")
 centered = false
 
-[node name="0point4xMoving" type="Parallax2D" parent="."]
+[node name="0point4xMoving" type="Parallax2D" parent="." unique_id=2040977421]
 scroll_scale = Vector2(0.4, 0.4)
 scroll_offset = Vector2(-33.3, 0)
 repeat_size = Vector2(271, 0)
 repeat_times = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving"]
+[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving" unique_id=174144937]
 texture = ExtResource("7_p4")
 centered = false
 
-[node name="0point6xMoving" type="Parallax2D" parent="."]
+[node name="0point6xMoving" type="Parallax2D" parent="." unique_id=101440790]
 scroll_scale = Vector2(0.6, 0.6)
 scroll_offset = Vector2(-22.2, 0)
 repeat_size = Vector2(271, 0)
 repeat_times = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="0point6xMoving"]
+[node name="Sprite2D" type="Sprite2D" parent="0point6xMoving" unique_id=1745784737]
 texture = ExtResource("8_p6")
 centered = false
 
@@ -120,3 +123,20 @@ spawn_offset = Vector2(-7, 8)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorRight" unique_id=1742064694]
 position = Vector2(2, 10)
 shape = SubResource("RectangleShape2D_door_side")
+
+[node name="Monster" type="Node2D" parent="." unique_id=1292374818]
+
+[node name="SpikeTentacle" parent="Monster" unique_id=799252900 instance=ExtResource("9_hl28t")]
+position = Vector2(52, 80)
+
+[node name="SpikeTentacle3" parent="Monster" unique_id=2068828107 instance=ExtResource("9_hl28t")]
+position = Vector2(204, 80)
+
+[node name="SpitterTentacle" parent="Monster" unique_id=1962045138 instance=ExtResource("10_fnui6")]
+position = Vector2(111, 80)
+
+[node name="SpitterTentacle2" parent="Monster" unique_id=405590734 instance=ExtResource("10_fnui6")]
+position = Vector2(249, 80)
+
+[node name="BloodSpider" parent="Monster" unique_id=357900899 instance=ExtResource("11_fnui6")]
+position = Vector2(174, 80)

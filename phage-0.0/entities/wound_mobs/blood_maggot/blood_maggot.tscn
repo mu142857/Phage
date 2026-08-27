@@ -1,7 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://c7rvd26m4p7sp"]
 
-[ext_resource type="Script" path="res://entities/wound_mobs/blood_maggot/blood_maggot.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://d13xdaecx4o0b" path="res://entities/wound_mobs/blood_maggot/blood_maggot.gd" id="1_script"]
 [ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_shader"]
+[ext_resource type="Texture2D" uid="uid://bdg32k1bj0mre" path="res://entities/wound_mobs/blood_maggot/blood_maggot-Sheet.png" id="3_gf66t"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hurt"]
 resource_local_to_scene = true
@@ -9,7 +10,93 @@ shader = ExtResource("2_shader")
 shader_parameter/Enabled = false
 shader_parameter/Tint = Color(0.784, 0.501, 0.495, 1)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ceajl"]
+atlas = ExtResource("3_gf66t")
+region = Rect2(60, 0, 20, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ymkl"]
+atlas = ExtResource("3_gf66t")
+region = Rect2(80, 0, 20, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cyia1"]
+atlas = ExtResource("3_gf66t")
+region = Rect2(0, 11, 20, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mn66c"]
+atlas = ExtResource("3_gf66t")
+region = Rect2(20, 11, 20, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jla0r"]
+atlas = ExtResource("3_gf66t")
+region = Rect2(60, 11, 20, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fafxt"]
+atlas = ExtResource("3_gf66t")
+region = Rect2(80, 11, 20, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1qjy"]
+atlas = ExtResource("3_gf66t")
+region = Rect2(0, 22, 20, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gant"]
+atlas = ExtResource("3_gf66t")
+region = Rect2(20, 22, 20, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rr4an"]
+atlas = ExtResource("3_gf66t")
+region = Rect2(0, 0, 20, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lkwcu"]
+atlas = ExtResource("3_gf66t")
+region = Rect2(20, 0, 20, 11)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_empty"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ceajl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ymkl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cyia1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mn66c")
+}],
+"loop": false,
+"name": &"Attack",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jla0r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fafxt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1qjy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2gant")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rr4an")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lkwcu")
+}],
+"loop": true,
+"name": &"Move",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(14, 7)
@@ -52,42 +139,45 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aggro"]
-size = Vector2(100, 30)
+size = Vector2(67, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_contact"]
-size = Vector2(14, 7)
+size = Vector2(10, 9)
 
-[node name="BloodMaggot" type="CharacterBody2D"]
+[node name="BloodMaggot" type="CharacterBody2D" unique_id=1424852672]
 collision_layer = 4
 script = ExtResource("1_script")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1903462630]
 material = SubResource("ShaderMaterial_hurt")
-position = Vector2(0, -4)
+position = Vector2(0, 1)
 sprite_frames = SubResource("SpriteFrames_empty")
+animation = &"Idle"
+frame_progress = 0.015234371
+offset = Vector2(2, -5.5)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1460250576]
 position = Vector2(0, -3.5)
 shape = SubResource("RectangleShape2D_body")
 debug_color = Color(0, 0.6, 0.7, 0)
 
-[node name="HitEffectPlayer" type="AnimationPlayer" parent="."]
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=974197679]
 libraries/ = SubResource("AnimationLibrary_hit")
 
-[node name="PlayerCheck" type="Area2D" parent="."]
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=557261978]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck"]
-position = Vector2(0, -8)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=1390208944]
+position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_aggro")
 debug_color = Color(0, 0.6, 0.7, 0)
 
-[node name="AttackCheck" type="Area2D" parent="."]
+[node name="AttackCheck" type="Area2D" parent="." unique_id=671496908]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackCheck"]
-position = Vector2(0, -3.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackCheck" unique_id=58602979]
+position = Vector2(-2, -4.5)
 shape = SubResource("RectangleShape2D_contact")
 debug_color = Color(0, 0.6, 0.7, 0)

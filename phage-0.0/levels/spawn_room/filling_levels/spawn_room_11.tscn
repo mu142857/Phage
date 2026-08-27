@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://bhbqd5j86myaf"]
 
 [ext_resource type="Texture2D" uid="uid://jpynxdgmnedu" path="res://levels/spawn_room/spawn_room_filling_levels_background/11.png" id="1_bg"]
+[ext_resource type="PackedScene" uid="uid://c8pnajburl72k" path="res://interactive/Text/text.tscn" id="2_221av"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="3_0jfsy"]
 [ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
+[ext_resource type="PackedScene" uid="uid://c7rvd26m4p7sp" path="res://entities/wound_mobs/blood_maggot/blood_maggot.tscn" id="4_p555v"]
+[ext_resource type="PackedScene" uid="uid://br78ko2n4l2p8" path="res://entities/wound_mobs/spike_tentacle/spike_tentacle.tscn" id="5_7w5xj"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_wuuri"]
 
@@ -69,8 +73,22 @@ shape = SubResource("RectangleShape2D_221av")
 position = Vector2(47.5, 57)
 shape = SubResource("RectangleShape2D_0jfsy")
 
+[node name="Text1" parent="Walls" unique_id=1026677927 instance=ExtResource("2_221av")]
+position = Vector2(80, 25)
+
+[node name="Label" type="Label" parent="Walls/Text1" unique_id=1728225292]
+z_index = 100
+offset_left = -13.0
+offset_top = 3.0
+offset_right = 29.0
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
+theme_override_fonts/font = ExtResource("3_0jfsy")
+theme_override_font_sizes/font_size = 7
+text = "当心敌人"
+
 [node name="Player" parent="." unique_id=325554583 instance=ExtResource("2_player")]
-position = Vector2(20, 70)
+position = Vector2(77, 8)
 
 [node name="DoorRight" type="Area2D" parent="." unique_id=543534793]
 position = Vector2(157, 62)
@@ -98,3 +116,11 @@ require_velocity = Vector2(0, -1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorTop" unique_id=880582214]
 position = Vector2(0, -5.5)
 shape = SubResource("RectangleShape2D_door_top")
+
+[node name="Monsters" type="Node2D" parent="." unique_id=1410313569]
+
+[node name="BloodMaggot" parent="Monsters" unique_id=1424852672 instance=ExtResource("4_p555v")]
+position = Vector2(15, 80)
+
+[node name="SpikeTentacle" parent="Monsters" unique_id=799252900 instance=ExtResource("5_7w5xj")]
+position = Vector2(129, 80)

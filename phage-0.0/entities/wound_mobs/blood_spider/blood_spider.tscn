@@ -1,7 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://rto2ii4ps3nr"]
 
-[ext_resource type="Script" path="res://entities/wound_mobs/blood_spider/blood_spider.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://c1wau4kp5a7ot" path="res://entities/wound_mobs/blood_spider/blood_spider.gd" id="1_script"]
 [ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_shader"]
+[ext_resource type="Texture2D" uid="uid://mgwaewaac1x1" path="res://entities/wound_mobs/blood_spider/blood_spider-Sheet.png" id="3_ayga2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hurt"]
 resource_local_to_scene = true
@@ -9,10 +10,84 @@ shader = ExtResource("2_shader")
 shader_parameter/Enabled = false
 shader_parameter/Tint = Color(0.784, 0.501, 0.495, 1)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wnd4"]
+atlas = ExtResource("3_ayga2")
+region = Rect2(0, 0, 28, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l35q7"]
+atlas = ExtResource("3_ayga2")
+region = Rect2(28, 0, 28, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c552k"]
+atlas = ExtResource("3_ayga2")
+region = Rect2(56, 0, 28, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_677qh"]
+atlas = ExtResource("3_ayga2")
+region = Rect2(84, 0, 28, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xhye2"]
+atlas = ExtResource("3_ayga2")
+region = Rect2(112, 0, 28, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ggq5d"]
+atlas = ExtResource("3_ayga2")
+region = Rect2(0, 16, 28, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7pkun"]
+atlas = ExtResource("3_ayga2")
+region = Rect2(28, 16, 28, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3x8r1"]
+atlas = ExtResource("3_ayga2")
+region = Rect2(56, 16, 28, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gqr1k"]
+atlas = ExtResource("3_ayga2")
+region = Rect2(84, 16, 28, 16)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_empty"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3wnd4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l35q7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c552k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_677qh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xhye2")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ggq5d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7pkun")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3x8r1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gqr1k")
+}],
+"loop": true,
+"name": &"Move",
+"speed": 10.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(10, 8)
+size = Vector2(23, 10.5)
 
 [sub_resource type="Animation" id="Animation_hit"]
 resource_name = "HitFlash"
@@ -52,42 +127,44 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aggro"]
-size = Vector2(120, 40)
+size = Vector2(70, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_contact"]
-size = Vector2(10, 8)
+size = Vector2(20, 7)
 
-[node name="BloodSpider" type="CharacterBody2D"]
+[node name="BloodSpider" type="CharacterBody2D" unique_id=357900899]
 collision_layer = 4
 script = ExtResource("1_script")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=423966727]
 material = SubResource("ShaderMaterial_hurt")
-position = Vector2(0, -5)
 sprite_frames = SubResource("SpriteFrames_empty")
+animation = &"Move"
+frame_progress = 0.016691169
+offset = Vector2(-2, -8)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -4)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2101568066]
+position = Vector2(0, -5.25)
 shape = SubResource("RectangleShape2D_body")
 debug_color = Color(0, 0.6, 0.7, 0)
 
-[node name="HitEffectPlayer" type="AnimationPlayer" parent="."]
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=37533123]
 libraries/ = SubResource("AnimationLibrary_hit")
 
-[node name="PlayerCheck" type="Area2D" parent="."]
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=2029336542]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck"]
-position = Vector2(0, -10)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=917112497]
+position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_aggro")
 debug_color = Color(0, 0.6, 0.7, 0)
 
-[node name="AttackCheck" type="Area2D" parent="."]
+[node name="AttackCheck" type="Area2D" parent="." unique_id=1916662879]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackCheck"]
-position = Vector2(0, -4)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackCheck" unique_id=1204276591]
+position = Vector2(0, -3.5)
 shape = SubResource("RectangleShape2D_contact")
 debug_color = Color(0, 0.6, 0.7, 0)

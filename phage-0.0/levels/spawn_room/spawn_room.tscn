@@ -345,6 +345,20 @@ theme_override_fonts/font = ExtResource("14_0ro3w")
 theme_override_font_sizes/font_size = 7
 text = "按下←攻击"
 
+[node name="Text4" parent="Guide" unique_id=128754813 instance=ExtResource("13_hsfmc")]
+position = Vector2(564, 52)
+
+[node name="Label" type="Label" parent="Guide/Text4" unique_id=835974483]
+z_index = 100
+offset_left = -20.0
+offset_top = -17.0
+offset_right = 22.0
+offset_bottom = -9.0
+theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
+theme_override_fonts/font = ExtResource("14_0ro3w")
+theme_override_font_sizes/font_size = 7
+text = "按下↓下平台"
+
 [node name="DreamIntro" parent="." unique_id=2049734742 instance=ExtResource("90_dreamintro")]
 story_text_1 = "睡前翻书的时候，纸划破了手指。"
 story_text_2 = "那一夜的梦，是红色的。"

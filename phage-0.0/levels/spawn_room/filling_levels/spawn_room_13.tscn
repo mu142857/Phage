@@ -7,6 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://du481m66ggayk" path="res://levels/spawn_room/spawn_room_filling_levels_background/13_0.png" id="5_p0"]
 [ext_resource type="Texture2D" uid="uid://c1wcflgqp1155" path="res://levels/spawn_room/spawn_room_filling_levels_background/13_3.png" id="6_p3"]
 [ext_resource type="Texture2D" uid="uid://c8pvj5ns7qhdr" path="res://levels/spawn_room/spawn_room_filling_levels_background/13_6.png" id="7_p6"]
+[ext_resource type="PackedScene" uid="uid://rto2ii4ps3nr" path="res://entities/wound_mobs/blood_spider/blood_spider.tscn" id="8_bjdcw"]
+[ext_resource type="PackedScene" uid="uid://br78ko2n4l2p8" path="res://entities/wound_mobs/spike_tentacle/spike_tentacle.tscn" id="9_awmbu"]
+[ext_resource type="PackedScene" uid="uid://bn2bfybne7ufp" path="res://entities/wound_mobs/spitter_tentacle/spitter_tentacle.tscn" id="10_04ah6"]
+[ext_resource type="PackedScene" uid="uid://c7rvd26m4p7sp" path="res://entities/wound_mobs/blood_maggot/blood_maggot.tscn" id="11_04ah6"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_4g4gb"]
 
@@ -179,3 +183,29 @@ spawn_offset = Vector2(-7, 10)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorRight" unique_id=297612943]
 position = Vector2(3, 21)
 shape = SubResource("RectangleShape2D_door_side")
+
+[node name="Monster" type="Node2D" parent="." unique_id=407535962]
+
+[node name="BloodSpider" parent="Monster" unique_id=357900899 instance=ExtResource("8_bjdcw")]
+position = Vector2(127, 199)
+
+[node name="SpikeTentacle" parent="Monster" unique_id=799252900 instance=ExtResource("9_awmbu")]
+position = Vector2(70, 65)
+
+[node name="SpikeTentacle2" parent="Monster" unique_id=805993283 instance=ExtResource("9_awmbu")]
+position = Vector2(89, 84)
+
+[node name="SpikeTentacle3" parent="Monster" unique_id=10540803 instance=ExtResource("9_awmbu")]
+position = Vector2(93, 122)
+
+[node name="SpitterTentacle" parent="Monster" unique_id=1962045138 instance=ExtResource("10_04ah6")]
+position = Vector2(103, 105)
+
+[node name="SpitterTentacle2" parent="Monster" unique_id=1432165165 instance=ExtResource("10_04ah6")]
+position = Vector2(70, 179)
+
+[node name="BloodMaggot" parent="Monster" unique_id=1424852672 instance=ExtResource("11_04ah6")]
+position = Vector2(87, 44)
+
+[node name="BloodMaggot2" parent="Monster" unique_id=26143382 instance=ExtResource("11_04ah6")]
+position = Vector2(77, 141)

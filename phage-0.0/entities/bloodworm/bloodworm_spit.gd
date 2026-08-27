@@ -1,10 +1,9 @@
-# 喷吐触手的子弹。
-# 弹道：先向上扬起 → 过顶下坠，但下坠不像抛物线越来越陡，而是越来越缓，
-# 最后贴着一个高度平行地面滑翔(水平速度不变，垂直速度衰减到 0)。
-# 碰到玩家或墙壁(世界层，玩家站的那层)「立刻」爆(Explode)，但只有爆炸动画第
-# damage_frame_start~end 帧(0 起数，默认 4~5)有伤害判定；寿命耗尽也原地起爆。
-# 爆炸时震屏+方形粒子(alpha 头尾渐变，与其他粒子一致)。
-# 飞行时带半透明重影拖尾(player_jump_trail 同款做法)。
+# 红丝虫的吐弹。从喷吐触手的子弹复制出来单独调参(那个出膛位置低、滑翔段贴地就炸；
+# 红丝虫嘴高得多，同参数会悬在半空平飞不下来)。
+# 弹道差异：出膛上扬压低 + 下坠段保留更久；拉平比下坠快一点，
+# 让爆点往外多挪几格，但仍会沉到地面撞地爆，不做长距离水平滑翔。
+# 碰到玩家或墙壁/地面「立刻」爆(Explode)，伤害只在爆炸第 4~5 帧(0 起数)；
+# 寿命耗尽渐隐兜底(子弹不许凭空消失)。飞行带半透明重影拖尾。
 # 动画名：Flying(循环)、Explode(单次)。
 # setup 约定: setup(start_pos: Vector2, direction_x: float)  # 1=往右, -1=往左
 extends Area2D
@@ -17,13 +16,15 @@ const EXPLOSION_EFFECT_SCENE: PackedScene = preload("res://entities/wound_mobs/s
 @export var damage_frame_end: int = 5     # Explode 伤害窗口结束帧(含)
 @export var explode_shake: float = 2.0    # 爆炸震屏强度
 @export var wall_arm_time: float = 0.15   # 出膛保护:这段时间内碰墙不炸(防出生贴地直接炸)
+## 屏幕边界：什么都没碰到就一直飞，划出边界才删(不会凭空消失)
+@export var bounds: Rect2 = Rect2(-20, -20, 200, 130)
 
 @export_group("Trajectory")
-@export var horizontal_speed: float = 35.0  # 水平速度(全程不变)
-@export var launch_up_speed: float = 60.0   # 出膛上扬初速
+@export var horizontal_speed: float = 38.0  # 水平速度(全程不变)
+@export var launch_up_speed: float = 40.0   # 出膛上扬初速(比喷吐触手低,压低整条弧线)
 @export var fall_gravity: float = 200.0     # 上升减速/刚过顶下坠用的重力
-@export var peak_fall_speed: float = 30.0   # 下坠到这个速度后开始滑翔(不再加速)
-@export var glide_damp: float = 2.5         # 滑翔段垂直速度衰减率，越大越快拉平
+@export var peak_fall_speed: float = 55.0   # 下坠到这个速度才开始收(下坠段保留更久)
+@export var glide_damp: float = 1.5         # 拉平速率(略快=爆点水平往外多挪几格,但仍会落地)
 
 @export_group("Trail")
 @export var trail_interval: float = 0.05    # 每隔多久留一个残影
@@ -56,14 +57,6 @@ func _ready() -> void:
 	if flight_shape != null and explosion_shape != null:
 		explosion_shape.disabled = true
 		flight_shape.disabled = false
-	# 真正划出摄像机画面才删(不用世界坐标矩形，房间偏移也不会误删)
-	var notifier := get_node_or_null("ScreenNotifier") as VisibleOnScreenNotifier2D
-	if notifier != null and not notifier.screen_exited.is_connected(_on_screen_exited):
-		notifier.screen_exited.connect(_on_screen_exited)
-
-
-func _on_screen_exited() -> void:
-	queue_free()
 
 
 func setup(start_pos: Vector2, direction_x: float) -> void:
@@ -86,13 +79,17 @@ func _physics_process(delta: float) -> void:
 	if _fading:
 		# 渐隐中继续飞，不再有任何判定
 		_process_trajectory(delta)
+		if not bounds.has_point(global_position):
+			queue_free()
 		return
 
 	_elapsed += delta
 	_process_trajectory(delta)
 	_spawn_trail(delta)
 	_check_touch()
-	if _elapsed >= lifetime:
+	if not bounds.has_point(global_position):
+		queue_free()
+	elif _elapsed >= lifetime:
 		_start_fade_out()
 
 
@@ -107,8 +104,8 @@ func _start_fade_out() -> void:
 	tw.tween_callback(queue_free)
 
 
-# 上升段/初坠段吃重力；坠速到 peak_fall_speed 后转入滑翔段，
-# 垂直速度指数衰减到 0 → 平行地面飞
+# 上升段/下坠段吃重力；坠速到 peak_fall_speed 后进入收束段，
+# 垂直速度衰减但衰减前一直在沉——沉到地面就撞地爆
 func _process_trajectory(delta: float) -> void:
 	if not _gliding:
 		_vertical_speed += fall_gravity * delta
@@ -119,7 +116,7 @@ func _process_trajectory(delta: float) -> void:
 	global_position += Vector2(_dir * horizontal_speed, _vertical_speed) * delta
 
 
-# 飞行中碰到玩家或墙壁(mask=1|2，非玩家的 body 就是世界碰撞)：不直接掉血，立刻起爆
+# 飞行中碰到玩家或墙壁/地面(mask=1|2，非玩家的 body 就是世界碰撞)：立刻起爆
 func _check_touch() -> void:
 	for body in get_overlapping_bodies():
 		if body == null:

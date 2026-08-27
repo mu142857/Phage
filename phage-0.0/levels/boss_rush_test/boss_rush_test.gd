@@ -10,6 +10,8 @@ const BossIntroScript := preload("res://systems/boss_intro/boss_intro.gd")
 const ROSTER: Array[Dictionary] = [
 	{"name": "球克", "title": "羸弱之翼", "scene": "res://entities/cox/week_cox.tscn",
 		"pos": Vector2(80, 40)},
+	{"name": "小红丝虫", "title": "伤口里的新住客", "scene": "res://entities/bloodworm/bloodworm.tscn",
+		"pos": Vector2(34.5, 80), "card_animation": &"Battlecry"},
 	{"name": "阿克缇诺斯", "title": "摇篮里的心跳", "scene": "res://entities/actinos/actinos.tscn",
 		"pos": Vector2(80, 80), "card_animation": &"Battlecry"},
 	{"name": "老大史莱姆", "title": "锈都拳王", "scene": "res://entities/rust_goat/rust_goat.tscn",

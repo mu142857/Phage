@@ -17,6 +17,11 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cox/cox_death.ts
 ## 击退距离封顶:被打退到离玩家超过这个距离就停,防止连击把它推出屏幕外。
 ## 按玩家距离算而不是按相机范围算:相机有跟随滞后和边缘限位,不稳定。
 @export var knockback_max_distance: float = 70.0
+## 活动边界(以出生点为锚的方框):光按玩家距离封顶挡不住"玩家边打边逼近、
+## 一路把它推走"和竖直方向,这里再钉死一圈硬边界,击退/追击/悬停都出不去。
+@export var bound_extent_x: float = 60.0    # 离出生点最远水平距离
+@export var bound_extent_up: float = 36.0   # 出生点上方最多飘多高
+@export var bound_extent_down: float = 34.0 # 出生点下方最多压多低
 
 var _spawn_position: Vector2 = Vector2.ZERO
 var _time_passed: float = 0.0
@@ -60,6 +65,7 @@ func _physics_process(delta: float) -> void:
 		_knockback_time_left = maxf(0.0, _knockback_time_left - delta)
 		global_position += _knockback_velocity * delta
 		_clamp_knockback_distance()
+		_clamp_to_bounds()
 		if _knockback_time_left <= 0.0:
 			_knockback_velocity = Vector2.ZERO
 		return
@@ -83,6 +89,7 @@ func _physics_process(delta: float) -> void:
 		global_position = global_position.move_toward(hover_position, hover_follow_speed * delta)
 
 	_try_damage_player()
+	_clamp_to_bounds()
 
 func take_damage(value: int) -> void:
 	health = clampi(health - value, 0, max_health)
@@ -174,6 +181,14 @@ func _try_damage_player() -> void:
 func _play_hit_flash() -> void:
 	if is_instance_valid(hit_effect_player):
 		hit_effect_player.play(&"HitFlash")
+
+# 出生点锚定的硬边界:无论被打飞还是自己飞,都不许出这个框。
+func _clamp_to_bounds() -> void:
+	global_position.x = clampf(global_position.x,
+			_spawn_position.x - bound_extent_x, _spawn_position.x + bound_extent_x)
+	global_position.y = clampf(global_position.y,
+			_spawn_position.y - bound_extent_up, _spawn_position.y + bound_extent_down)
+
 
 # 被击退时不许飞出交战距离:超过上限就沿玩家方向拉回并终止本次击退。
 func _clamp_knockback_distance() -> void:

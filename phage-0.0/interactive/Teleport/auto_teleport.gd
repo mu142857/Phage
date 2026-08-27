@@ -42,7 +42,8 @@ func _physics_process(_delta: float) -> void:
 		return
 	if require_velocity != Vector2.ZERO and _player_inside.velocity.dot(require_velocity) <= 0.0:
 		return
-	Game.change_scene(scene_path, teleport_id, player_light)
+	# 自动过门只是走进隔壁房间:主角护盾/技能运行态原样继承,不重置。
+	Game.change_scene(scene_path, teleport_id, player_light, true)
 
 
 func activate() -> void:

@@ -15,6 +15,8 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/wound_mobs/blood
 @export var contact_damage_cooldown: float = 0.5
 @export var knockback_speed: float = 120.0
 @export var knockback_duration: float = 0.1
+@export var edge_probe_distance: float = 7.0  # 向前探地的水平距离(防走下平台/悬空)
+@export var wander_distance: float = 60.0  # 离出生点的最远游荡距离(防走出场景边缘)
 ## 贴图默认头朝左；素材头朝右就取消勾选
 @export var sprite_faces_left: bool = true
 
@@ -27,6 +29,7 @@ enum Phase { IDLE, MOVE }
 
 var _phase: Phase = Phase.IDLE
 var _dir: float = 1.0
+var _spawn_x: float = 0.0
 var _phase_timer: float = 0.0
 var _contact_cd: float = 0.0
 var _knock_left: float = 0.0
@@ -43,6 +46,7 @@ func _ready() -> void:
 	health = clampi(health, 0, max_health)
 	if health <= 0:
 		health = max_health
+	_spawn_x = global_position.x
 	if ani_2d != null and ani_2d.material != null:
 		ani_2d.material = ani_2d.material.duplicate()
 		if ani_2d.material is ShaderMaterial:
@@ -70,8 +74,16 @@ func _physics_process(delta: float) -> void:
 				if _get_detected_player() != null:
 					_decide_move()
 			Phase.MOVE:
-				velocity.x = _dir * move_speed
-				_play_anim(&"Move")
+				# 前面没地/超出游荡范围就原地站住等这段走完——
+				# 绝不把身子探出平台，也绝不溜出场景边缘
+				var out_of_range: bool = (_dir > 0.0 and global_position.x >= _spawn_x + wander_distance) \
+					or (_dir < 0.0 and global_position.x <= _spawn_x - wander_distance)
+				if _floor_ahead(_dir) and not out_of_range:
+					velocity.x = _dir * move_speed
+					_play_anim(&"Move")
+				else:
+					velocity.x = 0.0
+					_play_anim(&"Idle")
 				# 一段走完(或撞墙)直接摇下一段，不停顿
 				if is_on_wall() or _phase_timer <= 0.0:
 					if _get_detected_player() != null:
@@ -96,6 +108,16 @@ func _decide_move() -> void:
 	_apply_facing()
 	_phase = Phase.MOVE
 	_phase_timer = randf_range(move_time_min, move_time_max)
+
+
+# 向前下方打一条射线探地(只查世界层1)，探不到=前面是悬崖
+func _floor_ahead(dir: float) -> bool:
+	if dir == 0.0 or not is_on_floor():
+		return true
+	var space := get_world_2d().direct_space_state
+	var origin: Vector2 = global_position + Vector2(dir * edge_probe_distance, -1.0)
+	var query := PhysicsRayQueryParameters2D.create(origin, origin + Vector2(0.0, 6.0), 1)
+	return not space.intersect_ray(query).is_empty()
 
 
 func take_damage(value: int) -> void:

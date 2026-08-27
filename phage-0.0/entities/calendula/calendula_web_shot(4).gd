@@ -117,8 +117,13 @@ func _spit() -> void:
 		start = release.global_position
 
 	var side: int = monster.side if "side" in monster else 1
+	var cx: float = monster.center_x if "center_x" in monster else 0.0
 	var bolt := BOLT_SCENE.instantiate()
 	get_tree().current_scene.add_child(bolt)
+	# 出界删除线跟着场地中心走：boss rush 的房间中心是 80，
+	# 用默认 [-110,110] 会把飞进房间右半的弹当出界删掉（=子弹凭空消失）
+	bolt.set("bound_left", cx - 110.0)
+	bolt.set("bound_right", cx + 110.0)
 	if bolt.has_method("setup_arc"):
 		bolt.setup_arc(start, Vector2(-float(side) * bolt_vx, 0.0))
 	else:

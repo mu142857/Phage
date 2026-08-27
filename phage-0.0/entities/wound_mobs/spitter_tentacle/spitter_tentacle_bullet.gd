@@ -16,7 +16,7 @@ const EXPLOSION_EFFECT_SCENE: PackedScene = preload("res://entities/wound_mobs/s
 @export var damage_frame_start: int = 4   # Explode 伤害窗口起始帧(0 起数)
 @export var damage_frame_end: int = 5     # Explode 伤害窗口结束帧(含)
 @export var explode_shake: float = 2.0    # 爆炸震屏强度
-@export var wall_arm_time: float = 0.15   # 出膛保护:这段时间内碰墙不炸(防出生贴地直接炸)
+@export var wall_arm_time: float = 0.25   # 出膛保护:这段时间内碰墙不炸(触手本体也算墙，要飞离自己)
 
 @export_group("Trajectory")
 @export var horizontal_speed: float = 35.0  # 水平速度(全程不变)
@@ -36,6 +36,7 @@ var _gliding: bool = false
 var _active: bool = false
 var _exploded: bool = false
 var _fading: bool = false
+var _boom_done: bool = false
 var _damage_done: bool = false
 var _elapsed: float = 0.0
 var _explode_elapsed: float = 0.0
@@ -137,25 +138,34 @@ func _explode() -> void:
 		return
 	_exploded = true
 	_damage_done = false
+	_boom_done = false
 	_explode_elapsed = 0.0
 	# 换形状：关掉飞行小箱，开爆炸大圆(伤害帧在 0.4s 后，deferred 一帧来得及)
 	if flight_shape != null and explosion_shape != null:
 		flight_shape.set_deferred("disabled", true)
 		explosion_shape.set_deferred("disabled", false)
-	Game.shake_camera(explode_shake)
-	_spawn_explosion_effect()
+	# 注意：震屏和爆炸粒子不在这——起爆动画前几帧只是预警，真正的"炸"
+	# (震屏+粒子+伤害)都在伤害帧那一刻，见 _process_explosion
 	# monitoring 保持开着——伤害帧还要查重叠
 	if ani_2d != null and ani_2d.sprite_frames != null \
 			and ani_2d.sprite_frames.has_animation(&"Explode"):
 		ani_2d.play(&"Explode")
 	else:
-		# 没有 Explode 动画的兜底：按普通子弹处理，直接伤害+消失
+		# 没有 Explode 动画的兜底：按普通子弹处理，炸+伤害+消失
+		Game.shake_camera(explode_shake)
+		_spawn_explosion_effect()
 		_try_window_damage()
 		queue_free()
 
 
 func _process_explosion(delta: float) -> void:
 	_explode_elapsed += delta
+	# 到伤害帧那一刻才"真炸"：震屏+粒子(只来一次)
+	if not _boom_done and ani_2d != null and ani_2d.animation == &"Explode" \
+			and ani_2d.frame >= damage_frame_start:
+		_boom_done = true
+		Game.shake_camera(explode_shake)
+		_spawn_explosion_effect()
 	# 伤害窗口内每帧都判，命中一次就停(玩家窗口中途踩进来也会挨)
 	if not _damage_done and ani_2d != null and ani_2d.animation == &"Explode" \
 			and ani_2d.frame >= damage_frame_start and ani_2d.frame <= damage_frame_end:

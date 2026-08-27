@@ -44,6 +44,17 @@ var _flash_tween: Tween = null
 @onready var hit_shape: CollisionShape2D = $CollisionShape2D
 
 
+func _ready() -> void:
+	add_to_group("calendula_web")  # 召唤者死亡/关卡收尾时按组清场
+
+
+## 外部清场（金盏死亡等）：任何状态都可调，解除缠身并快速溶解
+func dissolve() -> void:
+	if mode == MODE_DEAD:
+		return
+	_break_web()
+
+
 ## 抛物线出弹：initial_velocity 是出手瞬间的速度（吐弹给横向，轰炸弹给零）
 func setup_arc(start_pos: Vector2, initial_velocity: Vector2) -> void:
 	global_position = start_pos

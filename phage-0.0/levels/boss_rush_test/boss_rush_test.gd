@@ -76,7 +76,17 @@ func _run() -> void:
 		_total_seconds += seconds
 		_results.append("%s %.1fs%s" % [entry["name"], seconds, "(跳过)" if _skip_used else ""])
 		Game.stop_shake()
+		_clear_leftovers()
 	_finish()
+
+
+# boss 之间清场：上一个 boss 的召唤物/网弹不许带进下一场（N 跳过时也生效）。
+# 缠身网被 free 会在 _exit_tree 里自动解除玩家缠身。
+func _clear_leftovers() -> void:
+	for group_name in ["monster", "calendula_web"]:
+		for m in get_tree().get_nodes_in_group(group_name):
+			if is_instance_valid(m):
+				(m as Node).queue_free()
 
 
 func _spawn(entry: Dictionary) -> Node2D:

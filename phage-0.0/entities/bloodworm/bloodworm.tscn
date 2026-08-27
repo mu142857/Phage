@@ -538,7 +538,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(38, 25)
+size = Vector2(32, 25)
 
 [sub_resource type="Animation" id="Animation_hit"]
 resource_name = "HitFlash"
@@ -588,7 +588,7 @@ script = ExtResource("1_boss")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2085660636]
 material = SubResource("ShaderMaterial_hurt")
 sprite_frames = SubResource("SpriteFrames_body")
-animation = &"Enter"
+animation = &"Attack"
 autoplay = "Enter"
 offset = Vector2(38, -45)
 

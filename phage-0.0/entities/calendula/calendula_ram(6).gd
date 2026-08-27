@@ -143,6 +143,9 @@ func _spawn_bomb(x: float) -> void:
 		return
 	var bolt := BOLT_SCENE.instantiate()
 	get_tree().current_scene.add_child(bolt)
+	# 出界删除线跟着场地中心走（默认 [-110,110] 在 0~160 的房里会秒删右侧投弹线的弹）
+	bolt.set("bound_left", _center() - 110.0)
+	bolt.set("bound_right", _center() + 110.0)
 	if bolt.has_method("setup_arc"):
 		bolt.setup_arc(Vector2(x, bomb_spawn_y), Vector2.ZERO)
 	else:

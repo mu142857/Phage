@@ -31,6 +31,7 @@ const HEAL_BOLT_SCENE: PackedScene = preload("res://entities/wound_mobs/blood_ma
 @export var pace_distance: float = 10.0    # 每步挪多远
 @export var retreat_distance: float = 30.0 # 主角近于这个距离→这步往反方向挪
 @export var edge_probe_distance: float = 6.0  # 向前探地距离(防走下平台)
+@export var wander_distance: float = 50.0  # 离出生点的最远徘徊距离(防退着退着出场景)
 
 @export_group("Cast")
 @export var cast_frame: int = 4            # Attack 动画的出手帧(0 起数)
@@ -40,6 +41,7 @@ enum Phase { IDLE, PACE, CAST, REST }
 
 var _phase: Phase = Phase.IDLE
 var _pace_side: float = -1.0               # 下一步往哪边(左右交替)
+var _spawn_x: float = 0.0
 var _target_x: float = 0.0
 var _pace_timeout: float = 0.0
 var _rest_timer: float = 0.0
@@ -62,6 +64,7 @@ func _ready() -> void:
 	health = clampi(health, 0, max_health)
 	if health <= 0:
 		health = max_health
+	_spawn_x = global_position.x
 	if muzzle != null:
 		_muzzle_base_x = absf(muzzle.position.x)
 	if ani_2d != null and ani_2d.material != null:
@@ -126,7 +129,9 @@ func _plan_next_step() -> void:
 	if not _floor_ahead(step_dir):
 		_start_cast()
 		return
-	_target_x = global_position.x + step_dir * pace_distance
+	# 目标点夹在游荡范围内，退着退着也不会溜出场景
+	_target_x = clampf(global_position.x + step_dir * pace_distance,
+		_spawn_x - wander_distance, _spawn_x + wander_distance)
 	_pace_timeout = 1.0  # 兜底：卡住也最多走 1 秒
 	_face_dir = step_dir
 	_apply_facing()

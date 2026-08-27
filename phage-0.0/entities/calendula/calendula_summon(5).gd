@@ -138,6 +138,7 @@ func _spawn_descending(scene: PackedScene, x: float) -> void:
 	if spider == null:
 		return
 	_minions.append(spider)
+	spider.add_to_group("calendula_minion")  # 金盏死亡时随主人一起清场
 	spider.z_index = 10
 	# 必须先设位置再入树：腿部脚本在 _ready 里以当前位置为锚，晚了会拉出残影
 	spider.position = Vector2(x, SPAWN_START_Y)

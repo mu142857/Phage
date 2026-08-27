@@ -402,7 +402,9 @@ func _apply_scene_camera_limits(scene: Node) -> void:
 	set_camera_limits(default_limit_left, default_limit_right, default_limit_top, default_limit_bottom)
 
 
-func change_scene(scene_path: String, teleport_id: int, player_light: bool) -> void:
+# preserve_player_state:无提示自动过门(auto_teleport)传 true——只是走进隔壁
+# 房间,主角的护盾/技能运行态要原样继承,不该像新出生一样全部充满。
+func change_scene(scene_path: String, teleport_id: int, player_light: bool, preserve_player_state: bool = false) -> void:
 	if teleport_transition_active:
 		return
 	if scene_path.is_empty():
@@ -413,6 +415,11 @@ func change_scene(scene_path: String, teleport_id: int, player_light: bool) -> v
 	if tree == null:
 		teleport_transition_active = false
 		return
+	var player_state: Dictionary = {}
+	if preserve_player_state:
+		var old_player := _find_player_in_current_scene(tree.current_scene)
+		if is_instance_valid(old_player):
+			player_state = old_player.capture_state_snapshot()
 	tree.change_scene_to_file(scene_path)
 	await tree.process_frame
 	await tree.process_frame
@@ -438,15 +445,22 @@ func change_scene(scene_path: String, teleport_id: int, player_light: bool) -> v
 		# 落点贴地:侧门落点通常悬空几像素,淡入期间玩家被锁住不掉,
 		# 看起来像浮空。向下探 24px 内有地面就吸附;
 		# 竖井类特意悬空的落点(下方更远)保持原样继续下落。
+		# 必须先等一个物理帧:新场景的物理空间此刻往往还没建好,
+		# 立刻 test_move 会摸不到地面,贴地随机失效(反正在黑屏里,等得起)。
 		if player is CharacterBody2D:
 			player.velocity = Vector2.ZERO
-			if player.test_move(player.global_transform, Vector2(0, 24)):
+			await tree.physics_frame
+			if is_instance_valid(player) and player.test_move(player.global_transform, Vector2(0, 24)):
 				player.move_and_collide(Vector2(0, 24))
+			target_position = player.global_position
 		# Ensure player's sprite modulate is normalized so adding/removing lights
 		# does not inadvertently change perceived brightness.
 		if player is Player:
 			if is_instance_valid(player.sprite):
 				player.sprite.modulate = Color(1, 1, 1, 1)
+		# 自动过门继承状态:新实例 _ready 跑完后把旧主角的快照原样恢复。
+		if not player_state.is_empty():
+			player.apply_state_snapshot(player_state)
 		_ensure_player_light(player, player_light)
 		_set_player_lock(true)
 		# 新场景的传送落点作为初始安全点;无传送点则清空,等玩家落地后再记录。

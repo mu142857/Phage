@@ -178,7 +178,7 @@ collision_mask = 2
 script = ExtResource("4_auto")
 scene_path = "res://levels/spawn_room/filling_levels/spawn_room_16.tscn"
 teleport_id = 4
-spawn_offset = Vector2(-7, 10)
+spawn_offset = Vector2(-7, 25)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorRight" unique_id=297612943]
 position = Vector2(3, 21)
@@ -187,25 +187,37 @@ shape = SubResource("RectangleShape2D_door_side")
 [node name="Monster" type="Node2D" parent="." unique_id=407535962]
 
 [node name="BloodSpider" parent="Monster" unique_id=357900899 instance=ExtResource("8_bjdcw")]
-position = Vector2(127, 199)
+position = Vector2(104, 199)
 
 [node name="SpikeTentacle" parent="Monster" unique_id=799252900 instance=ExtResource("9_awmbu")]
 position = Vector2(70, 65)
+collision_layer = 4
+
+[node name="SpikeTentacle4" parent="Monster" unique_id=525303813 instance=ExtResource("9_awmbu")]
+position = Vector2(92, 158)
+collision_layer = 4
 
 [node name="SpikeTentacle2" parent="Monster" unique_id=805993283 instance=ExtResource("9_awmbu")]
 position = Vector2(89, 84)
+collision_layer = 4
 
 [node name="SpikeTentacle3" parent="Monster" unique_id=10540803 instance=ExtResource("9_awmbu")]
 position = Vector2(93, 122)
+collision_layer = 4
 
 [node name="SpitterTentacle" parent="Monster" unique_id=1962045138 instance=ExtResource("10_04ah6")]
-position = Vector2(103, 105)
+position = Vector2(71, 105)
+collision_layer = 4
 
 [node name="SpitterTentacle2" parent="Monster" unique_id=1432165165 instance=ExtResource("10_04ah6")]
 position = Vector2(70, 179)
+collision_layer = 4
 
 [node name="BloodMaggot" parent="Monster" unique_id=1424852672 instance=ExtResource("11_04ah6")]
 position = Vector2(87, 44)
 
 [node name="BloodMaggot2" parent="Monster" unique_id=26143382 instance=ExtResource("11_04ah6")]
 position = Vector2(77, 141)
+
+[node name="BloodMaggot3" parent="Monster" unique_id=282844230 instance=ExtResource("11_04ah6")]
+position = Vector2(63, 158)

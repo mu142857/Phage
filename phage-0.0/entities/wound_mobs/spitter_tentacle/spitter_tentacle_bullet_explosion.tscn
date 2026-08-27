@@ -37,7 +37,7 @@ color_ramp = SubResource("GradientTexture1D_alpha")
 color_initial_ramp = SubResource("GradientTexture1D_color")
 
 [node name="SpitterTentacleBulletExplosion" type="GPUParticles2D"]
-z_index = 11
+z_index = 13
 emitting = false
 one_shot = true
 amount = 8

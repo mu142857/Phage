@@ -28,8 +28,8 @@ const STATE_SUMMON: int = 5
 const STATE_RAM: int = 6
 
 # --- 基础数值 ----------------------------------------------------------------
-@export var max_health: int = 6000
-@export var health: int = 6000
+@export var max_health: int = 5500
+@export var health: int = 5500
 @export var idle_only: bool = false
 
 # --- 横向活动边界（[-80,80] 的蛛网森林 boss 房；换场地记得连 Idle 驻点一起调）---

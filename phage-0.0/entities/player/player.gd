@@ -9,6 +9,9 @@ const GRAVITY: float = 1000.0
 const MAX_HEALTH: int = 100
 const IDLE_TO_CONTRACT_TIME: float = 3.0
 const INVINCIBLE_DURATION: float = 0.3
+# 战吼式锁定解锁后的余量无敌:很多弹幕不会因为战吼消失(远程蜘蛛等),
+# 吼完立刻挨打太冤,解锁后再送这么久的闪烁无敌兜底。
+const CUTSCENE_LINGER_INVINCIBLE: float = 1.0
 
 # ---- 护盾机制 ----
 # 基础一层护盾;森林的谢礼再附加两层(共3),充能排队制。
@@ -96,6 +99,10 @@ var facing_direction: int = 1  # 1 = right, -1 = left
 var can_sprint: bool = true
 var is_invincible: bool = false
 var is_dying: bool = false  # 死亡序列进行中,避免重复触发
+# 战吼/演出期间的静默无敌(不闪烁);解锁时转成一段普通闪烁无敌。
+var cutscene_invincible: bool = false
+# 战吼式锁定:锁输入但保留重力,空中的主角落回地面(空洞骑士式)。
+var _fall_while_locked: bool = false
 var is_in_ball_form: bool = false  # true when contracted; modifies hitbox + buffs
 var input_locked: bool = false
 # 被金盏的网粘住:禁跳跃/禁冲刺/移速打折,把网打破(3下)才解除。
@@ -212,6 +219,18 @@ func _physics_process(_delta: float) -> void:
 		_toggle_dev_god_mode()
 	_update_shield_recharge(_delta)
 	_update_buff_timers(_delta)
+	# 战吼式锁定期间保留重力:空中被吼就落回地面站好,别悬在天上挨弹幕。
+	if input_locked and _fall_while_locked and not is_dying and not is_on_floor():
+		if is_instance_valid(sprite) and sprite.animation != &"Fall":
+			play_anim(&"Fall")
+		velocity.x = 0.0
+		apply_gravity(_delta, FALL_GRAVITY_MULTIPLIER)
+		move_and_slide()
+		if is_on_floor():
+			velocity = Vector2.ZERO
+			reached_terminal = false
+			spawn_landing_effect()
+			play_anim(&"Idle")
 	if not input_locked and Input.is_action_just_pressed(&"Backpack"):
 		raise_shield()
 	# 自动开盾(床边选项):有就绪的盾就自动拿出
@@ -290,9 +309,28 @@ func set_lock(locked: bool) -> void:
 		change_state(STATE_IDLE)
 		velocity = Vector2.ZERO
 		clear_attack_hitboxes()
+	else:
+		# 任何解锁路径都清掉战吼式锁定的痕迹,避免无敌/坠地标记卡死;
+		# 演出无敌不立刻掐掉,转成一段闪烁无敌(残留弹幕兜底)。
+		_fall_while_locked = false
+		if cutscene_invincible:
+			cutscene_invincible = false
+			_start_invincibility(CUTSCENE_LINGER_INVINCIBLE)
 	if is_instance_valid(state_machine):
 		state_machine.set_process(not locked)
 		state_machine.set_physics_process(not locked)
+
+## 战吼式锁定(BossIntro/各 Battlecry 状态用),比 set_lock 多两件事:
+## 1) 锁定期间保留重力,空中的主角像空洞骑士一样落回地面站好;
+## 2) 全程无敌 + 解锁后一小段闪烁无敌——战吼不清场上弹幕,靠无敌兜底,
+##    不用每种弹幕单独接战吼冻结。
+func set_battlecry_lock(locked: bool) -> void:
+	if locked:
+		set_lock(true)
+		_fall_while_locked = true
+		cutscene_invincible = true
+	else:
+		set_lock(false)  # 解锁分支会清坠地标记并发余量无敌
 
 ## 蛛网缠身开关(金盏网弹调用):true=禁跳/禁冲/减速,false=解除。
 func set_web_snared(snared: bool) -> void:
@@ -317,6 +355,8 @@ func take_damage(_amount: int) -> void:
 		return  # 蓝水晶:水晶包裹的冲刺,完全免疫
 	if mist_active:
 		return  # 礼拜日的云雾:雾中完全免疫
+	if cutscene_invincible:
+		return  # 战吼/演出锁定期间完全免疫(残留弹幕打不到)
 	if is_invincible:
 		return
 	if is_guarding:
@@ -693,6 +733,65 @@ func _muzi_revive() -> void:
 	Game.flash(0.35, Color(1.0, 1.0, 1.0, 1.0))
 	Game.shake_camera(3)
 	_start_invincibility(MUZI_REVIVE_INVINCIBLE)
+
+
+# ============================================================
+# 跨房间状态继承(无提示自动过门用,Game.change_scene 调)
+# ============================================================
+# 换场景后新场景里是全新的 Player 实例,_ready 会把一切充满/复原。
+# 自动过门(auto_teleport)语义上只是"走进隔壁房间",不该白送满盾:
+# 切场景前拍下运行态,新实例就位后原样恢复。
+func capture_state_snapshot() -> Dictionary:
+	return {
+		"shield_ready": shield_ready.duplicate(),
+		"shield_recharge": shield_recharge.duplicate(),
+		"is_guarding": is_guarding,
+		"guard_slot": guard_slot,
+		"tide_next_hit": tide_next_hit,
+		"tide_ring_bonus": tide_ring_bonus,
+		"lamp_energy": _lamp_energy,
+		"lamp_fire_left": _lamp_fire_left,
+		"window_ramp": _window_ramp,
+		"mist_active": mist_active,
+		"mist_left": _mist_left,
+		"mist_cooldown_left": mist_cooldown_left,
+		"muzi_broken": Story.muzi_broken,
+		"dev_god_mode": dev_god_mode,
+	}
+
+
+func apply_state_snapshot(data: Dictionary) -> void:
+	# 护盾:布局已在 _ready 按 buff 重建,层数一致才逐槽恢复
+	# (对不上说明途中 buff 变了,保持重建后的状态,别硬塞旧数组)。
+	var saved_ready = data.get("shield_ready")
+	var saved_recharge = data.get("shield_recharge")
+	if saved_ready is Array and saved_recharge is Array \
+			and (saved_ready as Array).size() == shield_ready.size() \
+			and (saved_recharge as Array).size() == shield_recharge.size():
+		for i in shield_ready.size():
+			shield_ready[i] = bool(saved_ready[i])
+			shield_recharge[i] = float(saved_recharge[i])
+		is_guarding = bool(data.get("is_guarding", is_guarding))
+		guard_slot = int(data.get("guard_slot", guard_slot))
+	tide_next_hit = bool(data.get("tide_next_hit", false))
+	tide_ring_bonus = bool(data.get("tide_ring_bonus", false))
+	_lamp_energy = int(data.get("lamp_energy", 0))
+	_lamp_fire_left = float(data.get("lamp_fire_left", 0.0))
+	_window_ramp = float(data.get("window_ramp", 0.0))
+	mist_active = bool(data.get("mist_active", false))
+	_mist_left = float(data.get("mist_left", 0.0))
+	mist_cooldown_left = float(data.get("mist_cooldown_left", 0.0))
+	# _ready 里把守望复原过了(那是给"新的一次出生"的),过门要接着旧账走。
+	Story.set_muzi_broken(bool(data.get("muzi_broken", false)))
+	if bool(data.get("dev_god_mode", false)) and not dev_god_mode:
+		dev_god_mode = true
+		modulate = Color(1.0, 0.85, 0.45)
+	# 铜灯火光还在烧的话,overlay 和火苗跟上(雾/潮汐水珠由每帧逻辑自理)。
+	set_effect_overlay(fire_attack_overlay, _lamp_fire_left > 0.0)
+	fire_aura.emitting = _lamp_fire_left > 0.0
+	_refresh_shield_visual()
+	shield_changed.emit()
+
 
 var reached_terminal: bool = false
 var coyote_timer: float = 0.0

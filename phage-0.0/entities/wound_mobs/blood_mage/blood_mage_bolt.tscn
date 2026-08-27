@@ -32,7 +32,7 @@ color = Color(1, 0.78, 0.42, 1)
 color_ramp = SubResource("GradientTexture1D_alpha")
 
 [node name="BloodMageBolt" type="Area2D"]
-z_index = 10
+z_index = 12
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_script")

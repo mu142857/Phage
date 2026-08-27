@@ -29,7 +29,7 @@ color = Color(0.55, 0.85, 1, 1)
 color_ramp = SubResource("GradientTexture1D_alpha")
 
 [node name="BloodMageHealBolt" type="Node2D"]
-z_index = 10
+z_index = 12
 script = ExtResource("1_script")
 
 [node name="TrailParticles" type="GPUParticles2D" parent="."]

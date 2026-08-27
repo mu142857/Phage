@@ -68,5 +68,8 @@ func _set_player_lock(locked: bool) -> void:
 	var players := get_tree().get_nodes_in_group("player")
 	if players.is_empty():
 		return
-	if players[0].has_method("set_lock"):
+	# 战吼式锁定:空中的主角落地站好,全程无敌+解锁后余量无敌(残留弹幕兜底)
+	if players[0].has_method("set_battlecry_lock"):
+		players[0].set_battlecry_lock(locked)
+	elif players[0].has_method("set_lock"):
 		players[0].set_lock(locked)

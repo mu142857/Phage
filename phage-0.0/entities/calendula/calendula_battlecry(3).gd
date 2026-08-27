@@ -62,7 +62,10 @@ func _set_player_lock(locked: bool) -> void:
 	var players := get_tree().get_nodes_in_group("player")
 	if players.is_empty():
 		return
-	if players[0].has_method("set_lock"):
+	# 战吼式锁定:落地+全程无敌——已飞出的蛛网/毒弹不会因战吼消失,靠无敌兜底
+	if players[0].has_method("set_battlecry_lock"):
+		players[0].set_battlecry_lock(locked)
+	elif players[0].has_method("set_lock"):
 		players[0].set_lock(locked)
 
 

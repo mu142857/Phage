@@ -412,14 +412,19 @@ func _get_player() -> Node2D:
 func _set_lock(locked: bool) -> void:
 	_guard_lock = locked
 	_player = _get_player()
-	if _player != null and _player.has_method("set_lock"):
+	if _player == null:
+		return
+	# 战吼式锁定:空中的主角落地站好,全程无敌+解锁后余量无敌(残留弹幕兜底)
+	if _player.has_method("set_battlecry_lock"):
+		_player.call("set_battlecry_lock", locked)
+	elif _player.has_method("set_lock"):
 		_player.call("set_lock", locked)
 
 
 # Game.change_scene 的迟到解锁可能落在演出任意时刻,每帧按回去(同 DreamIntro)
 func _process(_delta: float) -> void:
 	if _guard_lock and _player != null and not _player.input_locked:
-		_player.set_lock(true)
+		_player.set_battlecry_lock(true)
 
 
 func _input(event: InputEvent) -> void:

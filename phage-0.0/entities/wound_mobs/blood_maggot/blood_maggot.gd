@@ -15,6 +15,7 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/wound_mobs/blood
 @export var patrol_distance: float = 20.0  # 以出生点为中心的巡逻半径
 @export var chase_speed: float = 26.0      # 追击速度(也不算快)
 @export var edge_probe_distance: float = 8.0  # 向前探地的水平距离(防掉平台)
+@export var wander_distance: float = 60.0  # 离出生点的最远追击距离(防追出场景边缘)
 @export var knockback_speed: float = 80.0
 @export var knockback_duration: float = 0.1
 ## 贴图默认头朝左；素材头朝右就取消勾选
@@ -105,8 +106,10 @@ func _process_chase() -> void:
 	if absf(dx) > 2.0:
 		_dir = signf(dx)
 		_apply_facing()
-		# 前面没地就停住等，不跳崖
-		velocity.x = _dir * chase_speed if _floor_ahead(_dir) else 0.0
+		# 前面没地/追出游荡范围就停住等，不跳崖也不溜出场景
+		var out_of_range: bool = (_dir > 0.0 and global_position.x >= _spawn_x + wander_distance) \
+			or (_dir < 0.0 and global_position.x <= _spawn_x - wander_distance)
+		velocity.x = _dir * chase_speed if (_floor_ahead(_dir) and not out_of_range) else 0.0
 	else:
 		velocity.x = 0.0
 	_play_anim(&"Move")

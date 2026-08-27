@@ -120,7 +120,10 @@ func _set_player_lock(locked: bool) -> void:
 	if players.is_empty():
 		return
 	var player := players[0]
-	if player.has_method("set_lock"):
+	# 战吼式锁定:空中的主角落地站好,全程无敌+解锁后余量无敌(残留弹幕兜底)
+	if player.has_method("set_battlecry_lock"):
+		player.call("set_battlecry_lock", locked)
+	elif player.has_method("set_lock"):
 		player.call("set_lock", locked)
 
 

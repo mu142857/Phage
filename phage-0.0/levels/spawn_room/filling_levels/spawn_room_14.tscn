@@ -2,7 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://cyvny2myb3sqg" path="res://levels/spawn_room/spawn_room_filling_levels_background/14.png" id="1_bg"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://c8pnajburl72k" path="res://interactive/Text/text.tscn" id="2_ptkn2"]
 [ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="3_memjt"]
 [ext_resource type="PackedScene" uid="uid://c1tfhs4bg3xf3" path="res://entities/wound_mobs/blood_mage/blood_mage.tscn" id="4_rwmg3"]
 [ext_resource type="PackedScene" uid="uid://br78ko2n4l2p8" path="res://entities/wound_mobs/spike_tentacle/spike_tentacle.tscn" id="5_puhwq"]
 [ext_resource type="PackedScene" uid="uid://bn2bfybne7ufp" path="res://entities/wound_mobs/spitter_tentacle/spitter_tentacle.tscn" id="6_puhwq"]
@@ -96,6 +98,20 @@ shape = SubResource("RectangleShape2D_ptkn2")
 position = Vector2(78.5, 49.5)
 shape = SubResource("RectangleShape2D_memjt")
 
+[node name="Text1" parent="Walls" unique_id=1026677927 instance=ExtResource("2_ptkn2")]
+position = Vector2(18, 79)
+
+[node name="Label" type="Label" parent="Walls/Text1" unique_id=879245755]
+z_index = 100
+offset_left = -10.0
+offset_top = -17.0
+offset_right = 74.0
+offset_bottom = -9.0
+theme_override_colors/font_color = Color(0.73300546, 0.7330054, 0.7330054, 1)
+theme_override_fonts/font = ExtResource("3_memjt")
+theme_override_font_sizes/font_size = 7
+text = "当心敌人弹幕"
+
 [node name="Player" parent="." unique_id=2063501963 instance=ExtResource("2_player")]
 position = Vector2(12, 73)
 
@@ -132,12 +148,15 @@ position = Vector2(106, 38)
 
 [node name="SpikeTentacle" parent="Monster" unique_id=799252900 instance=ExtResource("5_puhwq")]
 position = Vector2(65, 60)
+collision_layer = 4
 
 [node name="SpikeTentacle2" parent="Monster" unique_id=244648533 instance=ExtResource("5_puhwq")]
 position = Vector2(72, 80)
+collision_layer = 4
 
 [node name="SpitterTentacle" parent="Monster" unique_id=1962045138 instance=ExtResource("6_puhwq")]
 position = Vector2(150, 38)
+collision_layer = 4
 
 [node name="BloodMaggot" parent="Monster" unique_id=1424852672 instance=ExtResource("7_e632e")]
 position = Vector2(115, 60)

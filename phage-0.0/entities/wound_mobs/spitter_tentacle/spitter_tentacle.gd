@@ -10,6 +10,9 @@ const BULLET_SCENE: PackedScene = preload("res://entities/wound_mobs/spitter_ten
 @export var max_health: int = 300
 @export var health: int = 300
 @export var gravity: float = 850.0
+## 打死后同一次运行内不复活(重进房间不刷新)——和 boss 门同一套
+## MapElementCounting 记账，重新做梦(记账重置)才回来。取消勾选=每次都刷新。
+@export var persist_defeat: bool = true
 
 @export_group("Shoot")
 @export var shoot_frame: int = 4          # Attack 动画的出弹帧(0 起数)
@@ -20,6 +23,7 @@ enum Phase { IDLE, ATTACK }
 var _phase: Phase = Phase.IDLE
 var _cooldown: float = 0.0
 var _shot_fired: bool = false
+var _persist_id: StringName = &""
 
 @onready var ani_2d: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 @onready var hit_effect_player: AnimationPlayer = get_node_or_null("HitEffectPlayer") as AnimationPlayer
@@ -28,6 +32,11 @@ var _shot_fired: bool = false
 
 
 func _ready() -> void:
+	if persist_defeat:
+		_persist_id = _make_persist_id()
+		if not MapElementCounting.is_wall_intact(_persist_id):
+			queue_free()
+			return
 	add_to_group("monster")
 	health = clampi(health, 0, max_health)
 	if health <= 0:
@@ -88,8 +97,19 @@ func take_damage(value: int) -> void:
 			hit_effect_player.active = true
 		hit_effect_player.play(&"HitFlash")
 	if health <= 0:
+		if _persist_id != &"":
+			MapElementCounting.mark_wall_broken(_persist_id)
 		_spawn_death_effect()
 		queue_free()
+
+
+# 按"场景+节点名+坐标"自动生成唯一记账ID，摆多少个都不用手填
+func _make_persist_id() -> StringName:
+	var scene_path: String = "unknown"
+	if get_tree().current_scene != null:
+		scene_path = get_tree().current_scene.scene_file_path
+	return StringName("%s/%s@%d,%d" % [scene_path, name,
+		roundi(global_position.x), roundi(global_position.y)])
 
 
 func _shoot() -> void:

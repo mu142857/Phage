@@ -2,9 +2,10 @@
 # 红丝虫嘴高得多，同参数会悬在半空平飞不下来)。
 # 弹道差异：出膛上扬压低 + 下坠段保留更久；拉平比下坠快一点，
 # 让爆点往外多挪几格，但仍会沉到地面撞地爆，不做长距离水平滑翔。
-# 碰到玩家或墙壁/地面「立刻」爆(Explode)，伤害只在爆炸第 4~5 帧(0 起数)；
-# 寿命耗尽渐隐兜底(子弹不许凭空消失)。飞行带半透明重影拖尾。
-# 动画名：Flying(循环)、Explode(单次)。
+# 碰到玩家或墙壁/地面「立刻」起爆(Explode)，但前几帧只是预警——
+# 震屏+爆炸粒子+伤害全在伤害帧(第 damage_frame_start 帧,0 起数)那一刻才触发，
+# 与喷吐触手同一套反馈时机。寿命耗尽渐隐兜底、真划出屏幕才删(子弹不许凭空消失)。
+# 飞行带半透明重影拖尾。动画名：Flying(循环)、Explode(单次)。
 # setup 约定: setup(start_pos: Vector2, direction_x: float)  # 1=往右, -1=往左
 extends Area2D
 
@@ -15,9 +16,7 @@ const EXPLOSION_EFFECT_SCENE: PackedScene = preload("res://entities/wound_mobs/s
 @export var damage_frame_start: int = 4   # Explode 伤害窗口起始帧(0 起数)
 @export var damage_frame_end: int = 5     # Explode 伤害窗口结束帧(含)
 @export var explode_shake: float = 2.0    # 爆炸震屏强度
-@export var wall_arm_time: float = 0.15   # 出膛保护:这段时间内碰墙不炸(防出生贴地直接炸)
-## 屏幕边界：什么都没碰到就一直飞，划出边界才删(不会凭空消失)
-@export var bounds: Rect2 = Rect2(-20, -20, 200, 130)
+@export var wall_arm_time: float = 0.25   # 出膛保护:这段时间内碰墙不炸(防出生贴着东西直接炸)
 
 @export_group("Trajectory")
 @export var horizontal_speed: float = 38.0  # 水平速度(全程不变)
@@ -37,6 +36,7 @@ var _gliding: bool = false
 var _active: bool = false
 var _exploded: bool = false
 var _fading: bool = false
+var _boom_done: bool = false
 var _damage_done: bool = false
 var _elapsed: float = 0.0
 var _explode_elapsed: float = 0.0
@@ -57,6 +57,14 @@ func _ready() -> void:
 	if flight_shape != null and explosion_shape != null:
 		explosion_shape.disabled = true
 		flight_shape.disabled = false
+	# 真正划出摄像机画面才删(不用世界坐标矩形，房间偏移也不会误删)
+	var notifier := get_node_or_null("ScreenNotifier") as VisibleOnScreenNotifier2D
+	if notifier != null and not notifier.screen_exited.is_connected(_on_screen_exited):
+		notifier.screen_exited.connect(_on_screen_exited)
+
+
+func _on_screen_exited() -> void:
+	queue_free()
 
 
 func setup(start_pos: Vector2, direction_x: float) -> void:
@@ -79,17 +87,13 @@ func _physics_process(delta: float) -> void:
 	if _fading:
 		# 渐隐中继续飞，不再有任何判定
 		_process_trajectory(delta)
-		if not bounds.has_point(global_position):
-			queue_free()
 		return
 
 	_elapsed += delta
 	_process_trajectory(delta)
 	_spawn_trail(delta)
 	_check_touch()
-	if not bounds.has_point(global_position):
-		queue_free()
-	elif _elapsed >= lifetime:
+	if _elapsed >= lifetime:
 		_start_fade_out()
 
 
@@ -116,7 +120,7 @@ func _process_trajectory(delta: float) -> void:
 	global_position += Vector2(_dir * horizontal_speed, _vertical_speed) * delta
 
 
-# 飞行中碰到玩家或墙壁/地面(mask=1|2，非玩家的 body 就是世界碰撞)：立刻起爆
+# 飞行中碰到玩家或墙壁/地面(mask=1|2，非玩家的 body 就是世界碰撞)：不直接掉血，立刻起爆
 func _check_touch() -> void:
 	for body in get_overlapping_bodies():
 		if body == null:
@@ -134,25 +138,34 @@ func _explode() -> void:
 		return
 	_exploded = true
 	_damage_done = false
+	_boom_done = false
 	_explode_elapsed = 0.0
 	# 换形状：关掉飞行小箱，开爆炸大圆(伤害帧在 0.4s 后，deferred 一帧来得及)
 	if flight_shape != null and explosion_shape != null:
 		flight_shape.set_deferred("disabled", true)
 		explosion_shape.set_deferred("disabled", false)
-	Game.shake_camera(explode_shake)
-	_spawn_explosion_effect()
+	# 注意：震屏和爆炸粒子不在这——起爆动画前几帧只是预警，真正的"炸"
+	# (震屏+粒子+伤害)都在伤害帧那一刻，见 _process_explosion
 	# monitoring 保持开着——伤害帧还要查重叠
 	if ani_2d != null and ani_2d.sprite_frames != null \
 			and ani_2d.sprite_frames.has_animation(&"Explode"):
 		ani_2d.play(&"Explode")
 	else:
-		# 没有 Explode 动画的兜底：按普通子弹处理，直接伤害+消失
+		# 没有 Explode 动画的兜底：按普通子弹处理，炸+伤害+消失
+		Game.shake_camera(explode_shake)
+		_spawn_explosion_effect()
 		_try_window_damage()
 		queue_free()
 
 
 func _process_explosion(delta: float) -> void:
 	_explode_elapsed += delta
+	# 到伤害帧那一刻才"真炸"：震屏+粒子(只来一次)
+	if not _boom_done and ani_2d != null and ani_2d.animation == &"Explode" \
+			and ani_2d.frame >= damage_frame_start:
+		_boom_done = true
+		Game.shake_camera(explode_shake)
+		_spawn_explosion_effect()
 	# 伤害窗口内每帧都判，命中一次就停(玩家窗口中途踩进来也会挨)
 	if not _damage_done and ani_2d != null and ani_2d.animation == &"Explode" \
 			and ani_2d.frame >= damage_frame_start and ani_2d.frame <= damage_frame_end:

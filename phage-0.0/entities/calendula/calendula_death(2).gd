@@ -42,6 +42,8 @@ func enter() -> void:
 	if monster.has_method("hide_health_ui"):
 		monster.hide_health_ui()
 
+	_wipe_spawns()
+
 	# 朝脸面对的方向逃（-side：右侧位朝左脸就往左冲），不转向不翻转
 	var side: int = monster.side if "side" in monster else 1
 	charge_dir = -float(side)
@@ -90,8 +92,26 @@ func _exit_screen_and_free() -> void:
 	is_active = false
 	if exit_shake > 0.0:
 		Game.shake_camera(exit_shake)
+	# 补刀：还没死透的随从（开盾回血的盾蛛等）强制清掉，
+	# 必须在 boss queue_free 之前做——之后本状态的代码就不会再跑了
+	for m in get_tree().get_nodes_in_group("calendula_minion"):
+		if is_instance_valid(m):
+			(m as Node).queue_free()
+	for w in get_tree().get_nodes_in_group("calendula_web"):
+		if is_instance_valid(w) and w.has_method("dissolve"):
+			w.call("dissolve")
 	if is_instance_valid(monster):
 		monster.queue_free()
+
+
+# 王死随从灭：召唤的小蜘蛛当场死亡（走各自的死亡表现），场上的网全部溶解
+func _wipe_spawns() -> void:
+	for m in get_tree().get_nodes_in_group("calendula_minion"):
+		if is_instance_valid(m) and m.has_method("take_damage"):
+			m.call("take_damage", 99999)
+	for w in get_tree().get_nodes_in_group("calendula_web"):
+		if is_instance_valid(w) and w.has_method("dissolve"):
+			w.call("dissolve")
 
 
 func _disable_all_interactions() -> void:

@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://bi3w45s7pwc04"]
 
 [ext_resource type="Texture2D" uid="uid://bukvrjqnm7r0i" path="res://levels/spawn_room/spawn_room_filling_levels_background/15.png" id="1_bg"]
+[ext_resource type="Script" uid="uid://bfe3byncnf7x2" path="res://interactive/BossDoor/boss_door.gd" id="2_nuuav"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
+[ext_resource type="Texture2D" uid="uid://djudbwushdump" path="res://levels/spawn_room/cox_door.png" id="3_8ck47"]
 [ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
 [ext_resource type="PackedScene" uid="uid://m3vsfg3834f7" path="res://entities/bloodworm/bloodworm.tscn" id="4_worm"]
 [ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="5_intro"]
@@ -16,6 +18,9 @@ size = Vector2(4.999999, 61)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_byb4w"]
 size = Vector2(5, 61)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_omroj"]
+size = Vector2(7, 19)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door_side"]
 size = Vector2(3, 16)
@@ -49,6 +54,35 @@ shape = SubResource("RectangleShape2D_8kt16")
 position = Vector2(157.5, 33.5)
 rotation = -3.1415925
 shape = SubResource("RectangleShape2D_byb4w")
+
+[node name="BloodwormDoor" type="StaticBody2D" parent="Walls" unique_id=1690060620]
+z_index = 9
+position = Vector2(0, 73.5)
+collision_mask = 0
+script = ExtResource("2_nuuav")
+boss_path = NodePath("../../Bloodworm")
+door_state_id = &"spawn_room_15/BloodwormDoor"
+appear_with_boss = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Walls/BloodwormDoor" unique_id=1187051716]
+texture = ExtResource("3_8ck47")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BloodwormDoor" unique_id=1425252887]
+shape = SubResource("RectangleShape2D_omroj")
+
+[node name="BloodwormDoor2" type="StaticBody2D" parent="Walls" unique_id=1472383116]
+z_index = 9
+position = Vector2(160, 73.5)
+collision_mask = 0
+script = ExtResource("2_nuuav")
+boss_path = NodePath("../../Bloodworm")
+door_state_id = &"spawn_room_15/BloodwormDoor2"
+
+[node name="Sprite2D" type="Sprite2D" parent="Walls/BloodwormDoor2" unique_id=285129674]
+texture = ExtResource("3_8ck47")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BloodwormDoor2" unique_id=661279248]
+shape = SubResource("RectangleShape2D_omroj")
 
 [node name="Player" parent="." unique_id=1270308619 instance=ExtResource("2_player")]
 position = Vector2(30, 70)

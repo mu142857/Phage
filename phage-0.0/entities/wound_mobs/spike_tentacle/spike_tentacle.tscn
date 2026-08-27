@@ -144,7 +144,7 @@ _data = {
 size = Vector2(40, 10)
 
 [node name="SpikeTentacle" type="CharacterBody2D" unique_id=799252900]
-collision_layer = 4
+collision_layer = 5
 script = ExtResource("1_script")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=568758791]

@@ -3,7 +3,10 @@ extends CharacterBody2D
 const MAX_HEALTH: int = 280
 const BREAK_EFFECT_LIFETIME: float = 0.8
 
-@export var wall_state_id: StringName = MapElementCounting.BROKEN_WALL_001_ID
+# 默认值必须写字面量:@export 默认值在编辑器/预载环境也会被求值,
+# 那里 autoload 还不存在,写 MapElementCounting.BROKEN_WALL_001_ID 会报
+# "Invalid access ... on a base object of type 'Nil'"。值与该常量保持一致。
+@export var wall_state_id: StringName = &"spawn_room/BrokenWall001"
 
 var health: int = MAX_HEALTH
 var _is_broken: bool = false

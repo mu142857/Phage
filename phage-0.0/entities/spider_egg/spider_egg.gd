@@ -72,6 +72,11 @@ func _follow(delta: float) -> void:
 	var target := _player.global_position \
 		+ Vector2(follow_offset.x * float(_player.facing_direction), follow_offset.y) \
 		+ Vector2(0.0, sin(_bob) * bob_amplitude)
+	# 主角被大幅瞬移(过门落点/死亡回安全点)时直接贴上去,
+	# 不做慢速 lerp——横穿整个房间去追主人非常出戏。
+	if global_position.distance_to(target) > 40.0:
+		global_position = target
+		return
 	global_position = global_position.lerp(target, minf(1.0, follow_lerp * delta))
 
 

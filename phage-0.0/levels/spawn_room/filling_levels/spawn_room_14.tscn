@@ -11,19 +11,22 @@ size = Vector2(128, 10)
 size = Vector2(16, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yqefp"]
-size = Vector2(5, 61)
+size = Vector2(5, 114)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_puhwq"]
-size = Vector2(160, 3)
+size = Vector2(160, 3.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m4uek"]
-size = Vector2(5, 77)
+size = Vector2(5, 130)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e632e"]
 size = Vector2(11, 4)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ws12k"]
 size = Vector2(98, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ipetd"]
+size = Vector2(60, 4)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ptkn2"]
 size = Vector2(33, 4)
@@ -57,15 +60,15 @@ position = Vector2(152, 85)
 shape = SubResource("RectangleShape2D_rwmg3")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=221388788]
-position = Vector2(2.5, 33.5)
+position = Vector2(2.5, 7)
 shape = SubResource("RectangleShape2D_yqefp")
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=604464195]
-position = Vector2(80, 1.5)
+position = Vector2(80, -48.25)
 shape = SubResource("RectangleShape2D_puhwq")
 
 [node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=357705332]
-position = Vector2(157.5, 41.5)
+position = Vector2(157.5, 15)
 shape = SubResource("RectangleShape2D_m4uek")
 
 [node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1499055482]
@@ -78,7 +81,7 @@ shape = SubResource("RectangleShape2D_ws12k")
 
 [node name="CollisionShape2D8" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1339654961]
 position = Vector2(125, 40)
-shape = SubResource("RectangleShape2D_ptkn2")
+shape = SubResource("RectangleShape2D_ipetd")
 
 [node name="CollisionShape2D9" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1791006250]
 position = Vector2(76.5, 17)
@@ -105,14 +108,14 @@ position = Vector2(-2, 10)
 shape = SubResource("RectangleShape2D_door_side")
 
 [node name="DoorDown" type="Area2D" parent="." unique_id=1796808023]
-position = Vector2(81, 88)
+position = Vector2(136, 88)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("3_auto")
 scene_path = "res://levels/spawn_room/filling_levels/spawn_room_13.tscn"
 teleport_id = 3
-spawn_offset = Vector2(-46, -18)
+spawn_offset = Vector2(-16, -14)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorDown" unique_id=2052647255]
-position = Vector2(55, 3.5)
+position = Vector2(0, 3.5)
 shape = SubResource("RectangleShape2D_door_down")

@@ -435,6 +435,13 @@ func change_scene(scene_path: String, teleport_id: int, player_light: bool) -> v
 		current_scene.add_child(player)
 	if is_instance_valid(player):
 		player.global_position = target_position
+		# 落点贴地:侧门落点通常悬空几像素,淡入期间玩家被锁住不掉,
+		# 看起来像浮空。向下探 24px 内有地面就吸附;
+		# 竖井类特意悬空的落点(下方更远)保持原样继续下落。
+		if player is CharacterBody2D:
+			player.velocity = Vector2.ZERO
+			if player.test_move(player.global_transform, Vector2(0, 24)):
+				player.move_and_collide(Vector2(0, 24))
 		# Ensure player's sprite modulate is normalized so adding/removing lights
 		# does not inadvertently change perceived brightness.
 		if player is Player:

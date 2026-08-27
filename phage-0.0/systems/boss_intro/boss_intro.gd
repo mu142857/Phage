@@ -138,6 +138,7 @@ func _run() -> void:
 	_start_fight()
 	_set_lock(false)
 	_finished = true
+	_watch_boss_and_reopen()
 
 
 ## 手动模式入口(珊瑚摇篮):关卡自己演完登场后调这里,播字卡并开打。
@@ -164,6 +165,7 @@ func play_for(boss: Node2D) -> void:
 	_start_fight()
 	_set_lock(false)
 	_finished = true
+	_watch_boss_and_reopen()
 
 
 # =============================================================================
@@ -324,11 +326,23 @@ func _start_fight() -> void:
 
 
 # Boss 开打 = 这个梦只能打完或者死:把场里所有传送点关掉,防止中途走人。
-# 打赢后 complete_dream 会自动淡出回房间,不需要重开。
 func _close_teleports() -> void:
 	for t in get_tree().get_nodes_in_group("teleport"):
 		if t.has_method("deactivate"):
 			t.call("deactivate")
+
+
+# Boss 死亡(节点被释放)后把场里的传送点重新打开:
+# spawn_room 这类"打完 boss 还要继续走"的关需要门恢复可用;
+# 打赢即离开的关(complete_dream 淡出换场景)本节点随场景销毁,不受影响。
+func _watch_boss_and_reopen() -> void:
+	while is_inside_tree() and is_instance_valid(_boss):
+		await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	for t in get_tree().get_nodes_in_group("teleport"):
+		if t.has_method("activate"):
+			t.call("activate")
 
 
 # =============================================================================

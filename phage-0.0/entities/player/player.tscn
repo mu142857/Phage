@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://entities/player/BuffEffect/fire_aura_effect.tscn" id="4_faura"]
 [ext_resource type="Script" uid="uid://clqk5icphj1mm" path="res://entities/player/player_jump_trail.gd" id="4_jtrail"]
 [ext_resource type="Texture2D" uid="uid://b4vpdylceycl6" path="res://entities/player/Shield-Sheet.png" id="4_shovl"]
+[ext_resource type="Shader" path="res://asstes/shaders/shield_overlay.gdshader" id="4_shshd"]
 [ext_resource type="PackedScene" path="res://entities/player/BuffEffect/tide_aura_effect.tscn" id="4_taura"]
 [ext_resource type="Texture2D" uid="uid://37eic0phwajs" path="res://entities/player/WaterTank-Sheet.png" id="4_wtovl"]
 [ext_resource type="Script" uid="uid://bytbglmyri018" path="res://entities/player/player_null(0).gd" id="5_gx6sm"]
@@ -684,6 +685,9 @@ region = Rect2(176, 133, 44, 19)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ov54"]
 atlas = ExtResource("4_shovl")
 region = Rect2(0, 152, 44, 19)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shovl"]
+shader = ExtResource("4_shshd")
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_shovl"]
 animations = [{
@@ -2310,6 +2314,7 @@ autoplay = "Idle"
 offset = Vector2(2, -6.5)
 
 [node name="ShieldOverlay" type="AnimatedSprite2D" parent="AnimatedSprite2D" unique_id=262300025]
+material = SubResource("ShaderMaterial_shovl")
 sprite_frames = SubResource("SpriteFrames_shovl")
 animation = &"Idle"
 offset = Vector2(2, -6.5)

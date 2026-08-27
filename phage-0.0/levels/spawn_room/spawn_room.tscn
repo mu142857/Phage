@@ -19,7 +19,9 @@
 [ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="92_bossintro"]
 [ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="95_auto"]
-[ext_resource type="Script" path="res://interactive/Platform/drop_through_platform.gd" id="96_dropplat"]
+[ext_resource type="Script" uid="uid://d38pw8eamkiaf" path="res://interactive/Platform/drop_through_platform.gd" id="96_dropplat"]
+[ext_resource type="Script" uid="uid://bfe3byncnf7x2" path="res://interactive/BossDoor/boss_door.gd" id="97_bossdoor"]
+[ext_resource type="Texture2D" uid="uid://djudbwushdump" path="res://levels/spawn_room/cox_door.png" id="98_coxdoor"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_n5t8k"]
 b = Vector2(541, -1)
@@ -75,6 +77,9 @@ size = Vector2(8, 80)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_egpqp"]
 size = Vector2(30, 2)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_drop_detect"]
+size = Vector2(30, 8)
+
 [sub_resource type="Gradient" id="Gradient_ctaym"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
@@ -86,11 +91,11 @@ fill_to = Vector2(0.5, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_i4v8s"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cox_door"]
+size = Vector2(7, 19)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door_filling"]
 size = Vector2(30, 16)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_drop_detect"]
-size = Vector2(30, 8)
 
 [node name="SpawnRoom" type="Node2D" unique_id=1159039431 groups=["camera_follow"]]
 script = ExtResource("1_aun17")
@@ -193,17 +198,17 @@ polygon = PackedVector2Array(10, 89, 6, 81, 6, 79, 5, 78, 5, 75, 4, 74, 4, 72, 3
 collision_mask = 0
 script = ExtResource("96_dropplat")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/DropPlatform13"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/DropPlatform13" unique_id=1622349659]
 z_index = 11
 position = Vector2(564, 54)
 shape = SubResource("RectangleShape2D_egpqp")
 one_way_collision = true
 
-[node name="Area2D" type="Area2D" parent="Walls/DropPlatform13"]
+[node name="Area2D" type="Area2D" parent="Walls/DropPlatform13" unique_id=1892128179]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/DropPlatform13/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/DropPlatform13/Area2D" unique_id=557265735]
 position = Vector2(564, 50)
 shape = SubResource("RectangleShape2D_drop_detect")
 
@@ -294,8 +299,7 @@ position = Vector2(0, 26)
 texture = ExtResource("6_hqcya")
 
 [node name="WeekCox" parent="." unique_id=263783893 instance=ExtResource("12_a46js")]
-position = Vector2(402, 38)
-metadata/_edit_lock_ = true
+position = Vector2(396, 60)
 
 [node name="Guide" type="Node2D" parent="." unique_id=2102713541]
 
@@ -359,6 +363,35 @@ trigger_distance = 110.0
 pre_delay = 0.5
 appear_mode = 1
 fight_state = -1
+
+[node name="CoxDoor" type="StaticBody2D" parent="." unique_id=537931404]
+z_index = 9
+position = Vector2(437.5, 69.5)
+collision_mask = 0
+script = ExtResource("97_bossdoor")
+boss_path = NodePath("../WeekCox")
+door_state_id = &"spawn_room/CoxDoor"
+
+[node name="Sprite2D" type="Sprite2D" parent="CoxDoor" unique_id=1941588005]
+texture = ExtResource("98_coxdoor")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CoxDoor" unique_id=479815237]
+shape = SubResource("RectangleShape2D_cox_door")
+
+[node name="CoxDoor2" type="StaticBody2D" parent="." unique_id=1351002983]
+z_index = 10
+position = Vector2(444.5, 69.5)
+scale = Vector2(-1, 1)
+collision_mask = 0
+script = ExtResource("97_bossdoor")
+boss_path = NodePath("../WeekCox")
+door_state_id = &"spawn_room/CoxDoor"
+
+[node name="Sprite2D" type="Sprite2D" parent="CoxDoor2" unique_id=1998393789]
+texture = ExtResource("98_coxdoor")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CoxDoor2" unique_id=1001155644]
+shape = SubResource("RectangleShape2D_cox_door")
 
 [node name="DoorFillingLevels" type="Area2D" parent="." unique_id=1340731983]
 position = Vector2(300, 92)

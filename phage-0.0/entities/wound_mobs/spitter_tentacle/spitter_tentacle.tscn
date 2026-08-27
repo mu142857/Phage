@@ -1,0 +1,218 @@
+[gd_scene format=3 uid="uid://bn2bfybne7ufp"]
+
+[ext_resource type="Script" uid="uid://nxsnyns00mgv" path="res://entities/wound_mobs/spitter_tentacle/spitter_tentacle.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_shader"]
+[ext_resource type="Texture2D" uid="uid://1i87v6sk8r7h" path="res://entities/wound_mobs/spitter_tentacle/spitter_tentacle-Sheet.png" id="3_dtrnu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hurt"]
+resource_local_to_scene = true
+shader = ExtResource("2_shader")
+shader_parameter/Enabled = false
+shader_parameter/Tint = Color(0.784, 0.501, 0.495, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dtrnu"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(32, 0, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aw3l4"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(0, 13, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lry4h"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(8, 13, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ho0tn"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(16, 13, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_quf7y"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(24, 13, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n7uwa"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(32, 13, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hhx8d"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(0, 26, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vhcng"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(8, 26, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ompk"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(16, 26, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ej4nv"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(24, 26, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5sbok"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(32, 26, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m88rd"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(0, 39, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56776"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(8, 39, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oqcpd"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(0, 0, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u6wmn"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(8, 0, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3v8tn"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(16, 0, 8, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yd6xh"]
+atlas = ExtResource("3_dtrnu")
+region = Rect2(24, 0, 8, 13)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_empty"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dtrnu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aw3l4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lry4h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ho0tn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_quf7y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n7uwa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hhx8d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vhcng")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ompk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ej4nv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5sbok")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m88rd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56776")
+}],
+"loop": false,
+"name": &"Attack",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oqcpd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u6wmn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3v8tn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yd6xh")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(7, 12)
+
+[sub_resource type="Animation" id="Animation_hit"]
+resource_name = "HitFlash"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hit"]
+_data = {
+&"HitFlash": SubResource("Animation_hit"),
+&"RESET": SubResource("Animation_reset")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aggro"]
+size = Vector2(90, 40)
+
+[node name="SpitterTentacle" type="CharacterBody2D" unique_id=1962045138]
+collision_layer = 4
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=207275174]
+material = SubResource("ShaderMaterial_hurt")
+sprite_frames = SubResource("SpriteFrames_empty")
+animation = &"Attack"
+frame = 12
+frame_progress = 1.0
+offset = Vector2(0, -6.5)
+
+[node name="Muzzle" type="Node2D" parent="." unique_id=1188881154]
+position = Vector2(0, -5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1881955546]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_body")
+debug_color = Color(0, 0.6, 0.7, 0)
+
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=613838558]
+libraries/ = SubResource("AnimationLibrary_hit")
+
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=1996681516]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck" unique_id=1582351008]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_aggro")
+debug_color = Color(0, 0.6, 0.7, 0)

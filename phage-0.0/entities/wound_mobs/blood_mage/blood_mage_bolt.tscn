@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/wound_mobs/blood_mage/blood_mage_bolt.gd" id="1_script"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_empty"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bolt"]
+radius = 2.0
+
+[node name="BloodMageBolt" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_empty")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_bolt")
+debug_color = Color(0.9, 0.2, 0.2, 0)

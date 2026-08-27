@@ -1,0 +1,197 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/bloodworm/bloodworm.gd" id="1_boss"]
+[ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_shader"]
+[ext_resource type="Script" uid="uid://bg8dd0jdo67rm" path="res://systems/state_machine/state_manager.gd" id="3_sm"]
+[ext_resource type="Script" path="res://entities/bloodworm/State/state_null.gd" id="4_null"]
+[ext_resource type="Script" path="res://entities/bloodworm/State/state_idle.gd" id="5_idle"]
+[ext_resource type="Script" path="res://entities/bloodworm/State/state_death.gd" id="6_death"]
+[ext_resource type="Script" path="res://entities/bloodworm/State/state_battlecry.gd" id="7_cry"]
+[ext_resource type="Script" path="res://entities/bloodworm/State/state_burrow.gd" id="8_burrow"]
+[ext_resource type="Script" path="res://entities/bloodworm/State/state_lunge.gd" id="9_lunge"]
+[ext_resource type="Script" path="res://entities/bloodworm/State/state_dive.gd" id="10_dive"]
+[ext_resource type="Script" uid="uid://cts6rntwen0yp" path="res://systems/ui/boss_health_ui.gd" id="11_ui"]
+[ext_resource type="Texture2D" uid="uid://bf122xnkx1by8" path="res://entities/actinos/actinos_health_bar_under.png" id="12_bar_under"]
+[ext_resource type="Texture2D" uid="uid://bci7sx5ngrxvt" path="res://entities/actinos/actinos_health_bar_over.png" id="13_bar_over"]
+[ext_resource type="Texture2D" uid="uid://bs7gwcp6vxcdl" path="res://entities/actinos/actinos_health_bar_progerss.png" id="14_bar_prog"]
+[ext_resource type="FontFile" uid="uid://3lne7jpkp2iu" path="res://asstes/fonts/PixelFont.ttf" id="15_font"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hurt"]
+resource_local_to_scene = true
+shader = ExtResource("2_shader")
+shader_parameter/Enabled = false
+shader_parameter/Tint = Color(0.784, 0.501, 0.495, 1)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_body"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dive"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(16, 8)
+
+[sub_resource type="Animation" id="Animation_hit"]
+resource_name = "HitFlash"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hit"]
+_data = {
+&"HitFlash": SubResource("Animation_hit"),
+&"RESET": SubResource("Animation_reset")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aggro"]
+size = Vector2(200, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_emerge"]
+size = Vector2(12, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lunge"]
+size = Vector2(16, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dive"]
+size = Vector2(160, 30)
+
+[node name="Bloodworm" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_boss")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_hurt")
+position = Vector2(0, -6)
+sprite_frames = SubResource("SpriteFrames_body")
+
+[node name="DiveSprite" type="AnimatedSprite2D" parent="."]
+top_level = true
+visible = false
+position = Vector2(80, 45)
+sprite_frames = SubResource("SpriteFrames_dive")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("3_sm")
+initial_state_index = 0
+
+[node name="Null(0)" type="Node" parent="StateMachine"]
+script = ExtResource("4_null")
+
+[node name="Idle(1)" type="Node" parent="StateMachine"]
+script = ExtResource("5_idle")
+
+[node name="Death(2)" type="Node" parent="StateMachine"]
+script = ExtResource("6_death")
+
+[node name="Battlecry(3)" type="Node" parent="StateMachine"]
+script = ExtResource("7_cry")
+
+[node name="Burrow(4)" type="Node" parent="StateMachine"]
+script = ExtResource("8_burrow")
+
+[node name="Lunge(5)" type="Node" parent="StateMachine"]
+script = ExtResource("9_lunge")
+
+[node name="Dive(6)" type="Node" parent="StateMachine"]
+script = ExtResource("10_dive")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_body")
+debug_color = Color(0, 0.6, 0.7, 0)
+
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="."]
+libraries/ = SubResource("AnimationLibrary_hit")
+
+[node name="PlayerCheck" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCheck"]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_aggro")
+debug_color = Color(0, 0.6, 0.7, 0)
+
+[node name="EmergeHitBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EmergeHitBox"]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_emerge")
+debug_color = Color(0.9, 0.2, 0.2, 0)
+
+[node name="LungeHitBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LungeHitBox"]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_lunge")
+debug_color = Color(0.9, 0.2, 0.2, 0)
+
+[node name="DiveHitBox" type="Area2D" parent="."]
+top_level = true
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DiveHitBox"]
+shape = SubResource("RectangleShape2D_dive")
+debug_color = Color(0.9, 0.2, 0.2, 0)
+
+[node name="BossHealthUI" type="Node" parent="."]
+script = ExtResource("11_ui")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 2000
+
+[node name="HealthBar" type="TextureProgressBar" parent="CanvasLayer"]
+offset_left = 15.0
+offset_top = 84.99999
+offset_right = 145.0
+offset_bottom = 92.99999
+value = 100.0
+texture_under = ExtResource("12_bar_under")
+texture_over = ExtResource("13_bar_over")
+texture_progress = ExtResource("14_bar_prog")
+
+[node name="HealthLabel" type="RichTextLabel" parent="CanvasLayer"]
+modulate = Color(0.7254902, 0.7254902, 0.7254902, 1)
+offset_left = 21.0
+offset_top = 83.0
+offset_right = 97.0
+offset_bottom = 91.0
+theme_override_fonts/normal_font = ExtResource("15_font")
+theme_override_font_sizes/normal_font_size = 7
+text = "4000"
+vertical_alignment = 1

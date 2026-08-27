@@ -94,8 +94,13 @@ func _out_of_bounds() -> bool:
 
 func _overlapping_player() -> Node2D:
 	for body in get_overlapping_bodies():
-		if body != null and body.is_in_group("player"):
-			return body as Node2D
+		if body == null or not body.is_in_group("player"):
+			continue
+		# 已被缠住的玩家对网是「透明」的：新弹不糊身也不消失，
+		# 照常飞过去落地成网（否则弹会在缠身玩家身上凭空溶解，像 bug）
+		if "web_snared" in body and body.web_snared:
+			continue
+		return body as Node2D
 	return null
 
 
@@ -111,11 +116,8 @@ func _land() -> void:
 
 
 # --- 糊到玩家身上：缠身 ---
+# （不叠加规则由 _overlapping_player 保证：缠身中的玩家根本探测不到）
 func _attach(player: Node2D) -> void:
-	# 已被别的网缠住：不叠加，这张网原地散开
-	if "web_snared" in player and player.web_snared:
-		_fizzle()
-		return
 	mode = MODE_ATTACHED
 	_victim = player
 	if player.has_method("set_web_snared"):
@@ -170,18 +172,6 @@ func _break_web() -> void:
 	collision_layer = 0
 	var tw := create_tween()
 	tw.tween_property(self, "modulate:a", 0.0, 0.25)
-	tw.tween_callback(queue_free)
-
-
-# 不叠加时的原地散开：播个 Explode 意思一下，慢慢淡掉，不可被打不挡刀
-func _fizzle() -> void:
-	mode = MODE_DEAD
-	velocity = Vector2.ZERO
-	rotation = 0.0
-	if is_instance_valid(ani):
-		ani.play(&"Explode")
-	var tw := create_tween()
-	tw.tween_property(self, "modulate:a", 0.0, 0.6)
 	tw.tween_callback(queue_free)
 
 

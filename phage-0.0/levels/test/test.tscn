@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://dceo1silobokc"]
 
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_mucky"]
+[ext_resource type="PackedScene" uid="uid://bn2bfybne7ufp" path="res://entities/wound_mobs/spitter_tentacle/spitter_tentacle.tscn" id="2_mioqa"]
+[ext_resource type="PackedScene" uid="uid://br78ko2n4l2p8" path="res://entities/wound_mobs/spike_tentacle/spike_tentacle.tscn" id="3_kqk0q"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5f5au"]
 
@@ -44,3 +46,9 @@ modulate = Color(0.43712005, 0.43712005, 0.43712005, 1)
 position = Vector2(79.5, 100)
 scale = Vector2(2.703125, 0.62499994)
 texture = SubResource("GradientTexture2D_jtfo5")
+
+[node name="SpitterTentacle" parent="." unique_id=1962045138 instance=ExtResource("2_mioqa")]
+position = Vector2(80, 80)
+
+[node name="SpikeTentacle" parent="." unique_id=799252900 instance=ExtResource("3_kqk0q")]
+position = Vector2(110, 80)

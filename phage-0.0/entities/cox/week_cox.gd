@@ -3,8 +3,8 @@ extends CharacterBody2D
 
 const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cox/cox_death.tscn")
 
-@export var max_health: int = 1000
-@export var health: int = 1000
+@export var max_health: int = 600
+@export var health: int = 600
 @export var idle_hover_amplitude: float = 15.0
 @export var idle_hover_speed: float = 2.2
 @export var hover_follow_speed: float = 18.0
@@ -14,6 +14,9 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cox/cox_death.ts
 @export var knockback_speed: float = 310.0
 @export var knockback_vertical_speed: float = -40.0
 @export var knockback_duration: float = 0.1
+## 击退距离封顶:被打退到离玩家超过这个距离就停,防止连击把它推出屏幕外。
+## 按玩家距离算而不是按相机范围算:相机有跟随滞后和边缘限位,不稳定。
+@export var knockback_max_distance: float = 70.0
 
 var _spawn_position: Vector2 = Vector2.ZERO
 var _time_passed: float = 0.0
@@ -56,6 +59,7 @@ func _physics_process(delta: float) -> void:
 	if _knockback_time_left > 0.0:
 		_knockback_time_left = maxf(0.0, _knockback_time_left - delta)
 		global_position += _knockback_velocity * delta
+		_clamp_knockback_distance()
 		if _knockback_time_left <= 0.0:
 			_knockback_velocity = Vector2.ZERO
 		return
@@ -170,6 +174,22 @@ func _try_damage_player() -> void:
 func _play_hit_flash() -> void:
 	if is_instance_valid(hit_effect_player):
 		hit_effect_player.play(&"HitFlash")
+
+# 被击退时不许飞出交战距离:超过上限就沿玩家方向拉回并终止本次击退。
+func _clamp_knockback_distance() -> void:
+	var players := get_tree().get_nodes_in_group("player")
+	if players.is_empty():
+		return
+	var player := players[0] as Node2D
+	if player == null:
+		return
+	var offset := global_position - player.global_position
+	if offset.length() <= knockback_max_distance:
+		return
+	global_position = player.global_position + offset.normalized() * knockback_max_distance
+	_knockback_velocity = Vector2.ZERO
+	_knockback_time_left = 0.0
+
 
 func _start_knockback() -> void:
 	if Game.suppress_hit_knockback:

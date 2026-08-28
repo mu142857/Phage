@@ -155,17 +155,9 @@ func _restore_player_shields() -> void:
 	if players.is_empty():
 		return
 	var p: Node = players[0]
-	if not "shield_ready" in p:
-		return
-	var ready_list: Array = p.get("shield_ready")
-	var recharge_list: Array = p.get("shield_recharge")
-	for i in ready_list.size():
-		ready_list[i] = true
-	for i in recharge_list.size():
-		recharge_list[i] = 0.0
-	if p.has_method("_refresh_shield_visual"):
-		p.call("_refresh_shield_visual")
-	p.emit_signal("shield_changed")
+	# 走 player 的正规接口:回满+守护槽对齐(直接改数组会漏掉对齐,破盾顺序会错)
+	if p.has_method("restore_all_shields"):
+		p.call("restore_all_shields")
 
 
 func _finish() -> void:

@@ -91,6 +91,9 @@ func _nearest_monster() -> Node2D:
 		if not monster.is_visible_in_tree() \
 				or monster.process_mode == Node.PROCESS_MODE_DISABLED:
 			continue
+		# Boss 的无敌/闪避/隐身阶段(hittable=false,boss_base/金盏的通用开关)不打
+		if "hittable" in monster and not monster.get("hittable"):
+			continue
 		# 挂着 monster 组但不是真怪的东西(暗门等)明确豁免
 		if monster.is_in_group("summon_ignore"):
 			continue

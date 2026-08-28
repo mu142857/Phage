@@ -27,7 +27,7 @@ const SHIELD_RECHARGE_TIME: float = 5.0    # 基础盾(槽0)充能秒数(2026-08
 # ---- Buff 数值(定义/文案见 BuffDefs;获得状态在 Story.buffs_owned) ----
 const TABLE_BREAK_INVINCIBLE: float = 2.0   # 愈合的伤口:破盾后无敌时长
 const GREEN_RECHARGE_EXTRA: float = 10.0    # 森林的谢礼:附加绿盾充能+10s(5→15)
-const FLOWER_RECHARGE_EXTRA: float = 10.0   # 绽放的代价:全部护盾充能+10s
+const FLOWER_RECHARGE_EXTRA: float = 5.0    # 绽放的代价:全部护盾充能+5s(速度1/2,2026-08-27从+10回调)
 const LAMP_ENERGY_MAX: int = 8              # 城市的心跳:攒满所需命中次数
 const LAMP_FIRE_DURATION: float = 6.0       # 城市的心跳:火光持续时间
 const LAMP_ATTACK_SPEED_BONUS: float = 0.3  # 城市的心跳:火光期攻速+30%(加法池)
@@ -39,7 +39,7 @@ const TIDE_SPIKE_SCALE: float = 1.5         # 珊瑚潮汐:水刺整体放大(�
 const TIDE_RING_BONUS_HITS: int = 4         # 珊瑚潮汐:命中≥这么多根触发下一击强化
 const TIDE_ALL_HIT_BONUS: float = 0.5       # 珊瑚潮汐:水刺够数命中→下一击+50%(加法叠加)
 const MUZI_REVIVE_INVINCIBLE: float = 1.2   # 沐子的守望:复活后无敌
-const MIST_DURATION: float = 2.0            # 礼拜日的云雾:隐身无敌时长
+const MIST_DURATION: float = 3.0            # 礼拜日的云雾:隐身无敌时长
 const MIST_COOLDOWN: float = 5.0            # 礼拜日的云雾:冷却(从雾散那刻起算)
 const MIST_ALPHA: float = 0.5               # 雾中的半透明度
 const TIDE_SPIKE_SCENE: PackedScene = preload("res://entities/player/BuffEffect/water_tank_bullet.tscn")
@@ -218,6 +218,7 @@ func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed(&"dev_god_mode"):
 		_toggle_dev_god_mode()
 	_update_shield_recharge(_delta)
+	_realign_guard_slot()  # 每帧强制:举的必须是编号最大的就绪盾(防外部改数组不重排)
 	_update_buff_timers(_delta)
 	# 战吼式锁定期间保留重力:空中被吼就落回地面站好,别悬在天上挨弹幕。
 	if input_locked and _fall_while_locked and not is_dying and not is_on_floor():
@@ -391,14 +392,10 @@ func _die() -> void:
 # ============================================================
 # 护盾
 # ============================================================
-# 排队充能:同一时间只充一个。顺序=绿盾优先(从上往下:槽1→槽2),基础盾(槽0)垫底——
-# 否则基础盾5s抢跑会变成"棕盾循环挨打",绿盾被饿死(实测踩过坑)。
+# 排队充能:同一时间只充一个。恢复从上往下(槽0普通盾最先回→绿1→绿2),
+# 破盾从下往上(见 _first_ready_shield/_realign_guard_slot)——用户定案。
 func _update_shield_recharge(delta: float) -> void:
-	var order: Array[int] = []
-	for i in range(1, shield_recharge.size()):
-		order.append(i)
-	order.append(0)
-	for i in order:
+	for i in shield_recharge.size():
 		if shield_ready[i]:
 			continue
 		shield_recharge[i] = maxf(shield_recharge[i] - delta, 0.0)
@@ -409,6 +406,18 @@ func _update_shield_recharge(delta: float) -> void:
 			_realign_guard_slot()  # 绿盾充好了就顶到基础盾前面挨打
 			shield_changed.emit()
 		break  # 只充这一个,后面的排队
+
+## 一键回满所有护盾(boss rush 场间恢复等外部调用):填满+清计时+重新对齐。
+func restore_all_shields() -> void:
+	for i in shield_ready.size():
+		shield_ready[i] = true
+		shield_recharge[i] = 0.0
+	if not is_guarding:
+		raise_shield()
+	_realign_guard_slot()
+	_refresh_shield_visual()
+	shield_changed.emit()
+
 
 ## 守护槽对齐:任何时刻都让编号最大的就绪盾顶在前面(绿盾先挨打,基础盾垫后)。
 ## 只换"举着哪个",不消耗任何东西;层数变化和充能完成后都要过一遍。

@@ -22,6 +22,7 @@ MapElementCounting="*uid://b8cf6rjmgt0bu"
 Dialogue="*res://systems/dialogue/dialogue.gd"
 Story="*res://systems/story.gd"
 Dev="*res://systems/dev_panel.gd"
+TouchControls="*res://systems/touch_controls/touch_controls.gd"
 
 [display]
 

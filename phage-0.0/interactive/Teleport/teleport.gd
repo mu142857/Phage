@@ -57,7 +57,9 @@ func _process(_delta: float) -> void:
 		return
 	if not _hint_visible:
 		_set_hint_visible(true)
-	if Input.is_action_just_pressed("Select"):
+	# 触屏模式下没有 Q 键,攻击键也能确认传送
+	if Input.is_action_just_pressed("Select") \
+			or (TouchControls.enabled and Input.is_action_just_pressed("Attack1")):
 		Game.change_scene(scene_path, teleport_id, player_light)
 
 func _on_area_2d_body_entered(body: Node2D) -> void:

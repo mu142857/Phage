@@ -74,12 +74,18 @@ func _inherit_material_recursive(node: Node) -> void:
 func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> void:
 	if not interaction_enabled or Dialogue.is_open:
 		return
+	# 触屏按钮压住的位置不响应(玩家是在按按钮,不是点物品)
+	if TouchControls.covers(get_viewport().get_mouse_position()):
+		return
 	var mb := event as InputEventMouseButton
 	if mb != null and mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
 		clicked.emit(self)
 
 func _on_mouse_entered() -> void:
 	if not interaction_enabled or Dialogue.is_open:
+		return
+	# 触屏按钮压住的位置不响应悬停(物理拾取的悬停拦不住事件,只能在这儿挡)
+	if TouchControls.covers(get_viewport().get_mouse_position()):
 		return
 	_active = self
 	_tween_highlight(hover_strength, rise_time)

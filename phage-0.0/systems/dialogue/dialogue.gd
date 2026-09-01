@@ -107,6 +107,10 @@ func say(lines: Array) -> void:
 ## (返回时已自动收起)。
 func ask(lines: Array, options: Array) -> int:
 	_open()
+	# 正文区下边界抬到选项底板上方,整个 ask 期间固定——文字既不被底板压暗,
+	# 弹选项时也不会跳位置(正文下移 26px 后中心落在了 3 选项底板里,踩过坑)
+	var panel_height := options.size() * OPTION_ROW_HEIGHT + OPTION_PANEL_PAD * 2.0
+	_label.offset_bottom = -maxf(30.0, panel_height + 2.0 + 4.0)
 	for i in lines.size():
 		await _type_line(lines[i])
 		if i < lines.size() - 1:  # 最后一句不等按键,直接带着它弹选项
@@ -206,6 +210,7 @@ func close() -> void:
 func _open() -> void:
 	is_open = true
 	visible = true
+	_label.offset_bottom = -30.0  # say() 用默认区;ask() 随后按选项数再抬高
 	_clear_options()
 
 

@@ -1,0 +1,51 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://systems/loading/loading.gd" id="1_script"]
+[ext_resource type="FontFile" path="res://asstes/fonts/PixelFont.ttf" id="2_font"]
+
+[sub_resource type="Gradient" id="Gradient_light"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_light"]
+gradient = SubResource("Gradient_light")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="Loading" type="Node2D" groups=["camera_fixed"]]
+script = ExtResource("1_script")
+
+[node name="WarmLit" type="Node2D" parent="."]
+position = Vector2(40, 45)
+
+[node name="Light" type="PointLight2D" parent="WarmLit"]
+texture = SubResource("GradientTexture2D_light")
+
+[node name="WarmUnlit" type="Node2D" parent="."]
+position = Vector2(120, 45)
+
+[node name="Cover" type="CanvasLayer" parent="."]
+layer = 2000
+
+[node name="Black" type="ColorRect" parent="Cover"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="Cover"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 14
+text = "加载中..."
+horizontal_alignment = 1
+vertical_alignment = 1

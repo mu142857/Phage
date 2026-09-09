@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/wooden_man/eye_laser.gd" id="1_laser"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(160, 3)
+
+[node name="EyeLaser" type="Node2D"]
+z_index = 12
+script = ExtResource("1_laser")
+
+[node name="AimLine" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 160, 0)
+width = 1.0
+default_color = Color(0.6, 0.9, 1, 0.8)
+
+[node name="Beam" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(0, 0, 160, 0)
+width = 3.0
+default_color = Color(0.5, 0.9, 1.6, 1)
+
+[node name="Core" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(0, 0, 160, 0)
+width = 1.0
+default_color = Color(1.4, 1.4, 1.6, 1)
+
+[node name="HitArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea"]
+position = Vector2(80, 0)
+shape = SubResource("RectangleShape2D_hit")

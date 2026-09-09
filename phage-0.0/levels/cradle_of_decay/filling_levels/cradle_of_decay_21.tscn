@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/21.png" id="1_bg"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WB_floor"]
+
+[node name="CradleOfDecay21" type="Node2D" groups=["camera_fixed"]]
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("1_bg")
+centered = false
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+
+[node name="Floor" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 80)
+shape = SubResource("WB_floor")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(80, 60)

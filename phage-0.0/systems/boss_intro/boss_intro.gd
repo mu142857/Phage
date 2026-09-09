@@ -205,8 +205,7 @@ func _reveal() -> void:
 	if _boss == null:
 		return
 	# 只让贴图动起来:本体保持冻结,不跑 AI、不触发任何状态逻辑
-	var ani := _boss.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-	if ani != null:
+	for ani in _boss_sprites():
 		ani.process_mode = Node.PROCESS_MODE_ALWAYS
 	_boss.visible = true
 
@@ -239,8 +238,7 @@ func _reveal() -> void:
 # 字卡:运镜聚焦 → 头衔打字机 → 名字砸入 → 等一次按键 → 渐隐复位
 func _play_card() -> void:
 	if _boss != null:
-		var ani := _boss.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-		if ani != null:
+		for ani in _boss_sprites():
 			ani.process_mode = Node.PROCESS_MODE_ALWAYS
 		_play_boss_anim(card_animation)
 		Game.set_position_override_smooth(_focus_position(), 0.25)
@@ -312,8 +310,7 @@ func _start_fight() -> void:
 	Game.stop_shake()
 	if _boss == null:
 		return
-	var ani := _boss.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-	if ani != null:
+	for ani in _boss_sprites():
 		ani.process_mode = Node.PROCESS_MODE_INHERIT
 	_boss.process_mode = Node.PROCESS_MODE_INHERIT
 	_change_boss_state(fight_state)
@@ -353,6 +350,9 @@ func _play_boss_anim(anim: StringName) -> void:
 	if _boss == null:
 		return
 	var ani := _boss.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if ani == null:
+		var all := _boss_sprites()
+		ani = all[0] if not all.is_empty() else null
 	if ani == null or ani.sprite_frames == null:
 		return
 	var target := anim
@@ -440,3 +440,14 @@ func _exit_tree() -> void:
 		Game.clear_position_override()
 		Game.reset_zoom(0.1)
 		Game.stop_shake()
+
+
+# boss 身上所有 AnimatedSprite2D(含后代):木偶师这类「控制器 + 子节点人偶」的 boss,
+# 贴图不在根节点直属,字卡期间要让它们照样动。
+func _boss_sprites() -> Array[AnimatedSprite2D]:
+	var out: Array[AnimatedSprite2D] = []
+	if _boss == null:
+		return out
+	for n in _boss.find_children("*", "AnimatedSprite2D", true, false):
+		out.append(n as AnimatedSprite2D)
+	return out

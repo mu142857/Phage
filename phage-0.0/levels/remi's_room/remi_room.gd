@@ -171,13 +171,17 @@ func _ready() -> void:
 		area.clicked.connect(_on_item_clicked)
 
 	# 兜底:入梦演出把 HUD 隐了但中途折返(或死在字卡里)时,回房间必须能看见
-	Game.buff_hold.show_now()
+	# (开机 boot 开场除外:HUD 要跟房间一起从黑里浮现,由 _boot_fade_in 叫回)
+	if Story.wake_kind != "boot":
+		Game.buff_hold.show_now()
 
 	match Story.wake_kind:
 		"morning":
 			_wake_up(false)
 		"night":
 			_wake_up(true)
+		"boot":
+			_boot_fade_in()
 		_:
 			Story.release_cover()
 	Story.wake_kind = ""
@@ -304,6 +308,15 @@ func _clear_hover_states() -> void:
 	for area: ClickableItem in get_tree().get_nodes_in_group(ClickableItem.GROUP):
 		area._tween_highlight(0.0, 0.2)
 		area._dim_background(0.0, 0.2)
+
+
+# _clear_hover_states 会把墙/房顶/氛围层 tween 回正常亮度(0.2s),
+# 摆黑开场前必须先掐掉,否则黑一瞬间又被拉亮。
+func _kill_background_dim_tweens() -> void:
+	for tween: Tween in ClickableItem._dim_tweens.values():
+		if tween != null and tween.is_running():
+			tween.kill()
+	ClickableItem._dim_tweens.clear()
 
 
 # ============================================================
@@ -450,6 +463,7 @@ func _wake_up(night: bool) -> void:
 	var visuals := _all_room_visuals()
 	visuals.append(_window)
 	visuals.append(_window_view)
+	_kill_background_dim_tweens()
 	for node: CanvasItem in visuals:
 		node.modulate = Color.BLACK
 	for light: PointLight2D in _lights.get_children():
@@ -480,6 +494,44 @@ func _wake_up(night: bool) -> void:
 			if light != _window_glow and light.visible:
 				create_tween().tween_property(light, "energy", _glow_energy[light], 1.3)
 		await get_tree().create_timer(1.4).timeout
+	_end_interaction()
+
+
+## 开机开场(加载屏淡黑后接过来):全黑 → 窗户和窗外先浮现 → 房间其它东西跟上。
+## 白天连窗光一起亮;夜里没有窗光,只有窗户本身。所有东西都是 modulate 从黑到正常。
+func _boot_fade_in() -> void:
+	_begin_interaction()
+	# 先把一切摆成黑,加载屏切过来时画面和它的全黑无缝
+	var visuals := _all_room_visuals()
+	visuals.append(_window)
+	visuals.append(_window_view)
+	visuals.append(_dust)
+	_kill_background_dim_tweens()
+	for node: CanvasItem in visuals:
+		node.modulate = Color.BLACK
+	for light: PointLight2D in _lights.get_children():
+		light.energy = 0.0
+	Story.release_cover()
+	await get_tree().create_timer(0.3).timeout
+
+	# ① 窗户先亮
+	create_tween().tween_property(_window, "modulate", Color.WHITE, 1.0)
+	create_tween().tween_property(_window_view, "modulate", Color.WHITE, 1.0)
+	if not Story.is_night:
+		create_tween().tween_property(_beams, "modulate", Color.WHITE, 1.4)
+		create_tween().tween_property(_window_glow, "energy", _glow_energy[_window_glow], 1.4)
+	await get_tree().create_timer(0.9).timeout
+
+	# ② 其它都跟上(左上角 HUD 也在这一批)
+	Game.buff_hold.fade_in(1.3)
+	for node: CanvasItem in visuals:
+		if node == _window or node == _window_view or node == _beams:
+			continue
+		create_tween().tween_property(node, "modulate", Color.WHITE, 1.3)
+	for light: PointLight2D in _lights.get_children():
+		if light != _window_glow and light.visible:
+			create_tween().tween_property(light, "energy", _glow_energy[light], 1.3)
+	await get_tree().create_timer(1.4).timeout
 	_end_interaction()
 
 

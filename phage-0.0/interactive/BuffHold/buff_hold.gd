@@ -71,6 +71,13 @@ func show_now() -> void:
 	_root.modulate.a = 1.0
 
 
+## 立即藏起(开机加载屏切房间前调用,HUD 随房间一起从黑里浮现)。
+func hide_now() -> void:
+	if is_instance_valid(_fade_tween):
+		_fade_tween.kill()
+	_root.modulate.a = 0.0
+
+
 func _start_fade(target_alpha: float, duration: float) -> void:
 	if is_instance_valid(_fade_tween):
 		_fade_tween.kill()

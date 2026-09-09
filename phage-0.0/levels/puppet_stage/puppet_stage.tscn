@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://entities/wooden_man/puppeteer.tscn" id="2_boss"]
+[ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="3_dreamend"]
+[ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="4_bossintro"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_floor"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_left"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_right"]
+
+[node name="PuppetStage" type="Node2D" groups=["camera_fixed"]]
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="Backdrop" type="ColorRect" parent="Environment"]
+z_index = -5
+offset_right = 160.0
+offset_bottom = 90.0
+color = Color(0.07, 0.06, 0.1, 1)
+
+[node name="Floor" type="ColorRect" parent="Environment"]
+z_index = 11
+offset_top = 80.0
+offset_right = 160.0
+offset_bottom = 90.0
+color = Color(0.2, 0.14, 0.16, 1)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment"]
+collision_mask = 0
+
+[node name="CollisionShape2D1" type="CollisionShape2D" parent="Environment/StaticBody2D"]
+position = Vector2(0, 80)
+shape = SubResource("WorldBoundaryShape2D_floor")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Environment/StaticBody2D"]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_left")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Environment/StaticBody2D"]
+position = Vector2(160, 80)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_right")
+
+[node name="Puppeteer" parent="." instance=ExtResource("2_boss")]
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector2(24, 80)
+
+[node name="DreamEnd" parent="." instance=ExtResource("3_dreamend")]
+watch_path = NodePath("../Puppeteer")
+
+[node name="BossIntro" parent="." instance=ExtResource("4_bossintro")]
+boss_path = NodePath("../Puppeteer")
+title_text = "台上那只手"
+boss_name_text = "木头人"
+appear_mode = 1
+focus_offset = Vector2(80, 40)

@@ -1,0 +1,83 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/cradle_corridor/cradle_room.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
+[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_0.png" id="bg_0"]
+[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_2.png" id="bg_2"]
+[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_4.png" id="bg_4"]
+[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_6.png" id="bg_6"]
+[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_8.png" id="bg_8"]
+[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_10.png" id="bg_10"]
+[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_12.png" id="bg_12"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WB_floor"]
+
+[node name="CradleOfDecay22" type="Node2D" groups=["camera_follow"]]
+script = ExtResource("1_script")
+camera_limit_right = 216
+camera_limit_bottom = 137
+
+[node name="0point0xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0, 0)
+scroll_offset = Vector2(-28, -23.5)
+
+[node name="Sprite2D" type="Sprite2D" parent="0point0xMoving"]
+texture = ExtResource("bg_0")
+centered = false
+
+[node name="0point2xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.2, 0.2)
+scroll_offset = Vector2(-22.4, -18.8)
+
+[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving"]
+texture = ExtResource("bg_2")
+centered = false
+
+[node name="0point4xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.4, 0.4)
+scroll_offset = Vector2(-16.8, -14.1)
+
+[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving"]
+texture = ExtResource("bg_4")
+centered = false
+
+[node name="0point6xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.6, 0.6)
+scroll_offset = Vector2(-11.2, -9.4)
+
+[node name="Sprite2D" type="Sprite2D" parent="0point6xMoving"]
+texture = ExtResource("bg_6")
+centered = false
+
+[node name="0point8xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.8)
+scroll_offset = Vector2(-5.6, -4.7)
+
+[node name="Sprite2D" type="Sprite2D" parent="0point8xMoving"]
+texture = ExtResource("bg_8")
+centered = false
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("bg_10")
+centered = false
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+
+[node name="Floor" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 77)
+shape = SubResource("WB_floor")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(25, 60)
+
+[node name="1point2xMoving" type="Parallax2D" parent="."]
+z_index = 20
+scroll_scale = Vector2(1.2, 1.2)
+scroll_offset = Vector2(5.6, 4.7)
+
+[node name="Sprite2D" type="Sprite2D" parent="1point2xMoving"]
+texture = ExtResource("bg_12")
+centered = false

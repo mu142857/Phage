@@ -107,6 +107,8 @@ var is_in_ball_form: bool = false  # true when contracted; modifies hitbox + buf
 var input_locked: bool = false
 # 被金盏的网粘住:禁跳跃/禁冲刺/移速打折,把网打破(3下)才解除。
 var web_snared: bool = false
+var is_stunned: bool = false           # 被惊喜盒子砸中的硬控(不掉血,只锁操作)
+var _stun_left: float = 0.0
 
 # 护盾状态: shield_ready[i] 是否就绪; shield_recharge[i] 剩余充能秒数。
 # is_guarding = 当前是否拿出了护盾(显示外壳); guard_slot = 拿出的是哪个盾(-1=无)。
@@ -220,6 +222,7 @@ func _physics_process(_delta: float) -> void:
 	_update_shield_recharge(_delta)
 	_realign_guard_slot()  # 每帧强制:举的必须是编号最大的就绪盾(防外部改数组不重排)
 	_update_buff_timers(_delta)
+	_update_stun(_delta)
 	# 战吼式锁定期间保留重力:空中被吼就落回地面站好,别悬在天上挨弹幕。
 	if input_locked and _fall_while_locked and not is_dying and not is_on_floor():
 		if is_instance_valid(sprite) and sprite.animation != &"Fall":
@@ -332,6 +335,31 @@ func set_battlecry_lock(locked: bool) -> void:
 		cutscene_invincible = true
 	else:
 		set_lock(false)  # 解锁分支会清坠地标记并发余量无敌
+
+## 硬控(木偶师的惊喜盒子调用):锁操作 duration 秒,不掉血、不破盾。
+## 复用战吼式锁定的坠地逻辑(空中被砸也会落地站好),但不给无敌——控住的时候照样能被打。
+func apply_stun(duration: float) -> void:
+	if is_dying or dev_god_mode or cutscene_invincible:
+		return
+	if input_locked and not is_stunned:
+		return  # 演出锁定中不叠加
+	_stun_left = maxf(_stun_left, duration)
+	if not is_stunned:
+		is_stunned = true
+		set_lock(true)
+		_fall_while_locked = true
+
+
+func _update_stun(delta: float) -> void:
+	if not is_stunned:
+		return
+	_stun_left -= delta
+	if _stun_left <= 0.0 or is_dying:
+		_stun_left = 0.0
+		is_stunned = false
+		if not is_dying:
+			set_lock(false)
+
 
 ## 蛛网缠身开关(金盏网弹调用):true=禁跳/禁冲/减速,false=解除。
 func set_web_snared(snared: bool) -> void:

@@ -1,0 +1,1727 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/cradle_corridor/cradle_room.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dtchvx4o02bc0" path="res://levels/cradle_corridor/cradel_corridor_left_end.png" id="1_lend"]
+[ext_resource type="Texture2D" uid="uid://ebnc676xw8di" path="res://levels/cradle_corridor/cradel_corridor.png" id="2_tile"]
+[ext_resource type="Texture2D" uid="uid://0uarw2wnpgl4" path="res://levels/cradle_corridor/tree1.png" id="5_t1"]
+[ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="5_player"]
+[ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="5_swing"]
+[ext_resource type="Texture2D" uid="uid://b8avk4awwhc0n" path="res://levels/cradle_corridor/tree2.png" id="6_t2"]
+[ext_resource type="Texture2D" uid="uid://pk1831mnlid7" path="res://levels/cradle_corridor/cradel_corridor_front.png" id="6_front"]
+[ext_resource type="Texture2D" uid="uid://bkgoipd3p8wyv" path="res://levels/cradle_corridor/tree3.png" id="7_t3"]
+[ext_resource type="Texture2D" uid="uid://ddjnqvu38a1uv" path="res://levels/cradle_corridor/tree4.png" id="8_t4"]
+[ext_resource type="Texture2D" uid="uid://drbdeq7r3fmdv" path="res://levels/cradle_corridor/wall.png" id="11_wall"]
+[ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="12_slow"]
+[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WB_floor"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WB_left"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WB_right"]
+
+[sub_resource type="Gradient" id="Grad_light"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradTex_light"]
+gradient = SubResource("Grad_light")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="ShaderMaterial" id="M_slow4"]
+shader = ExtResource("12_slow")
+shader_parameter/WindStrength = 4
+
+[sub_resource type="ShaderMaterial" id="M_s2p1"]
+shader = ExtResource("5_swing")
+shader_parameter/Strength = 2
+shader_parameter/Speed = 1
+
+[sub_resource type="ShaderMaterial" id="M_s2p2"]
+shader = ExtResource("5_swing")
+shader_parameter/Strength = 2
+shader_parameter/Speed = 2
+
+[sub_resource type="ShaderMaterial" id="M_s2p16"]
+shader = ExtResource("5_swing")
+shader_parameter/Strength = 2
+shader_parameter/Speed = 1.6
+
+[sub_resource type="ShaderMaterial" id="M_s2p15"]
+shader = ExtResource("5_swing")
+shader_parameter/Strength = 2
+shader_parameter/Speed = 1.5
+
+[sub_resource type="ShaderMaterial" id="M_s3p12"]
+shader = ExtResource("5_swing")
+shader_parameter/Strength = 3
+shader_parameter/Speed = 1.2
+
+[sub_resource type="ShaderMaterial" id="M_f5p5"]
+shader = ExtResource("5_swing")
+shader_parameter/Strength = 5
+shader_parameter/Speed = 5
+
+[sub_resource type="ShaderMaterial" id="M_f7p3"]
+shader = ExtResource("5_swing")
+shader_parameter/Strength = 7
+shader_parameter/Speed = 3
+
+[sub_resource type="ShaderMaterial" id="M_f6p4"]
+shader = ExtResource("5_swing")
+shader_parameter/Strength = 6
+shader_parameter/Speed = 4
+
+[sub_resource type="ShaderMaterial" id="M_f8p15"]
+shader = ExtResource("5_swing")
+shader_parameter/Strength = 8
+shader_parameter/Speed = 1.5
+
+[sub_resource type="ShaderMaterial" id="M_f10p1"]
+shader = ExtResource("5_swing")
+shader_parameter/Strength = 10
+shader_parameter/Speed = 1
+
+[node name="CradleRoom1" type="Node2D" groups=["camera_follow"]]
+script = ExtResource("1_script")
+camera_limit_right = 1836
+
+[node name="Walls" type="Node2D" parent="."]
+z_index = 10
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+
+[node name="Floor" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 80)
+shape = SubResource("WB_floor")
+
+[node name="WallLeft" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 80)
+rotation = 1.5707964
+shape = SubResource("WB_left")
+
+[node name="WallRight" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(1836, 90)
+rotation = -1.5707964
+shape = SubResource("WB_right")
+
+[node name="Tile1" type="Sprite2D" parent="Walls"]
+position = Vector2(0, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile2" type="Sprite2D" parent="Walls"]
+position = Vector2(153, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile3" type="Sprite2D" parent="Walls"]
+position = Vector2(306, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile4" type="Sprite2D" parent="Walls"]
+position = Vector2(459, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile5" type="Sprite2D" parent="Walls"]
+position = Vector2(612, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile6" type="Sprite2D" parent="Walls"]
+position = Vector2(765, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile7" type="Sprite2D" parent="Walls"]
+position = Vector2(918, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile8" type="Sprite2D" parent="Walls"]
+position = Vector2(1071, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile9" type="Sprite2D" parent="Walls"]
+position = Vector2(1224, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile10" type="Sprite2D" parent="Walls"]
+position = Vector2(1377, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile11" type="Sprite2D" parent="Walls"]
+position = Vector2(1530, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="Tile12" type="Sprite2D" parent="Walls"]
+position = Vector2(1683, 0)
+texture = ExtResource("2_tile")
+centered = false
+
+[node name="CeilingTentacle" type="Sprite2D" parent="Walls"]
+position = Vector2(639, 0)
+texture = ExtResource("1_lend")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 153, 32)
+
+[node name="Trees" type="Node2D" parent="."]
+z_index = 2
+
+[node name="Tree2_1" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9100, 0.9400, 0.7200, 1)
+material = SubResource("M_s2p1")
+position = Vector2(110, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_1" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9700, 0.8900, 0.9700, 1)
+material = SubResource("M_s2p1")
+position = Vector2(69.5, 55)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_2" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9100, 0.9400, 0.7200, 1)
+material = SubResource("M_s2p1")
+position = Vector2(147, 68)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_1" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5400, 0.6600, 0.3100, 1)
+material = SubResource("M_s2p16")
+position = Vector2(36.5, 69)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_2" type="Sprite2D" parent="Trees"]
+modulate = Color(0.0000, 0.7100, 0.4900, 1)
+material = SubResource("M_s2p1")
+position = Vector2(50, 64)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_3" type="Sprite2D" parent="Trees"]
+modulate = Color(0.3400, 0.6500, 0.7500, 1)
+material = SubResource("M_s2p2")
+position = Vector2(74.5, 70)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_4" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5800, 0.6400, 0.2900, 1)
+material = SubResource("M_s2p2")
+position = Vector2(93.5, 63)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_5" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7100, 0.5500, 0.6200, 1)
+material = SubResource("M_s2p2")
+position = Vector2(105.5, 73)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_6" type="Sprite2D" parent="Trees"]
+modulate = Color(0.6600, 0.6000, 0.4300, 1)
+material = SubResource("M_s2p2")
+position = Vector2(135, 78)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_7" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7400, 0.5600, 0.4000, 1)
+material = SubResource("M_s2p2")
+position = Vector2(145.5, 67)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_8" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4300, 0.6500, 0.6700, 1)
+material = SubResource("M_s2p16")
+position = Vector2(154.5, 72)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_9" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4500, 0.6500, 0.6000, 1)
+material = SubResource("M_s2p15")
+position = Vector2(173, 73)
+texture = ExtResource("7_t3")
+
+[node name="Tree1_1" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9100, 0.9400, 0.7200, 1)
+material = SubResource("M_slow4")
+position = Vector2(330, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("5_t1")
+
+[node name="Tree4_3" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7400, 0.9500, 0.9700, 1)
+material = SubResource("M_s2p1")
+position = Vector2(294.5, 55)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_10" type="Sprite2D" parent="Trees"]
+modulate = Color(0.2900, 0.7100, 0.3100, 1)
+material = SubResource("M_s2p1")
+position = Vector2(265.5, 81)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_11" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4500, 0.6500, 0.6000, 1)
+material = SubResource("M_s2p1")
+position = Vector2(276, 80)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_12" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4300, 0.6500, 0.6700, 1)
+material = SubResource("M_s2p2")
+position = Vector2(287, 76)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_13" type="Sprite2D" parent="Trees"]
+modulate = Color(0.2900, 0.7100, 0.3100, 1)
+material = SubResource("M_s2p15")
+position = Vector2(297.5, 71)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_14" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5400, 0.6600, 0.3100, 1)
+material = SubResource("M_s2p15")
+position = Vector2(324.5, 80)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_15" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7400, 0.5600, 0.4000, 1)
+material = SubResource("M_s2p2")
+position = Vector2(351.5, 79)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_16" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5500, 0.6100, 0.7100, 1)
+material = SubResource("M_s2p16")
+position = Vector2(359.5, 63)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_17" type="Sprite2D" parent="Trees"]
+modulate = Color(0.6000, 0.6000, 0.6000, 1)
+material = SubResource("M_s2p16")
+position = Vector2(388, 76)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_18" type="Sprite2D" parent="Trees"]
+modulate = Color(0.0000, 0.7100, 0.4900, 1)
+material = SubResource("M_s2p2")
+position = Vector2(397, 69)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_19" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5800, 0.6400, 0.2900, 1)
+material = SubResource("M_s2p16")
+position = Vector2(412.5, 66)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_20" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4300, 0.6500, 0.6700, 1)
+material = SubResource("M_s2p2")
+position = Vector2(424.5, 80)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree4_4" type="Sprite2D" parent="Trees"]
+modulate = Color(0.8100, 0.8200, 0.8200, 1)
+material = SubResource("M_s2p1")
+position = Vector2(512.5, 62)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_21" type="Sprite2D" parent="Trees"]
+modulate = Color(0.3400, 0.6500, 0.7500, 1)
+material = SubResource("M_s2p2")
+position = Vector2(506.5, 64)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_22" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5500, 0.6100, 0.7100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(517.5, 79)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_23" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7100, 0.5500, 0.6200, 1)
+material = SubResource("M_s2p15")
+position = Vector2(532.5, 72)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_24" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4500, 0.6500, 0.6000, 1)
+material = SubResource("M_s2p2")
+position = Vector2(541.5, 63)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_25" type="Sprite2D" parent="Trees"]
+modulate = Color(0.0000, 0.7100, 0.4900, 1)
+material = SubResource("M_s2p2")
+position = Vector2(556.5, 72)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_26" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5500, 0.6100, 0.7100, 1)
+material = SubResource("M_s2p15")
+position = Vector2(566.5, 75)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree4_5" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9100, 0.9400, 0.7200, 1)
+material = SubResource("M_s2p1")
+position = Vector2(622, 62)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_6" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9000, 0.8100, 0.5900, 1)
+material = SubResource("M_s2p1")
+position = Vector2(784, 62)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_27" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7100, 0.5500, 0.6200, 1)
+material = SubResource("M_s2p2")
+position = Vector2(644, 72)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_28" type="Sprite2D" parent="Trees"]
+modulate = Color(0.2900, 0.7100, 0.3100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(664, 77)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_29" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5500, 0.6100, 0.7100, 1)
+material = SubResource("M_s2p1")
+position = Vector2(675.5, 79)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_30" type="Sprite2D" parent="Trees"]
+modulate = Color(0.6000, 0.6000, 0.6000, 1)
+material = SubResource("M_s2p2")
+position = Vector2(685, 74)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_2" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9700, 0.8900, 0.9700, 1)
+material = SubResource("M_s2p1")
+position = Vector2(880, 40)
+texture = ExtResource("6_t2")
+
+[node name="Tree1_2" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9200, 0.9200, 0.9200, 1)
+material = SubResource("M_slow4")
+position = Vector2(928, 40)
+texture = ExtResource("5_t1")
+
+[node name="Tree4_7" type="Sprite2D" parent="Trees"]
+modulate = Color(0.8100, 0.8200, 0.8200, 1)
+material = SubResource("M_s2p1")
+position = Vector2(851, 55)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_8" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4800, 0.8000, 0.6800, 1)
+material = SubResource("M_s2p1")
+position = Vector2(914, 62)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_31" type="Sprite2D" parent="Trees"]
+modulate = Color(0.6600, 0.6000, 0.4300, 1)
+material = SubResource("M_s2p1")
+position = Vector2(859.5, 65)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_32" type="Sprite2D" parent="Trees"]
+modulate = Color(0.2900, 0.7100, 0.3100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(871.5, 76)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_33" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4500, 0.6500, 0.6000, 1)
+material = SubResource("M_s2p1")
+position = Vector2(884.5, 77)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_34" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7100, 0.5500, 0.6200, 1)
+material = SubResource("M_s2p2")
+position = Vector2(894.5, 78)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_35" type="Sprite2D" parent="Trees"]
+modulate = Color(0.0000, 0.7100, 0.4900, 1)
+material = SubResource("M_s2p16")
+position = Vector2(915.5, 62)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_3" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9200, 0.9200, 0.9200, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1102, 40)
+texture = ExtResource("6_t2")
+
+[node name="Tree2_4" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7600, 0.9300, 1.0000, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1149.5, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_9" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7400, 0.9500, 0.9700, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1071.5, 68)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_10" type="Sprite2D" parent="Trees"]
+modulate = Color(1.0000, 0.8800, 0.8200, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1142.5, 62)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_11" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9000, 0.8100, 0.5900, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1054.5, 55)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_36" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5800, 0.6400, 0.2900, 1)
+material = SubResource("M_s2p15")
+position = Vector2(1078.5, 80)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_37" type="Sprite2D" parent="Trees"]
+modulate = Color(0.3400, 0.6500, 0.7500, 1)
+material = SubResource("M_s2p15")
+position = Vector2(1107.5, 78)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_38" type="Sprite2D" parent="Trees"]
+modulate = Color(0.2900, 0.7100, 0.3100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1125.5, 76)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_39" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7400, 0.5600, 0.4000, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1143.5, 67)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_40" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5500, 0.6100, 0.7100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1156.5, 66)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_41" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7400, 0.5600, 0.4000, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1181.5, 69)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree1_3" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4800, 0.8000, 0.6800, 1)
+material = SubResource("M_slow4")
+position = Vector2(1317, 40)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_5" type="Sprite2D" parent="Trees"]
+modulate = Color(0.8300, 0.7000, 0.4400, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1369, 40)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_12" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9700, 0.8900, 0.9700, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1270.5, 55)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_13" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9000, 0.8100, 0.5900, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1361.5, 55)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_14" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9000, 0.8100, 0.5900, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1291, 55)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_42" type="Sprite2D" parent="Trees"]
+modulate = Color(0.2900, 0.7100, 0.3100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1309, 78)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_43" type="Sprite2D" parent="Trees"]
+modulate = Color(0.6600, 0.6000, 0.4300, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1335.5, 64)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_44" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4300, 0.6500, 0.6700, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1354, 74)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_45" type="Sprite2D" parent="Trees"]
+modulate = Color(0.3400, 0.6500, 0.7500, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1365.5, 76)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_6" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5700, 0.7200, 0.7300, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1523.5, 40)
+texture = ExtResource("6_t2")
+
+[node name="Tree1_4" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5300, 0.7500, 0.5500, 1)
+material = SubResource("M_slow4")
+position = Vector2(1560, 40)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_7" type="Sprite2D" parent="Trees"]
+modulate = Color(0.9200, 0.9200, 0.9200, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1595, 40)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_15" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4800, 0.8000, 0.6800, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1562, 68)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_16" type="Sprite2D" parent="Trees"]
+modulate = Color(0.8300, 0.7000, 0.4400, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1641, 55)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_17" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7600, 0.9300, 1.0000, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1553.5, 55)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_46" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7100, 0.5500, 0.6200, 1)
+material = SubResource("M_s2p15")
+position = Vector2(1497, 73)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_47" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4300, 0.6500, 0.6700, 1)
+material = SubResource("M_s2p15")
+position = Vector2(1521.5, 72)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_48" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5800, 0.6400, 0.2900, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1546, 72)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_49" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5500, 0.6100, 0.7100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1560.5, 73)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_50" type="Sprite2D" parent="Trees"]
+modulate = Color(0.6600, 0.6100, 0.3200, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1589.5, 80)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_51" type="Sprite2D" parent="Trees"]
+modulate = Color(0.6000, 0.6000, 0.6000, 1)
+material = SubResource("M_s2p15")
+position = Vector2(1602.5, 63)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_52" type="Sprite2D" parent="Trees"]
+modulate = Color(0.3400, 0.6500, 0.7500, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1622.5, 66)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_8" type="Sprite2D" parent="Trees"]
+modulate = Color(0.8300, 0.7000, 0.4400, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1760, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_18" type="Sprite2D" parent="Trees"]
+modulate = Color(0.8100, 0.8200, 0.8200, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1720.5, 55)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_19" type="Sprite2D" parent="Trees"]
+modulate = Color(0.4800, 0.8000, 0.6800, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1792.5, 55)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_53" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7400, 0.5600, 0.4000, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1720, 64)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_54" type="Sprite2D" parent="Trees"]
+modulate = Color(0.5500, 0.6100, 0.7100, 1)
+material = SubResource("M_s2p15")
+position = Vector2(1746.5, 65)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_55" type="Sprite2D" parent="Trees"]
+modulate = Color(0.3400, 0.6500, 0.7500, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1770.5, 65)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_56" type="Sprite2D" parent="Trees"]
+modulate = Color(0.7100, 0.5500, 0.6200, 1)
+material = SubResource("M_s2p15")
+position = Vector2(1782, 64)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_57" type="Sprite2D" parent="Trees"]
+modulate = Color(0.3400, 0.6500, 0.7500, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1792, 69)
+texture = ExtResource("7_t3")
+
+[node name="Player" parent="." instance=ExtResource("5_player")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+position = Vector2(700, 60)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player"]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("GradTex_light")
+
+[node name="SpawnLight" type="PointLight2D" parent="."]
+position = Vector2(700, 30)
+scale = Vector2(1.375, 1.375)
+texture = SubResource("GradTex_light")
+
+[node name="1point5xMoving" type="Parallax2D" parent="."]
+z_index = 20
+scroll_scale = Vector2(1.5, 1.5)
+repeat_size = Vector2(400, 0)
+repeat_times = 8
+
+[node name="1" type="Sprite2D" parent="1point5xMoving"]
+material = SubResource("M_f5p5")
+position = Vector2(127, 47)
+texture = ExtResource("6_front")
+
+[node name="2" type="Sprite2D" parent="1point5xMoving"]
+material = SubResource("M_f7p3")
+position = Vector2(139, 52)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_front")
+region_enabled = true
+region_rect = Rect2(60.5, 0, 110.5, 90)
+
+[node name="3" type="Sprite2D" parent="1point5xMoving"]
+material = SubResource("M_f5p5")
+position = Vector2(228.5, 46)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_front")
+
+[node name="4" type="Sprite2D" parent="1point5xMoving"]
+material = SubResource("M_f6p4")
+position = Vector2(262, 44)
+texture = ExtResource("6_front")
+region_enabled = true
+region_rect = Rect2(60.5, 0, 110.5, 90)
+
+[node name="1point5xFixing" type="Parallax2D" parent="."]
+z_index = 20
+scroll_scale = Vector2(1.5, 1.5)
+
+[node name="Tree2_1" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.2200, 0.1000, 0.0800, 1)
+material = SubResource("M_f10p1")
+position = Vector2(170, 52)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_1" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(116.5, 80)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_2" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(204, 72)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_1" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0050, 0.1000, 0.0900, 1)
+material = SubResource("M_s2p16")
+position = Vector2(122, 90)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_2" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1100, 0.0700, 0.0300, 1)
+material = SubResource("M_s2p2")
+position = Vector2(145.5, 88)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_3" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1100, 0.0700, 0.0300, 1)
+material = SubResource("M_s2p2")
+position = Vector2(173.5, 84)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_4" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0050, 0.1000, 0.0900, 1)
+material = SubResource("M_s2p16")
+position = Vector2(203.5, 78)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_2" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.2400, 0.0080, 0.2600, 1)
+material = SubResource("M_f10p1")
+position = Vector2(420, 63)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_3" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(381.5, 72)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_4" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(452.5, 77)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_5" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0050, 0.1000, 0.0900, 1)
+material = SubResource("M_s2p16")
+position = Vector2(372, 82)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_6" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0200, 0.0900, 0.1100, 1)
+material = SubResource("M_s2p16")
+position = Vector2(393, 81)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_7" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0050, 0.1000, 0.0900, 1)
+material = SubResource("M_s2p16")
+position = Vector2(423, 89)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_8" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0900, 0.0800, 0.0700, 1)
+material = SubResource("M_s2p16")
+position = Vector2(442.5, 82)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_3" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.2200, 0.1000, 0.0800, 1)
+material = SubResource("M_f10p1")
+position = Vector2(720, 67)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_5" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(682.5, 71)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_6" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(770, 79)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_9" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0050, 0.1000, 0.0900, 1)
+material = SubResource("M_s2p2")
+position = Vector2(672, 84)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_10" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0900, 0.0800, 0.0700, 1)
+material = SubResource("M_s2p2")
+position = Vector2(696, 79)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_11" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0200, 0.0900, 0.1100, 1)
+material = SubResource("M_s2p16")
+position = Vector2(719, 92)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_12" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0050, 0.1000, 0.0900, 1)
+material = SubResource("M_s2p16")
+position = Vector2(751.5, 80)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_4" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0300, 0.1600, 0.1700, 1)
+material = SubResource("M_f10p1")
+position = Vector2(1207.5, 54)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree2_5" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1950, 0.0900, 0.2100, 1)
+material = SubResource("M_f10p1")
+position = Vector2(1254, 51)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_7" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1171.5, 81)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_8" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1270, 79)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_9" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1206, 76)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_13" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0200, 0.0900, 0.1100, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1206, 84)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_14" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1100, 0.0700, 0.0300, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1227, 84)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_6" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1950, 0.0900, 0.2100, 1)
+material = SubResource("M_f10p1")
+position = Vector2(1460, 68)
+texture = ExtResource("6_t2")
+
+[node name="Tree2_7" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.2400, 0.0080, 0.2600, 1)
+material = SubResource("M_f10p1")
+position = Vector2(1501.5, 69)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_10" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1431.5, 77)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_11" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1515, 66)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_12" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1427.5, 70)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_15" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0900, 0.0800, 0.0700, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1456, 90)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_16" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0050, 0.1000, 0.0900, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1483.5, 83)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_8" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0300, 0.1600, 0.1700, 1)
+material = SubResource("M_f10p1")
+position = Vector2(1713, 62)
+texture = ExtResource("6_t2")
+
+[node name="Tree2_9" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1950, 0.0900, 0.2100, 1)
+material = SubResource("M_f10p1")
+position = Vector2(1761, 56)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_13" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1713, 76)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_14" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1780, 76)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_15" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1710, 74)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_17" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0900, 0.0800, 0.0700, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1716, 83)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_18" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0200, 0.0900, 0.1100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1738.5, 75)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_10" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.2400, 0.0080, 0.2600, 1)
+material = SubResource("M_f10p1")
+position = Vector2(1981, 58)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree2_11" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1950, 0.0900, 0.2100, 1)
+material = SubResource("M_f10p1")
+position = Vector2(2022.5, 59)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_16" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1964.5, 76)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_17" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(2057, 71)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_18" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(1975, 77)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_19" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0200, 0.0900, 0.1100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1976, 90)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_20" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1100, 0.0700, 0.0300, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1996, 83)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_12" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.2200, 0.1000, 0.0800, 1)
+material = SubResource("M_f10p1")
+position = Vector2(2276.5, 69)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree2_13" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1950, 0.0900, 0.2100, 1)
+material = SubResource("M_f10p1")
+position = Vector2(2324.5, 65)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_19" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(2251, 79)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_20" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(2320.5, 68)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_21" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(2261, 75)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_21" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0200, 0.0900, 0.1100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(2276, 81)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_22" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0200, 0.0900, 0.1100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(2300, 75)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree2_14" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.2400, 0.0080, 0.2600, 1)
+material = SubResource("M_f10p1")
+position = Vector2(2533.5, 66)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree2_15" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1950, 0.0900, 0.2100, 1)
+material = SubResource("M_f10p1")
+position = Vector2(2577.5, 63)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree4_22" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(2517.5, 67)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_23" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(2607, 80)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree4_24" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1670, 0.1670, 0.1670, 1)
+material = SubResource("M_f8p15")
+position = Vector2(2501.5, 76)
+scale = Vector2(-1, 1)
+texture = ExtResource("8_t4")
+
+[node name="Tree3_23" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.1100, 0.0700, 0.0300, 1)
+material = SubResource("M_s2p2")
+position = Vector2(2536, 86)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_24" type="Sprite2D" parent="1point5xFixing"]
+modulate = Color(0.0200, 0.0900, 0.1100, 1)
+material = SubResource("M_s2p2")
+position = Vector2(2558, 81)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="0point8xMoving" type="Parallax2D" parent="."]
+z_index = -1
+scroll_scale = Vector2(0.9, 0.9)
+repeat_size = Vector2(153, 0)
+repeat_times = 13
+
+[node name="1" type="Sprite2D" parent="0point8xMoving"]
+texture = ExtResource("11_wall")
+centered = false
+
+[node name="0point8xFixing" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.9, 0.9)
+
+[node name="Tree1_1" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.5976, 0.5040, 0.3168, 1)
+material = SubResource("M_slow4")
+position = Vector2(63, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_1" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3456, 0.5760, 0.4896, 1)
+material = SubResource("M_s2p1")
+position = Vector2(119, 40)
+texture = ExtResource("6_t2")
+
+[node name="Tree3_1" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3300, 0.3660, 0.4260, 1)
+material = SubResource("M_s2p1")
+position = Vector2(-14, 79)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_2" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3960, 0.3660, 0.1920, 1)
+material = SubResource("M_s2p15")
+position = Vector2(10.5, 73)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_3" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3600, 0.3600, 0.3600, 1)
+material = SubResource("M_s2p15")
+position = Vector2(39, 73)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_4" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2040, 0.3900, 0.4500, 1)
+material = SubResource("M_s2p15")
+position = Vector2(61, 62)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_5" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3600, 0.3600, 0.3600, 1)
+material = SubResource("M_s2p2")
+position = Vector2(88.5, 66)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_6" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3300, 0.3660, 0.4260, 1)
+material = SubResource("M_s2p2")
+position = Vector2(117, 79)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_7" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3480, 0.3840, 0.1740, 1)
+material = SubResource("M_s2p2")
+position = Vector2(148, 75)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_8" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.4440, 0.3360, 0.2400, 1)
+material = SubResource("M_s2p2")
+position = Vector2(172.5, 66)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree1_2" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3456, 0.5760, 0.4896, 1)
+material = SubResource("M_slow4")
+position = Vector2(270, 40)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_2" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.5688, 0.5904, 0.6048, 1)
+material = SubResource("M_s2p1")
+position = Vector2(329.5, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree3_9" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3240, 0.3960, 0.1860, 1)
+material = SubResource("M_s2p1")
+position = Vector2(196, 80)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_10" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.4440, 0.3360, 0.2400, 1)
+material = SubResource("M_s2p16")
+position = Vector2(225, 80)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_11" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3480, 0.3840, 0.1740, 1)
+material = SubResource("M_s2p2")
+position = Vector2(248, 65)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_12" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3960, 0.3600, 0.2580, 1)
+material = SubResource("M_s2p2")
+position = Vector2(273.5, 69)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_13" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3960, 0.3600, 0.2580, 1)
+material = SubResource("M_s2p15")
+position = Vector2(296, 64)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_14" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3480, 0.3840, 0.1740, 1)
+material = SubResource("M_s2p2")
+position = Vector2(322, 66)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_15" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2700, 0.3900, 0.3600, 1)
+material = SubResource("M_s2p15")
+position = Vector2(348, 67)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_16" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3960, 0.3660, 0.1920, 1)
+material = SubResource("M_s2p15")
+position = Vector2(377.5, 79)
+texture = ExtResource("7_t3")
+
+[node name="Tree1_3" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.6480, 0.5832, 0.4248, 1)
+material = SubResource("M_slow4")
+position = Vector2(491.5, 40)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_3" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.6552, 0.6768, 0.5184, 1)
+material = SubResource("M_s2p1")
+position = Vector2(547.5, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree3_17" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3240, 0.3960, 0.1860, 1)
+material = SubResource("M_s2p2")
+position = Vector2(416, 75)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_18" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3240, 0.3960, 0.1860, 1)
+material = SubResource("M_s2p15")
+position = Vector2(446, 70)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_19" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3240, 0.3960, 0.1860, 1)
+material = SubResource("M_s2p2")
+position = Vector2(472, 80)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_20" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3960, 0.3660, 0.1920, 1)
+material = SubResource("M_s2p2")
+position = Vector2(494.5, 62)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_21" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.0000, 0.4260, 0.2940, 1)
+material = SubResource("M_s2p2")
+position = Vector2(518, 69)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_22" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2700, 0.3900, 0.3600, 1)
+material = SubResource("M_s2p2")
+position = Vector2(542, 65)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_23" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.4440, 0.3360, 0.2400, 1)
+material = SubResource("M_s2p2")
+position = Vector2(571, 72)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_24" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2700, 0.3900, 0.3600, 1)
+material = SubResource("M_s2p2")
+position = Vector2(602.5, 69)
+texture = ExtResource("7_t3")
+
+[node name="Tree1_4" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3816, 0.5400, 0.3960, 1)
+material = SubResource("M_slow4")
+position = Vector2(730.5, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_4" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.7200, 0.6336, 0.5904, 1)
+material = SubResource("M_s2p1")
+position = Vector2(788.5, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree3_25" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2700, 0.3900, 0.3600, 1)
+material = SubResource("M_s2p15")
+position = Vector2(656, 73)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_26" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.4260, 0.3300, 0.3720, 1)
+material = SubResource("M_s2p2")
+position = Vector2(685.5, 79)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_27" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2040, 0.3900, 0.4500, 1)
+material = SubResource("M_s2p15")
+position = Vector2(715, 79)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_28" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3300, 0.3660, 0.4260, 1)
+material = SubResource("M_s2p15")
+position = Vector2(740, 66)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_29" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3480, 0.3840, 0.1740, 1)
+material = SubResource("M_s2p1")
+position = Vector2(768.5, 70)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_30" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2580, 0.3900, 0.4020, 1)
+material = SubResource("M_s2p2")
+position = Vector2(795.5, 73)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_31" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.4440, 0.3360, 0.2400, 1)
+material = SubResource("M_s2p2")
+position = Vector2(824.5, 78)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_32" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2700, 0.3900, 0.3600, 1)
+material = SubResource("M_s2p2")
+position = Vector2(849.5, 69)
+texture = ExtResource("7_t3")
+
+[node name="Tree1_5" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.5688, 0.5904, 0.6048, 1)
+material = SubResource("M_slow4")
+position = Vector2(885, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_5" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3816, 0.5400, 0.3960, 1)
+material = SubResource("M_s2p1")
+position = Vector2(930.5, 40)
+texture = ExtResource("6_t2")
+
+[node name="Tree1_6" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.6984, 0.6408, 0.6984, 1)
+material = SubResource("M_slow4")
+position = Vector2(988.5, 40)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_6" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.5688, 0.5904, 0.6048, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1046.5, 40)
+texture = ExtResource("6_t2")
+
+[node name="Tree3_33" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2700, 0.3900, 0.3600, 1)
+material = SubResource("M_s2p2")
+position = Vector2(895, 62)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_34" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3480, 0.3840, 0.1740, 1)
+material = SubResource("M_s2p15")
+position = Vector2(917.5, 64)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_35" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.0000, 0.4260, 0.2940, 1)
+material = SubResource("M_s2p15")
+position = Vector2(946, 78)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_36" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.4260, 0.3300, 0.3720, 1)
+material = SubResource("M_s2p16")
+position = Vector2(972.5, 74)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_37" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.4260, 0.3300, 0.3720, 1)
+material = SubResource("M_s2p1")
+position = Vector2(996.5, 66)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree1_7" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3456, 0.5760, 0.4896, 1)
+material = SubResource("M_slow4")
+position = Vector2(1090, 40)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_7" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.4104, 0.5184, 0.5256, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1152, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree1_8" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3816, 0.5400, 0.3960, 1)
+material = SubResource("M_slow4")
+position = Vector2(1208, 40)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_8" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3816, 0.5400, 0.3960, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1270, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree3_38" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2580, 0.3900, 0.4020, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1115, 70)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_39" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3960, 0.3600, 0.2580, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1139, 66)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_40" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2580, 0.3900, 0.4020, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1162.5, 75)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_41" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3300, 0.3660, 0.4260, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1193, 72)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_42" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3960, 0.3660, 0.1920, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1218.5, 73)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree1_9" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.5976, 0.5040, 0.3168, 1)
+material = SubResource("M_slow4")
+position = Vector2(1310.5, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_9" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.7200, 0.6336, 0.5904, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1373, 40)
+texture = ExtResource("6_t2")
+
+[node name="Tree1_10" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.5472, 0.6696, 0.7200, 1)
+material = SubResource("M_slow4")
+position = Vector2(1429.5, 40)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_10" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.5976, 0.5040, 0.3168, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1483.5, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree3_43" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3240, 0.3960, 0.1860, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1335, 75)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_44" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2040, 0.3900, 0.4500, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1366.5, 76)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_45" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3960, 0.3600, 0.2580, 1)
+material = SubResource("M_s2p15")
+position = Vector2(1397.5, 75)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_46" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3480, 0.3840, 0.1740, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1429, 72)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_47" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.4260, 0.3300, 0.3720, 1)
+material = SubResource("M_s2p15")
+position = Vector2(1459.5, 77)
+texture = ExtResource("7_t3")
+
+[node name="Tree1_11" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.5688, 0.5904, 0.6048, 1)
+material = SubResource("M_slow4")
+position = Vector2(1519, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_11" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.6984, 0.6408, 0.6984, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1570, 40)
+texture = ExtResource("6_t2")
+
+[node name="Tree1_12" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.5688, 0.5904, 0.6048, 1)
+material = SubResource("M_slow4")
+position = Vector2(1627.5, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("5_t1")
+
+[node name="Tree2_12" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.5472, 0.6696, 0.7200, 1)
+material = SubResource("M_s2p1")
+position = Vector2(1679.5, 40)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_t2")
+
+[node name="Tree3_48" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2040, 0.3900, 0.4500, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1535, 70)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_49" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3960, 0.3660, 0.1920, 1)
+material = SubResource("M_s2p2")
+position = Vector2(1566, 64)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_50" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.2580, 0.3900, 0.4020, 1)
+material = SubResource("M_s2p15")
+position = Vector2(1588.5, 69)
+scale = Vector2(-1, 1)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_51" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.3960, 0.3600, 0.2580, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1611, 80)
+texture = ExtResource("7_t3")
+
+[node name="Tree3_52" type="Sprite2D" parent="0point8xFixing"]
+modulate = Color(0.0000, 0.4260, 0.2940, 1)
+material = SubResource("M_s2p16")
+position = Vector2(1639, 79)
+texture = ExtResource("7_t3")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.5370987, 0.5370987, 0.5370987, 1)
+
+[node name="DreamIntro" parent="." instance=ExtResource("90_dreamintro")]
+story_text_1 = "睡前，给鱼缸换了水。珊瑚在灯下轻轻地摇。"
+story_text_2 = "梦里的水很暖。摇篮的深处，有什么在呼吸。"
+weekday_text = "周二的梦"
+title_text = "珊瑚摇篮"
+title_color = Color(0.6, 0.82, 0.78, 1)

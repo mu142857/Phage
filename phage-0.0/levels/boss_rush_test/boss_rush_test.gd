@@ -25,6 +25,9 @@ const ROSTER: Array[Dictionary] = [
 	# 忏悔者:字卡期间藏在地里(hidden_intro),开打从 Prominence(6) 升起 → 镰刀冲砍 → 正常循环
 	{"name": "忏悔者", "title": "礼拜日的狂信徒", "scene": "res://entities/penitent/penitent.tscn",
 		"pos": Vector2(140, 80), "fight_state": 6, "hidden_intro": true},
+	# 木偶师:控制器节点放原点,自带的木头人吊在 (80,30);死亡=控制器 queue_free
+	{"name": "木头人", "title": "台上那只手", "scene": "res://entities/wooden_man/puppeteer.tscn",
+		"pos": Vector2(0, 0)},
 ]
 
 @export var start_index := 0    # 从第几个 boss 开打(0 起),想单练后期 boss 改这里
@@ -83,7 +86,7 @@ func _run() -> void:
 # boss 之间清场：上一个 boss 的召唤物/网弹不许带进下一场（N 跳过时也生效）。
 # 缠身网被 free 会在 _exit_tree 里自动解除玩家缠身。
 func _clear_leftovers() -> void:
-	for group_name in ["monster", "calendula_web"]:
+	for group_name in ["monster", "calendula_web", "puppeteer_spawn", "puppeteer_minion"]:
 		for m in get_tree().get_nodes_in_group(group_name):
 			if is_instance_valid(m):
 				(m as Node).queue_free()

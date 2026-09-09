@@ -1,0 +1,152 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/wooden_man/wooden_man.gd" id="1_body"]
+[ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_hurt"]
+[ext_resource type="Script" uid="uid://bg8dd0jdo67rm" path="res://systems/state_machine/state_manager.gd" id="3_sm"]
+[ext_resource type="Script" path="res://entities/wooden_man/State/state_null.gd" id="4_null"]
+[ext_resource type="Script" path="res://entities/wooden_man/State/state_idle.gd" id="5_idle"]
+[ext_resource type="Script" path="res://entities/wooden_man/State/state_death.gd" id="6_death"]
+[ext_resource type="Script" path="res://entities/wooden_man/State/state_descend.gd" id="7_descend"]
+[ext_resource type="Script" path="res://entities/wooden_man/State/state_vanish.gd" id="8_vanish"]
+[ext_resource type="Script" path="res://entities/wooden_man/State/state_to_blade.gd" id="9_to_blade"]
+[ext_resource type="Script" path="res://entities/wooden_man/State/state_slash.gd" id="10_slash"]
+[ext_resource type="Script" path="res://entities/wooden_man/State/state_to_eye.gd" id="11_to_eye"]
+[ext_resource type="Script" path="res://entities/wooden_man/State/state_laser.gd" id="12_laser"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hurt"]
+resource_local_to_scene = true
+shader = ExtResource("2_hurt")
+shader_parameter/Enabled = false
+shader_parameter/Tint = Color(0.9, 0.95, 1, 1)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_body"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"ToBlade",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"BladeIdle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"BladeMove",
+"speed": 8.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"Slash",
+"speed": 6.7
+}, {
+"frames": [],
+"loop": false,
+"name": &"ToEye",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"EyeIdle",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_hitflash"]
+resource_name = "HitFlash"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hit"]
+_data = {
+&"HitFlash": SubResource("Animation_hitflash"),
+&"RESET": SubResource("Animation_reset")
+}
+
+[node name="WoodenMan" type="CharacterBody2D"]
+z_index = 10
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_body")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_hurt")
+sprite_frames = SubResource("SpriteFrames_body")
+animation = &"Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("3_sm")
+initial_state_index = 0
+
+[node name="Null(0)" type="Node" parent="StateMachine"]
+script = ExtResource("4_null")
+
+[node name="Idle(1)" type="Node" parent="StateMachine"]
+script = ExtResource("5_idle")
+
+[node name="Death(2)" type="Node" parent="StateMachine"]
+script = ExtResource("6_death")
+
+[node name="Descend(3)" type="Node" parent="StateMachine"]
+script = ExtResource("7_descend")
+
+[node name="Vanish(4)" type="Node" parent="StateMachine"]
+script = ExtResource("8_vanish")
+
+[node name="ToBlade(5)" type="Node" parent="StateMachine"]
+script = ExtResource("9_to_blade")
+
+[node name="Slash(6)" type="Node" parent="StateMachine"]
+script = ExtResource("10_slash")
+
+[node name="ToEye(7)" type="Node" parent="StateMachine"]
+script = ExtResource("11_to_eye")
+
+[node name="Laser(8)" type="Node" parent="StateMachine"]
+script = ExtResource("12_laser")
+
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="."]
+libraries/ = SubResource("AnimationLibrary_hit")
+
+[node name="SlashHitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SlashHitbox"]
+
+[node name="EyePoint" type="Node2D" parent="."]
+position = Vector2(6, -44)

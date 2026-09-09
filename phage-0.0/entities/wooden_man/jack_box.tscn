@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/wooden_man/jack_box.gd" id="1_box"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_box"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"Fly",
+"speed": 8.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"Land",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"Pop",
+"speed": 10.0
+}]
+
+[node name="JackBox" type="Area2D"]
+z_index = 12
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_box")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_box")
+animation = &"Fly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-8, -8, 16, 16)

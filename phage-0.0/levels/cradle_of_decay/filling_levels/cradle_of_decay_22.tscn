@@ -1,83 +1,173 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cj3f3twdpj12o"]
 
-[ext_resource type="Script" path="res://levels/cradle_corridor/cradle_room.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://exucoh44seym" path="res://levels/cradle_corridor/cradle_room.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
-[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_0.png" id="bg_0"]
-[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_2.png" id="bg_2"]
-[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_4.png" id="bg_4"]
-[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_6.png" id="bg_6"]
-[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_8.png" id="bg_8"]
-[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_10.png" id="bg_10"]
-[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_12.png" id="bg_12"]
+[ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
+[ext_resource type="Texture2D" uid="uid://bxedpo3oitfxu" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_0.png" id="bg_0"]
+[ext_resource type="Texture2D" uid="uid://c4rndfuxd4inm" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_2.png" id="bg_2"]
+[ext_resource type="Texture2D" uid="uid://cuces6qv527s1" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_4.png" id="bg_4"]
+[ext_resource type="Texture2D" uid="uid://lrrsfdnc2pbj" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_6.png" id="bg_6"]
+[ext_resource type="Texture2D" uid="uid://bj3o7pul64mtn" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_8.png" id="bg_8"]
+[ext_resource type="Texture2D" uid="uid://dhycjx3v0f2ug" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_10.png" id="bg_10"]
+[ext_resource type="Texture2D" uid="uid://dcu0a86wayukx" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_12.png" id="bg_12"]
+[ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WB_floor"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_22qh5"]
+size = Vector2(64, 39)
 
-[node name="CradleOfDecay22" type="Node2D" groups=["camera_follow"]]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7jtui"]
+size = Vector2(112, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_torp7"]
+size = Vector2(4, 77.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aen1v"]
+size = Vector2(4, 134)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xkysm"]
+size = Vector2(4, 56)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ahpo4"]
+size = Vector2(4, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qy8u5"]
+size = Vector2(216, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vomjc"]
+size = Vector2(26, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_omvqa"]
+size = Vector2(28, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_bottom"]
+size = Vector2(32, 2)
+
+[node name="CradleOfDecay22" type="Node2D" unique_id=499718006 groups=["camera_follow"]]
 script = ExtResource("1_script")
-camera_limit_right = 216
 camera_limit_bottom = 137
+camera_limit_right = 216
 
-[node name="0point0xMoving" type="Parallax2D" parent="."]
+[node name="0point0xMoving" type="Parallax2D" parent="." unique_id=2109275286]
 scroll_scale = Vector2(0, 0)
 scroll_offset = Vector2(-28, -23.5)
 
-[node name="Sprite2D" type="Sprite2D" parent="0point0xMoving"]
+[node name="Sprite2D" type="Sprite2D" parent="0point0xMoving" unique_id=1781215068]
 texture = ExtResource("bg_0")
 centered = false
 
-[node name="0point2xMoving" type="Parallax2D" parent="."]
+[node name="0point2xMoving" type="Parallax2D" parent="." unique_id=1783234661]
 scroll_scale = Vector2(0.2, 0.2)
 scroll_offset = Vector2(-22.4, -18.8)
 
-[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving"]
+[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving" unique_id=281195486]
 texture = ExtResource("bg_2")
 centered = false
 
-[node name="0point4xMoving" type="Parallax2D" parent="."]
+[node name="0point4xMoving" type="Parallax2D" parent="." unique_id=1496376092]
 scroll_scale = Vector2(0.4, 0.4)
 scroll_offset = Vector2(-16.8, -14.1)
 
-[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving"]
+[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving" unique_id=1625264118]
 texture = ExtResource("bg_4")
 centered = false
 
-[node name="0point6xMoving" type="Parallax2D" parent="."]
+[node name="0point6xMoving" type="Parallax2D" parent="." unique_id=102102203]
 scroll_scale = Vector2(0.6, 0.6)
 scroll_offset = Vector2(-11.2, -9.4)
 
-[node name="Sprite2D" type="Sprite2D" parent="0point6xMoving"]
+[node name="Sprite2D" type="Sprite2D" parent="0point6xMoving" unique_id=1837637572]
 texture = ExtResource("bg_6")
 centered = false
 
-[node name="0point8xMoving" type="Parallax2D" parent="."]
+[node name="0point8xMoving" type="Parallax2D" parent="." unique_id=1134720027]
 scroll_scale = Vector2(0.8, 0.8)
 scroll_offset = Vector2(-5.6, -4.7)
 
-[node name="Sprite2D" type="Sprite2D" parent="0point8xMoving"]
+[node name="Sprite2D" type="Sprite2D" parent="0point8xMoving" unique_id=1965346633]
 texture = ExtResource("bg_8")
 centered = false
 
-[node name="Background" type="Sprite2D" parent="."]
+[node name="Background" type="Sprite2D" parent="." unique_id=2134877451]
 texture = ExtResource("bg_10")
 centered = false
 
-[node name="Walls" type="Node2D" parent="."]
+[node name="Walls" type="Node2D" parent="." unique_id=701846650]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=100080514]
 collision_mask = 0
 
-[node name="Floor" type="CollisionShape2D" parent="Walls/StaticBody2D"]
-position = Vector2(0, 77)
-shape = SubResource("WB_floor")
+[node name="Floor" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1255249059]
+position = Vector2(32, 95.5)
+shape = SubResource("RectangleShape2D_22qh5")
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector2(25, 60)
+[node name="Floor2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1411340291]
+position = Vector2(120, 110)
+shape = SubResource("RectangleShape2D_7jtui")
 
-[node name="1point2xMoving" type="Parallax2D" parent="."]
+[node name="Floor3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1083603011]
+position = Vector2(178, 98.5)
+shape = SubResource("RectangleShape2D_torp7")
+
+[node name="Floor4" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1553275417]
+position = Vector2(214, 70)
+shape = SubResource("RectangleShape2D_aen1v")
+
+[node name="Floor5" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=618524802]
+position = Vector2(2, 48)
+shape = SubResource("RectangleShape2D_xkysm")
+
+[node name="Floor6" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1370282060]
+position = Vector2(2, 3.5)
+shape = SubResource("RectangleShape2D_ahpo4")
+
+[node name="Floor7" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1145984900]
+position = Vector2(108, 1.5)
+shape = SubResource("RectangleShape2D_qy8u5")
+
+[node name="Floor8" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1703232292]
+position = Vector2(113, 55.5)
+shape = SubResource("RectangleShape2D_vomjc")
+
+[node name="Player" parent="." unique_id=369940065 instance=ExtResource("2_player")]
+position = Vector2(35, 16)
+
+[node name="DoorLeft" type="Area2D" parent="." unique_id=17684058]
+position = Vector2(3, 59)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_auto")
+scene_path = "res://levels/cradle_of_decay/filling_levels/cradle_of_decay_21.tscn"
+teleport_id = 4
+spawn_offset = Vector2(7, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorLeft" unique_id=1391136182]
+position = Vector2(11, -47)
+shape = SubResource("RectangleShape2D_omvqa")
+
+[node name="DoorBottom" type="Area2D" parent="." unique_id=54383196]
+position = Vector2(196, 137)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_auto")
+scene_path = "res://levels/cradle_of_decay/filling_levels/cradle_of_decay_23.tscn"
+teleport_id = 5
+spawn_offset = Vector2(-30, -42)
+require_velocity = Vector2(0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorBottom" unique_id=967279118]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_door_bottom")
+
+[node name="1point2xMoving" type="Parallax2D" parent="." unique_id=709340351]
 z_index = 20
 scroll_scale = Vector2(1.2, 1.2)
 scroll_offset = Vector2(5.6, 4.7)
 
-[node name="Sprite2D" type="Sprite2D" parent="1point2xMoving"]
+[node name="Sprite2D" type="Sprite2D" parent="1point2xMoving" unique_id=1900218739]
+modulate = Color(1, 1, 1, 0.8)
+position = Vector2(-4.6, -4.7)
+scale = Vector2(1.2, 1)
 texture = ExtResource("bg_12")
 centered = false
+
+[node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]

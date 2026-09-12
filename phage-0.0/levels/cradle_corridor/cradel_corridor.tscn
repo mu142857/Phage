@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c1eqqcfj5cia5" path="res://levels/cradle_corridor/cradel_corridor.gd" id="1_js0h5"]
 [ext_resource type="Texture2D" uid="uid://dtchvx4o02bc0" path="res://levels/cradle_corridor/cradel_corridor_left_end.png" id="1_qbil3"]
 [ext_resource type="Texture2D" uid="uid://ebnc676xw8di" path="res://levels/cradle_corridor/cradel_corridor.png" id="2_kshva"]
+[ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
 [ext_resource type="Texture2D" uid="uid://nnubgpoob6q5" path="res://levels/cradle_corridor/cradel_corridor_right_end.png" id="4_l5uys"]
 [ext_resource type="Texture2D" uid="uid://0uarw2wnpgl4" path="res://levels/cradle_corridor/tree1.png" id="5_ewxpp"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="5_l5uys"]
@@ -14,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://drbdeq7r3fmdv" path="res://levels/cradle_corridor/wall.png" id="11_nfyjk"]
 [ext_resource type="Texture2D" uid="uid://bh2siqogdaihy" path="res://levels/cradle_corridor/red_wall.png" id="12_hu8kv"]
 [ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="12_woclt"]
-[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
+[ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a1y6q"]
 
@@ -49,6 +50,9 @@ gradient = SubResource("Gradient_ecic6")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_side"]
+size = Vector2(2, 80)
 
 [sub_resource type="Gradient" id="Gradient_woclt"]
 colors = PackedColorArray(0.6480781, 0.64807814, 0.64807796, 1, 0, 0, 0, 1)
@@ -1272,6 +1276,19 @@ position = Vector2(0, -7)
 scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("GradientTexture2D_a1y6q")
 
+[node name="DoorLeft" type="Area2D" parent="." unique_id=1541573028]
+position = Vector2(3, 62)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_auto")
+scene_path = "res://levels/cradle_of_decay/filling_levels/cradle_of_decay_23.tscn"
+teleport_id = 6
+spawn_offset = Vector2(7, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorLeft" unique_id=728807484]
+position = Vector2(-2, -22)
+shape = SubResource("RectangleShape2D_door_side")
+
 [node name="PointLight2D1" type="PointLight2D" parent="." unique_id=1434196974]
 position = Vector2(61.000008, 30)
 scale = Vector2(1.375, 1.375)
@@ -1768,9 +1785,4 @@ position = Vector2(613, 80)
 [node name="PopTopsPosition2" type="Node2D" parent="." unique_id=2025007576]
 position = Vector2(954, 80)
 
-[node name="DreamIntro" parent="." unique_id=94633649 instance=ExtResource("90_dreamintro")]
-story_text_1 = "睡前，给鱼缸换了水。珊瑚在灯下轻轻地摇。"
-story_text_2 = "梦里的水很暖。摇篮的深处，有什么在呼吸。"
-weekday_text = "周二的梦"
-title_text = "珊瑚摇篮"
-title_color = Color(0.6, 0.82, 0.78, 1)
+[node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]

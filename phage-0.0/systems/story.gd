@@ -6,10 +6,10 @@
 extends Node
 
 const ROOM_SCENE := "res://levels/remi's_room/remi's_room.tscn"
-## 七夜的梦。cradle_corridor / rust_city 还没做完,先直接进 boss 场景。
+## 七夜的梦。rust_city 还没做完,先直接进 boss 场景。
 const DREAM_SCENES: Array[String] = [
 	"res://levels/spawn_room/spawn_room.tscn",              # 周一《伤口》
-	"res://levels/cradle_of_decay/cradle_of_decay.tscn",    # 周二《珊瑚摇篮》
+	"res://levels/cradle_corridor/cradle_room_1.tscn",     # 周二《珊瑚摇篮》(出生房,链路见 cradle_room_1)
 	"res://levels/rust_arena/rust_arena.tscn",              # 周三《铁锈城》
 	"res://levels/pink_land/pink_land.tscn",                # 周四《盐做的山》
 	"res://levels/spider_forest/spider_forest.tscn",        # 周五《网》

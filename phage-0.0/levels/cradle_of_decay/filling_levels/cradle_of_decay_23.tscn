@@ -1,24 +1,126 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://4q8tk6qqwf5c"]
 
-[ext_resource type="Texture2D" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/23.png" id="1_bg"]
+[ext_resource type="Texture2D" uid="uid://cjtdpsg3xhnif" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/23.png" id="1_bg"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
+[ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
+[ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="3_ju82c"]
+[ext_resource type="Texture2D" uid="uid://bkgoipd3p8wyv" path="res://levels/cradle_corridor/tree3.png" id="4_hh5qm"]
+[ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WB_floor"]
 
-[node name="CradleOfDecay23" type="Node2D" groups=["camera_fixed"]]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1b1rs"]
+size = Vector2(4, 77)
 
-[node name="Background" type="Sprite2D" parent="."]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1v6ut"]
+size = Vector2(64, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ju82c"]
+size = Vector2(81, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hh5qm"]
+size = Vector2(17, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hkpb0"]
+size = Vector2(17, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_side"]
+size = Vector2(15, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b1dam"]
+size = Vector2(4, 80)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hkpb0"]
+shader = ExtResource("3_ju82c")
+shader_parameter/Strength = 2.0
+shader_parameter/Speed = 2.0000000475
+
+[node name="CradleOfDecay23" type="Node2D" unique_id=666694985 groups=["camera_fixed"]]
+
+[node name="Background" type="Sprite2D" parent="." unique_id=570385018]
 texture = ExtResource("1_bg")
 centered = false
 
-[node name="Walls" type="Node2D" parent="."]
+[node name="Walls" type="Node2D" parent="." unique_id=849525479]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls" unique_id=1558530120]
 collision_mask = 0
 
-[node name="Floor" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+[node name="Floor" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=113816582]
 position = Vector2(0, 80)
 shape = SubResource("WB_floor")
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector2(20, 60)
+[node name="Floor2" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=2085471902]
+position = Vector2(2, 41.5)
+shape = SubResource("RectangleShape2D_1b1rs")
+
+[node name="Floor3" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=86618565]
+position = Vector2(32, 1.5)
+shape = SubResource("RectangleShape2D_1v6ut")
+
+[node name="Floor4" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1488106320]
+position = Vector2(119.5, 1.5)
+shape = SubResource("RectangleShape2D_ju82c")
+
+[node name="Floor5" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=743071106]
+position = Vector2(12.5, 55.5)
+shape = SubResource("RectangleShape2D_hh5qm")
+
+[node name="Floor6" type="CollisionShape2D" parent="Walls/StaticBody2D" unique_id=1758234460]
+position = Vector2(70.5, 31.5)
+shape = SubResource("RectangleShape2D_hkpb0")
+
+[node name="Player" parent="." unique_id=101394859 instance=ExtResource("2_player")]
+position = Vector2(23, 40)
+
+[node name="DoorLeft" type="Area2D" parent="." unique_id=298515247]
+position = Vector2(3, 62)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_auto")
+scene_path = "res://levels/cradle_of_decay/filling_levels/cradle_of_decay_22.tscn"
+teleport_id = 5
+spawn_offset = Vector2(7, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorLeft" unique_id=488148681]
+position = Vector2(68.5, -61)
+shape = SubResource("RectangleShape2D_door_side")
+
+[node name="DoorRight" type="Area2D" parent="." unique_id=215996833]
+position = Vector2(157, 62)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_auto")
+scene_path = "res://levels/cradle_corridor/cradel_corridor.tscn"
+teleport_id = 6
+spawn_offset = Vector2(-7, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorRight" unique_id=245923417]
+position = Vector2(5, -22)
+shape = SubResource("RectangleShape2D_b1dam")
+
+[node name="Trees" type="Node2D" parent="." unique_id=461201057]
+
+[node name="Tree3_1" type="Sprite2D" parent="Trees" unique_id=896435792]
+modulate = Color(0.28718984, 0.70403004, 0.37438238, 1)
+material = SubResource("ShaderMaterial_hkpb0")
+position = Vector2(145, 62)
+texture = ExtResource("4_hh5qm")
+
+[node name="Tree3_2" type="Sprite2D" parent="Trees" unique_id=740122956]
+modulate = Color(0.79334337, 0.54847586, 0.22863361, 1)
+material = SubResource("ShaderMaterial_hkpb0")
+position = Vector2(164, 74)
+scale = Vector2(-1, 1)
+texture = ExtResource("4_hh5qm")
+
+[node name="Tree3_3" type="Sprite2D" parent="Trees" unique_id=1682670233]
+modulate = Color(0.33611086, 0.64643914, 0.80330396, 1)
+material = SubResource("ShaderMaterial_hkpb0")
+position = Vector2(114, 64.5)
+scale = Vector2(-1, 1)
+texture = ExtResource("4_hh5qm")
+region_enabled = true
+region_rect = Rect2(0, 0, 37, 31)
+
+[node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]

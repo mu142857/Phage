@@ -27,6 +27,7 @@ const FADE_OUT_TIME := 0.5
 ## levels/ 里的常驻粒子和关卡专用 shader 随关卡在 DreamIntro 黑幕下加载编译,不登记。
 const WARM_SCENE_PATHS: Array[String] = [
 	# 独立粒子特效
+	"res://systems/oxygen/oxygen_overlay.tscn",
 	"res://entities/actinos/actinos_death_effect.tscn",
 	"res://entities/actinos/actinos_jump_effect.tscn",
 	"res://entities/azure_warlord/azure_bullet_effects.tscn",

@@ -4,12 +4,13 @@
 [ext_resource type="Script" uid="uid://ddb7j6jlpcnp" path="res://levels/cradle_of_decay/cradle_of_decay.gd" id="1_lqaxi"]
 [ext_resource type="Texture2D" uid="uid://6s5ig1kn3pi8" path="res://levels/cradle_of_decay/wall.png" id="2_hklc7"]
 [ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="3_4iulq"]
+[ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
 [ext_resource type="Texture2D" uid="uid://cdjfx1qn2rjnr" path="res://levels/cradle_of_decay/tree1.png" id="3_pgmxn"]
 [ext_resource type="Texture2D" uid="uid://dhmb2fbwnqnoa" path="res://levels/cradle_of_decay/tree2.png" id="4_4iulq"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="5_hklc7"]
 [ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="5_lqaxi"]
-[ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="91_dreamintro"]
 [ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="92_bossintro"]
+[ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ul3c"]
 shader = ExtResource("3_4iulq")
@@ -30,6 +31,9 @@ shader_parameter/Speed = 3.000000095
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hklc7"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pgmxn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_side"]
+size = Vector2(2, 80)
 
 [node name="CradleOfDecay" type="Node2D" unique_id=1386702902 groups=["camera_fixed"]]
 script = ExtResource("1_lqaxi")
@@ -103,22 +107,30 @@ shape = SubResource("WorldBoundaryShape2D_pgmxn")
 [node name="Player" parent="." unique_id=949587783 instance=ExtResource("5_hklc7")]
 position = Vector2(68, 81)
 
+[node name="DoorRight" type="Area2D" parent="." unique_id=167269808]
+position = Vector2(157, 62)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_auto")
+scene_path = "res://levels/cradle_corridor/cradle_room_2.tscn"
+teleport_id = 3
+spawn_offset = Vector2(-7, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorRight" unique_id=743130452]
+position = Vector2(2, -22)
+shape = SubResource("RectangleShape2D_door_side")
+
 [node name="Timer" type="Timer" parent="." unique_id=379900041]
 wait_time = 0.1
 one_shot = true
 autostart = true
-
-[node name="DreamIntro" parent="." unique_id=1093593339 instance=ExtResource("91_dreamintro")]
-story_text_1 = "睡前，给鱼缸换了水。珊瑚在灯下轻轻地摇。"
-story_text_2 = "梦里的水很暖。摇篮的深处，有什么在呼吸。"
-weekday_text = "周二的梦"
-title_text = "珊瑚摇篮"
-title_color = Color(0.6, 0.82, 0.78, 1)
 
 [node name="BossIntro" parent="." unique_id=1006985307 instance=ExtResource("92_bossintro")]
 title_text = "摇篮里的心跳"
 boss_name_text = "阿克缇诺斯"
 auto_start = false
 card_animation = &"Battlecry"
+
+[node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

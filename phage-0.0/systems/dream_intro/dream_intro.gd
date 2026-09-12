@@ -56,7 +56,11 @@ func _ready() -> void:
 		queue_free()
 		return
 	var level := get_parent()
+	# 一个梦可能跨好几个场景(周二:房间1→21→22→…),按"第几夜"记账只播一次;
+	# 直接 F6 跑单个场景时 in_dream 为假,退回按场景路径记。
 	var key: String = level.scene_file_path if level != null else "?"
+	if Story.in_dream and Story.current_dream_night > 0:
+		key = "night_%d" % Story.current_dream_night
 	if _played.get(key, false):
 		Game.buff_hold.fade_in(0.35)
 		queue_free()

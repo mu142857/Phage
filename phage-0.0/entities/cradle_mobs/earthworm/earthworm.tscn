@@ -166,12 +166,14 @@ script = ExtResource("1_script")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1577489970]
 material = SubResource("ShaderMaterial_hurt")
 sprite_frames = SubResource("SpriteFrames_empty")
-animation = &"Step"
+animation = &"Idle"
 autoplay = "Step"
+frame_progress = 0.06933766
 offset = Vector2(0, -14)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1131379605]
-polygon = PackedVector2Array(-12, 0, -12, -6, -9, -10, -5, -13, 0, -14, 5, -13, 9, -10, 12, -6, 12, 0, 6, 0, 6, -4, 4, -7, 0, -8, -4, -7, -6, -4, -6, 0)
+position = Vector2(0, -2)
+polygon = PackedVector2Array(-12, 2, -12, -6, -9, -10, -5, -13, 0, -14, 5, -13, 10, -11, 13, -6, 14, 2, 6, 2, 6, -4, 4, -7, 0, -8, -4, -7, -6, -4, -6, 2)
 
 [node name="FloorRay" type="RayCast2D" parent="." unique_id=901241971]
 position = Vector2(20, -2)

@@ -103,10 +103,15 @@ func _widen_contact_box() -> void:
 			var pts: PackedVector2Array = poly.polygon
 			if pts.size() < 3:
 				continue
-			# 自交/退化的多边形 Godot 建不出碰撞,接触伤害会静悄悄失效——踩过:多画了一个压在底边上的顶点
-			if Geometry2D.triangulate_polygon(pts).is_empty():
-				push_warning("%s: AttackCheck 的多边形自交或退化(常见是多了一个压在边上的顶点),碰撞建不出来,接触伤害不会生效" % name)
-				continue
+			# 自交/退化的多边形 Godot 建不出碰撞,接触伤害会静悄悄失效——踩过:多画了一个压在底边上的顶点 (0,0)。
+			# 运行时兜底:逐个试删顶点,删掉哪个能三角化就用哪个;同时打警告提醒去编辑器里把那个点删了
+			if Geometry2D.decompose_polygon_in_convex(pts).is_empty():  # 物理拆凸包用的就是它;triangulate 对自交多边形照样能算,不能拿来判
+				var fixed := _repair_polygon(pts)
+				if fixed.is_empty():
+					push_warning("%s: AttackCheck 的多边形自交或退化,碰撞建不出来,接触伤害不会生效" % name)
+					continue
+				push_warning("%s: AttackCheck 的多边形自交(多了一个压在边上的顶点),运行时已自动删掉一个点修好,请去编辑器里把它删了" % name)
+				pts = fixed
 			var cx := 0.0
 			for pt in pts:
 				cx += pt.x
@@ -116,6 +121,16 @@ func _widen_contact_box() -> void:
 				var side := signf(pt.x - cx)
 				grown.append(Vector2(pt.x + side * contact_margin, pt.y))
 			poly.polygon = grown
+
+
+# 试着删掉一个顶点让多边形能三角化;都不行返回空
+static func _repair_polygon(pts: PackedVector2Array) -> PackedVector2Array:
+	for i in pts.size():
+		var trial := PackedVector2Array(pts)
+		trial.remove_at(i)
+		if trial.size() >= 3 and not Geometry2D.decompose_polygon_in_convex(trial).is_empty():
+			return trial
+	return PackedVector2Array()
 
 
 func _try_contact_damage() -> void:

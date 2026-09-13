@@ -101,7 +101,7 @@ script = ExtResource("1_script")
 material = SubResource("ShaderMaterial_hurt")
 sprite_frames = SubResource("SpriteFrames_empty")
 animation = &"Idle"
-frame_progress = 0.9536242
+frame_progress = 0.180994
 offset = Vector2(0, -45)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=554270211]
@@ -117,4 +117,6 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AttackCheck" unique_id=1500811734]
+position = Vector2(-0.4999994, 0)
+scale = Vector2(0.4086539, 1)
 polygon = PackedVector2Array(-11, 0, 6, 0, 8, -15, 7, -38, 13, -56, 9, -90, -3, -90, -11, -57, -6, -29, -13, 0, 0, 0)

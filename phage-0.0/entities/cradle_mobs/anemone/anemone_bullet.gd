@@ -19,7 +19,8 @@ const EXPLOSION_EFFECT_SCENE: PackedScene = preload("res://entities/cradle_mobs/
 @export var speed_accel: float = 18.0     # 每秒加多少
 @export var speed_max: float = 60.0       # 上限
 @export var track_delay: float = 0.4      # 飘多久才开始追
-@export var turn_rate_deg: float = 75.0   # 转向速度(度/秒),越小越钝、越好骗进墙
+@export var turn_rate_deg: float = 75.0   # 起步时的转向速度(度/秒)
+@export var turn_rate_at_max: float = 0.3  # 飞到最高速时转向只剩起步的几成(越快越转不动弯,越好骗进墙)
 
 var _dir := Vector2.UP
 var _speed := 10.0
@@ -66,7 +67,10 @@ func _physics_process(delta: float) -> void:
 		if player != null:
 			var want := (player.global_position + Vector2(0, -4) - global_position).normalized()
 			if want != Vector2.ZERO:
-				var max_turn := deg_to_rad(turn_rate_deg) * delta
+				# 转向随速度线性变钝:speed_start 时 100%,speed_max 时只剩 turn_rate_at_max
+				var k := clampf((_speed - speed_start) / maxf(speed_max - speed_start, 0.01), 0.0, 1.0)
+				var rate := turn_rate_deg * lerpf(1.0, turn_rate_at_max, k)
+				var max_turn := deg_to_rad(rate) * delta
 				var diff := _dir.angle_to(want)
 				_dir = _dir.rotated(clampf(diff, -max_turn, max_turn)).normalized()
 		_speed = minf(_speed + speed_accel * delta, speed_max)

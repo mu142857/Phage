@@ -14,7 +14,7 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cradle_mobs/anem
 
 @export_group("Attack")
 @export var shoot_frame: int = 7          # Attack 动画的出弹帧(0 起数)
-@export var attack_cooldown: float = 3.0
+@export var attack_cooldown: float = 5.0
 
 enum Phase { IDLE, ATTACK }
 
@@ -30,6 +30,7 @@ var _shot_done := false
 
 func _ready() -> void:
 	add_to_group("monster")
+	collision_layer = collision_layer & ~1   # 只留怪物层:葵不挡主角(用户要求),主角能从它身上走过去
 	health = clampi(health, 0, max_health)
 	if health <= 0:
 		health = max_health

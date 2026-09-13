@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_mucky"]
 [ext_resource type="PackedScene" uid="uid://bg2e3ibkgkxrw" path="res://entities/cradle_mobs/earthworm/earthworm.tscn" id="3_mioqa"]
-[ext_resource type="PackedScene" uid="uid://boet2qi3x3yxm" path="res://entities/cradle_mobs/worm_wall/worm_wall.tscn" id="4_kqk0q"]
+[ext_resource type="PackedScene" uid="uid://cgmdknc2rs2yw" path="res://entities/cradle_mobs/sprayer/sprayer.tscn" id="5_twiol"]
 [ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="8_intro"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5f5au"]
@@ -56,5 +56,8 @@ card_animation = &"Battlecry"
 
 [node name="Earthworm" parent="." unique_id=366700080 instance=ExtResource("3_mioqa")]
 
-[node name="WormWall" parent="." unique_id=1301253992 instance=ExtResource("4_kqk0q")]
-position = Vector2(128, 80)
+[node name="Sprayer" parent="." unique_id=1629435598 instance=ExtResource("5_twiol")]
+position = Vector2(47, 0)
+
+[node name="Sprayer2" parent="." unique_id=1181614118 instance=ExtResource("5_twiol")]
+position = Vector2(99, 0)

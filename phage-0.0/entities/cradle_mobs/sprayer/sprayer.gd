@@ -1,8 +1,10 @@
-# 喷射战士(sprayer,素材 2怪):定点炮台,无接触伤害,血厚(600=20 刀)。
-# 主角进 PlayerCheck 就播 Attack,从第 spray_frame 帧起在 volley_duration 秒内朝主角那一侧
-# 连喷 volley_count 颗浓雾弹(sprayer_fog),上下扇形铺满,空地上根本躲不掉——
-# 只有钻到蚯蚓拱门底下,雾弹撞在蚯蚓身上就散了。
-# 动画名:Idle(循环)、Attack(单次)。素材默认朝左,朝右整体 x 镜像。
+# 喷射战士(sprayer,素材 2怪):挂在天花板上的喷雾口,定点、无接触伤害、血厚(600=20 刀)。
+# 持续不断地喷浓雾弹(sprayer_fog),不瞄主角:方向 = 节点中心指向 Muzzle 的那条向量
+# (Muzzle 放在正下方就是垂直往下喷,想斜着喷就把 Muzzle 挪一挪),在 ±spread_degrees 的扇形里撒,
+# 中间密、两边稀(三个随机数取平均,天然中间多);每颗速度、大小、颜色都略有不同,出现时渐显。
+# 空地上躲不掉——只有躲到蚯蚓身后,雾弹撞在蚯蚓身上就散了。
+# hanging=true:不吃重力、不动(挂顶/贴墙);关掉就是站在地上的版本。
+# 动画:喷的时候循环播 Attack,不喷时 Idle。贴图不旋转(渲染铁律),贴墙版另画帧。
 extends CharacterBody2D
 
 const FOG_SCENE: PackedScene = preload("res://entities/cradle_mobs/sprayer/sprayer_fog.tscn")
@@ -10,24 +12,26 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cradle_mobs/spra
 
 @export var max_health: int = 600
 @export var health: int = 600
+## 挂在天花板/墙上:不吃重力、不落地。关掉就是站在地上的版本。
+@export var hanging: bool = true
 @export var gravity: float = 850.0
 
 @export_group("Spray")
-@export var spray_frame: int = 14          # Attack 动画从这帧开始喷(0 起数)
-@export var volley_count: int = 14         # 一轮喷几颗
-@export var volley_duration: float = 0.7   # 一轮喷多久
-@export var spread_degrees: float = 32.0   # 上下扇形半角
-@export var fog_speed: Vector2 = Vector2(48.0, 62.0)  # 每颗速度在这区间随机
-@export var attack_cooldown: float = 2.6
+## 只在主角进 PlayerCheck 时才喷;关掉 = 永远在喷(环境危害)
+@export var only_when_player_near: bool = true
+@export var linger_time: float = 1.5            # 主角离开范围后再喷这么久才停
+@export var fogs_per_second: float = 10.0
+@export var spread_degrees: float = 30.0        # 扇形半角(中间密两边稀)
+@export var spawn_half_width: float = 8.0       # 出生点不是一个点,是枪口左右各这么宽的一条线(中间密两边稀)
+@export var fog_speed: Vector2 = Vector2(30.0, 110.0)  # 每颗速度随机区间(又快又慢;最快的要能追上冲刺)
+@export var fog_gravity: float = 45.0           # 雾弹吃一点重力,往下弯
+@export var fog_size: Vector2 = Vector2(0.7, 1.7)      # 每颗大小随机区间(又大又小,1=3px)
+@export var fog_color: Color = Color(0.78, 0.66, 0.9, 0.85)
+@export var color_jitter: float = 0.12          # 颜色每通道 ±抖动
 
-enum Phase { IDLE, ATTACK }
-
-var _phase: Phase = Phase.IDLE
-var _cooldown := 0.0
+var _emit_acc := 0.0
 var _spraying := false
-var _spray_left := 0
-var _spray_timer := 0.0
-var _spray_dir := -1.0
+var _linger_left := 0.0
 
 @onready var ani_2d: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 @onready var hit_effect_player: AnimationPlayer = get_node_or_null("HitEffectPlayer") as AnimationPlayer
@@ -49,75 +53,72 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if health <= 0:
 		return
-	if not is_on_floor():
-		velocity.y += gravity * delta
-	velocity.x = 0.0
-	move_and_slide()
-	_cooldown = maxf(0.0, _cooldown - delta)
-	match _phase:
-		Phase.IDLE:
-			_play_anim(&"Idle")
-			if _cooldown <= 0.0:
-				var player := _get_detected_player()
-				if player != null:
-					_start_attack(player)
-		Phase.ATTACK:
-			_process_attack(delta)
-
-
-func _start_attack(player: Node2D) -> void:
-	_phase = Phase.ATTACK
-	_spraying = false
-	_spray_dir = -1.0 if player.global_position.x < global_position.x else 1.0
-	_face_towards(player.global_position.x)
-	if _has_anim(&"Attack"):
-		ani_2d.play(&"Attack")
+	if not hanging:
+		if not is_on_floor():
+			velocity.y += gravity * delta
+		velocity.x = 0.0
+		move_and_slide()
+	# 看到主角就喷,主角走了再喷 linger_time 秒才停
+	if not only_when_player_near or _player_near():
+		_linger_left = linger_time
 	else:
-		_begin_volley()   # 没导 Attack 帧也能喷,方便先测玩法
+		_linger_left = maxf(0.0, _linger_left - delta)
+	_spraying = not only_when_player_near or _linger_left > 0.0
+	_play_anim(&"Attack" if _spraying else &"Idle")
+	if not _spraying:
+		_emit_acc = 0.0
+		return
+	# 匀速持续出雾:按每秒颗数攒够一颗就喷一颗
+	_emit_acc += fogs_per_second * delta
+	while _emit_acc >= 1.0:
+		_emit_acc -= 1.0
+		_spawn_fog()
 
 
-func _process_attack(delta: float) -> void:
-	if not _spraying and _spray_left <= 0 and ani_2d != null \
-			and ani_2d.animation == &"Attack" and ani_2d.frame >= spray_frame:
-		_begin_volley()
-	if _spraying:
-		_spray_timer -= delta
-		while _spraying and _spray_timer <= 0.0 and _spray_left > 0:
-			_spawn_fog()
-			_spray_left -= 1
-			_spray_timer += volley_duration / maxf(float(volley_count), 1.0)
-		if _spray_left <= 0:
-			_spraying = false
-	var anim_done := not _has_anim(&"Attack") or ani_2d.animation != &"Attack" or not ani_2d.is_playing()
-	if anim_done and not _spraying:
-		_phase = Phase.IDLE
-		_cooldown = attack_cooldown
-
-
-func _begin_volley() -> void:
-	_spraying = true
-	_spray_left = volley_count
-	_spray_timer = 0.0
+# 喷的方向 = 中心 → Muzzle
+func _spray_dir() -> Vector2:
+	if muzzle != null and muzzle.position != Vector2.ZERO:
+		return muzzle.position.normalized()
+	return Vector2.DOWN
 
 
 func _spawn_fog() -> void:
 	if FOG_SCENE == null or get_tree().current_scene == null:
 		return
-	var start := muzzle.global_position if muzzle != null else global_position + Vector2(0, -8)
-	var angle := deg_to_rad(randf_range(-spread_degrees, spread_degrees))
-	var dir := Vector2(_spray_dir, 0.0).rotated(angle)
+	var origin := muzzle.global_position if muzzle != null else global_position
+	var base := _spray_dir()
+	# 三个均匀随机取平均:钟形分布,中间密两边稀(角度和出生点各摇一次)
+	var t := _bell()
+	var dir := base.rotated(deg_to_rad(spread_degrees) * t)
+	# 出生点沿着与喷射方向垂直的那条线摊开:枪口左右各 spawn_half_width 像素
+	var side := Vector2(-base.y, base.x)
+	# 出生点用两个随机数取平均(三角分布):比角度那个钟形平一点,两头 5 格也能铺到
+	var start := origin + side * (spawn_half_width * ((randf() + randf()) - 1.0))
+	var speed := randf_range(fog_speed.x, fog_speed.y)
+	var size := randf_range(fog_size.x, fog_size.y)
+	var col := Color(
+		clampf(fog_color.r + randf_range(-color_jitter, color_jitter), 0.0, 1.0),
+		clampf(fog_color.g + randf_range(-color_jitter, color_jitter), 0.0, 1.0),
+		clampf(fog_color.b + randf_range(-color_jitter, color_jitter), 0.0, 1.0),
+		fog_color.a)
 	var fog := FOG_SCENE.instantiate()
 	get_tree().current_scene.add_child(fog)
 	if fog.has_method("setup"):
-		fog.call("setup", start, dir, randf_range(fog_speed.x, fog_speed.y))
+		fog.call("setup", start, dir, speed, size, col, fog_gravity)
 
 
-func _face_towards(target_x: float) -> void:
-	var flip: float = -1.0 if target_x > global_position.x else 1.0
-	if ani_2d != null:
-		ani_2d.scale.x = absf(ani_2d.scale.x) * flip
-	if muzzle != null:
-		muzzle.position.x = absf(muzzle.position.x) * -flip
+# -1~1 的钟形随机(三个均匀随机取平均)
+func _bell() -> float:
+	return (randf() + randf() + randf()) / 3.0 * 2.0 - 1.0
+
+
+func _player_near() -> bool:
+	if player_check == null:
+		return false
+	for body in player_check.get_overlapping_bodies():
+		if body != null and body.is_in_group("player"):
+			return true
+	return false
 
 
 func take_damage(value: int) -> void:
@@ -129,15 +130,6 @@ func take_damage(value: int) -> void:
 	if health <= 0:
 		_spawn_death_effect()
 		queue_free()
-
-
-func _get_detected_player() -> Node2D:
-	if player_check == null:
-		return null
-	for body in player_check.get_overlapping_bodies():
-		if body != null and body.is_in_group("player") and body is Node2D:
-			return body as Node2D
-	return null
 
 
 func _has_anim(anim: StringName) -> bool:

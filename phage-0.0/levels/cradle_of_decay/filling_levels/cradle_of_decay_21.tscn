@@ -106,5 +106,6 @@ shape = SubResource("RectangleShape2D_heuot")
 z_index = 10
 position = Vector2(84, 47)
 wander_distance = 24.0
+detect_below = 40.0
 
 [node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]

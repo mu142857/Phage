@@ -17,6 +17,7 @@ const EXPLOSION_EFFECT_SCENE: PackedScene = preload("res://entities/cradle_mobs/
 @export var wall_arm_time: float = 0.2
 @export var max_total: int = 8
 @export var floor_probe: float = 4.0     # 落地判定:正下方多少像素内有地才算"落地"
+@export var floor_probe_up: float = 8.0  # 探地射线从中心往上这么多像素起射:弹快的时候被发现重叠那一帧中心已经陷进地里,从地里面往下射是探不到地的
 
 var _dir := -1.0
 var _vy := 0.0
@@ -91,10 +92,13 @@ func _check_touch() -> void:
 		return
 
 
-# 正下方 floor_probe 像素内有世界碰撞 = 落在地上;否则就是撞墙
+# 正下方 floor_probe 像素内有世界碰撞 = 落在地上;否则就是撞墙。
+# 射线从中心上方 floor_probe_up 起射:高速下落时物理引擎报重叠的那一帧,中心可能已经在地面线以下
+# (实测 y=80.2),射线起点在地里面就探不到地,会被误判成撞墙只爆不生(21 房从平台往地面抛弹踩过)。
+# 起点在上面、终点在地里,穿过地面线就能探到;侧面撞墙时起点终点都在墙里,照样探不到=撞墙,语义不变。
 func _ground_below() -> bool:
 	var space := get_world_2d().direct_space_state
-	var query := PhysicsRayQueryParameters2D.create(global_position, global_position + Vector2(0, floor_probe), 1)
+	var query := PhysicsRayQueryParameters2D.create(global_position + Vector2(0, -floor_probe_up), global_position + Vector2(0, floor_probe), 1)
 	return not space.intersect_ray(query).is_empty()
 
 

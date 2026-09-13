@@ -33,6 +33,8 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cradle_mobs/spli
 @export var spit_frame: int = 6           # Attack 动画的出弹帧(0 起数)
 @export var attack_cooldown: float = 4.0
 @export var max_total: int = 8            # 场上分身(含本体)封顶
+## 侦测范围往下多伸这么多像素:站在平台上的本体也能看见底下地面上的主角,往下面抛弹让分身长在地上
+@export var detect_below: float = 0.0
 ## 由分身弹生成的分身:先当幼体播 Spawn 再开始活动
 @export var spawned_from_bullet: bool = false
 
@@ -68,6 +70,13 @@ var _last_walk_frame := -1
 
 func _ready() -> void:
 	add_to_group("monster")
+	if detect_below > 0.0 and player_check != null:
+		var pc_shape := player_check.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if pc_shape != null and pc_shape.shape is RectangleShape2D:
+			var rect := (pc_shape.shape as RectangleShape2D).duplicate() as RectangleShape2D
+			rect.size.y += detect_below
+			pc_shape.shape = rect
+			pc_shape.position.y += detect_below * 0.5
 	if floor_ray == null:
 		# 场景里没画探地射线就自己造一根:站在平台上(21 房中间平台)才不会一窜窜下去
 		floor_ray = RayCast2D.new()
@@ -282,8 +291,8 @@ func take_damage(value: int) -> void:
 
 
 func _try_contact_damage() -> void:
-	if _contact_cd > 0.0 or attack_check == null:
-		return
+	if _contact_cd > 0.0 or attack_check == null or not attack_check.monitoring:
+		return   # 幼体转成体那一帧 monitoring 还是 set_deferred 的 off,查重叠会报错
 	for body in attack_check.get_overlapping_bodies():
 		if body == null or not body.is_in_group("player"):
 			continue

@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
 [ext_resource type="PackedScene" uid="uid://dumhmcodsiajy" path="res://entities/wowen/wowen.tscn" id="50_wowen"]
 [ext_resource type="PackedScene" uid="uid://joegf2jsjujd" path="res://entities/pop_tops/pop_tops.tscn" id="51_poptops"]
+[ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="90_dreamend"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a1y6q"]
 
@@ -1800,5 +1801,12 @@ position = Vector2(700, 80)
 [node name="Wowen2" parent="Mobs" unique_id=1622318813 instance=ExtResource("50_wowen")]
 z_index = 10
 position = Vector2(1050, 80)
+
+[node name="DreamEnd" parent="." instance=ExtResource("90_dreamend")]
+position = Vector2(1250, 0)
+reward_buff = &"Watertank"
+ending_line = "……水都退了。红墙也不喘了。"
+require_actinos = true
+locked_line = "……墙还在喘。还不到时候。"
 
 [node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]

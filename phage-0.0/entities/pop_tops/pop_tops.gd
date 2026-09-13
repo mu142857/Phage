@@ -9,6 +9,7 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/pop_tops/pop_top
 
 func _ready() -> void:
 	add_to_group("monster")
+	collision_layer |= 1   # 也占世界层:挡住主角的路(得打掉或跳过去)
 	health = clampi(health, 0, max_health)
 	var sprite := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if sprite != null and sprite.material != null:

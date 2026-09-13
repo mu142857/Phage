@@ -30,6 +30,7 @@ var wake_kind := ""          # 回到房间要播的醒来演出:"" / "morning" 
 # ---- 环境/强制 buff:不占持有上限,HUD 上排在最左,不能放下(定义见 BuffDefs "forced") ----
 signal forced_buffs_changed
 var underwater := false      # 当前场景在水下(OxygenOverlay 进场设 true,排干设 false)
+var actinos_defeated := false  # 本次入梦里 Actinos 已被打败:全图的水都不回来,氧气不再掉;终点红墙才放行
 var oxygen := 1.0            # 氧气 1→0,跨房间不回满;新入梦回满;见底=梦境破碎
 const OXYGEN_FULL_TIME := 120.0   # 满到红线的秒数
 var revisit_counts: Dictionary = {}  # "夜" → 回笼觉(回顾旧梦)次数,入存档
@@ -87,6 +88,7 @@ func start_dream(night: int, replay := false) -> void:
 	_dream_settled = false
 	oxygen = 1.0
 	underwater = false
+	actinos_defeated = false
 	if replay:
 		var key := str(night)
 		revisit_counts[key] = int(revisit_counts.get(key, 0)) + 1
@@ -279,6 +281,15 @@ func set_underwater(on: bool) -> void:
 		return
 	underwater = on
 	forced_buffs_changed.emit()
+
+
+## Actinos 死了:水彻底没了(之后进任何房 OxygenOverlay 都按排干状态开场),摘掉"水下",氧气停掉。
+## 梦还没完——得走回原走廊尽头的红墙(那里的 DreamEnd 要求这个标记)。
+func defeat_actinos() -> void:
+	if not in_dream or actinos_defeated:
+		return
+	actinos_defeated = true
+	set_underwater(false)
 
 
 ## 当前挂在 HUD 最左的强制 buff,按固定顺序:浅浅的梦(回笼觉) → 水下。

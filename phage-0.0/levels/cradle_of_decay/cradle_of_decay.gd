@@ -76,8 +76,12 @@ func _spawn_actinos() -> void:
 	if actinos_instance == null:
 		return
 	add_child(actinos_instance)
-	# boss 是运行时才生成的,DreamEnd 盯不到,在这儿挂"死亡=梦完成"
-	actinos_instance.tree_exited.connect(func() -> void: Story.complete_dream())
+	# boss 是运行时才生成的,在这儿挂"死亡=水彻底没了"(tree_exited 换场景也会响,所以要看血量)。
+	# 梦不在这里结束:得走回原走廊尽头的红墙(cradel_corridor 的 DreamEnd)
+	var boss := actinos_instance
+	boss.tree_exited.connect(func() -> void:
+		if is_instance_valid(boss) and int(boss.get("health")) <= 0:
+			Story.defeat_actinos())
 	actinos_instance.global_position = spawn_position
 	var sprite := actinos_instance.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if is_instance_valid(sprite):

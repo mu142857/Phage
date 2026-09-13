@@ -12,6 +12,11 @@ extends Area2D
 @export var reward_buff: StringName = &""
 ## 报纪念品前先自言自语的一句(比如 boss 溜走了),可空。
 @export_multiline var ending_line := ""
+## 要求本次入梦已打败 Actinos 才算终点(周二红墙用);没打就只自言自语一句 locked_line,不结束。
+@export var require_actinos := false
+@export_multiline var locked_line := ""
+
+var _locked_said := false
 
 
 func _ready() -> void:
@@ -24,6 +29,7 @@ func _ready() -> void:
 			push_warning("DreamEnd: 找不到要盯的节点 %s" % watch_path)
 		return
 	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
 
 
 func _on_target_gone() -> void:
@@ -32,5 +38,17 @@ func _on_target_gone() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
+	if not (body is Player):
+		return
+	if require_actinos and not Story.actinos_defeated:
+		# 还没到时候:嘀咕一句就算,走开再回来才会再说
+		if not locked_line.is_empty() and not _locked_said:
+			_locked_said = true
+			Dialogue.say([locked_line])
+		return
+	Story.complete_dream(reward_buff, ending_line)
+
+
+func _on_body_exited(body: Node2D) -> void:
 	if body is Player:
-		Story.complete_dream(reward_buff, ending_line)
+		_locked_said = false

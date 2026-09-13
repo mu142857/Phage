@@ -54,6 +54,10 @@ func _ready() -> void:
 	# 材质是场景里共用的资源,别的实例/以后的参数改动互不干扰
 	for e in _emitters + [_breath, _landing, _caustics]:
 		e.process_material = e.process_material.duplicate()
+	# Actinos 死后水不回来:任何房间都按"已排干"开场(没滤镜没气泡,不掉氧气)
+	if Story.actinos_defeated:
+		_water_gone = true
+		_level = LEVEL_EMPTY
 	_apply()
 	_follow_camera()
 	queue_redraw()

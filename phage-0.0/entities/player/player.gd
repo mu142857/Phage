@@ -137,6 +137,10 @@ var _mist_left: float = 0.0
 # F1(或 ` 反引号)切换:开启后不死不破盾,全身金色提示。
 # 地刺仍会把人弹回安全点(respawn_to_safe 不走 take_damage),方便继续跑图。
 var dev_god_mode: bool = false
+const DEV_GOD_TINT := Color(1.0, 0.85, 0.45)
+# 关卡场景里 Player 实例自带的 modulate(多数房间压暗到 0.685 配合点光),
+# 无敌模式的金色只是叠在它上面,关掉要还原它而不是写回纯白。
+var _base_modulate: Color = Color.WHITE
 # 走路特效当前应否发射(有盾时改由 ShieldPlayerWalkingEffect 发射)。
 var _walking_effect_enabled: bool = false
 
@@ -172,6 +176,7 @@ signal shield_changed
 
 func _ready() -> void:
 	add_to_group("player")
+	_base_modulate = modulate
 	set_ball_form(false)
 	clear_attack_hitboxes()
 	can_sprint = true
@@ -372,7 +377,8 @@ func run_speed() -> float:
 func _toggle_dev_god_mode() -> void:
 	dev_god_mode = not dev_god_mode
 	# 用根节点 modulate 做金色提示,不碰 sprite.modulate(攻击发光在用它)。
-	modulate = Color(1.0, 0.85, 0.45) if dev_god_mode else Color.WHITE
+	# 金色乘在关卡自带的 modulate 上,关掉还原关卡那份,别把压暗抹成纯白。
+	modulate = _base_modulate * DEV_GOD_TINT if dev_god_mode else _base_modulate
 	print("[DEV] 无敌模式: ", "开" if dev_god_mode else "关")
 
 func take_damage(_amount: int) -> void:
@@ -401,6 +407,15 @@ func take_damage(_amount: int) -> void:
 	health = 0
 	health_changed.emit(health)
 	_die()
+
+## 氧气见底之类的"环境死亡":绕过护盾/守望/无敌,当场倒下。
+func die_instantly() -> void:
+	if is_dying or dev_god_mode:
+		return
+	health = 0
+	health_changed.emit(health)
+	_die()
+
 
 # 蔚蓝式死亡:原地炸开 → 冻结/隐藏 → 交给 Game 黑屏重载房间(清怪+回出生点)。
 func _die() -> void:
@@ -822,7 +837,7 @@ func apply_state_snapshot(data: Dictionary) -> void:
 	Story.set_muzi_broken(bool(data.get("muzi_broken", false)))
 	if bool(data.get("dev_god_mode", false)) and not dev_god_mode:
 		dev_god_mode = true
-		modulate = Color(1.0, 0.85, 0.45)
+		modulate = _base_modulate * DEV_GOD_TINT
 	# 铜灯火光还在烧的话,overlay 和火苗跟上(雾/潮汐水珠由每帧逻辑自理)。
 	set_effect_overlay(fire_attack_overlay, _lamp_fire_left > 0.0)
 	fire_aura.emitting = _lamp_fire_left > 0.0

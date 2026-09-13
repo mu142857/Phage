@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://boet2qi3x3yxm"]
+
+[ext_resource type="Script" uid="uid://2o2abgdvku8s" path="res://entities/cradle_mobs/worm_wall/worm_wall.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://n1vhucwbqhk1" path="res://asstes/shaders/hurt.tres" id="2_shader"]
+[ext_resource type="Texture2D" uid="uid://l6n507817h5j" path="res://entities/cradle_mobs/worm_wall/worm_wall-Sheet.png" id="3_nngyk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hurt"]
+resource_local_to_scene = true
+shader = ExtResource("2_shader")
+shader_parameter/Enabled = false
+shader_parameter/Tint = Color(0.62, 0.5, 0.7, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ht4g1"]
+atlas = ExtResource("3_nngyk")
+region = Rect2(0, 0, 32, 90)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6wh3"]
+atlas = ExtResource("3_nngyk")
+region = Rect2(32, 0, 32, 90)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvf0i"]
+atlas = ExtResource("3_nngyk")
+region = Rect2(64, 0, 32, 90)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ee01d"]
+atlas = ExtResource("3_nngyk")
+region = Rect2(96, 0, 32, 90)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yhvgp"]
+atlas = ExtResource("3_nngyk")
+region = Rect2(128, 0, 32, 90)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_empty"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ht4g1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6wh3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvf0i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ee01d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yhvgp")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(8, 90)
+
+[sub_resource type="Animation" id="Animation_hit"]
+resource_name = "HitFlash"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hit"]
+_data = {
+&"HitFlash": SubResource("Animation_hit"),
+&"RESET": SubResource("Animation_reset")
+}
+
+[node name="WormWall" type="CharacterBody2D" unique_id=1301253992]
+collision_layer = 5
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1609886751]
+material = SubResource("ShaderMaterial_hurt")
+sprite_frames = SubResource("SpriteFrames_empty")
+animation = &"Idle"
+frame_progress = 0.9536242
+offset = Vector2(0, -45)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=554270211]
+position = Vector2(0, -45)
+shape = SubResource("RectangleShape2D_body")
+debug_color = Color(0, 0.6, 0.7, 0)
+
+[node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=1856341379]
+libraries/ = SubResource("AnimationLibrary_hit")
+
+[node name="AttackCheck" type="Area2D" parent="." unique_id=1077166633]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AttackCheck" unique_id=1500811734]
+polygon = PackedVector2Array(-11, 0, 6, 0, 8, -15, 7, -38, 13, -56, 9, -90, -3, -90, -11, -57, -6, -29, -13, 0, 0, 0)

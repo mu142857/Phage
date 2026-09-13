@@ -112,3 +112,5 @@ card_animation = &"Battlecry"
 [node name="DreamEnd" parent="." unique_id=136661337 instance=ExtResource("6_dreamend")]
 position = Vector2(210, 45)
 watch_path = NodePath("../Bloodworm")
+reward_buff = &"Table"
+ending_line = "……钻回去了。"

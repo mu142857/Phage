@@ -27,6 +27,15 @@ const FADE_OUT_TIME := 0.5
 ## levels/ 里的常驻粒子和关卡专用 shader 随关卡在 DreamIntro 黑幕下加载编译,不登记。
 const WARM_SCENE_PATHS: Array[String] = [
 	# 独立粒子特效
+	# 珊瑚摇篮杂兵(cradle_mobs)
+	"res://entities/cradle_mobs/worm_wall/worm_wall_death.tscn",
+	"res://entities/cradle_mobs/anemone/anemone_death.tscn",
+	"res://entities/cradle_mobs/anemone/anemone_bullet_explosion.tscn",
+	"res://entities/cradle_mobs/earthworm/earthworm_death.tscn",
+	"res://entities/cradle_mobs/earthworm/earthworm_stomp.tscn",
+	"res://entities/cradle_mobs/splitter/splitter_death.tscn",
+	"res://entities/cradle_mobs/splitter/splitter_bullet_explosion.tscn",
+	"res://entities/cradle_mobs/sprayer/sprayer_death.tscn",
 	"res://systems/oxygen/oxygen_overlay.tscn",
 	"res://entities/actinos/actinos_death_effect.tscn",
 	"res://entities/actinos/actinos_jump_effect.tscn",

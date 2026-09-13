@@ -29,6 +29,16 @@ func _start_intro() -> void:
 	if intro_lock_player:
 		_set_player_lock(true)
 
+	# 一进场就锁门:水开始退就不许跑,这个梦只能打完或者死(门由 BossIntro 在 boss 死后重开)
+	for t in get_tree().get_nodes_in_group("teleport"):
+		if t.has_method("deactivate"):
+			t.call("deactivate")
+
+	# 震动开始 = 水被排干:三段震动的总时长内水面从屏幕顶退到底,Actinos 落地时正好没水
+	var oxygen := get_node_or_null("OxygenOverlay")
+	if oxygen != null and oxygen.has_method("drain"):
+		oxygen.call("drain", light_duration + medium_duration + heavy_duration + pause_duration * 2.0)
+
 	await _shake_sequence()
 	if not is_inside_tree():
 		return

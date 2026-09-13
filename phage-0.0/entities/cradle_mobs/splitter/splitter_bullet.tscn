@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://bys3lntwpxk0a"]
+
+[ext_resource type="Script" uid="uid://byu03n5asnssm" path="res://entities/cradle_mobs/splitter/splitter_bullet.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dm7vi2hpde0bf" path="res://entities/cradle_mobs/splitter/AplitterBullet-Sheet.png" id="2_ihcog"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iadm3"]
+atlas = ExtResource("2_ihcog")
+region = Rect2(0, 0, 30, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvck4"]
+atlas = ExtResource("2_ihcog")
+region = Rect2(30, 0, 30, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_53ale"]
+atlas = ExtResource("2_ihcog")
+region = Rect2(60, 0, 30, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gymqy"]
+atlas = ExtResource("2_ihcog")
+region = Rect2(90, 0, 30, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_empty"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iadm3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cvck4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_53ale")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gymqy")
+}],
+"loop": true,
+"name": &"Flying",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_flight"]
+size = Vector2(6, 6)
+
+[node name="SplitterBullet" type="Area2D" unique_id=660044629]
+z_index = 12
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("1_script")
+
+[node name="ScreenNotifier" type="VisibleOnScreenNotifier2D" parent="." unique_id=1219005933]
+rect = Rect2(-16, -16, 32, 32)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1799995105]
+sprite_frames = SubResource("SpriteFrames_empty")
+animation = &"Flying"
+frame_progress = 0.9525311
+offset = Vector2(4, -3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=175485264]
+shape = SubResource("RectangleShape2D_flight")
+debug_color = Color(0.9, 0.2, 0.2, 0)

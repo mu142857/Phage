@@ -7,10 +7,24 @@ class_name BuffDefs
 const ICON_DIR := "res://entities/player/BuffIcon/"
 
 const DEFS: Dictionary = {
+	# ---- 强制 buff:环境/状态挂上来的,不占持有上限,HUD 最左,不能放下 ----
+	&"Underwater": {
+		"name": "水下",
+		"desc": "氧气会一点点漏掉。别让氧气条见底。",
+		"tags": [],
+		"forced": true,
+	},
+	&"ALightDream": {
+		"name": "浅浅的梦",
+		"desc": "回到了做过的梦里。随时可以醒来。",
+		"tags": [],
+		"forced": true,
+	},
 	&"Table": {
 		"name": "愈合的伤口",
 		"desc": "破盾后的无敌时间,延长到两秒。",
 		"tags": [],
+		"hint": "醒来以后,去桌上找找看。",
 	},
 	&"Watertank": {
 		"name": "珊瑚潮汐",
@@ -102,6 +116,16 @@ static func display_name(id: StringName) -> String:
 
 static func desc(id: StringName) -> String:
 	return DEFS[id]["desc"] if DEFS.has(id) else ""
+
+
+## 强制 buff(环境挂的):不占上限、不能放下。
+static func is_forced(id: StringName) -> bool:
+	return bool(DEFS.get(id, {}).get("forced", false))
+
+
+## 通关报"带回去了"之后的一句提示:回房间去哪儿找它。
+static func pickup_hint(id: StringName) -> String:
+	return String(DEFS.get(id, {}).get("hint", "醒来以后,在房间里找找看。"))
 
 
 static func icon(id: StringName) -> Texture2D:

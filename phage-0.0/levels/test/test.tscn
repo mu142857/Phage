@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://dceo1silobokc"]
 
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="1_mucky"]
-[ext_resource type="PackedScene" uid="uid://m3vsfg3834f7" path="res://entities/bloodworm/bloodworm.tscn" id="7_worm"]
+[ext_resource type="PackedScene" uid="uid://bg2e3ibkgkxrw" path="res://entities/cradle_mobs/earthworm/earthworm.tscn" id="3_mioqa"]
+[ext_resource type="PackedScene" uid="uid://boet2qi3x3yxm" path="res://entities/cradle_mobs/worm_wall/worm_wall.tscn" id="4_kqk0q"]
 [ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="8_intro"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5f5au"]
@@ -47,11 +48,13 @@ position = Vector2(79.5, 100)
 scale = Vector2(2.703125, 0.62499994)
 texture = SubResource("GradientTexture2D_jtfo5")
 
-[node name="Bloodworm" parent="." unique_id=383631495 instance=ExtResource("7_worm")]
-position = Vector2(34.5, 80)
-
 [node name="BossIntro" parent="." unique_id=1445602228 instance=ExtResource("8_intro")]
 title_text = "伤口里的新住客"
 boss_name_text = "小红丝虫"
 auto_start = false
 card_animation = &"Battlecry"
+
+[node name="Earthworm" parent="." unique_id=366700080 instance=ExtResource("3_mioqa")]
+
+[node name="WormWall" parent="." unique_id=1301253992 instance=ExtResource("4_kqk0q")]
+position = Vector2(128, 80)

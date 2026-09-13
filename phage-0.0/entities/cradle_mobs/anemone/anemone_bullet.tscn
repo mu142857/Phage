@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://b3rib2pcesd25"]
+
+[ext_resource type="Script" uid="uid://c42x4pydehsue" path="res://entities/cradle_mobs/anemone/anemone_bullet.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://drf8mylkddqdn" path="res://entities/cradle_mobs/anemone/Anemone_Bullet-Sheet.png" id="2_2serj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2serj"]
+atlas = ExtResource("2_2serj")
+region = Rect2(192, 37, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kh251"]
+atlas = ExtResource("2_2serj")
+region = Rect2(0, 74, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vdc8q"]
+atlas = ExtResource("2_2serj")
+region = Rect2(48, 74, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_antvo"]
+atlas = ExtResource("2_2serj")
+region = Rect2(0, 0, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vwkxu"]
+atlas = ExtResource("2_2serj")
+region = Rect2(48, 0, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wbjt8"]
+atlas = ExtResource("2_2serj")
+region = Rect2(96, 0, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wedcj"]
+atlas = ExtResource("2_2serj")
+region = Rect2(144, 0, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u27a5"]
+atlas = ExtResource("2_2serj")
+region = Rect2(192, 0, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gw3ch"]
+atlas = ExtResource("2_2serj")
+region = Rect2(0, 37, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ny81s"]
+atlas = ExtResource("2_2serj")
+region = Rect2(48, 37, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8s8mh"]
+atlas = ExtResource("2_2serj")
+region = Rect2(96, 37, 48, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8npt5"]
+atlas = ExtResource("2_2serj")
+region = Rect2(144, 37, 48, 37)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_empty"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2serj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kh251")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vdc8q")
+}],
+"loop": false,
+"name": &"Explode",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_antvo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vwkxu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wbjt8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wedcj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u27a5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gw3ch")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ny81s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8s8mh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8npt5")
+}],
+"loop": true,
+"name": &"Flying",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_flight"]
+radius = 9.055386
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_explosion"]
+radius = 9.0
+
+[node name="AnemoneBullet" type="Area2D" unique_id=735974695]
+z_index = 12
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("1_script")
+
+[node name="ScreenNotifier" type="VisibleOnScreenNotifier2D" parent="." unique_id=1853814687]
+rect = Rect2(-12, -12, 24, 24)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1492481216]
+sprite_frames = SubResource("SpriteFrames_empty")
+animation = &"Explode"
+frame = 2
+frame_progress = 1.0
+offset = Vector2(-2.5, -0.5)
+
+[node name="FlightShape" type="CollisionShape2D" parent="." unique_id=1894334192]
+shape = SubResource("CircleShape2D_flight")
+debug_color = Color(0.9, 0.2, 0.2, 0)
+
+[node name="ExplosionShape" type="CollisionShape2D" parent="." unique_id=1652165613]
+shape = SubResource("CircleShape2D_explosion")
+disabled = true
+debug_color = Color(0.9, 0.2, 0.2, 0)

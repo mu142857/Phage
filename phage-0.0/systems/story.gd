@@ -27,6 +27,13 @@ var replay_mode := false     # 点旧物品"回到梦里"的回顾模式:不推�
 var current_dream_night := 0 # 正在做第几夜的梦(1-7)
 var wake_kind := ""          # 回到房间要播的醒来演出:"" / "morning" / "night"
 
+# ---- 环境/强制 buff:不占持有上限,HUD 上排在最左,不能放下(定义见 BuffDefs "forced") ----
+signal forced_buffs_changed
+var underwater := false      # 当前场景在水下(OxygenOverlay 进场设 true,排干设 false)
+var oxygen := 1.0            # 氧气 1→0,跨房间不回满;新入梦回满;见底=梦境破碎
+const OXYGEN_FULL_TIME := 120.0   # 满到红线的秒数
+var revisit_counts: Dictionary = {}  # "夜" → 回笼觉(回顾旧梦)次数,入存档
+
 var _dream_settled := false  # 当前梦已判定过通关/失败,防止双触发
 var _shatter_layer: CanvasLayer = null
 
@@ -78,6 +85,13 @@ func start_dream(night: int, replay := false) -> void:
 	in_dream = true
 	replay_mode = replay
 	_dream_settled = false
+	oxygen = 1.0
+	underwater = false
+	if replay:
+		var key := str(night)
+		revisit_counts[key] = int(revisit_counts.get(key, 0)) + 1
+		save_game()
+	forced_buffs_changed.emit()
 	await Game.fade_cover(1.0, 0.0)  # 保底铺黑,盖住换场景的瞬间
 	get_tree().change_scene_to_file(DREAM_SCENES[night - 1])
 	await get_tree().process_frame
@@ -91,17 +105,51 @@ func start_dream(night: int, replay := false) -> void:
 # ============================================================
 
 ## 梦完成:通关触发器(DreamEnd)或 F9 调用。
-func complete_dream() -> void:
+## reward_buff:这一夜带回来的纪念品(buff id)。主线首次通关时淡黑后报一句
+## "把它带回去了"+图标+去房间哪里找;只是告知资格,真正收下要回房间点物品(空洞骑士式)。
+## ending_line:报资格前先自言自语的一句(boss 溜走了之类),可空。回顾梦不报。
+func complete_dream(reward_buff: StringName = &"", ending_line: String = "") -> void:
 	if not in_dream or _dream_settled:
 		return
 	_dream_settled = true
+	var first_clear := not replay_mode
 	if not replay_mode:
 		nights_completed = maxi(nights_completed, current_dream_night)
 		is_night = false
 	wake_kind = "night" if is_night else "morning"
 	save_game()
 	await Game.fade_cover(1.0, 0.6)
+	if first_clear and reward_buff != &"":
+		await _play_reward(reward_buff, ending_line)
 	_goto_room()
+
+
+# 黑屏上的通关小剧情。Dialogue 平时在 150 层,压在 1000 层的黑幕底下,演的时候临时抬上去。
+func _play_reward(reward_buff: StringName, ending_line: String) -> void:
+	var old_layer: int = Dialogue.layer
+	Dialogue.layer = 1001
+	if not ending_line.is_empty():
+		await Dialogue.say([ending_line])
+	await Dialogue.say_gain(
+		"把它带回去了\n「{icon}%s」" % BuffDefs.display_name(reward_buff),
+		BuffDefs.icon(reward_buff),
+		BuffDefs.pickup_hint(reward_buff))
+	Dialogue.layer = old_layer
+
+
+## 回笼觉里主动醒来(HUD 上点"浅浅的梦"):不推进度、不改昼夜,按当前时刻的醒来演出回房间。
+func wake_early() -> void:
+	if not in_dream or _dream_settled or not replay_mode:
+		return
+	_dream_settled = true
+	wake_kind = "night" if is_night else "morning"
+	await Game.fade_cover(1.0, 0.6)
+	_goto_room()
+
+
+## 某一夜的梦回顾过几次(第一次主线通关不算)。
+func revisit_count(night: int) -> int:
+	return int(revisit_counts.get(str(night), 0))
 
 
 ## 梦里死亡:梦境破碎,惊醒在夜里。由 Game.handle_player_death 委托过来。
@@ -115,8 +163,10 @@ func fail_dream() -> void:
 	# 停一拍,看清爆炸(真实时间)
 	await get_tree().create_timer(0.45, true, false, true).timeout
 	await _play_shatter()
-	is_night = true
-	wake_kind = "night"
+	# 回笼觉(回顾旧梦)不改昼夜:白天睡的回笼觉死了照样是白天醒;主线才会惊醒到夜里
+	if not replay_mode:
+		is_night = true
+	wake_kind = "night" if is_night else "morning"
 	save_game()
 	_goto_room()
 
@@ -125,6 +175,8 @@ func _goto_room() -> void:
 	in_dream = false
 	replay_mode = false
 	current_dream_night = 0
+	underwater = false
+	forced_buffs_changed.emit()
 	set_muzi_broken(false)  # 回到房间,守望复原
 	get_tree().change_scene_to_file(ROOM_SCENE)
 
@@ -219,6 +271,52 @@ func has_buff(id: StringName) -> bool:
 	return String(id) in buffs_owned
 
 
+# ---- 强制 buff ----
+
+## 水下开关(OxygenOverlay 调):进有水的场景 true,排干/离梦 false。
+func set_underwater(on: bool) -> void:
+	if underwater == on:
+		return
+	underwater = on
+	forced_buffs_changed.emit()
+
+
+## 当前挂在 HUD 最左的强制 buff,按固定顺序:浅浅的梦(回笼觉) → 水下。
+func forced_buffs() -> Array[StringName]:
+	var out: Array[StringName] = []
+	if not in_dream:
+		return out
+	if replay_mode:
+		out.append(&"ALightDream")
+	if underwater:
+		out.append(&"Underwater")
+	return out
+
+
+## 彩蛋:握着珊瑚潮汐(鱼缸)时氧气不掉,条满着不动。
+func oxygen_frozen() -> bool:
+	return has_buff(&"Watertank")
+
+
+func _process(delta: float) -> void:
+	if not in_dream or _dream_settled or not underwater:
+		return
+	if oxygen_frozen() or get_tree().paused:
+		return
+	oxygen = maxf(oxygen - delta / OXYGEN_FULL_TIME, 0.0)
+	if oxygen <= 0.0:
+		_suffocate()
+
+
+# 氧气见底:主角当场倒下,走"梦境破碎、惊醒"。护盾/守望都救不了。
+func _suffocate() -> void:
+	var players := get_tree().get_nodes_in_group("player")
+	if players.is_empty() or not players[0].has_method("die_instantly"):
+		fail_dream()
+		return
+	players[0].call("die_instantly")
+
+
 ## 获得 buff 并立即存档。已拥有或手里已满返回 false。
 func grant_buff(id: StringName) -> bool:
 	if has_buff(id):
@@ -250,6 +348,7 @@ func save_game() -> void:
 	config.set_value("progress", "is_night", is_night)
 	config.set_value("progress", "buffs_owned", buffs_owned)
 	config.set_value("progress", "auto_shield", auto_shield)
+	config.set_value("progress", "revisit_counts", revisit_counts)
 	config.save(SAVE_PATH)
 
 
@@ -261,3 +360,4 @@ func load_save() -> void:
 	is_night = bool(config.get_value("progress", "is_night", false))
 	buffs_owned = config.get_value("progress", "buffs_owned", []) as Array
 	auto_shield = bool(config.get_value("progress", "auto_shield", false))
+	revisit_counts = config.get_value("progress", "revisit_counts", {}) as Dictionary

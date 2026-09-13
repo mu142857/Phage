@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://exucoh44seym" path="res://levels/cradle_corridor/cradle_room.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
 [ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
+[ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
 [ext_resource type="Texture2D" uid="uid://bxedpo3oitfxu" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_0.png" id="bg_0"]
 [ext_resource type="Texture2D" uid="uid://c4rndfuxd4inm" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_2.png" id="bg_2"]
 [ext_resource type="Texture2D" uid="uid://cuces6qv527s1" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_4.png" id="bg_4"]
@@ -10,7 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://bj3o7pul64mtn" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_8.png" id="bg_8"]
 [ext_resource type="Texture2D" uid="uid://dhycjx3v0f2ug" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_10.png" id="bg_10"]
 [ext_resource type="Texture2D" uid="uid://dcu0a86wayukx" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_12.png" id="bg_12"]
-[ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_22qh5"]
 size = Vector2(64, 39)
@@ -37,7 +37,7 @@ size = Vector2(216, 3)
 size = Vector2(26, 3)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_omvqa"]
-size = Vector2(28, 16)
+size = Vector2(30, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door_bottom"]
 size = Vector2(32, 2)
@@ -141,7 +141,7 @@ teleport_id = 4
 spawn_offset = Vector2(7, 8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorLeft" unique_id=1391136182]
-position = Vector2(11, -47)
+position = Vector2(12, -47)
 shape = SubResource("RectangleShape2D_omvqa")
 
 [node name="DoorBottom" type="Area2D" parent="." unique_id=54383196]
@@ -170,4 +170,4 @@ scale = Vector2(1.2, 1)
 texture = ExtResource("bg_12")
 centered = false
 
-[node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]
+[node name="OxygenOverlay" parent="." unique_id=1609274984 instance=ExtResource("95_oxygen")]

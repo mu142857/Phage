@@ -1,14 +1,28 @@
 # res://interactive/BuffHold/buff_hold.gd
-# 左上角持有 buff 展示(上限 Story.MAX_BUFFS=2):
-# 1 个 = 单格框 BuffHold1,2 个 = 双格框 BuffHold2,8×8 图标嵌在格洞里。
-# 左键格子 → 先看名字和介绍,再问要不要放下(期间暂停游戏,Dialogue 不受暂停影响)。
-# 由 Game 常驻实例化,跟随存档变化自动刷新。
+# 左上角 buff 展示:格子数随内容往右无限拼(框从 BuffHold2 切边框/格洞/隔条拼出来),
+# 最左是强制 buff(浅浅的梦/水下:环境挂的,不占上限、不能放下),右边是持有的 buff
+# (上限 Story.MAX_BUFFS=2)。8×8 图标嵌在格洞里。
+# 左键格子 → 持有的:看名字介绍再问放不放下;水下:只看说明;浅浅的梦:问继续做梦还是醒来
+# (期间暂停游戏,Dialogue 不受暂停影响)。由 Game 常驻实例化,跟随存档/环境变化自动刷新。
+# 右侧竖着一根氧气条(素材 OxygenBar.png 4×36):在水下时显示,从上往下流逝,
+# 顶到底下的红格 = 死;握着珊瑚潮汐时满着不动。
 extends CanvasLayer
 
-const FRAME_SINGLE: Texture2D = preload("res://interactive/BuffHold/BuffHold1.png")
-const FRAME_DOUBLE: Texture2D = preload("res://interactive/BuffHold/BuffHold2.png")
+const FRAME_SHEET: Texture2D = preload("res://interactive/BuffHold/BuffHold2.png")
 const MARGIN := Vector2(2.0, 2.0)                      # 距屏幕左上角
-const SLOT_OFFSETS: Array[Vector2] = [Vector2(1, 1), Vector2(10, 1)]  # 格洞位置(8×8)
+# BuffHold2 的切法:x0 左边框 | x1..8 格洞 | x9 隔条 | x10..17 格洞 | x18 右边框,高 10
+const FRAME_H := 10.0
+const CELL_PITCH := 9.0                                # 一格 8 + 隔条 1
+const FRAME_LEFT := Rect2(0, 0, 1, 10)
+const FRAME_CELL := Rect2(1, 0, 8, 10)
+const FRAME_DIVIDER := Rect2(9, 0, 1, 10)
+const FRAME_RIGHT := Rect2(18, 0, 1, 10)
+
+# ---- 氧气条(OxygenBar.png 4×36):x1..2 是柱子,y1..31 可流逝区,y33..34 红格=死线 ----
+const OXYGEN_BAR: Texture2D = preload("res://entities/player/OxygenBar.png")
+const OXYGEN_POS := Vector2(154.0, 27.0)               # 屏幕右缘,竖向居中
+const OXYGEN_FILL := Rect2(1.0, 1.0, 2.0, 31.0)
+const OXYGEN_EMPTY_COLOR := Color(93.0 / 255.0, 62.0 / 255.0, 54.0 / 255.0, 1.0)  # 流走的部分=框色
 
 # ---- 护盾进度条(素材 ShieldBar.png:三条 19×4,行距5,中间两行=进度填充) ----
 # 槽0=第一条(棕框,基础盾);槽1/2=第二三条(绿框,森林的谢礼附加的两层)。
@@ -46,6 +60,8 @@ func _ready() -> void:
 	Story.buff_gained.connect(_on_buffs_changed)
 	Story.buff_removed.connect(_on_buffs_changed)
 	Story.muzi_broken_changed.connect(_rebuild)  # 守望破碎/复原时换图标
+	Story.forced_buffs_changed.connect(_rebuild)  # 入水/排干/回笼觉/回房间
+	_build_oxygen_bar()
 	# Game 这个 autoload 排在 Story 前面:此刻存档(load_save)还没跑,直接
 	# _rebuild 会读到空列表且事后没有信号。延迟到全部 autoload 就绪后再建。
 	_rebuild.call_deferred()
@@ -87,34 +103,59 @@ func _start_fade(target_alpha: float, duration: float) -> void:
 
 func _rebuild() -> void:
 	for child in _root.get_children():
-		if child != _bars_root:
+		if child != _bars_root and child != _oxygen_root:
 			child.queue_free()
 	_built_display = _current_display()
-	var owned: Array = Story.buffs_owned
-	if owned.is_empty():
+	var ids := _slot_ids()
+	if ids.is_empty():
 		return
-	var count := mini(owned.size(), Story.MAX_BUFFS)
-	var frame := TextureRect.new()
-	frame.texture = FRAME_DOUBLE if count >= 2 else FRAME_SINGLE
-	frame.position = MARGIN
-	frame.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_root.add_child(frame)
-	for i in count:
-		var id := StringName(String(owned[i]))
+	# 框:左边框 + (格洞 + 隔条)×(n-1) + 格洞 + 右边框,总宽 9n+1
+	var n := ids.size()
+	_add_frame_piece(FRAME_LEFT, 0.0)
+	for i in n:
+		_add_frame_piece(FRAME_CELL, 1.0 + CELL_PITCH * float(i))
+		if i < n - 1:
+			_add_frame_piece(FRAME_DIVIDER, 9.0 + CELL_PITCH * float(i))
+	_add_frame_piece(FRAME_RIGHT, 1.0 + CELL_PITCH * float(n) - 1.0)
+	for i in n:
+		var id: StringName = ids[i]
+		var slot := MARGIN + Vector2(1.0 + CELL_PITCH * float(i), 1.0)
 		var icon := TextureRect.new()
 		icon.texture = BuffDefs.icon(_display_id(id))
-		icon.position = MARGIN + SLOT_OFFSETS[i]
+		icon.position = slot
 		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_root.add_child(icon)
 		# 透明点击区盖住格洞,左键查看
 		var click := Control.new()
-		click.position = MARGIN + SLOT_OFFSETS[i]
+		click.position = slot
 		click.size = Vector2(8, 8)
 		click.mouse_filter = Control.MOUSE_FILTER_STOP
 		click.gui_input.connect(_on_slot_input.bind(id))
 		_root.add_child(click)
+
+
+func _add_frame_piece(region: Rect2, x: float) -> void:
+	var atlas := AtlasTexture.new()
+	atlas.atlas = FRAME_SHEET
+	atlas.region = region
+	var piece := TextureRect.new()
+	piece.texture = atlas
+	piece.position = MARGIN + Vector2(x, 0.0)
+	piece.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	piece.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_root.add_child(piece)
+
+
+# 格子顺序:强制 buff 在左,持有的在右(截到上限)。
+func _slot_ids() -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for f in Story.forced_buffs():
+		ids.append(f)
+	var owned: Array = Story.buffs_owned
+	for i in mini(owned.size(), Story.MAX_BUFFS):
+		ids.append(StringName(String(owned[i])))
+	return ids
 
 
 func _on_slot_input(event: InputEvent, id: StringName) -> void:
@@ -125,12 +166,26 @@ func _on_slot_input(event: InputEvent, id: StringName) -> void:
 
 
 ## 先报名字,按键后带着介绍弹选项:放下 / 留着。
+## 强制 buff 没有"放下":水下只看说明;浅浅的梦报回来的次数,问继续做梦还是醒来。
 func _inspect(id: StringName) -> void:
 	if Dialogue.is_open:
 		return
 	var shown := _display_id(id)  # 破碎的守望显示变体名/介绍,放下仍操作真身
 	var tree := get_tree()
 	tree.paused = true
+	if id == &"ALightDream":
+		var times := Story.revisit_count(Story.current_dream_night)
+		var pick := await Dialogue.ask(
+			["「%s」" % BuffDefs.display_name(id), "这是第 %d 次回到这个梦了。" % times],
+			["继续做梦", "醒来"])
+		tree.paused = false
+		if pick == 1:
+			Story.wake_early()
+		return
+	if BuffDefs.is_forced(id):
+		await Dialogue.say(["「%s」" % BuffDefs.display_name(shown), BuffDefs.desc(shown)])
+		tree.paused = false
+		return
 	var pick := await Dialogue.ask(
 		["「%s」" % BuffDefs.display_name(shown), BuffDefs.desc(shown)],
 		["放下", "留着"])
@@ -154,11 +209,43 @@ func _display_id(id: StringName) -> StringName:
 var _built_display: Array = []
 
 func _current_display() -> Array:
-	var owned: Array = Story.buffs_owned
 	var result: Array = []
-	for i in mini(owned.size(), Story.MAX_BUFFS):
-		result.append(String(_display_id(StringName(String(owned[i])))))
+	for id in _slot_ids():
+		result.append(String(_display_id(id)))
 	return result
+
+
+# ---- 氧气条 ----
+var _oxygen_root: TextureRect = null
+var _oxygen_mask: ColorRect = null
+
+
+func _build_oxygen_bar() -> void:
+	_oxygen_root = TextureRect.new()
+	_oxygen_root.texture = OXYGEN_BAR
+	_oxygen_root.position = OXYGEN_POS
+	_oxygen_root.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_oxygen_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_oxygen_root.visible = false
+	_root.add_child(_oxygen_root)
+	# 流走的部分:从顶上盖下来的一块框色
+	_oxygen_mask = ColorRect.new()
+	_oxygen_mask.color = OXYGEN_EMPTY_COLOR
+	_oxygen_mask.position = OXYGEN_FILL.position
+	_oxygen_mask.size = Vector2(OXYGEN_FILL.size.x, 0.0)
+	_oxygen_mask.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_oxygen_root.add_child(_oxygen_mask)
+
+
+func _update_oxygen_bar() -> void:
+	if _oxygen_root == null:
+		return
+	var show := Story.in_dream and Story.underwater
+	_oxygen_root.visible = show
+	if not show:
+		return
+	var gone := roundf(OXYGEN_FILL.size.y * (1.0 - clampf(Story.oxygen, 0.0, 1.0)))
+	_oxygen_mask.size.y = gone
 
 
 # ---- 护盾进度条 ----
@@ -209,6 +296,7 @@ func _rebuild_bars() -> void:
 ## 每帧更新充能进度(遮罩从右往左盖住未充部分)、"拿着"的微亮和状态图标。
 func _process(_delta: float) -> void:
 	_update_bars()
+	_update_oxygen_bar()
 	if _current_display() != _built_display:
 		_rebuild()
 

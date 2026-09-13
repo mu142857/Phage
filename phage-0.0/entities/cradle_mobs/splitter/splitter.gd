@@ -68,6 +68,14 @@ var _last_walk_frame := -1
 
 func _ready() -> void:
 	add_to_group("monster")
+	if floor_ray == null:
+		# 场景里没画探地射线就自己造一根:站在平台上(21 房中间平台)才不会一窜窜下去
+		floor_ray = RayCast2D.new()
+		floor_ray.name = "FloorRay"
+		floor_ray.position = Vector2(hop_distance + 4.0, -2.0)
+		floor_ray.target_position = Vector2(0.0, 8.0)
+		floor_ray.collision_mask = 1
+		add_child(floor_ray)
 	add_to_group("splitter")
 	health = clampi(health, 0, max_health)
 	if health <= 0:

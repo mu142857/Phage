@@ -8,12 +8,17 @@ extends Area2D
 @export var lifetime: float = 3.0
 @export var appear_time: float = 0.25     # 渐显时长
 ## 被蚯蚓挡住时往回弹的比例,按雾的大小插值:小的轻、弹得多;大的重、几乎不弹。再各自 ±jitter 随机一点
-@export var bounce_small: float = 0.6     # 最小雾(size_small)的回弹比例
-@export var bounce_big: float = 0.04      # 最大雾(size_big)的回弹比例
+@export var bounce_small: float = 0.4     # 最小雾(size_small)的回弹比例
+@export var bounce_big: float = 0.05      # 最大雾(size_big)的回弹比例
 @export var size_small: float = 0.7       # 和喷射战士 fog_size 的区间对齐
 @export var size_big: float = 1.7
 @export var bounce_jitter: float = 0.1
-@export var block_fade_time: float = 0.45 # 被挡住后散掉用时
+@export var bounce_speed_max: float = 32.0   # 回弹速度封顶(像素/秒),快雾也别弹得夸张
+@export var bounce_scatter_deg: float = 40.0 # 回弹方向在"原路返回"基础上左右随机偏这么多度,别每颗都原路弹
+@export var bounce_gravity_keep: float = 0.5 # 回弹后还吃多少重力(弹起来再落回去,不是飘走)
+@export var bounce_color: Color = Color(0.98, 0.9, 0.72, 0.9)  # 弹开的雾换成这个色(暖白),一眼看出"被挡了"
+@export var bounce_color_mix: float = 0.75   # 换色比例 0~1
+@export var block_fade_time: float = 0.8  # 被挡住后飞多久散掉(短了像凭空消失)
 @export var wall_arm_time: float = 0.15
 @export var trail_interval: float = 0.05
 @export var trail_lifetime: float = 0.28
@@ -81,15 +86,36 @@ func _check_touch() -> void:
 		if body.is_in_group("earthworm"):
 			# 被蚯蚓挡住:往回弹一小段再散掉,看得出是"撞上了"(它的碰撞箱随动画变化很大,别硬邦邦地瞬间消失)
 			# 小雾弹得多、大雾几乎不弹,再随机一点,别每颗都一个样
-			var k := clampf(inverse_lerp(size_small, size_big, _size), 0.0, 1.0)
-			var bounce := lerpf(bounce_small, bounce_big, k) + randf_range(-bounce_jitter, bounce_jitter)
-			_dissipate(block_fade_time, -maxf(bounce, 0.0))
+			_bounce_off()
 			return
 		if body.is_in_group("monster"):
 			continue
 		if _elapsed >= wall_arm_time:
 			_dissipate()
 			return
+
+
+# 被蚯蚓挡住:速度按大小打折并封顶,方向=原路返回再随机偏一个角度,换成暖白色,
+# 留一半重力让它弹起来再落下去,慢慢淡掉。要看得出"弹了",但绝不能弹得又远又夸张。
+func _bounce_off() -> void:
+	if _done:
+		return
+	var k := clampf(inverse_lerp(size_small, size_big, _size), 0.0, 1.0)
+	var bounce := maxf(lerpf(bounce_small, bounce_big, k) + randf_range(-bounce_jitter, bounce_jitter), 0.0)
+	var speed := minf(_vel.length() * bounce, bounce_speed_max)
+	var back := -_vel.normalized() if _vel != Vector2.ZERO else Vector2.UP
+	var dir := back.rotated(deg_to_rad(randf_range(-bounce_scatter_deg, bounce_scatter_deg)))
+	if _square != null:
+		_square.color = _square.color.lerp(bounce_color, bounce_color_mix)
+	_done = true
+	set_deferred("monitoring", false)
+	_vel = dir * speed
+	_fall_gravity *= bounce_gravity_keep
+	var tw := create_tween().set_parallel(true)
+	modulate.a = minf(modulate.a, 1.0)
+	tw.tween_property(self, "modulate:a", 0.0, block_fade_time)
+	tw.tween_property(self, "scale", Vector2(0.6, 0.6), block_fade_time)
+	tw.chain().tween_callback(queue_free)
 
 
 # 散掉:缩小+淡出,不凭空消失。duration=淡多久;drift=淡的时候速度乘多少(负数=往回弹)

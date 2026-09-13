@@ -76,6 +76,10 @@ func _ready() -> void:
 	add_to_group("monster")
 	add_to_group("earthworm")   # 雾弹撞到它会散
 	z_index = maxi(z_index, 11)  # 盖在主角(z=10)上面,当掩体
+	if step_hitbox != null:
+		# 踩地判定必须开着监测,否则 _stomp 里查不到主角还会刷 "monitoring is off" 报错
+		# (tscn 里被关过一次,这里兜底强开)
+		step_hitbox.monitoring = true
 	if use_custom_patrol_range:
 		_min_x = minf(patrol_min_x, patrol_max_x)
 		_max_x = maxf(patrol_min_x, patrol_max_x)

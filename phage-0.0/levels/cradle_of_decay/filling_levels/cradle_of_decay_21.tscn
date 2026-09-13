@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://c2ejyda6u6hut" path="res://entities/player/player.tscn" id="2_player"]
 [ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
 [ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
+[ext_resource type="PackedScene" uid="uid://cgmdknc2rs2yw" path="res://entities/cradle_mobs/sprayer/sprayer.tscn" id="56_sprayer"]
+[ext_resource type="PackedScene" uid="uid://bg2e3ibkgkxrw" path="res://entities/cradle_mobs/earthworm/earthworm.tscn" id="54_earthworm"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WB_floor"]
 
@@ -98,5 +100,18 @@ spawn_offset = Vector2(-7, 8)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorRight" unique_id=694200744]
 position = Vector2(2, -50)
 shape = SubResource("RectangleShape2D_heuot")
+
+[node name="Mobs" type="Node2D" parent="." unique_id=388051737]
+
+[node name="Sprayer1" parent="Mobs" unique_id=1578228079 instance=ExtResource("56_sprayer")]
+z_index = 10
+position = Vector2(84, 3)
+
+[node name="Earthworm1" parent="Mobs" unique_id=451862186 instance=ExtResource("54_earthworm")]
+z_index = 10
+position = Vector2(84, 47)
+use_custom_patrol_range = true
+patrol_min_x = 70.0
+patrol_max_x = 98.0
 
 [node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]

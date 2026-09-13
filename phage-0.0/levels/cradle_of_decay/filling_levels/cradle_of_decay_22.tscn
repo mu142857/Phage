@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bj3o7pul64mtn" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_8.png" id="bg_8"]
 [ext_resource type="Texture2D" uid="uid://dhycjx3v0f2ug" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_10.png" id="bg_10"]
 [ext_resource type="Texture2D" uid="uid://dcu0a86wayukx" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_12.png" id="bg_12"]
+[ext_resource type="PackedScene" uid="uid://ccd3r040uf45y" path="res://entities/cradle_mobs/splitter/splitter.tscn" id="55_splitter"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_22qh5"]
 size = Vector2(64, 39)
@@ -169,5 +170,11 @@ position = Vector2(-4.6, -4.7)
 scale = Vector2(1.2, 1)
 texture = ExtResource("bg_12")
 centered = false
+
+[node name="Mobs" type="Node2D" parent="." unique_id=1588165099]
+
+[node name="Splitter1" parent="Mobs" unique_id=221982931 instance=ExtResource("55_splitter")]
+z_index = 10
+position = Vector2(120, 105)
 
 [node name="OxygenOverlay" parent="." unique_id=1609274984 instance=ExtResource("95_oxygen")]

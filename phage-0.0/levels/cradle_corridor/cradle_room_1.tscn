@@ -15,6 +15,12 @@
 [ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="12_slow"]
 [ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
 [ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
+[ext_resource type="PackedScene" uid="uid://joegf2jsjujd" path="res://entities/pop_tops/pop_tops.tscn" id="51_poptops"]
+[ext_resource type="PackedScene" uid="uid://dumhmcodsiajy" path="res://entities/wowen/wowen.tscn" id="50_wowen"]
+[ext_resource type="PackedScene" uid="uid://cgmdknc2rs2yw" path="res://entities/cradle_mobs/sprayer/sprayer.tscn" id="56_sprayer"]
+[ext_resource type="PackedScene" uid="uid://bg2e3ibkgkxrw" path="res://entities/cradle_mobs/earthworm/earthworm.tscn" id="54_earthworm"]
+[ext_resource type="PackedScene" uid="uid://boet2qi3x3yxm" path="res://entities/cradle_mobs/worm_wall/worm_wall.tscn" id="52_wormwall"]
+[ext_resource type="PackedScene" uid="uid://dl5mmwvvhk6qk" path="res://entities/cradle_mobs/anemone/anemone.tscn" id="53_anemone"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WB_floor"]
 
@@ -1742,6 +1748,54 @@ texture = ExtResource("7_t3")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=738808335]
 color = Color(0.5370987, 0.5370987, 0.5370987, 1)
+
+[node name="Mobs" type="Node2D" parent="." unique_id=305062345]
+
+[node name="PopTops1" parent="Mobs" unique_id=1435958856 instance=ExtResource("51_poptops")]
+z_index = 10
+position = Vector2(540, 80)
+
+[node name="Wowen1" parent="Mobs" unique_id=1785070620 instance=ExtResource("50_wowen")]
+z_index = 10
+position = Vector2(330, 80)
+
+[node name="Sprayer1" parent="Mobs" unique_id=507557419 instance=ExtResource("56_sprayer")]
+z_index = 10
+position = Vector2(170, 0)
+
+[node name="Earthworm1" parent="Mobs" unique_id=599779372 instance=ExtResource("54_earthworm")]
+z_index = 10
+position = Vector2(170, 80)
+use_custom_patrol_range = true
+patrol_min_x = 120.0
+patrol_max_x = 220.0
+
+[node name="Wowen2" parent="Mobs" unique_id=1847588939 instance=ExtResource("50_wowen")]
+z_index = 10
+position = Vector2(880, 80)
+
+[node name="Sprayer2" parent="Mobs" unique_id=1891432103 instance=ExtResource("56_sprayer")]
+z_index = 10
+position = Vector2(1180, 0)
+
+[node name="Earthworm2" parent="Mobs" unique_id=1795398506 instance=ExtResource("54_earthworm")]
+z_index = 10
+position = Vector2(1180, 80)
+use_custom_patrol_range = true
+patrol_min_x = 1130.0
+patrol_max_x = 1230.0
+
+[node name="WormWall1" parent="Mobs" unique_id=1827606918 instance=ExtResource("52_wormwall")]
+z_index = 10
+position = Vector2(1480, 80)
+
+[node name="Anemone1" parent="Mobs" unique_id=899429538 instance=ExtResource("53_anemone")]
+z_index = 10
+position = Vector2(1504, 80)
+
+[node name="PopTops2" parent="Mobs" unique_id=906590342 instance=ExtResource("51_poptops")]
+z_index = 10
+position = Vector2(1650, 80)
 
 [node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]
 

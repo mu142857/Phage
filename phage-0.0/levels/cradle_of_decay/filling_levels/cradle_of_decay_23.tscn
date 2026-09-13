@@ -6,6 +6,9 @@
 [ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="3_ju82c"]
 [ext_resource type="Texture2D" uid="uid://bkgoipd3p8wyv" path="res://levels/cradle_corridor/tree3.png" id="4_hh5qm"]
 [ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
+[ext_resource type="PackedScene" uid="uid://dl5mmwvvhk6qk" path="res://entities/cradle_mobs/anemone/anemone.tscn" id="53_anemone"]
+[ext_resource type="PackedScene" uid="uid://boet2qi3x3yxm" path="res://entities/cradle_mobs/worm_wall/worm_wall.tscn" id="52_wormwall"]
+[ext_resource type="PackedScene" uid="uid://dumhmcodsiajy" path="res://entities/wowen/wowen.tscn" id="50_wowen"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WB_floor"]
 
@@ -122,5 +125,22 @@ scale = Vector2(-1, 1)
 texture = ExtResource("4_hh5qm")
 region_enabled = true
 region_rect = Rect2(0, 0, 37, 31)
+
+[node name="Mobs" type="Node2D" parent="." unique_id=1159354615]
+
+[node name="Anemone1" parent="Mobs" unique_id=1170884305 instance=ExtResource("53_anemone")]
+z_index = 10
+position = Vector2(58, 80)
+
+[node name="WormWall1" parent="Mobs" unique_id=402961186 instance=ExtResource("52_wormwall")]
+z_index = 10
+position = Vector2(92, 80)
+
+[node name="Wowen1" parent="Mobs" unique_id=970166941 instance=ExtResource("50_wowen")]
+z_index = 10
+position = Vector2(135, 80)
+use_custom_patrol_range = true
+patrol_min_x = 108.0
+patrol_max_x = 150.0
 
 [node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]

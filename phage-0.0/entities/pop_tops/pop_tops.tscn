@@ -293,7 +293,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5oxri"]
-size = Vector2(14, 17)
+size = Vector2(13, 16.5)
 
 [sub_resource type="Animation" id="Animation_ebm1s"]
 resource_name = "HitFlash"
@@ -348,10 +348,11 @@ material = SubResource("ShaderMaterial_xsxg8")
 sprite_frames = SubResource("SpriteFrames_k7wsa")
 animation = &"Idle"
 autoplay = "Idle"
+frame_progress = 0.3590855
 offset = Vector2(-3, -32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1086345879]
-position = Vector2(0, -8.5)
+position = Vector2(0, -8.25)
 shape = SubResource("RectangleShape2D_5oxri")
 
 [node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=216054272]

@@ -1793,6 +1793,10 @@ position = Vector2(1480, 80)
 z_index = 10
 position = Vector2(1573, 80)
 
+[node name="Anemone2" parent="Mobs" unique_id=1055664912 instance=ExtResource("53_anemone")]
+z_index = 10
+position = Vector2(1361, 80)
+
 [node name="PopTops2" parent="Mobs" unique_id=906590342 instance=ExtResource("51_poptops")]
 z_index = 10
 position = Vector2(1650, 80)

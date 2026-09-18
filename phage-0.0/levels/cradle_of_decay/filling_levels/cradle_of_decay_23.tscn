@@ -5,10 +5,10 @@
 [ext_resource type="Script" uid="uid://drkwutnr27vdj" path="res://interactive/Teleport/auto_teleport.gd" id="3_auto"]
 [ext_resource type="Shader" uid="uid://coutsk7ij30gj" path="res://asstes/shaders/swing.tres" id="3_ju82c"]
 [ext_resource type="Texture2D" uid="uid://bkgoipd3p8wyv" path="res://levels/cradle_corridor/tree3.png" id="4_hh5qm"]
-[ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
-[ext_resource type="PackedScene" uid="uid://dl5mmwvvhk6qk" path="res://entities/cradle_mobs/anemone/anemone.tscn" id="53_anemone"]
-[ext_resource type="PackedScene" uid="uid://boet2qi3x3yxm" path="res://entities/cradle_mobs/worm_wall/worm_wall.tscn" id="52_wormwall"]
 [ext_resource type="PackedScene" uid="uid://dumhmcodsiajy" path="res://entities/wowen/wowen.tscn" id="50_wowen"]
+[ext_resource type="PackedScene" uid="uid://boet2qi3x3yxm" path="res://entities/cradle_mobs/worm_wall/worm_wall.tscn" id="52_wormwall"]
+[ext_resource type="PackedScene" uid="uid://dl5mmwvvhk6qk" path="res://entities/cradle_mobs/anemone/anemone.tscn" id="53_anemone"]
+[ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WB_floor"]
 
@@ -74,7 +74,7 @@ position = Vector2(70.5, 31.5)
 shape = SubResource("RectangleShape2D_hkpb0")
 
 [node name="Player" parent="." unique_id=101394859 instance=ExtResource("2_player")]
-position = Vector2(23, 40)
+position = Vector2(67, 24)
 
 [node name="DoorLeft" type="Area2D" parent="." unique_id=298515247]
 position = Vector2(3, 62)
@@ -130,7 +130,7 @@ region_rect = Rect2(0, 0, 37, 31)
 
 [node name="Anemone1" parent="Mobs" unique_id=1170884305 instance=ExtResource("53_anemone")]
 z_index = 10
-position = Vector2(40, 80)
+position = Vector2(26, 80)
 
 [node name="WormWall1" parent="Mobs" unique_id=402961186 instance=ExtResource("52_wormwall")]
 z_index = 10
@@ -143,4 +143,4 @@ use_custom_patrol_range = true
 patrol_min_x = 108.0
 patrol_max_x = 150.0
 
-[node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]
+[node name="OxygenOverlay" parent="." unique_id=1890164901 instance=ExtResource("95_oxygen")]

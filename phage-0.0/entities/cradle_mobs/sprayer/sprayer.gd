@@ -20,10 +20,14 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cradle_mobs/spra
 ## 只在主角进 PlayerCheck 时才喷;关掉 = 永远在喷(环境危害)
 @export var only_when_player_near: bool = true
 @export var linger_time: float = 1.5            # 主角离开范围后再喷这么久才停
+## 侦测范围左右各多宽(像素)。0 = 用场景里 PlayerCheck 画的框。
+## 要比雾柱宽很多:雾从顶上落到地面要 0.5~1.5 秒,主角冲刺 220 像素/秒,
+## 侦测太窄的话主角冲进来时雾还没落地,等于白喷(实测 40 次只中 5 次)。
+@export var detect_half_width: float = 0.0
 @export var fogs_per_second: float = 10.0
 @export var spread_degrees: float = 30.0        # 扇形半角(中间密两边稀)
 @export var spawn_half_width: float = 8.0       # 出生点不是一个点,是枪口左右各这么宽的一条线(中间密两边稀)
-@export var fog_speed: Vector2 = Vector2(30.0, 110.0)  # 每颗速度随机区间(又快又慢;最快的要能追上冲刺)
+@export var fog_speed: Vector2 = Vector2(30.0, 210.0)  # 每颗速度随机区间(又快又慢;最快的要能追上冲刺)
 @export var fog_gravity: float = 45.0           # 雾弹吃一点重力,往下弯
 @export var fog_size: Vector2 = Vector2(0.7, 1.7)      # 每颗大小随机区间(又大又小,1=3px)
 @export var fog_color: Color = Color(0.78, 0.66, 0.9, 0.85)
@@ -41,6 +45,7 @@ var _linger_left := 0.0
 
 func _ready() -> void:
 	add_to_group("monster")
+	_apply_detect_width()
 	health = clampi(health, 0, max_health)
 	if health <= 0:
 		health = max_health
@@ -48,6 +53,19 @@ func _ready() -> void:
 		ani_2d.material = ani_2d.material.duplicate()
 		if ani_2d.material is ShaderMaterial:
 			(ani_2d.material as ShaderMaterial).set_shader_parameter("Enabled", false)
+
+
+# 侦测框按 detect_half_width 放宽(形状资源先复制,不影响别的实例)
+func _apply_detect_width() -> void:
+	if detect_half_width <= 0.0 or player_check == null:
+		return
+	var shape_node := player_check.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if shape_node == null or not (shape_node.shape is RectangleShape2D):
+		return
+	var rect := (shape_node.shape as RectangleShape2D).duplicate() as RectangleShape2D
+	rect.size.x = detect_half_width * 2.0
+	shape_node.shape = rect
+	shape_node.position.x = 0.0
 
 
 func _physics_process(delta: float) -> void:

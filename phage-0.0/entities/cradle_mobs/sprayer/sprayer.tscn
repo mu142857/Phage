@@ -204,7 +204,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aggro"]
-size = Vector2(86, 90)
+size = Vector2(102, 90)
 
 [node name="Sprayer" type="CharacterBody2D" unique_id=1629435598]
 collision_layer = 5

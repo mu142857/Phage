@@ -107,6 +107,7 @@ radius = 9.055386
 radius = 9.0
 
 [node name="AnemoneBullet" type="Area2D" unique_id=735974695]
+light_mask = 0
 z_index = 12
 collision_layer = 0
 collision_mask = 3

@@ -12,13 +12,13 @@
 [ext_resource type="Texture2D" uid="uid://ddjnqvu38a1uv" path="res://levels/cradle_corridor/tree4.png" id="8_t4"]
 [ext_resource type="Texture2D" uid="uid://drbdeq7r3fmdv" path="res://levels/cradle_corridor/wall.png" id="11_wall"]
 [ext_resource type="Shader" uid="uid://cqtkbi1ocysrj" path="res://asstes/shaders/slow_swing.tres" id="12_slow"]
-[ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
 [ext_resource type="PackedScene" uid="uid://dumhmcodsiajy" path="res://entities/wowen/wowen.tscn" id="50_wowen"]
-[ext_resource type="PackedScene" uid="uid://cgmdknc2rs2yw" path="res://entities/cradle_mobs/sprayer/sprayer.tscn" id="56_sprayer"]
-[ext_resource type="PackedScene" uid="uid://bg2e3ibkgkxrw" path="res://entities/cradle_mobs/earthworm/earthworm.tscn" id="54_earthworm"]
-[ext_resource type="PackedScene" uid="uid://dl5mmwvvhk6qk" path="res://entities/cradle_mobs/anemone/anemone.tscn" id="53_anemone"]
-[ext_resource type="PackedScene" uid="uid://boet2qi3x3yxm" path="res://entities/cradle_mobs/worm_wall/worm_wall.tscn" id="52_wormwall"]
 [ext_resource type="PackedScene" uid="uid://joegf2jsjujd" path="res://entities/pop_tops/pop_tops.tscn" id="51_poptops"]
+[ext_resource type="PackedScene" uid="uid://boet2qi3x3yxm" path="res://entities/cradle_mobs/worm_wall/worm_wall.tscn" id="52_wormwall"]
+[ext_resource type="PackedScene" uid="uid://dl5mmwvvhk6qk" path="res://entities/cradle_mobs/anemone/anemone.tscn" id="53_anemone"]
+[ext_resource type="PackedScene" uid="uid://bg2e3ibkgkxrw" path="res://entities/cradle_mobs/earthworm/earthworm.tscn" id="54_earthworm"]
+[ext_resource type="PackedScene" uid="uid://cgmdknc2rs2yw" path="res://entities/cradle_mobs/sprayer/sprayer.tscn" id="56_sprayer"]
+[ext_resource type="PackedScene" path="res://systems/oxygen/oxygen_overlay.tscn" id="95_oxygen"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WB_floor"]
 
@@ -1464,6 +1464,10 @@ patrol_max_x = 1060.0
 z_index = 10
 position = Vector2(720, 80)
 
+[node name="Anemone2" parent="Mobs" unique_id=1055664912 instance=ExtResource("53_anemone")]
+z_index = 10
+position = Vector2(825, 80)
+
 [node name="WormWall1" parent="Mobs" unique_id=548701281 instance=ExtResource("52_wormwall")]
 z_index = 10
 position = Vector2(640, 80)
@@ -1476,4 +1480,4 @@ position = Vector2(420, 80)
 z_index = 10
 position = Vector2(250, 80)
 
-[node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]
+[node name="OxygenOverlay" parent="." unique_id=832852190 instance=ExtResource("95_oxygen")]

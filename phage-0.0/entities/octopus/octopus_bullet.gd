@@ -50,8 +50,8 @@ func setup(start: Vector2, ground_y: float, fall_time: float, hover: float = 0.0
 		create_tween().tween_property(self, "modulate:a", 1.0, minf(fade_in_time, _hover_left))
 
 
-## 抛物线:从 start 出发,正好 flight_time 秒后落到 target(Actinos 子弹的算法)
-func launch(start: Vector2, target: Vector2, flight_time: float, arc_gravity: float) -> void:
+## 抛物线:从 start 出发,正好 flight_time 秒后落到 target(Actinos 子弹的算法);delay 秒后才出发(之前藏着不动)
+func launch(start: Vector2, target: Vector2, flight_time: float, arc_gravity: float, delay: float = 0.0) -> void:
 	global_position = start
 	_arc = true
 	_arc_target = target
@@ -60,7 +60,8 @@ func launch(start: Vector2, target: Vector2, flight_time: float, arc_gravity: fl
 	_fall_gravity = arc_gravity
 	_velocity.x = (target.x - start.x) / _arc_time
 	_velocity.y = (target.y - start.y - 0.5 * arc_gravity * _arc_time * _arc_time) / _arc_time
-	_hover_left = 0.0
+	_hover_left = maxf(delay, 0.0)
+	visible = _hover_left <= 0.0
 	_active = true
 	_damage_applied = false
 
@@ -69,6 +70,11 @@ func _physics_process(delta: float) -> void:
 	if not _active:
 		return
 	if _arc:
+		if _hover_left > 0.0:
+			_hover_left -= delta
+			if _hover_left <= 0.0:
+				visible = true
+			return
 		_elapsed += delta
 		_velocity.y += _fall_gravity * delta
 		global_position += _velocity * delta

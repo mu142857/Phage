@@ -5,16 +5,17 @@
 # - 主角退到左门口(想离开房间)或者被一路挤到门口 = 剧情杀,所以得边退边打、尽快打赢。
 # - 技能两个:
 #   ①平时天上掉子弹:预判 / 堵后路 / 前后夹,一直往后退躲不掉,得前后挪着躲;
-#   ②砸地(Slam,有概率连砸两下):砸地帧之前把身体挪到 Hit 点正好压在地面(ground_y)的高度(不管当时飘在哪),
+#   ②砸地(Slam,按阶段连砸 2/3/3 下):砸地帧之前把身体挪到 Hit 点正好压在地面(ground_y)的高度(不管当时飘在哪),
 #     砸地那一帧震屏(可选闪屏),天上斜着落下一把子弹:各自带角度走弧线,落点分格打散、落地先后也打散,有缝但不规律;
 #     砸完一整轮停 slam_rest_time 秒(不走不掉子弹),再接着压。
-#   ③十字激光(Laser,用 Idle 动画):原地停住,身后以本体原点为交点摆两根预警线——一根指向主角,一根和它垂直,
-#     预警完一起开火。Idle 等够了在砸地和激光里按权重挑一个。
-# - 不吃主角的光(贴图 light_mask 清 0)。
+#   ③十字激光(Laser,用 Idle 动画):原地停住,身后以本体原点为交点摆十字预警线——一根瞄主角再往左 30°
+#     (摆好就固定),一根和它垂直;开火后整个十字每秒转 20° 扫到开火时主角的位置,转完变细消失。
+#     Idle 等够了在砸地和激光里按权重挑。
+# - 不吃主角的光(贴图 light_mask 清 0);贴图颜色在两个很接近的色之间慢慢来回。
 # - 打赢了不死(之后会变成 NPC):往上飞走 / 沉到地下,离开屏幕后删掉。
 # 编辑器里摆的两个点:Hit = 砸地那一帧触手碰地的点;Low = Idle(移动也是它)时贴图最低点,飘到最低时离地 float_gap。
 # 动画名:Idle(循环) / Slam(一次) / Battlecry(阶段吼)。没导帧的动画自动跳过、按计时兜底。
-# 状态(按序号):Null(0) Idle(1) Flee(2) Battlecry(3) Slam(4)。
+# 状态(按序号):Null(0) Idle(1) Flee(2) Battlecry(3) Slam(4) Laser(5)。
 #   往前压、上下飘、推人、平时掉子弹都在主体里跑,状态只负责"演";下一招都问 get_next_attack_state()。
 extends CharacterBody2D
 
@@ -32,8 +33,8 @@ const PHASE_QUARTER := 2
 const BULLET_SCENE: PackedScene = preload("res://entities/octopus/octopus_bullet.tscn")
 
 @export_group("血量")
-@export var max_health: int = 5000
-@export var health: int = 5000
+@export var max_health: int = 4500
+@export var health: int = 4500
 ## 调试:开打后原地飘着,不走不打
 @export var idle_only := false
 
@@ -49,13 +50,13 @@ const BULLET_SCENE: PackedScene = preload("res://entities/octopus/octopus_bullet
 
 @export_group("往前压")
 ## 每秒往左推进多少像素
-@export var advance_speed: float = 12.0
+@export var advance_speed: float = 9.6
 ## 各阶段(满血 / 半血以下 / 四分之一以下)推进速度的倍率
 @export var phase_speed_mult: Array[float] = [1.0, 1.2, 1.45]
 
 @export_group("推人与接触伤害")
 ## 主角在 Blocker 里被往回推(px/s):刚进左边缘是 push_min,越往里越大,到右边缘是 push_max。
-## 主角跑速 70,章鱼自己还在往前压 12:push_max 比 82 大一点 = 挤到快穿过去时就挤不动了,冲刺能多冲一截
+## 主角跑速 70,章鱼自己还在往前压(约 10):push_max 比两者之和大一点 = 挤到快穿过去时就挤不动了,冲刺能多冲一截
 @export var push_min: float = 0.0
 @export var push_max: float = 90.0
 ## 推力随深度的曲线(1 = 线性;大于 1 = 前半段软、快到头才猛)
@@ -95,23 +96,34 @@ const BULLET_SCENE: PackedScene = preload("res://entities/octopus/octopus_bullet
 @export var laser_weight: float = 1.0
 
 @export_group("砸地")
-## 每轮砸地连砸第二下的概率(1 = 每次都连砸两下)
-@export var double_slam_chance: float = 0.5
+## 各阶段一轮砸地连砸几下(满血 / 半血以下 / 四分之一以下)
+@export var slam_combo: Array[int] = [2, 3, 3]
 ## 一轮砸完停多久(不走、不掉子弹),然后接着往前压
 @export var slam_rest_time: float = 1.5
 ## 砸下去那一帧的震屏 / 白闪(0 = 不要)
 @export var slam_shake: float = 3.0
 @export var slam_flash: float = 0.0
-## 各阶段每砸一下天上落几颗
-@export var burst_count: Array[int] = [6, 7, 8]
-## 每颗从屏幕上沿落到地面的秒数,在这个范围里随机(落地有先有后)
-@export var burst_min_time: float = 0.7
-@export var burst_max_time: float = 1.2
-## 斜着落:每颗落下来横着走多少像素(随机向左或向右),越大越斜
-@export var burst_slant_min: float = 12.0
-@export var burst_slant_max: float = 40.0
+## 各阶段每砸一下天上落几颗(连砸次数多了,每下的量就少一点)
+@export var burst_count: Array[int] = [3, 4, 4]
+## 重力(px/s²):越小落得越慢、越好躲
+@export var burst_gravity: float = 90.0
+## 出发时往下的初速度(px/s),每颗在这个范围里随机
+@export var burst_fall_speed_min: float = 0.0
+@export var burst_fall_speed_max: float = 20.0
+## 横着的速度(px/s,随机向左或向右):越大越斜
+@export var burst_side_speed_min: float = 8.0
+@export var burst_side_speed_max: float = 24.0
+## 每颗出发前随机晚 0~这么多秒(落地有先有后)
+@export var burst_stagger: float = 0.3
 ## 落点在每一格里随机的范围(0~1,两头留空保证相邻两颗至少隔开半格)
 @export var burst_cell_jitter: float = 0.5
+
+@export_group("变色")
+## 贴图在两个颜色之间慢慢来回(只动一点点)
+@export var tint_a: Color = Color(1.0, 0.96, 0.93)
+@export var tint_b: Color = Color(0.93, 0.97, 1.0)
+## 来回一趟的秒数
+@export var tint_period: float = 6.0
 
 @export_group("打赢以后")
 ## 不死,逃走:往上飞出屏幕 / 沉到地下
@@ -141,6 +153,7 @@ var _extra_slams := 0   # 这一轮砸地还要再连砸几下
 var _bobbing := true
 var _bob_t := 0.0
 var _y_tween: Tween = null
+var _tint_t := 0.0
 
 @onready var ani_2d: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 @onready var hit_effect_player: AnimationPlayer = get_node_or_null("HitEffectPlayer") as AnimationPlayer
@@ -176,6 +189,14 @@ func _unlit(node: Node) -> void:
 		(node as CanvasItem).light_mask = 0
 	for child in node.get_children():
 		_unlit(child)
+
+
+# 贴图在 tint_a / tint_b 之间慢慢来回(self_modulate,不碰受击闪白和 BossIntro 的渐显)
+func _process(delta: float) -> void:
+	if ani_2d == null or tint_period <= 0.0:
+		return
+	_tint_t += delta
+	ani_2d.self_modulate = tint_a.lerp(tint_b, 0.5 - 0.5 * cos(TAU * _tint_t / tint_period))
 
 
 ## BossIntro 开演前来问:这个梦里已经把它打跑了,回走廊就不再出来(打没打 Actinos 都会出来)
@@ -259,7 +280,7 @@ func flee_target_y() -> float:
 # 决策(集中在主体,状态演完都来问)
 # =============================================================================
 
-## 先插阶段战吼;Idle 等够了按权重挑砸地或激光(砸地这时决定连不连砸第二下);出完招/吼完回 Idle
+## 先插阶段战吼;Idle 等够了按权重挑砸地或激光(砸地这时按阶段定连砸几下);出完招/吼完回 Idle
 func get_next_attack_state(from_state: int = STATE_IDLE) -> int:
 	_update_phase()
 	if pending_battlecry > 0:
@@ -270,7 +291,7 @@ func get_next_attack_state(from_state: int = STATE_IDLE) -> int:
 		var total := maxf(slam_weight, 0.0) + maxf(laser_weight, 0.0)
 		if total > 0.0 and rng.randf() * total < maxf(laser_weight, 0.0):
 			return STATE_LASER
-		_extra_slams = 1 if rng.randf() < double_slam_chance else 0
+		_extra_slams = maxi(0, int(_phase_value(slam_combo, 1.0)) - 1)
 		return STATE_SLAM
 	return STATE_IDLE
 
@@ -378,8 +399,8 @@ func slam_impact() -> void:
 
 
 # 落点:把屏幕左边到主角能站的最右处等分成 N 格,每格里随机挑一个点(相邻至少隔半格,有缝但不整齐);
-# 每颗从屏幕上沿斜上方出发(随机偏左或偏右 slant 像素),从静止开始往下加速——横着匀速、竖着越落越快,
-# 走出来就是一段有角度的弧;落地时间在 min~max 之间随机,有先有后
+# 每颗从屏幕上沿外出发:横着匀速(side_speed,随机左右)、竖着从 fall_speed 开始按 burst_gravity 加速,
+# 走出来就是一段有角度的弧。出发点是按落点倒推的,所以缝还在;再随机晚出发一点,落地有先有后
 func _burst() -> void:
 	var view := _view_rect()
 	var left := maxf(view.position.x, 0.0) + 4.0
@@ -390,14 +411,15 @@ func _burst() -> void:
 	var cell := (right - left) / float(count)
 	var edge := clampf((1.0 - burst_cell_jitter) * 0.5, 0.0, 0.5)
 	var top := view.position.y - 6.0
+	var g := maxf(burst_gravity, 1.0)
 	for i in count:
 		var x := left + cell * (float(i) + rng.randf_range(edge, 1.0 - edge))
 		var target := Vector2(x, _ground_y_at(x, top))
-		var slant := rng.randf_range(burst_slant_min, burst_slant_max) * (1.0 if rng.randf() < 0.5 else -1.0)
-		var start := Vector2(x - slant, top)
-		var t := rng.randf_range(burst_min_time, burst_max_time)
-		var fall_gravity := 2.0 * maxf(target.y - start.y, 1.0) / (t * t)  # 从静止起落,正好 t 秒到地
-		_launch_bullet(start, target, t, fall_gravity)
+		var vy := rng.randf_range(burst_fall_speed_min, burst_fall_speed_max)
+		var vx := rng.randf_range(burst_side_speed_min, burst_side_speed_max) * (1.0 if rng.randf() < 0.5 else -1.0)
+		var dy := maxf(target.y - top, 1.0)
+		var t := (-vy + sqrt(vy * vy + 2.0 * g * dy)) / g  # 落这么高要多久
+		_launch_bullet(Vector2(x - vx * t, top), target, t, g, rng.randf_range(0.0, burst_stagger))
 
 
 ## 砸完:duration 秒内飘回轨道,然后接着上下飘
@@ -614,13 +636,13 @@ func _spawn_bullet(start: Vector2, bullet_ground_y: float, fall_time: float, hov
 	bullet.call("setup", start, bullet_ground_y, fall_time, hover)
 
 
-func _launch_bullet(start: Vector2, target: Vector2, flight_time: float, arc_gravity: float) -> void:
+func _launch_bullet(start: Vector2, target: Vector2, flight_time: float, arc_gravity: float, delay: float = 0.0) -> void:
 	var scene := get_tree().current_scene
 	if scene == null or BULLET_SCENE == null:
 		return
 	var bullet := BULLET_SCENE.instantiate()
 	scene.add_child(bullet)
-	bullet.call("launch", start, target, flight_time, arc_gravity)
+	bullet.call("launch", start, target, flight_time, arc_gravity, delay)
 
 
 # 落点的地面高度:从出生点往下打射线找世界层(找不到按 ground_y)

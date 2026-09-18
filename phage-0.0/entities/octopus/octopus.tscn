@@ -8,8 +8,8 @@
 [ext_resource type="Script" uid="uid://mnni1ijwvwdr" path="res://entities/octopus/octopus_idle(1).gd" id="5_idle"]
 [ext_resource type="Script" path="res://entities/octopus/octopus_flee(2).gd" id="6_flee"]
 [ext_resource type="Script" uid="uid://cacm7n5unsb3l" path="res://entities/octopus/octopus_battlecry(3).gd" id="7_battlecry"]
+[ext_resource type="Script" uid="uid://35j3mb8no0dg" path="res://entities/octopus/octopus_laser(5).gd" id="8_laser"]
 [ext_resource type="Script" uid="uid://kj7uhkiih2u8" path="res://entities/octopus/octopus_slam(4).gd" id="8_slam"]
-[ext_resource type="Script" path="res://entities/octopus/octopus_laser(5).gd" id="8_laser"]
 [ext_resource type="Script" uid="uid://cts6rntwen0yp" path="res://systems/ui/boss_health_ui.gd" id="9_hpui"]
 [ext_resource type="Texture2D" uid="uid://bia1swob5arrm" path="res://entities/octopus/octopus_health_bar_under.png" id="10_under"]
 [ext_resource type="Texture2D" uid="uid://c2ihmvlsrmy8v" path="res://entities/octopus/octopus_health_bar_over.png" id="11_over"]
@@ -20,7 +20,7 @@
 resource_local_to_scene = true
 shader = ExtResource("2_hurt")
 shader_parameter/Enabled = false
-shader_parameter/Tint = Color(1, 1, 1, 1)
+shader_parameter/Tint = Color(0.95, 0.55, 0.2, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g835b"]
 atlas = ExtResource("3_g835b")
@@ -310,7 +310,7 @@ script = ExtResource("7_battlecry")
 [node name="Slam(4)" type="Node" parent="StateMachine" unique_id=1617288680]
 script = ExtResource("8_slam")
 
-[node name="Laser(5)" type="Node" parent="StateMachine"]
+[node name="Laser(5)" type="Node" parent="StateMachine" unique_id=1030819721]
 script = ExtResource("8_laser")
 
 [node name="HitEffectPlayer" type="AnimationPlayer" parent="." unique_id=965580041]
@@ -340,7 +340,7 @@ offset_right = 97.0
 offset_bottom = 91.0
 theme_override_fonts/normal_font = ExtResource("13_font")
 theme_override_font_sizes/normal_font_size = 7
-text = "5000"
+text = "4500"
 vertical_alignment = 1
 
 [node name="Hit" type="Node2D" parent="." unique_id=1661200195]

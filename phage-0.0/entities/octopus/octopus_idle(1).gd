@@ -11,7 +11,7 @@ var _wait := 0.0
 
 func enter() -> void:
 	monster.start_fight()
-	monster.set_advancing(true)
+	monster.set_advancing(true, monster.move_ramp_time)
 	monster.set_drops(true)
 	monster.set_bobbing(true)
 	monster.play_anim(&"Idle")

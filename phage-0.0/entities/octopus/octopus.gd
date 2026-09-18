@@ -7,7 +7,7 @@
 #   ①平时天上掉子弹:预判 / 堵后路 / 前后夹,一直往后退躲不掉,得前后挪着躲;
 #   ②砸地(Slam,按阶段连砸 2/3/3 下):砸地帧之前把身体挪到 Hit 点正好压在地面(ground_y)的高度(不管当时飘在哪),
 #     砸地那一帧震屏(可选闪屏),天上斜着落下一把子弹:各自带角度走弧线,落点分格打散、落地先后也打散,有缝但不规律;
-#     砸完一整轮停 slam_rest_time 秒(不走不掉子弹),再接着压。
+#     砸之前先慢慢刹停、停稳才砸(砸的时候不走);砸完一整轮原地等 slam_rest_time 秒,再慢慢加速接着压。
 #   ③十字激光(Laser,用 Idle 动画):原地停住,身后以本体原点为交点摆十字预警线——一根瞄主角再往左 30°
 #     (摆好就固定),一根和它垂直;开火后整个十字每秒转 20° 扫到开火时主角的位置,转完变细消失。
 #     Idle 等够了在砸地和激光里按权重挑。
@@ -51,6 +51,8 @@ const BULLET_SCENE: PackedScene = preload("res://entities/octopus/octopus_bullet
 @export_group("往前压")
 ## 每秒往左推进多少像素
 @export var advance_speed: float = 9.6
+## 停下之后重新往前压时,从 0 加速到全速用几秒(砸地前的刹车时长在 Slam(4) 节点上)
+@export var move_ramp_time: float = 0.6
 ## 各阶段(满血 / 半血以下 / 四分之一以下)推进速度的倍率
 @export var phase_speed_mult: Array[float] = [1.0, 1.2, 1.45]
 
@@ -73,7 +75,7 @@ const BULLET_SCENE: PackedScene = preload("res://entities/octopus/octopus_bullet
 
 @export_group("平时掉子弹")
 ## 各阶段两次掉落之间隔几秒
-@export var drop_interval: Array[float] = [1.4, 1.1, 0.85]
+@export var drop_interval: Array[float] = [1.8, 1.4, 1.1]
 @export var drop_jitter: float = 0.2
 ## 从屏幕上沿落到地面用几秒
 @export var drop_fall_time: float = 0.9
@@ -89,7 +91,7 @@ const BULLET_SCENE: PackedScene = preload("res://entities/octopus/octopus_bullet
 
 @export_group("出招")
 ## 各阶段 Idle 里等几秒出一招(砸地或激光)
-@export var attack_interval: Array[float] = [7.0, 6.0, 5.0]
+@export var attack_interval: Array[float] = [9.0, 8.0, 7.0]
 @export var attack_interval_jitter: float = 1.0
 ## 出招时砸地和激光的权重(各 1 = 一半一半)
 @export var slam_weight: float = 1.0
@@ -98,8 +100,8 @@ const BULLET_SCENE: PackedScene = preload("res://entities/octopus/octopus_bullet
 @export_group("砸地")
 ## 各阶段一轮砸地连砸几下(满血 / 半血以下 / 四分之一以下)
 @export var slam_combo: Array[int] = [2, 3, 3]
-## 一轮砸完停多久(不走、不掉子弹),然后接着往前压
-@export var slam_rest_time: float = 1.5
+## 一轮砸完停多久(不走、不掉子弹),然后慢慢加速接着往前压
+@export var slam_rest_time: float = 2.0
 ## 砸下去那一帧的震屏 / 白闪(0 = 不要)
 @export var slam_shake: float = 3.0
 @export var slam_flash: float = 0.0
@@ -144,7 +146,9 @@ var initial_battlecry_shown := false
 var rng := RandomNumberGenerator.new()
 
 var _in_fight := false
-var _advancing := false
+var _move_factor := 0.0   # 当前推进速度占全速的比例(0~1),平滑变化
+var _move_target := 0.0
+var _move_rate := 0.0
 var _drops_on := false
 var _drop_cd := 0.0
 var _contact_cd := 0.0
@@ -207,8 +211,9 @@ func intro_allowed() -> bool:
 func _physics_process(delta: float) -> void:
 	if not _in_fight or _killing:
 		return
-	if _advancing and not idle_only:
-		global_position.x -= advance_speed * _phase_value(phase_speed_mult, 1.0) * delta
+	_move_factor = move_toward(_move_factor, _move_target, _move_rate * delta)
+	if _move_factor > 0.0 and not idle_only:
+		global_position.x -= advance_speed * _phase_value(phase_speed_mult, 1.0) * _move_factor * delta
 	_update_bob(delta)
 	_contact_cd = maxf(0.0, _contact_cd - delta)
 	_keep_player_on_front_side()
@@ -236,8 +241,18 @@ func start_fight() -> void:
 		player.global_position.x = edge - 10.0
 
 
-func set_advancing(on: bool) -> void:
-	_advancing = on
+## ramp_time > 0 = 在这么多秒里慢慢加速到全速 / 慢慢刹停;0 = 立刻(激光要原地定住,战吼/逃跑也是立刻停)
+func set_advancing(on: bool, ramp_time: float = 0.0) -> void:
+	_move_target = 1.0 if on else 0.0
+	if ramp_time <= 0.0:
+		_move_factor = _move_target
+	else:
+		_move_rate = 1.0 / ramp_time
+
+
+## 已经完全停住了没有(砸地要等刹停再出手)
+func is_stopped() -> bool:
+	return _move_factor <= 0.0
 
 
 ## 激光时要原地定住(十字交点就是本体原点,不能飘走);重新开飘时追回轨道是平滑的
@@ -255,7 +270,7 @@ func set_drops(on: bool) -> void:
 func end_fight() -> void:
 	Story.octopus_defeated = true
 	_in_fight = false
-	_advancing = false
+	set_advancing(false)
 	_drops_on = false
 	_extra_slams = 0
 	_bobbing = false

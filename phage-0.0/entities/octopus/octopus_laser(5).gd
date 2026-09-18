@@ -9,14 +9,14 @@ const SELF_ID := 5
 const LASER_SCENE: PackedScene = preload("res://entities/octopus/octopus_laser.tscn")
 
 ## 预警线亮着多久才开火
-@export var warn_time: float = 1.0
+@export var warn_time: float = 1.5
 ## 预警线瞄在主角左边多少度(开火后大约就转这么多度扫到主角)
 @export var sweep_angle: float = 30.0
-## 开火后转动的速度(度/秒);30 度 ÷ 20 = 扫 1.5 秒
-@export var sweep_speed: float = 20.0
+## 开火后转动的速度(度/秒);30 度 ÷ 15 = 扫 2 秒
+@export var sweep_speed: float = 15.0
 ## 扫一次最短 / 最长几秒(主角预警时乱跑会让要转的角度变大变小)
 @export var sweep_time_min: float = 0.4
-@export var sweep_time_max: float = 2.5
+@export var sweep_time_max: float = 3.0
 ## 收束后再停多久回 Idle
 @export var after_time: float = 0.5
 

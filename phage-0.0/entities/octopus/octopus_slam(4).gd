@@ -1,13 +1,16 @@
 # 章鱼 Slam(4):砸地,一轮连砸几下(主体按阶段定:满血 2 下,半血以下 3 下)。
+# 先在 brake_time 秒里慢慢刹停,停稳了才开砸;砸的时候不往前走、平时的掉落也停。
 # 每一下:前 slam_frame 帧不管当时飘在哪,把身体挪到 Hit 正好压在地面上的高度(主体 slam_windup);
 # 第 slam_frame 帧砸下去:震屏 + 天上斜着落下一把子弹(主体 slam_impact),剩下的帧里飘回去。
-# 砸的时候照样往前压,平时的掉落先停;一轮砸完原地停 slam_rest_time 秒(不走、不掉子弹),再回 Idle。
+# 一轮砸完原地等 slam_rest_time 秒(不走、不掉子弹),再回 Idle 慢慢加速接着压。
 extends BasicState
 
 const SELF_ID := 4
 
 ## Slam 动画第几帧砸到地(从 0 数,第 5 号帧 = 触手甩到左下碰地、正对 Hit 点)
 @export var slam_frame: int = 5
+## 出招前从全速慢慢刹停用几秒
+@export var brake_time: float = 0.8
 ## 没导 Slam 帧时:抬身多久算砸到地、砸完再过多久算这一下结束
 @export var fallback_windup: float = 0.5
 @export var fallback_recover: float = 0.5
@@ -20,6 +23,8 @@ var _windup := 0.0
 var _length := 0.0
 var _fired := false
 var _use_anim := false
+var _braking := false
+var _brake_left := 0.0
 var _resting := false
 var _rest_left := 0.0
 var _done := false
@@ -28,14 +33,16 @@ var _done := false
 func enter() -> void:
 	_done = false
 	_resting = false
+	_braking = true
+	_brake_left = brake_time
 	monster.set_drops(false)
-	_start_one_slam()
+	monster.set_advancing(false, brake_time)
+	monster.play_anim(&"Idle")
 
 
 func _start_one_slam() -> void:
 	_t = 0.0
 	_fired = false
-	monster.set_advancing(true)
 	_use_anim = monster.has_anim(&"Slam")
 	if _use_anim:
 		monster.restart_anim(&"Slam")
@@ -49,6 +56,14 @@ func _start_one_slam() -> void:
 
 func process(delta: float) -> void:
 	if _done:
+		return
+	# 先刹车:停稳(或者刹车时间到)才开砸
+	if _braking:
+		_brake_left -= delta
+		if monster.is_stopped() or _brake_left <= 0.0:
+			_braking = false
+			monster.set_advancing(false)
+			_start_one_slam()
 		return
 	if _resting:
 		_rest_left -= delta
@@ -71,8 +86,7 @@ func process(delta: float) -> void:
 		if monster.take_extra_slam():
 			_start_one_slam()
 			return
-		# 一轮砸完:原地停一会儿,不走不掉子弹
+		# 一轮砸完:原地等一会儿,不走不掉子弹
 		_resting = true
 		_rest_left = monster.slam_rest_time
-		monster.set_advancing(false)
 		monster.play_anim(&"Idle")

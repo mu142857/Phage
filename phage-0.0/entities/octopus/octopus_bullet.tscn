@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/octopus/octopus_bullet.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://bt6glsnbx1iau" path="res://entities/actinos/actinos_bullet.png" id="2_tex"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0"]
+atlas = ExtResource("2_tex")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1"]
+atlas = ExtResource("2_tex")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2"]
+atlas = ExtResource("2_tex")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3"]
+atlas = ExtResource("2_tex")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4"]
+atlas = ExtResource("2_tex")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f5"]
+atlas = ExtResource("2_tex")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bullet"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_trail_color"]
+offsets = PackedFloat32Array(0, 0.45945945, 1)
+colors = PackedColorArray(0.7, 0.35, 1, 1, 1, 1, 1, 1, 0.3, 0.85, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_trail_color"]
+gradient = SubResource("Gradient_trail_color")
+
+[sub_resource type="Gradient" id="Gradient_trail_alpha"]
+offsets = PackedFloat32Array(0, 0.10810811, 0.4864865, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_trail_alpha"]
+gradient = SubResource("Gradient_trail_alpha")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_trail"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_trail_alpha")
+color_initial_ramp = SubResource("GradientTexture1D_trail_color")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bullet"]
+radius = 2.0
+
+[node name="OctopusBullet" type="Area2D"]
+z_index = 11
+light_mask = 0
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(1.4, 4, 3, 1)
+light_mask = 0
+sprite_frames = SubResource("SpriteFrames_bullet")
+offset = Vector2(-0.5, -0.5)
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+modulate = Color(1.9, 1.9, 1.9, 1)
+light_mask = 0
+process_material = SubResource("ParticleProcessMaterial_trail")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_bullet")

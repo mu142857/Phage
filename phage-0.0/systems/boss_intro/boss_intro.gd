@@ -18,7 +18,8 @@ static var _played: Dictionary = {}
 @export var auto_start := true               ## ready 后自动走完整开场
 @export var trigger_distance := 0.0          ## >0:等玩家横向靠近 boss 这么多像素才开演(走路关用)
 @export var pre_delay := 1.2                 ## 触发后的安静停顿
-@export_enum("Drop", "Fade") var appear_mode := 0  ## 现身方式:天降 / 渐显
+@export_enum("Drop", "Fade", "Slide") var appear_mode := 0  ## 现身方式:天降 / 渐显 / 横着滑进来
+@export var slide_offset := Vector2(120, 0)  ## Slide:从摆放位置加这个偏移处滑到位(默认从右边屏幕外)
 @export var reveal_animation: StringName = &""     ## 现身过程播的动画(空=Idle;落地后自动回 Idle)
 ## 字卡期间播的动画(空=Idle)。注意:动画播完会发 animation_finished,
 ## 只能用「没连信号」或「处理函数有动画名守卫」的动画(如 penitent 的 Battlecry)。
@@ -103,6 +104,9 @@ func _run() -> void:
 	if dream_intro != null:
 		await dream_intro.tree_exited
 	if not is_inside_tree():
+		return
+	# boss 自己可以说"这次先不出场"(大章鱼:没打 Actinos 之前红墙只是锁着),那就一直藏着不演
+	if _boss.has_method("intro_allowed") and not _boss.call("intro_allowed"):
 		return
 
 	var key := _scene_key()
@@ -222,6 +226,18 @@ func _reveal() -> void:
 		Game.shake_camera(2.5)
 		Game.flash(0.35, Color(1.0, 1.0, 1.0))
 		_play_boss_anim(&"")  # 落地回 Idle
+	elif appear_mode == 2:
+		# 滑入:从屏幕外横着挤进来,越到位越慢(大章鱼从红墙里出来)
+		_play_boss_anim(reveal_animation)
+		_boss.global_position = _target_pos + slide_offset
+		var tw := create_tween()
+		tw.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+		tw.tween_property(_boss, "global_position", _target_pos, 0.9)
+		Game.shake_camera(1.5)
+		await tw.finished
+		if not is_inside_tree():
+			return
+		_play_boss_anim(&"")
 	else:
 		# 渐显:原地从透明浮现
 		_play_boss_anim(reveal_animation)

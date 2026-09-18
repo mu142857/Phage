@@ -14,6 +14,7 @@ extends Node2D
 @export var beam_width: float = 3.0
 @export var core_width: float = 1.0
 @export var retract_time: float = 0.1   # 收束时长(渐窄收拢，不硬删)
+@export var flash_color: Color = Color(1.5, 0.45, 0.45, 0.4)  # 开火闪屏的颜色
 
 var _vec := Vector2.RIGHT
 var _deals_damage: bool = false
@@ -77,7 +78,7 @@ func fire() -> void:
 	aim_line.visible = false
 	Game.shake_camera(_fire_shake)
 	if _fire_flash > 0.0:
-		Game.flash(_fire_flash, Color(1.5, 0.45, 0.45, 0.4))
+		Game.flash(_fire_flash, flash_color)
 	_firing = true
 	_damage_done = false
 	if _deals_damage:

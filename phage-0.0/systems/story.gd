@@ -30,7 +30,8 @@ var wake_kind := ""          # 回到房间要播的醒来演出:"" / "morning" 
 # ---- 环境/强制 buff:不占持有上限,HUD 上排在最左,不能放下(定义见 BuffDefs "forced") ----
 signal forced_buffs_changed
 var underwater := false      # 当前场景在水下(OxygenOverlay 进场设 true,排干设 false)
-var actinos_defeated := false  # 本次入梦里 Actinos 已被打败:全图的水都不回来,氧气不再掉;终点红墙才放行
+var actinos_defeated := false  # 本次入梦里 Actinos 已被打败:全图的水都不回来,氧气不再掉
+var octopus_defeated := false  # 本次入梦里原走廊的大章鱼已被打跑:回走廊不再出来(打没打 Actinos 都能去红墙通关)
 var oxygen := 1.0            # 氧气 1→0,跨房间不回满;新入梦回满;见底=梦境破碎
 const OXYGEN_FULL_TIME := 120.0   # 满到红线的秒数
 var revisit_counts: Dictionary = {}  # "夜" → 回笼觉(回顾旧梦)次数,入存档
@@ -89,6 +90,7 @@ func start_dream(night: int, replay := false) -> void:
 	oxygen = 1.0
 	underwater = false
 	actinos_defeated = false
+	octopus_defeated = false
 	if replay:
 		var key := str(night)
 		revisit_counts[key] = int(revisit_counts.get(key, 0)) + 1

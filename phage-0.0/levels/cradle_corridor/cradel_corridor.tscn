@@ -19,6 +19,8 @@
 [ext_resource type="PackedScene" uid="uid://dumhmcodsiajy" path="res://entities/wowen/wowen.tscn" id="50_wowen"]
 [ext_resource type="PackedScene" uid="uid://joegf2jsjujd" path="res://entities/pop_tops/pop_tops.tscn" id="51_poptops"]
 [ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="90_dreamend"]
+[ext_resource type="PackedScene" path="res://entities/octopus/octopus.tscn" id="96_octopus"]
+[ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="97_bossintro"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a1y6q"]
 
@@ -1806,7 +1808,18 @@ position = Vector2(1050, 80)
 position = Vector2(1250, 0)
 reward_buff = &"Watertank"
 ending_line = "……水都退了。红墙也不喘了。"
-require_actinos = true
 locked_line = "……墙还在喘。还不到时候。"
+
+[node name="Octopus" parent="." instance=ExtResource("96_octopus")]
+position = Vector2(1210, 40)
+
+[node name="BossIntro" parent="." instance=ExtResource("97_bossintro")]
+boss_path = NodePath("../Octopus")
+title_text = "头衔待定"
+boss_name_text = "名字待定"
+trigger_distance = 80.0
+pre_delay = 0.2
+appear_mode = 2
+focus_offset = Vector2(0, 0)
 
 [node name="OxygenOverlay" parent="." instance=ExtResource("95_oxygen")]

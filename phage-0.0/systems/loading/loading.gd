@@ -39,6 +39,7 @@ const WARM_SCENE_PATHS: Array[String] = [
 	"res://systems/oxygen/oxygen_overlay.tscn",
 	"res://entities/actinos/actinos_death_effect.tscn",
 	"res://entities/actinos/actinos_jump_effect.tscn",
+	"res://entities/octopus/octopus_bullet_land.tscn",
 	"res://entities/azure_warlord/azure_bullet_effects.tscn",
 	"res://entities/azure_warlord/azure_warlord_death_effect.tscn",
 	"res://entities/bloodworm/bloodworm_death.tscn",
@@ -82,6 +83,8 @@ const WARM_SCENE_PATHS: Array[String] = [
 	"res://levels/silvaron/leaf_1.tscn",
 	# 子弹 / 道具(内嵌粒子)
 	"res://entities/actinos/actinos_bullet.tscn",
+	"res://entities/octopus/octopus_bullet.tscn",
+	"res://entities/octopus/octopus_laser.tscn",
 	"res://entities/azure_warlord/azure_bullet.tscn",
 	"res://entities/bloodworm/bloodworm_laser.tscn",
 	"res://entities/broken_wall/broken_wall_001.tscn",
@@ -95,6 +98,7 @@ const WARM_SCENE_PATHS: Array[String] = [
 	# 主角 / 怪 / Boss(受击闪白等 ShaderMaterial,部分内嵌粒子)
 	"res://entities/player/player.tscn",
 	"res://entities/actinos/actinos.tscn",
+	"res://entities/octopus/octopus.tscn",
 	"res://entities/azure_warlord/azure_warlord.tscn",
 	"res://entities/bloodworm/bloodworm.tscn",
 	"res://entities/calendula/calendula.tscn",

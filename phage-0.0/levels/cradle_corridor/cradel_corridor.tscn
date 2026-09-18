@@ -1815,8 +1815,8 @@ position = Vector2(1210, 40)
 
 [node name="BossIntro" parent="." instance=ExtResource("97_bossintro")]
 boss_path = NodePath("../Octopus")
-title_text = "头衔待定"
-boss_name_text = "名字待定"
+title_text = "满手墨水的怪物"
+boss_name_text = "章鱼馆长"
 trigger_distance = 80.0
 pre_delay = 0.2
 appear_mode = 2

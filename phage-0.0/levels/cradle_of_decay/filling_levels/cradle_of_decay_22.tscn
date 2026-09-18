@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://bj3o7pul64mtn" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_8.png" id="bg_8"]
 [ext_resource type="Texture2D" uid="uid://dhycjx3v0f2ug" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_10.png" id="bg_10"]
 [ext_resource type="Texture2D" uid="uid://dcu0a86wayukx" path="res://levels/cradle_of_decay/cradle_of_decay_filling_levels_background/22_12.png" id="bg_12"]
+[ext_resource type="PackedScene" uid="uid://dumhmcodsiajy" path="res://entities/wowen/wowen.tscn" id="50_wowen"]
+[ext_resource type="PackedScene" uid="uid://joegf2jsjujd" path="res://entities/pop_tops/pop_tops.tscn" id="51_poptops"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_22qh5"]
 size = Vector2(64, 39)
@@ -171,5 +173,23 @@ texture = ExtResource("bg_12")
 centered = false
 
 [node name="Mobs" type="Node2D" parent="." unique_id=1588165099]
+
+[node name="PopTops1" parent="Mobs" unique_id=1733052201 instance=ExtResource("51_poptops")]
+z_index = 10
+position = Vector2(113, 54)
+
+[node name="Wowen1" parent="Mobs" unique_id=1733052202 instance=ExtResource("50_wowen")]
+z_index = 10
+position = Vector2(95, 105)
+use_custom_patrol_range = true
+patrol_min_x = 76.0
+patrol_max_x = 118.0
+
+[node name="Wowen2" parent="Mobs" unique_id=1733052203 instance=ExtResource("50_wowen")]
+z_index = 10
+position = Vector2(150, 105)
+use_custom_patrol_range = true
+patrol_min_x = 122.0
+patrol_max_x = 164.0
 
 [node name="OxygenOverlay" parent="." unique_id=1609274984 instance=ExtResource("95_oxygen")]

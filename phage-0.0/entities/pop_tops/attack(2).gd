@@ -67,7 +67,7 @@ func _spawn_bullet() -> void:
 	var start_pos := monster.global_position
 	if is_instance_valid(release_point):
 		start_pos = release_point.global_position
-	var target_pos := Vector2(_get_player_x(), ground_y)
+	var target_pos := Vector2(_get_player_x(), _get_target_y())
 	if bullet.has_method("setup"):
 		bullet.call("setup", start_pos, target_pos, bullet_flight_time, bullet_gravity)
 	else:
@@ -81,6 +81,20 @@ func _schedule_attack_timeout(ticket: int) -> void:
 	if ticket != attack_ticket:
 		return
 	change_state(1)
+
+# 子弹砸在主角脚下那块地上:从主角身上往下探 200px 找世界碰撞(层 1)。
+# 地面不在 y=80 的房间(比如 22 房的台阶和凹坑)也能砸中;探不到就退回 ground_y。平地关卡结果和以前一样。
+func _get_target_y() -> float:
+	var players := get_tree().get_nodes_in_group("player")
+	if players.is_empty() or not (players[0] is Node2D):
+		return ground_y
+	var from := (players[0] as Node2D).global_position + Vector2(0, -4)
+	var query := PhysicsRayQueryParameters2D.create(from, from + Vector2(0, 200), 1)
+	var hit := monster.get_world_2d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return ground_y
+	return (hit["position"] as Vector2).y
+
 
 func _get_player_x() -> float:
 	var players := get_tree().get_nodes_in_group("player")

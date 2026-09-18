@@ -23,8 +23,8 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cradle_mobs/spra
 ## 侦测范围左右各多宽(像素)。0 = 用场景里 PlayerCheck 画的框。
 ## 要比雾柱宽很多:雾从顶上落到地面要 0.5~1.5 秒,主角冲刺 220 像素/秒,
 ## 侦测太窄的话主角冲进来时雾还没落地,等于白喷(实测 40 次只中 5 次)。
-@export var detect_half_width: float = 0.0
-@export var fogs_per_second: float = 10.0
+@export var detect_half_width: float = 160.0
+@export var fogs_per_second: float = 18.0
 @export var spread_degrees: float = 30.0        # 扇形半角(中间密两边稀)
 @export var spawn_half_width: float = 8.0       # 出生点不是一个点,是枪口左右各这么宽的一条线(中间密两边稀)
 @export var fog_speed: Vector2 = Vector2(30.0, 210.0)  # 每颗速度随机区间(又快又慢;最快的要能追上冲刺)

@@ -7,8 +7,8 @@
 #         其余时间停着,看起来一窜一窜但不生硬;
 #         每段 0.8~1.6s 重摇方向:3/5 朝主角、2/5 背对;这时候身体有接触伤害(AttackCheck)。
 #   Attack:主角进 PlayerCheck 就停下播 Attack,第 spit_frame 帧朝主角方向抛一颗分身弹(抛物线),
-#         冷却 10s。Attack 本身没有伤害,只有身体的接触伤害。
-# 分裂规则(用户定):出手瞬间自己血量减半(最少 1),弹落到地面长成新的一只(血量=减半后的值);
+#         冷却 attack_cooldown(4s)。Attack 本身没有伤害,只有身体的接触伤害。
+# 分裂规则(用户定,2026-09-17 改):本体不掉血,弹落到地面长成新的一只(血量=本体当前血量的一半,最少 1);
 # 场上总数封顶 max_total(8),满了就抛普通弹(落地炸)。弹打到左右墙只爆不生。
 # 动画名:主体 Walk(循环)/Attack(单次),$Spawn 节点 Spawn(单次)。素材默认朝左。
 # 可选节点 FloorRay/WallRay(RayCast2D,mask 1):有就探地/探墙掉头。
@@ -253,12 +253,11 @@ func _spit() -> void:
 		player = get_tree().get_first_node_in_group("player") as Node2D
 	if player == null or BULLET_SCENE == null or get_tree().current_scene == null:
 		return
-	# 满员就抛普通弹;没满就分裂:自己先减半,弹带着减半后的血量落地长出来
+	# 满员就抛普通弹;没满就分裂:弹带着本体当前血量的一半落地长出来,本体自己不掉血
 	var can_split := get_tree().get_nodes_in_group("splitter").size() < max_total
 	var payload_hp := 0
 	if can_split:
-		health = maxi(1, health / 2)
-		payload_hp = health
+		payload_hp = maxi(1, health / 2)
 	var start := muzzle.global_position if muzzle != null else global_position + Vector2(0, -8)
 	var dir_x := signf(player.global_position.x - global_position.x)
 	if dir_x == 0.0:

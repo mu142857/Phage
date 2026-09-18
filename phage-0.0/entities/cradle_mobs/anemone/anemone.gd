@@ -14,7 +14,7 @@ const DEATH_EFFECT_SCENE: PackedScene = preload("res://entities/cradle_mobs/anem
 
 @export_group("Attack")
 @export var shoot_frame: int = 7          # Attack 动画的出弹帧(0 起数)
-@export var attack_cooldown: float = 5.0
+@export var attack_cooldown: float = 2.5   # Attack 播完到下一次开打的间隔。Idle 只有 1 帧,别让它干站太久
 
 enum Phase { IDLE, ATTACK }
 

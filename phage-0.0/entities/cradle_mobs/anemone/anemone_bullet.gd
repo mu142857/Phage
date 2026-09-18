@@ -35,6 +35,7 @@ var _elapsed := 0.0
 
 
 func _ready() -> void:
+	_unlit(self)
 	if _has_anim(&"Flying"):
 		ani_2d.play(&"Flying")
 	# 爆炸范围形状不再用于判定(命中即刻结算),关掉省事
@@ -133,10 +134,19 @@ func _has_anim(anim: StringName) -> bool:
 		and ani_2d.sprite_frames.get_frame_count(anim) > 0
 
 
+# 不吃主角身上的 PointLight2D:light_mask 不会从父节点传给子节点,要一个个关
+static func _unlit(node: Node) -> void:
+	if node is CanvasItem:
+		(node as CanvasItem).light_mask = 0
+	for c in node.get_children():
+		_unlit(c)
+
+
 func _spawn_explosion_effect() -> void:
 	if EXPLOSION_EFFECT_SCENE == null or get_tree().current_scene == null:
 		return
 	var effect := EXPLOSION_EFFECT_SCENE.instantiate()
+	_unlit(effect)
 	get_tree().current_scene.add_child(effect)
 	if effect is Node2D:
 		(effect as Node2D).global_position = global_position

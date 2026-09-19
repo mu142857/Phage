@@ -130,7 +130,7 @@ region_rect = Rect2(0, 0, 37, 31)
 
 [node name="Anemone1" parent="Mobs" unique_id=1170884305 instance=ExtResource("53_anemone")]
 z_index = 10
-position = Vector2(26, 80)
+position = Vector2(36, 80)
 
 [node name="WormWall1" parent="Mobs" unique_id=402961186 instance=ExtResource("52_wormwall")]
 z_index = 10

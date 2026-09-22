@@ -1,0 +1,149 @@
+Rust City 风格 · PixelLab 提示词
+================================
+
+每条提示词都已经带好风格后缀，整行复制就能用。
+中文说明单独一行，别一起复制进去。
+
+
+【固定设置】每次都一样
+--------------------------------
+View      : side
+Outline   : Lineless
+Shading   : detailed shading（噪点太多就换 medium shading）
+Detail    : 小怪 medium detail / Boss highly detailed
+Colors    : 上传同目录的 rust_city_palette_1px.png（35色，取自 rust_city 楼房 + RustGOAT，另补3个路灯暖光色）
+风格参考  : 上传同目录的 rust_city_style_ref_128.png（Pro 版的 "Create images from style references"）
+背景      : 透明
+
+画布大小（参照：主角大约 4×8 像素，猫 NPC 大约 29×25）
+  小怪 / 动物    32×32
+  人形 NPC       48×48
+  Boss / 大机械  64×64 或 128×128
+
+
+【负面提示词】（有这个输入框就填）
+--------------------------------
+outline, black outline, thick lines, saturated colors, neon, clean flat vector
+
+
+【风格后缀】（想自己写主体的话，接在后面）
+--------------------------------
+side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+
+================================
+街上的人　48×48
+================================
+
+报童
+a newsboy in a flat cap and oversized coat, holding a bundle of newspapers, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+扫烟囱的
+a chimney sweep covered in soot, long brushes over the shoulder, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+点路灯的人
+a lamplighter holding a long pole with a small flame at the tip, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+工厂工人
+a factory worker in a leather apron and rolled sleeves, holding a coal shovel, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+戴圆顶礼帽的绅士
+a gentleman in a bowler hat and long overcoat, holding a black umbrella, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+撑阳伞的女士
+a lady in a long Edwardian dress holding a lace parasol, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+铜盔潜水员
+a diver in an old brass diving helmet and canvas suit, heavy boots, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+
+================================
+活过来的老物件　32×32（适合小怪）
+================================
+
+留声机
+an old gramophone with a big brass horn, walking on four thin metal legs, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+怀表
+a tarnished brass pocket watch with thin spider-like legs, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+煤气路灯
+a cast iron gas street lamp come alive, hunched over, warm glow in its glass head, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+缝纫机
+an antique cast iron sewing machine creature, the needle like a beak, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+老式婴儿车
+a rusty Victorian baby carriage rolling by itself, dark hood, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+裁缝人台
+a headless tailor's dress form on a cast iron stand, patched fabric torso, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+烛台电话
+a candlestick telephone creature, the earpiece hanging on its cord like an arm, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+打字机
+an old typewriter creature, the keys like teeth, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+鸟笼
+an ornate rusty birdcage with a small warm light glowing inside, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+
+================================
+动物　32×32（马用 64×64）
+================================
+
+下水道老鼠
+a sewer rat with patchy wet fur, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+城市鸽子
+a city pigeon with ruffled grey feathers, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+拉车的瘦马（64×64）
+a thin carriage horse wearing blinkers and a worn leather harness, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+
+================================
+大型机械　64×64 或 128×128（Boss / 背景）
+================================
+
+早期电车
+an early electric tram car, rusted panels, trolley pole on the roof, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+蒸汽拖拉机
+a steam traction engine with a tall chimney and huge iron wheels, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+早期汽车
+a 1900s horseless carriage automobile with brass lamps and spoked wheels, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+小飞艇
+a small patched airship with a hanging wooden gondola, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+
+================================
+街边道具（放背景）
+================================
+
+圆柱邮筒
+a cast iron pillar post box, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+报刊亭
+a wooden newspaper kiosk with posters, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+广告圆柱
+a round advertising column covered in torn posters, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+木桶和木箱
+a stack of wooden barrels and crates, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+手推车
+a wooden hand cart with a broken wheel, side view, early 1900s industrial city, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+
+================================
+小提示
+================================
+- 同一条多跑几次，先挑剪影最好的；细节可以在 Aseprite 里修，剪影不对很难救。
+- Outline 选项官方说只是"弱控制"，出来还带黑边的话，丢给 Claude 用脚本处理：
+  最外圈黑边换成材质自己的暗色、颜色压回色板、对一下在游戏里的大小。
+- 这些只是外形描述，名字和设定都没写。

@@ -97,7 +97,7 @@ The second week begins.
 
 ## Status
 
-In active development.
+In active development. That's right!
 
 ## Tech
 

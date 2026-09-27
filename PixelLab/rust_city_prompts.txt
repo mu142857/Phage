@@ -147,3 +147,220 @@ a wooden hand cart with a broken wheel, side view, early 1900s industrial city, 
 - Outline 选项官方说只是"弱控制"，出来还带黑边的话，丢给 Claude 用脚本处理：
   最外圈黑边换成材质自己的暗色、颜色压回色板、对一下在游戏里的大小。
 - 这些只是外形描述，名字和设定都没写。
+
+
+================================
+Boss：机械女王　身高最多 24 格
+================================
+
+目标：就要一个好看的像素人。粉紫色头发，其他越简单越好。
+
+【设置】
+  画布    : 自己调，人最高 24 格
+  Outline : Lineless
+  Shading : medium shading
+  Detail  : medium detail（细节太多反而不好看）
+  Colors  : 不要上传色板（色板里没有粉紫色，头发会变棕）
+
+【负面提示词】
+outline, black outline, gears, clockwork, throne, sitting, armor, weapon, too many details, cluttered, ugly face, deformed face
+
+【头发颜色】把 pink-purple 换成下面的词
+  偏粉  : rose pink
+  中间  : mauve
+  偏紫  : lavender
+
+长直发
+a beautiful girl queen, long straight pink-purple hair, small simple crown, plain long dark dress, side view, full body, standing, simple clean design, minimal details, soft muted colors, soft top lighting, no outline
+
+长卷发
+a beautiful girl queen, long wavy pink-purple hair, small simple crown, plain long dark dress, side view, full body, standing, simple clean design, minimal details, soft muted colors, soft top lighting, no outline
+
+高马尾
+a beautiful girl queen, pink-purple hair in a long high ponytail, small simple crown, plain long dark dress, side view, full body, standing, simple clean design, minimal details, soft muted colors, soft top lighting, no outline
+
+短发
+a beautiful girl queen, short bob pink-purple hair, small simple crown, plain long dark dress, side view, full body, standing, simple clean design, minimal details, soft muted colors, soft top lighting, no outline
+
+【想加一点点机械感】加在第一个逗号后面，只加一个
+  , subtle doll joints on the arms
+  , pale porcelain skin
+  , one small glowing eye
+
+【Pro 模式注意】Pro 会忽略 Outline / Shading / Detail，也没有 24px（最小 32）
+  - 无描边只能靠：提示词开头强调 + Style Image / Style Character
+  - Style Image 可以试同目录的 rust_city_style_ref_128.png（本身就是无描边），头发变褐就去掉
+  - 最稳的流程：Standard 模式选 Lineless 先出一个 → 挑最好的 → Pro 里用 "Style Character" 选它
+
+Pro 版长卷发（无描边写在最前面）
+lineless pixel art, no outlines, no dark border around the character, edges defined only by color and shading. a beautiful girl queen, long wavy pink-purple hair, small simple crown, plain long dark dress, side view, full body, standing, simple clean design, minimal details, soft muted colors, soft top lighting
+
+
+================================
+机械女王 第二轮（Pro 出来大头 + 有描边 → 换 Standard）
+================================
+
+原因：Pro 模式会忽略 Proportions（身体比例）和 Outline，所以默认就是大头 Q 版 + 黑边，提示词压不住。
+      "beautiful girl" 这种词也会把它往动漫大头上带。
+
+【Standard 模式设置】
+  Generation Mode : Standard（每次只花 1 次额度，可以多跑）
+  Size            : 32（24 能选就选 24）
+  Camera View     : Sidescroller
+  Proportions     : realistic_female
+                    有自定义就把 head_size 调到 0.6～0.7
+  Outline         : Lineless
+  Shading         : medium shading
+  Detail          : medium detail
+  出来是 8 个方向：游戏里用朝右（east）那张，别看正面那张
+
+【提示词】
+a slender young queen with realistic adult proportions, small head, long wavy pink-purple hair down to the waist, small simple crown, plain long dark dress, side view, full body, standing, muted desaturated colors, soft top lighting, painterly shading, no outline
+
+【负面提示词】
+chibi, big head, anime, cute, outline, black outline, gears, throne, cluttered, too many details
+
+
+================================
+机械女王 第三轮：要有腿 + 不要黑边
+================================
+
+问题：长裙在 24 格里会糊成一块，看起来没腿；黑边要在生成时就压住，不然做出来的动画每一帧都带黑边。
+
+【Standard 模式设置】
+  Proportions : realistic_female（有自定义就 head_size 0.7、legs 调长）
+  Outline     : Lineless
+  Shading     : medium shading
+  Detail      : medium detail
+  Camera      : Sidescroller
+  Size        : 32
+
+【负面提示词】
+outline, black outline, dark border, chibi, big head, short legs, stubby body, long dress covering legs, gears, throne
+
+前短后长裙（像女王又露腿，最推荐）
+lineless pixel art, no outline. a slender young queen, small head, long legs, long wavy pink-purple hair, small gold crown, dark high-low dress short in front and long trailing in back, dark stockings, small boots, visible legs and feet, side view, full body, standing, simple clean design, muted colors, soft top lighting
+
+及膝短裙
+lineless pixel art, no outline. a slender young queen, small head, long legs, long wavy pink-purple hair, small gold crown, knee-length dark dress, dark stockings, small boots, visible legs and feet, side view, full body, standing, simple clean design, muted colors, soft top lighting
+
+长外套 + 长靴
+lineless pixel art, no outline. a slender young queen, small head, long legs, long wavy pink-purple hair, small gold crown, fitted dark long coat open at the front, slim trousers, tall boots, visible legs and feet, side view, full body, standing, simple clean design, muted colors, soft top lighting
+
+
+================================
+直接改已有角色（不重新生成）
+================================
+
+① Character State（状态/变体）—— 最推荐
+   在已有角色上描述一处修改，8 个方向一起改，颜色保持不变，改完还能继续做动画。
+   一次只改一件事，改完再在新 state 上接着改。
+
+   加腿：
+change the long dress to a dark high-low dress, short in front and long trailing in back, showing slim legs in dark stockings and small boots
+
+   头小一点、腿长一点：
+make the head smaller and the legs longer, keep the same hair, crown and dress
+
+   去黑边（AI 不一定听，不行就导出来给 Claude 用脚本去）：
+remove the black outline, lineless, edges shaded with darker tones of the hair and dress colors
+
+② Edit Image (Pro)
+   只改一张图（比如只改朝右那张），按文字改，每次约 20 次额度，最小 32×32。
+   写法用 change / add / remove / replace 开头。
+
+③ Inpaint（局部重画）
+   框住下半身，只重画那一块，其他像素完全不动。适合"只把腿补出来"。
+   框内描述：slim legs in dark stockings and small boots, dark high-low dress
+
+
+================================
+Create State：换裙子颜色（黑色不够铁锈城）
+================================
+颜色都取自 rust_city 素材。裙子是同一件衣服，可以和"加腿"合成一次改。
+如果 Create State 里有"保留原配色 / keep colors"之类的选项，这次要关掉。
+
+铁锈红（红砖楼那种，最推荐）
+change the long black dress to a rusty red-brown high-low dress with tarnished brass trim, short in front and long trailing in back, weathered fabric, showing slim legs in dark stockings and small boots
+
+旧黄铜 / 赭黄（黄楼那种，最有女王感，头发最跳）
+change the long black dress to a dull ochre and tarnished brass high-low dress, short in front and long trailing in back, weathered fabric, showing slim legs in dark stockings and small boots
+
+铁灰（铁船那种，最有机械感）
+change the long black dress to a weathered iron-grey high-low dress with rust stains and brass buttons, short in front and long trailing in back, showing slim legs in dark stockings and small boots
+
+
+================================
+机械女王：动画动作（角色页右上角 Add Animation）
+================================
+PixelLab 只做她身体的动作；激光、冲击波、残影这些特效在 Godot 里做（能发光、能判定伤害）。
+每条都是朝右（east）那个方向用。
+
+待机（头发轻轻飘）
+standing idle, long hair gently swaying
+
+甩手发射
+flicks her arm forward sharply to cast a spell, hair whips back
+
+转圈
+spins around in place, dress and hair flaring out
+
+起跳
+crouches then leaps high into the air
+
+落地
+lands hard in a crouch, then rises
+
+冲刺
+dashes forward quickly, hair streaming behind
+
+响指
+raises one hand and snaps her fingers
+
+拨头发（打完的嘲讽）
+flips her hair back with one hand, confident pose
+
+受击
+recoils from a hit, staggering back
+
+战吼
+throws both arms out to the sides, head tilted back
+
+
+================================
+机械女王 重新生成（淡蓝短裙 / 姐姐型 / 头发偏冷紫）
+================================
+画布一开始就定好（Size 32），生成后别再用 Resize canvas —— 改画布会让各帧对不齐。
+
+【Standard 模式设置】
+  Size        : 32（生成时就定）
+  Camera View : Sidescroller
+  Proportions : realistic_female（有自定义就 head_size 0.7、legs 调长）
+  Outline     : Lineless
+  Shading     : medium shading
+  Detail      : medium detail
+
+【提示词】
+lineless pixel art, no outline. a slender mature young queen, calm confident elegant look, realistic adult proportions, small head, long legs, long wavy cool lavender-violet hair down to the waist, small simple crown, light blue short dress, dark stockings, small boots, visible legs and feet, side view, full body, standing, muted desaturated colors, soft top lighting, painterly shading
+
+【负面提示词】
+outline, black outline, dark border, chibi, big head, cute, childish, short legs, stubby body, pink hair, gears, throne, cluttered
+
+【调整】
+  头发还不够紫 : 把 lavender-violet 换成 violet
+  头发太蓝     : 换成 lilac purple
+  裙子太灰     : 把 light blue 换成 pale sky blue
+
+
+================================
+机械女王 v3 版（目前效果最好的模式）
+================================
+基于唯一一次满意的那条（v3 生成），只改了：姐姐型(mature)、头发冷紫、淡蓝短裙+丝袜+靴子。
+v3 会忽略 Shading 和 Proportions，比例全靠提示词里的 realistic adult proportions, small head。
+v3 没忽略 Outline：界面里有 Outline 就选 Lineless。
+画布生成时就定好，之后别 Resize canvas。
+
+a slender mature young queen with realistic adult proportions, small head, long wavy lavender-violet hair down to the waist, small simple crown, light blue short dress, dark stockings, small boots, side view, full body, standing, muted desaturated colors, soft top lighting, painterly shading, no outline
+
+腿还是短：在 small head 后面加 , long legs
+头发还偏粉：把 lavender-violet 换成 violet

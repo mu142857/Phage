@@ -364,3 +364,34 @@ a slender mature young queen with realistic adult proportions, small head, long 
 
 腿还是短：在 small head 后面加 , long legs
 头发还偏粉：把 lavender-violet 换成 violet
+
+
+================================
+背景：废弃工厂（黑帮运货据点 / Boss 场地）
+================================
+入口：顶部导航 Creator → 左栏第一张卡 Create image（里面如果要选模型就选 pixflux）；找不到就点左侧最下面的 All tools
+
+【设置】
+  Size       : 160×90（游戏原生分辨率，一张 = 一屏；Boss 场地本来就是一屏）
+  View       : side
+  Outline    : Lineless
+  Shading    : detailed shading
+  Detail     : highly detailed
+  颜色/Palette: 上传 rust_city_palette_1px.png（背景没有粉紫头发的问题，可以锁色）
+  去背景     : 整屏底图不开；中景、前景那两条要开（生成透明底的一层）
+  地面        : 游戏自己有地面层（y=80 以下 10 格），提示词里只要"中间空地板"
+
+【负面提示词】
+outline, black outline, people, characters, text, bright saturated colors, neon, clean flat vector
+
+整屏底图（先试这条）
+interior of an abandoned early 1900s factory warehouse, side view, tall rusted iron pillars and riveted steel beams, broken arched windows letting in dim dusty light, stacked wooden cargo crates and barrels along the walls, hanging chains and an old overhead crane, empty flat floor in the middle, grimy and weathered, rust brown, brick red, dull ochre and dark iron grey, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+远景层（视差最后面，低对比）
+back wall of an abandoned factory, huge broken arched windows with a hazy dusty sky outside, rusted steel truss beams across the top, faded and low contrast, side view, grimy and weathered, rust brown and dark iron grey, desaturated muted colors, painterly textured shading, no outline
+
+中景层（开去背景）
+a row of stacked wooden cargo crates, barrels and rusty old machinery, some crates stamped with faded weapon marks, side view, transparent background, grimy and weathered, rust brown, dull ochre and dark iron grey, desaturated muted colors, painterly textured shading, no outline
+
+前景层（开去背景，从画面顶上垂下来）
+rusty chains and a large crane hook hanging down from the top of the frame, dark silhouette, side view, transparent background, rust brown and dark iron grey, desaturated muted colors, no outline

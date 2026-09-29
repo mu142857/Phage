@@ -1,0 +1,321 @@
+铁锈城 NPC · PixelLab 批量提示词
+================================
+
+编号：#0 图书管理员章鱼、#1 猫（都已做好，这里不写）
+      #2 起按铁锈城·一 从左到右的房子排；下水道、铁锈城·二、别的夜排在后面
+      剧情用的非粉丝 NPC 用字母（A、B…），不占粉丝编号
+每条英文提示词整行复制；中文说明单独一行，别一起复制进去。
+
+
+【固定设置】
+--------------------------------
+模式      : v3（目前效果最好）；界面里有 Outline 就选 Lineless
+视角      : side / Sidescroller，游戏里用朝右（east）那张
+背景      : 透明
+画布      : 生成时就定好，之后别 Resize canvas（会让各帧对不齐）
+            大小你自己在网站上调；以前的习惯是 人形 48×48，小东西 32×32
+色板      : 大部分可以上传 rust_city_palette_1px.png
+            标了【不传色板】的有招牌颜色（蓝史莱姆、绿头发、紫头发…），传了会被拉成棕色
+参考图    : 标了【有参考图】的，粉丝自己画过，v3 上传那张 PNG 当参考最像本人
+            链接是 B 站原图，浏览器打开另存就行
+
+
+【负面提示词】
+--------------------------------
+人形：
+outline, black outline, dark border, chibi, big head, anime, saturated colors, neon, clean flat vector, cluttered
+
+小东西 / 物件（要可爱的去掉 chibi, big head）：
+outline, black outline, dark border, saturated colors, neon, clean flat vector, cluttered
+
+
+【动画说明】
+--------------------------------
+- 大部分只要「待机」。游戏里对话是全屏打字机，NPC 说话时看不见，不用做说话动画。
+- 动画在角色页右上角 Add Animation，填下面每行冒号后面的英文。
+- 物件类（电脑、轮胎、硬币、球瓶）PixelLab 做动画容易乱，不行就 Aseprite 手画 2~4 帧。
+- 轮胎滚、球瓶倒下可以直接在 Godot 里转贴图，不用做这两个动画；硬币翻面是立体翻转，还是要逐帧画。
+
+
+================================
+铁锈城·一（主地图）
+================================
+
+#2 重名三兄弟 —— 我不信会再重名
+他没给形象，按梗设计：越普通越好笑。三兄弟用同一张图，别换色，一模一样才是笑点。
+an ordinary middle-aged man with a plain flat cap, grey wool coat and a neat mustache, hands in his pockets, side view, full body, standing, realistic adult proportions, small head, early 1900s industrial city, weathered clothes, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  待机　　: standing idle, slight breathing
+  叉腰得意: puts both hands on his hips and lifts his chin proudly
+
+
+#3 戴皇冠的蓝史莱姆 —— 布丁入侵超帅
+【有参考图】【不传色板】他画的第二张（戴皇冠那张）
+https://i0.hdslb.com/bfs/new_dyn/77039d4fd21d390ef3971fd288704f18668751180.png
+a small round blue slime with a tiny gold crown on top, simple cheerful face, soft glossy jelly body, side view, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  待机: squishes gently up and down
+  出拳: a small jelly fist pops out and punches forward
+  蹦　: hops up excitedly and lands with a squish
+
+
+#4 纸壳文字框 —— 舞白衫
+两个状态：先生成「套纸壳」的，再用 Create State 做「摘掉纸壳」的。
+摘掉后的文字框最好在 Aseprite 按游戏自己的对话框样式手画 —— 它长得越像游戏 UI，"它就是对话框"这个梗越好笑。
+a small dented cardboard box sitting on the floor, a white speech bubble tail poking out from under one side, side view, grimy and weathered, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+Create State（摘掉纸壳）：
+remove the cardboard box, revealing a small floating white rectangular speech bubble with a little pointed tail and a blinking text cursor as its only eye
+动画
+  纸壳里发抖: the cardboard box trembles slightly
+  摘纸壳　　: pulls the cardboard box off and tosses it aside
+  待机　　　: floats and bobs gently, cursor blinking
+  委屈　　　: droops down and shivers
+
+
+#5 花冠女孩 —— 月下面饼
+【有参考图】【不传色板】绿头发 + 金色花冠
+https://i0.hdslb.com/bfs/new_dyn/331d8789178aa3a52341451dac5530b93706990817708624.png
+a young girl with long green hair and a small golden flower wreath, simple dark green dress, holding a small rusty tin can with a tiny sprout in it, side view, full body, standing, realistic proportions, small head, early 1900s industrial city, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  待机: standing idle, hair gently swaying
+  浇水: tilts a small watering can over the tin can plant
+
+
+#6 退役勇士（武器铺老板）—— 一条细狗不会玩
+【有参考图】金发、深蓝衣服、拄大剑
+https://i0.hdslb.com/bfs/new_dyn/e648a444767e93a8c2a167f59c389d803493281105185446.png
+a tired retired swordsman shopkeeper, messy blond hair, worn dark blue coat, grey trousers, leaning on a large old sword, side view, full body, standing, realistic adult proportions, small head, early 1900s industrial city, weathered clothes, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  待机: standing idle, leaning on his sword, breathing slowly
+  擦剑: polishes the sword blade with a cloth
+
+
+#7 扫地机 —— ALIS不是人机
+【不传色板】他要"主要配色是蓝色"。
+a small round blue robot vacuum cleaner with a dented tin shell, two little side brushes underneath and one small indicator light, side view, grimy and weathered, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+动画
+  移动: rolls forward, little side brushes spinning
+  撞墙: bumps into something and shakes
+  待机: sits still, indicator light blinking
+
+
+#8 数羊的羊 —— 首脑的5级眼线
+他发的图是别家游戏的角色，这里换成原创，只保留他要的元素：蓬毛、弯角、两只眼睛颜色不一样。
+平时（32）：
+a round fluffy white sheep with curled lavender ram horns and sleepy mismatched eyes, one green and one purple, wearing a small striped nightcap, side view, soft wool texture, desaturated muted colors, soft top lighting, painterly shading, no outline
+Create State（打架形态，画布可以开大一点）：
+the same sheep rising up on long thin purple legs, wool puffed up, both eyes wide open and glowing, nightcap gone
+动画
+  打瞌睡: dozing, head nodding slowly
+  打哈欠: yawns widely
+  变身　: rises up on long legs, wool puffing out
+  放声波: opens its mouth and lets out a loud bleat, body vibrating
+
+
+#9 保龄球先生 + 球瓶 —— 小孩子小号问号
+【有参考图】他画的第二张：红球头 + 黑点 + 倒三角身子 + 两个红圆手
+https://i0.hdslb.com/bfs/new_dyn/8041e5f7d7bb71485e6fdf20b805d63f3546841358535191.jpg
+保龄球先生：
+a little character with a round red bowling ball for a head, three dark finger holes as its face, a red upside-down triangle body and two floating round red hands, side view, full body, standing, muted desaturated colors, soft top lighting, painterly shading, no outline
+球瓶（他点名要放一个在旁边）：
+a tall old white bowling pin with a faded red stripe and a tiny sleepy face, side view, weathered, desaturated muted colors, soft top lighting, painterly shading, no outline
+动画
+  球先生 待机: idle, bouncing slightly, hands floating
+  球先生 扔球: swings one hand back and throws
+  球瓶 待机　: stands still, wobbling slightly
+  球瓶 倒下　: gets knocked over and falls flat
+  球瓶 站起　: pushes itself back up to standing
+
+
+#10 技能铺老板 —— Elvina艾温娜
+她的商人设定在更早那期视频里，这两期没有形象。先把原稿翻出来再写。
+动画：待机
+
+
+#11 旧电脑 —— 朔北v
+【有参考图】他已经画了 4 帧（亮屏 / 黑屏），尺寸基本就是游戏尺寸 —— 建议直接导入他的图，不走 PixelLab。
+https://i0.hdslb.com/bfs/new_dyn/184c4e1006d9367e523974417f121f6b3494354102520077.png
+想统一画风的话：
+an old boxy computer terminal with a small dim green screen on a little iron desk, dusty keyboard, a tangle of cables hanging down, side view, grimy and weathered, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+动画
+  待机: screen glowing softly, cursor blinking
+  关屏: screen flickers and goes dark
+  打字: lines of text scrolling up the screen
+
+
+#12 轮胎 —— 几乎啥都看的雕
+【有参考图】灰轮胎 + 棕帽子 + 帽子上一面黑白格赛车旗
+https://i0.hdslb.com/bfs/new_dyn/4c0cfbbb10e808ff364475fa48036d783546858997680536.jpg
+an old rubber tire standing upright on its own, worn tread, a grey hubcap like a face, wearing a small brown cap with a tiny checkered racing flag, side view, grimy and weathered, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+动画（滚动可以在 Godot 里直接转贴图，下面的「滚动」可以不做）
+  待机: bounces lightly in place
+  滚动: rolls forward fast, tread pattern moving
+  得意: hops up and lands proudly
+
+
+#13 九尾狐涂鸦 + 小狐狸 —— 艾斯利尔音游人
+他说"背景里晃悠的小狐狸，或者哪边贴个小壁画"。颜色他没说，先问一句他九尾狐自设的颜色。
+涂鸦（要做 9 处，每处一条尾巴）：
+a small faded spray-paint graffiti of a cute nine-tailed fox on a rusty brick wall, simple stencil style, weathered and peeling, muted colors, no outline
+背景跑过的小狐狸：
+a small fox with nine fluffy tails, side view, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  小狐狸 跑: runs quickly, tails streaming behind
+
+
+#14 摆烂仔 —— 终末-星雨-寂灭之律
+【有参考图】他画的小像素人 + 头像（银白头发、两个橙色发夹、耳机）
+https://i0.hdslb.com/bfs/new_dyn/20a055d2e89f9217921882c1d2a2c9e63546770999085765.png
+https://i0.hdslb.com/bfs/new_dyn/680a54d2090738ce4df1e1013c77f6463546770999085765.png
+a young person with messy silver-white hair, two small orange hair clips, big headphones around the neck, dark hoodie, lying flat on the floor looking bored, side view, full body, early 1900s industrial city, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  躺平: lying on the back, chest rising slowly
+  翻身: rolls over lazily onto one side
+  坐起: sits up slowly and stretches
+
+
+#15 剑中石 —— 爱吃金苹果的美西螈
+他写的是"一把剑中石"（不是石中剑），将错就错：一把剑，剑身上卡着块石头。
+an old rusty sword lying on the ground with a large rough grey stone stuck on the middle of its blade, side view, grimy and weathered, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+动画
+  待机: the sword trembles slightly, a small glint runs along the blade
+
+
+#16 海盗船长 —— 爻棥
+外观是他自己给的：高马尾、海盗帽、深蓝牛仔裤、绿斗篷。
+a young man with a long high ponytail, a worn pirate tricorn hat, dark blue jeans, a long green cloak, side view, full body, standing, realistic adult proportions, small head, early 1900s industrial city, weathered clothes, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  待机　　: standing idle, cloak and ponytail gently swaying
+  远眺　　: shades his eyes with one hand, looking into the distance
+  摘帽致意: takes off his hat and bows slightly
+
+
+#17 方块修路工 —— 能不能去看看你们
+他发的是一张 MC 截图（他的皮肤），保留"方块脸"的味道，配色照他截图。
+https://i0.hdslb.com/bfs/new_dyn/8209dbbb5cfa9617f238518aa072598a3706977217678000.jpg
+a blocky square-headed road worker with brown hair, a dented hard hat and grey work clothes, holding a pickaxe, simple cube-like body shapes, side view, full body, early 1900s industrial city, weathered, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  挖　: swings the pickaxe down again and again
+  待机: standing idle, wiping sweat from his forehead
+
+
+#18 戳戳 —— 耳夊
+他要"把我的头像做成任务 NPC，多点几下有彩蛋"，但发的是截图。先找他要头像原图。
+动画：待机 / 被戳（flinches）/ 生气（puffs up angrily）/ 彩蛋（看他头像再定）
+
+
+#19 会说话的铜板 —— 鸟灵不吃鸟
+a small tarnished copper coin with a tiny worried face, side view, weathered, desaturated muted colors, soft top lighting, painterly shading, no outline
+动画（翻转逐帧画）
+  翻转: flips over in the air
+  说话: bounces while talking
+
+
+#24 铁皮点灯人（主线）—— wjm1145
+他只说"想要一个可爱的"。剧本里他是整夜的主角：字卡"给铁皮人上满了发条"就是他，结尾把铜灯送给你。
+【负面提示词去掉 chibi, big head】
+a tiny cute wind-up tin toy with a big brass key on its back, round body, stubby legs, a few small dents, carrying a long thin pole with a small copper lamp hanging from the tip, side view, weathered tin, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  走　　: waddles forward stiffly, the little lamp swinging on the pole
+  拧灯　: reaches the pole up high and twists it around three times
+  慢下来: slows down, head drooping, key turning slowly
+  坐下　: sits down under a street lamp and goes still
+  高兴　: hops up and down excitedly
+  递灯　: takes the little lamp off the pole and holds it out
+
+
+A 收费员（剧情 NPC，下水道入口）—— 武器铺老板的老朋友，背着同款旧剑
+a gruff toll collector in a patched long coat and flat cap, sitting on a stool beside a sewer grate, an old sword strapped on his back, holding a tin cash box, side view, full body, realistic adult proportions, small head, early 1900s industrial city, weathered clothes, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  待机　: sitting idle, tapping the cash box
+  伸手要: holds out one open hand
+
+
+路障道具（"前面在修路"）
+a wooden road-work barrier with striped planks and a hand-painted warning sign, a small oil lamp hanging on it, side view, grimy and weathered, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+
+================================
+下水道
+================================
+
+#20 未者（水上漂的商人）—— 未光麦格
+【有参考图】两张概念图：带棚子的货摊船 + 紫色灯罩脑袋的小人
+https://i0.hdslb.com/bfs/new_dyn/30f0e068e569bb8231e7e81391a2e7d03546729339161526.png
+https://i0.hdslb.com/bfs/new_dyn/39a817e48a995ecbe030b78c6111e0ec3546729339161526.png
+小人：
+a thin mysterious merchant with a round purple glass lantern for a head, a dark triangular cloak for a body and long thin arms, side view, full body, standing, muted desaturated colors, soft top lighting, painterly shading, no outline
+货摊船（道具）：
+a small wooden raft with a grey cloth canopy on two poles and a few crates of goods, floating on dark water, side view, grimy and weathered, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+动画
+  待机: stands still, lantern head glowing softly
+  招手: waves one long thin arm
+  （船在水上晃用代码做）
+
+
+#21 甲虫男 —— 陛下别抽象
+【有参考图】他画了人设、紫发头像、甲虫头盔、甲虫形态，还有一张游戏尺寸的小人动作图 —— 他会画，直接找他要帧可能最快。
+https://i0.hdslb.com/bfs/new_dyn/61cbe7c4f4aa295bc79e8de2febff1db1745560673.png
+https://i0.hdslb.com/bfs/new_dyn/43c470b5bfce9cf1b1753831fa8974e01745560673.png
+https://i0.hdslb.com/bfs/new_dyn/d71fac5aa38a37c9f8f973ac8c9838e01745560673.png
+https://i0.hdslb.com/bfs/new_dyn/f7f44135f059022faa0c054cc8c5f58c1745560673.png
+a young man with messy purple hair wearing a golden beetle-shell helmet with one curved horn, golden segmented beetle armor on his arms and back, fighting stance, side view, full body, realistic adult proportions, small head, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画（招式都照他自己写的）
+  待机　　: fighting stance, bouncing lightly on his feet
+  长甲壳　: golden beetle shell plates grow out over his body
+  扔甲壳　: tears a shell plate off his arm and throws it
+  出拳　　: throws a heavy straight punch
+  爬墙　　: clings to a wall and crawls upward
+  蹬墙冲撞: kicks off the wall and dashes forward
+  破壳僵直: shell cracks apart, he staggers dizzily
+  砸地　　: raises both fists and slams them into the ground
+
+
+================================
+铁锈城·二（船坞 / 竞技场 / 更多房子）
+================================
+
+#22 肌肉哥 —— 自身所构成之物
+他发的是那张发光肌肉男梗图，就照这个做，放竞技场的健身房。
+a hugely muscular man in an unbuttoned white shirt, faintly glowing, confident heroic stance, side view, full body, standing, early 1900s industrial city, muted desaturated colors, soft top lighting, painterly shading, no outline
+动画
+  待机　: flexing slightly and breathing deeply
+  摆pose: strikes a bodybuilder double biceps pose
+  举重　: lifts a heavy iron barbell overhead
+
+
+#23 "你" —— 肥皂是益虫
+【有参考图】他已经缩到二十几格，薄荷绿渐变到紫，可能能直接用
+https://i0.hdslb.com/bfs/new_dyn/b596bf730b02d53a3330ca84719d97aa1987325695.png
+a tall thin ghostly figure, mint green at the top fading into violet at the bottom, a forked V-shaped head, the base flowing like liquid onto the floor, side view, soft glow, muted colors, soft top lighting, painterly shading, no outline
+动画
+  待机: sways slowly like smoke
+  消散: melts downward and disappears
+
+
+#24 发条小铁人 → 挪到上面「铁锈城·一」，改成主线的点灯人
+
+
+#25 索琳 —— 索琳_awa　　（等形象）
+#26 是竹璃　　　　　　　 （等形象）
+
+
+B 轮胎的旧车（剧情道具，铁锈城·二 船坞边）
+a rusty 1900s automobile missing its front wheel, sagging down on one side, cracked brass lamps, side view, grimy and weathered, desaturated muted colors, soft top lighting, painterly textured shading, no outline
+
+海盗船长的船 = 现成的 iron_ship.png，不用生成。
+
+
+================================
+别的夜 / 待定
+================================
+
+#27 星岚（隐藏 boss，打完变 NPC）—— 恭喜你发现了坏东西
+不一定放周三。外观是他写的：蓝瞳、金发、银冠、白衣。
+a young woman with long golden hair, blue eyes, a simple silver crown and flowing white robes, side view, full body, standing, realistic adult proportions, small head, muted desaturated colors, soft top lighting, painterly shading, no outline
+
+#28 紫龙星浪 —— 画渣furry星浪　　（点名周六；只说了"紫的"，要形象）
+#29 南南朱int128　　　　　　　　（点名周二；发的是截图，要形象）
+#30 蓝龙 —— 郭丰瑞5　　　　　　（要的是奥特激斗传的蓝龙，有版权，请他换原创）
+
+已经有素材、这次没编号的：金蛋（金蛋爆爆，在 pink_land）、6319 + 叶子（pink_land）、未来女孩（silvaron）

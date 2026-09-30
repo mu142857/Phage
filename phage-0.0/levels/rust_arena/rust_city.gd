@@ -1,4 +1,4 @@
-extends Node2D
+extends Node2D 
 
 @export var camera_limit_top: int = 0
 @export var camera_limit_bottom: int = 90

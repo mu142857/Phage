@@ -4,6 +4,9 @@
 # 用法:
 #   await Dialogue.say(["第一句。", "第二句。"])
 #   var pick: int = await Dialogue.ask(["要睡了吗。"], ["钻进被窝", "再待一会儿"])
+#   NPC 说话带名字(顶部居中一行小字)、可单独调打字速度(字/秒,0=默认):
+#   await Dialogue.say(["哇!新来的!"], "点灯人", 26.0)
+#   await Dialogue.talk([["修路工", "前面在修路。"], ["点灯人", "修多久了?", 12.0]])  # 多人轮流,中途不收起
 # 打字中任意键/点击 = 整段显示;显示完 = 下一句。选项只认鼠标点击。
 extends CanvasLayer
 
@@ -16,6 +19,7 @@ const OPTION_COLOR := Color(0.93, 0.91, 0.86)          # 默认就是亮的
 const OPTION_HOVER_COLOR := Color(0.6, 0.95, 0.68)     # 选中浅绿
 const OPTION_ROW_HEIGHT := 13.0
 const OPTION_PANEL_PAD := 3.0
+const NAME_COLOR := Color(0.95, 0.74, 0.45)            # 说话人名字:暖黄,和正文区分
 
 var is_open := false
 
@@ -25,6 +29,8 @@ var _label: Label = null
 var _options_panel: ColorRect = null
 var _options_box: VBoxContainer = null
 var _inline_icon: TextureRect = null
+var _name_label: Label = null
+var _cps := TYPE_CPS
 
 
 func _ready() -> void:
@@ -56,6 +62,22 @@ func _ready() -> void:
 	_label.add_theme_constant_override("shadow_offset_y", 1)
 	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(_label)
+
+	# 说话人名字:顶部居中一行。左上角 buff/护盾 HUD 只占 x≤21,居中不会撞上;
+	# 放在正文区上方的空带里,正文和选项底板的布局一点不动。
+	_name_label = Label.new()
+	_name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	_name_label.offset_top = 13.0
+	_name_label.offset_bottom = 24.0
+	_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_name_label.add_theme_font_override("font", FONT)
+	_name_label.add_theme_font_size_override("font_size", 11)
+	_name_label.add_theme_color_override("font_color", NAME_COLOR)
+	_name_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
+	_name_label.add_theme_constant_override("shadow_offset_x", 1)
+	_name_label.add_theme_constant_override("shadow_offset_y", 1)
+	_name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_root.add_child(_name_label)
 
 	# 选项区:半透明黑底 + 左对齐的选项列
 	_options_panel = ColorRect.new()
@@ -95,8 +117,10 @@ func _input(event: InputEvent) -> void:
 
 
 ## 顺序打出每一句,每句等一次按键。播完自动收起。
-func say(lines: Array) -> void:
+## speaker:说话人名字(空=自言自语,不显示);cps:打字速度(字/秒,0=默认)。
+func say(lines: Array, speaker := "", cps := 0.0) -> void:
 	_open()
+	_set_voice(speaker, cps)
 	for line: String in lines:
 		await _type_line(line)
 		await _wait_advance()
@@ -105,8 +129,9 @@ func say(lines: Array) -> void:
 
 ## 打完 lines(可为空,则保留上一句)后弹出选项,返回点中的下标。收起由调用方决定何时发生
 ## (返回时已自动收起)。
-func ask(lines: Array, options: Array) -> int:
+func ask(lines: Array, options: Array, speaker := "", cps := 0.0) -> int:
 	_open()
+	_set_voice(speaker, cps)
 	# 正文区下边界抬到选项底板上方,整个 ask 期间固定——文字既不被底板压暗,
 	# 弹选项时也不会跳位置(正文下移 26px 后中心落在了 3 选项底板里,踩过坑)
 	var panel_height := options.size() * OPTION_ROW_HEIGHT + OPTION_PANEL_PAD * 2.0
@@ -120,6 +145,22 @@ func ask(lines: Array, options: Array) -> int:
 	_clear_options()
 	close()
 	return index
+
+
+## 多人轮流说话:entries 每项 [说话人, 这句话] 或 [说话人, 这句话, 打字速度]。
+## 整段期间对话层不收起(换人不闪),每句等一次按键,播完收起。
+func talk(entries: Array) -> void:
+	_open()
+	for entry: Array in entries:
+		_set_voice(String(entry[0]), float(entry[2]) if entry.size() > 2 else 0.0)
+		await _type_line(String(entry[1]))
+		await _wait_advance()
+	close()
+
+
+func _set_voice(speaker: String, cps: float) -> void:
+	_name_label.text = speaker
+	_cps = cps if cps > 0.0 else TYPE_CPS
 
 
 ## 获得 buff 演出:打出 line 后把图标贴进 "{icon}" 占位符的位置(文字里预留了
@@ -203,6 +244,8 @@ func close() -> void:
 	is_open = false
 	visible = false
 	_label.text = ""
+	_name_label.text = ""
+	_cps = TYPE_CPS
 	_inline_icon.visible = false
 	_clear_options()
 
@@ -211,6 +254,8 @@ func _open() -> void:
 	is_open = true
 	visible = true
 	_label.offset_bottom = -30.0  # say() 用默认区;ask() 随后按选项数再抬高
+	_name_label.text = ""
+	_cps = TYPE_CPS
 	_clear_options()
 
 
@@ -223,7 +268,7 @@ func _type_line(text: String, reveal_icon_at: int = -1) -> void:
 	while _label.visible_characters < text.length():
 		if _advance:
 			break
-		acc += get_process_delta_time() * TYPE_CPS
+		acc += get_process_delta_time() * _cps
 		while acc >= 1.0 and _label.visible_characters < text.length():
 			_label.visible_characters += 1
 			acc -= 1.0

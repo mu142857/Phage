@@ -36,6 +36,13 @@ var oxygen := 1.0            # 氧气 1→0,跨房间不回满;新入梦回满;�
 const OXYGEN_FULL_TIME := 120.0   # 满到红线的秒数
 var revisit_counts: Dictionary = {}  # "夜" → 回笼觉(回顾旧梦)次数,入存档
 
+# ---- 梦里的剧情进度(铁锈城起用):运行态,不入存档,每次入梦清空 ----
+## 铜板数变了(HUD 刷新用)。
+signal coins_changed
+var coins := 0
+## 剧情标记:谁见过了、谁的事办完了、哪盏灯亮了……键名由各关自己约定。
+var flags: Dictionary = {}
+
 var _dream_settled := false  # 当前梦已判定过通关/失败,防止双触发
 var _shatter_layer: CanvasLayer = null
 
@@ -69,6 +76,7 @@ func _input(event: InputEvent) -> void:
 		current_dream_night = 0
 		_dream_settled = false
 		wake_kind = ""
+		reset_dream_progress()
 		Engine.time_scale = 1.0
 		save_game()
 		get_tree().change_scene_to_file(ROOM_SCENE)
@@ -91,6 +99,7 @@ func start_dream(night: int, replay := false) -> void:
 	underwater = false
 	actinos_defeated = false
 	octopus_defeated = false
+	reset_dream_progress()
 	if replay:
 		var key := str(night)
 		revisit_counts[key] = int(revisit_counts.get(key, 0)) + 1
@@ -149,6 +158,27 @@ func wake_early() -> void:
 	wake_kind = "night" if is_night else "morning"
 	await Game.fade_cover(1.0, 0.6)
 	_goto_room()
+
+
+## 剧情标记读写。
+func flag(key: String, default: Variant = false) -> Variant:
+	return flags.get(key, default)
+
+
+func set_flag(key: String, value: Variant = true) -> void:
+	flags[key] = value
+
+
+## 加/减铜板(不会减到负数)。
+func add_coins(amount: int) -> void:
+	coins = maxi(coins + amount, 0)
+	coins_changed.emit()
+
+
+func reset_dream_progress() -> void:
+	coins = 0
+	flags = {}
+	coins_changed.emit()
 
 
 ## 某一夜的梦回顾过几次(第一次主线通关不算)。

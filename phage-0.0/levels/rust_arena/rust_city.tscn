@@ -20,6 +20,14 @@
 [ext_resource type="Texture2D" uid="uid://b6gpl60waso3u" path="res://entities/talktive_npc/cat-Sheet.png" id="12_peiiq"]
 [ext_resource type="PackedScene" uid="uid://b6ivjjfn6mpn7" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="18_i5hsc"]
 [ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="90_dreamintro"]
+[ext_resource type="PackedScene" path="res://systems/npc/npc.tscn" id="200_npc"]
+[ext_resource type="Script" path="res://levels/rust_arena/rust_city_story.gd" id="201_story"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/talking_coin.png" id="202_coin"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/lamplighter.png" id="203_lamp"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/toll_collector.png" id="204_toll"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/road_worker.png" id="205_worker"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/manhole.png" id="206_manhole"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/roadblock.png" id="207_roadblock"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tlm15"]
 
@@ -563,6 +571,9 @@ animations = [{
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qsdf7"]
 
+[sub_resource type="RectangleShape2D" id="RoadBlockShape"]
+size = Vector2(4, 120)
+
 [node name="RustCity" type="Node2D" unique_id=1234878069]
 script = ExtResource("1_j3jog")
 
@@ -1080,6 +1091,58 @@ repeat_times = 8
 [node name="BackGroundSmoke" parent="." unique_id=258183138 instance=ExtResource("18_i5hsc")]
 light_mask = 0
 z_index = 11
+
+[node name="Npcs" type="Node2D" parent="."]
+
+[node name="TalkingCoin" parent="Npcs" instance=ExtResource("200_npc")]
+position = Vector2(46, 80)
+display_name = "铜板"
+texture = ExtResource("202_coin")
+talkable = false
+
+[node name="Lamplighter" parent="Npcs" instance=ExtResource("200_npc")]
+position = Vector2(200, 80)
+display_name = "点灯人"
+texture = ExtResource("203_lamp")
+
+[node name="TollCollector" parent="Npcs" instance=ExtResource("200_npc")]
+position = Vector2(1470, 80)
+display_name = "收费员"
+texture = ExtResource("204_toll")
+flip = true
+
+[node name="RoadWorker" parent="Npcs" instance=ExtResource("200_npc")]
+position = Vector2(1530, 80)
+display_name = "修路工"
+texture = ExtResource("205_worker")
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="Manhole" type="Sprite2D" parent="Props"]
+z_index = 11
+position = Vector2(1486, 80)
+texture = ExtResource("206_manhole")
+centered = false
+offset = Vector2(-6, 0)
+
+[node name="RoadBlock" type="Node2D" parent="Props"]
+z_index = 9
+position = Vector2(1556, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/RoadBlock"]
+texture = ExtResource("207_roadblock")
+centered = false
+offset = Vector2(-11, -13)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Props/RoadBlock"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/RoadBlock/StaticBody2D"]
+position = Vector2(-10, -60)
+shape = SubResource("RoadBlockShape")
+
+[node name="CityStory" type="Node" parent="."]
+script = ExtResource("201_story")
 
 [node name="DreamIntro" parent="." unique_id=239038722 instance=ExtResource("90_dreamintro")]
 story_text_1 = "睡前，给铁皮人上满了发条。"

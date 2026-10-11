@@ -318,4 +318,6 @@ a young woman with long golden hair, blue eyes, a simple silver crown and flowin
 #29 南南朱int128　　　　　　　　（点名周二；发的是截图，要形象）
 #30 蓝龙 —— 郭丰瑞5　　　　　　（要的是奥特激斗传的蓝龙，有版权，请他换原创）
 
+#31 大白鹅 —— 呆傻的大白鹅　（每期都来评论「我又来了」；Claude 已手画，claude_drafts/31_goose.png，不用生成）
+
 已经有素材、这次没编号的：金蛋（金蛋爆爆，在 pink_land）、6319 + 叶子（pink_land）、未来女孩（silvaron）

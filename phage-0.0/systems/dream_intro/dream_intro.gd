@@ -12,6 +12,10 @@ extends Node
 
 static var _played: Dictionary = {}
 
+## 演出全部结束、主角交还控制权时发出(关卡剧情接在字卡后面用)。
+signal finished
+var done := false
+
 @export_multiline var story_text_1 := ""  ## 纯黑阶段:昨晚睡前发生的事
 @export_multiline var story_text_2 := ""  ## 微亮阶段:关于这个梦的一句引子
 @export var weekday_text := ""            ## 标题第一行(小字):周几的梦
@@ -362,5 +366,7 @@ func _finale() -> void:
 			_player.set_ball_form(false)
 		_player.set_lock(false)
 	_finished = true
+	done = true
+	finished.emit()
 	await get_tree().create_timer(1.4).timeout
 	queue_free()

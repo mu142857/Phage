@@ -73,6 +73,7 @@ remove the cardboard box, revealing a small floating white rectangular speech bu
 
 
 #5 花冠女孩 —— 月下面饼
+【2026-10 梧桐已画:种花的兔子姑娘(4 段动画),用 entities/rust_npcs/rabbit/rabbit.tres,不用生成】
 【有参考图】【不传色板】绿头发 + 金色花冠
 https://i0.hdslb.com/bfs/new_dyn/331d8789178aa3a52341451dac5530b93706990817708624.png
 a young girl with long green hair and a small golden flower wreath, simple dark green dress, holding a small rusty tin can with a tiny sprout in it, side view, full body, standing, realistic proportions, small head, early 1900s industrial city, muted desaturated colors, soft top lighting, painterly shading, no outline
@@ -100,6 +101,7 @@ a small round blue robot vacuum cleaner with a dented tin shell, two little side
 
 
 #8 数羊的羊 —— 首脑的5级眼线
+【2026-10 梧桐已画:睡觉待机 + 变金羊,用 entities/rust_npcs/sheep/sheep.tres,不用生成】
 他发的图是别家游戏的角色，这里换成原创，只保留他要的元素：蓬毛、弯角、两只眼睛颜色不一样。
 平时（32）：
 a round fluffy white sheep with curled lavender ram horns and sleepy mismatched eyes, one green and one purple, wearing a small striped nightcap, side view, soft wool texture, desaturated muted colors, soft top lighting, painterly shading, no outline
@@ -315,8 +317,10 @@ a rusty 1900s automobile missing its front wheel, sagging down on one side, crac
 a young woman with long golden hair, blue eyes, a simple silver crown and flowing white robes, side view, full body, standing, realistic adult proportions, small head, muted desaturated colors, soft top lighting, painterly shading, no outline
 
 #28 紫龙星浪 —— 画渣furry星浪　　（点名周六；只说了"紫的"，要形象）
+【2026-10 梧桐已画:改成"由一大堆小小的奇异生物组成的狼"(紫色,聚形+待机),用 entities/talktive_npc/xinglang_wolf/xinglang_wolf.tres】
 #29 南南朱int128　　　　　　　　（点名周二；发的是截图，要形象）
 #30 蓝龙 —— 郭丰瑞5　　　　　　（要的是奥特激斗传的蓝龙，有版权，请他换原创）
+【2026-10 梧桐已画原创蓝龙,用 entities/talktive_npc/blue_dragon/blue_dragon.tres】
 
 #31 大白鹅 —— 呆傻的大白鹅　（每期都来评论「我又来了」；Claude 已手画，claude_drafts/31_goose.png，不用生成）
 

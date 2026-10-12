@@ -1,0 +1,148 @@
+{
+ "sheep_idle": {
+  "source": "羊.gif",
+  "frame_size": [
+   25,
+   24
+  ],
+  "frames": 4,
+  "durations_ms": [
+   300,
+   300,
+   300,
+   300
+  ]
+ },
+ "sheep_to_gold": {
+  "source": "羊变金羊.gif",
+  "frame_size": [
+   25,
+   24
+  ],
+  "frames": 8,
+  "durations_ms": [
+   300,
+   300,
+   300,
+   300,
+   300,
+   300,
+   300,
+   300
+  ],
+  "note": "整体右移2下移1,金羊脚踩地;和 sheep_idle 同为 25x24"
+ },
+ "rabbit_hop": {
+  "source": "种花的兔子姑娘1.gif",
+  "frame_size": [
+   24,
+   24
+  ],
+  "frames": 6,
+  "durations_ms": [
+   150,
+   150,
+   150,
+   150,
+   150,
+   150
+  ]
+ },
+ "rabbit_water": {
+  "source": "种花的兔子姑娘2.gif",
+  "frame_size": [
+   24,
+   24
+  ],
+  "frames": 8,
+  "durations_ms": [
+   200,
+   200,
+   200,
+   200,
+   200,
+   200,
+   200,
+   200
+  ]
+ },
+ "rabbit_crown_hop": {
+  "source": "种花的兔子姑娘3.gif",
+  "frame_size": [
+   24,
+   24
+  ],
+  "frames": 6,
+  "durations_ms": [
+   150,
+   150,
+   150,
+   150,
+   150,
+   150
+  ]
+ },
+ "rabbit_lie_down": {
+  "source": "种花的兔子姑娘4.gif",
+  "frame_size": [
+   24,
+   24
+  ],
+  "frames": 6,
+  "durations_ms": [
+   200,
+   200,
+   200,
+   200,
+   200,
+   200
+  ]
+ },
+ "dragon_idle": {
+  "source": "龙.gif",
+  "frame_size": [
+   32,
+   32
+  ],
+  "frames": 4,
+  "durations_ms": [
+   300,
+   300,
+   300,
+   300
+  ]
+ },
+ "wolf_form": {
+  "source": "由一大堆的小小的奇艺生物组成的狼1.gif",
+  "frame_size": [
+   48,
+   48
+  ],
+  "frames": 8,
+  "durations_ms": [
+   100,
+   100,
+   100,
+   100,
+   100,
+   100,
+   100,
+   100
+  ],
+  "note": "整体左移1上移6,和 wolf_idle 对齐"
+ },
+ "wolf_idle": {
+  "source": "由一大堆的小小的奇艺生物组成的狼2.gif",
+  "frame_size": [
+   48,
+   48
+  ],
+  "frames": 4,
+  "durations_ms": [
+   200,
+   200,
+   200,
+   200
+  ]
+ }
+}

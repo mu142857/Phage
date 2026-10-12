@@ -29,6 +29,10 @@
 [ext_resource type="Texture2D" path="res://entities/rust_npcs/manhole.png" id="206_manhole"]
 [ext_resource type="Texture2D" path="res://entities/rust_npcs/roadblock.png" id="207_roadblock"]
 
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/alley_mouth.png" id="210_alleymouth"]
+[ext_resource type="PackedScene" path="res://interactive/Teleport/teleport.tscn" id="211_teleport"]
+[ext_resource type="Texture2D" path="res://interactive/Teleport/enter_hint.png" id="212_enterhint"]
+
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tlm15"]
 
 [sub_resource type="Gradient" id="Gradient_i5hsc"]
@@ -944,6 +948,10 @@ texture = ExtResource("8_0jstw")
 region_enabled = true
 region_rect = Rect2(0, 58, 66, 28)
 
+[node name="AlleyMouth" type="Sprite2D" parent="Buildings"]
+position = Vector2(741, 44)
+texture = ExtResource("210_alleymouth")
+
 [node name="Bush1" type="Sprite2D" parent="Buildings" unique_id=845881457]
 modulate = Color(0.61057377, 0.3599029, 0, 0.9019608)
 material = SubResource("ShaderMaterial_0jstw")
@@ -1140,6 +1148,19 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Props/RoadBlock/StaticBody2D"]
 position = Vector2(-10, -60)
 shape = SubResource("RoadBlockShape")
+
+[node name="ToLaundryAlley" parent="." instance=ExtResource("211_teleport")]
+position = Vector2(741, 76)
+scene_path = "res://levels/rust_city/laundry_alley/laundry_alley.tscn"
+teleport_id = 1
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToLaundryAlley"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("212_enterhint")
 
 [node name="CityStory" type="Node" parent="."]
 script = ExtResource("201_story")

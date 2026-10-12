@@ -1,0 +1,703 @@
+[gd_scene load_steps=52 format=3]
+
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_ochre.png" id="house_ochre"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_green.png" id="house_green"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_brick.png" id="house_brick"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/dead_end.png" id="dead_end"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/terrace.png" id="terrace"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/crate.png" id="crate"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/crate_small.png" id="crate_small"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/barrel.png" id="barrel"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line_a.png" id="line_a"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line_b.png" id="line_b"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line_c.png" id="line_c"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line_d.png" id="line_d"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/bulbs.png" id="bulbs"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/alley_mouth.png" id="alley_mouth"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/alley_back.png" id="alley_back"]
+[ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="player"]
+[ext_resource type="Script" path="res://levels/rust_arena/rust_city.gd" id="script"]
+[ext_resource type="Script" path="res://interactive/Platform/drop_through_platform.gd" id="drop"]
+[ext_resource type="PackedScene" path="res://interactive/Teleport/teleport.tscn" id="teleport"]
+[ext_resource type="Texture2D" path="res://interactive/Teleport/enter_hint.png" id="hint"]
+[ext_resource type="Shader" path="res://asstes/shaders/silk_swing.gdshader" id="silk"]
+[ext_resource type="PackedScene" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="smoke"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_light.png" id="lamp"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_sky.png" id="sky"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_background.png" id="bg"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_1.png" id="city1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_2.png" id="city2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_ground.png" id="ground"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/yellow_building_1.png" id="yellow1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/black_building_2.png" id="black2"]
+
+[sub_resource type="WorldBoundaryShape2D" id="Boundary"]
+
+[sub_resource type="Gradient" id="PlayerGrad"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="PlayerLightTex"]
+gradient = SubResource("PlayerGrad")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="LampGrad"]
+offsets = PackedFloat32Array(0, 0.28960395, 0.40346536, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.07484522, 0.07484529, 0.07484522, 1, 0.12955844, 0.12955847, 0.12955841, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="LampLightTex"]
+gradient = SubResource("LampGrad")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="CanvasItemMaterial" id="FarMat"]
+
+[sub_resource type="ShaderMaterial" id="ClothSwing"]
+shader = ExtResource("silk")
+shader_parameter/Strength = 0.6
+shader_parameter/Speed = 1.3
+
+[sub_resource type="ShaderMaterial" id="ClothSwingFront"]
+shader = ExtResource("silk")
+shader_parameter/Strength = 1.4
+shader_parameter/Speed = 1.0
+
+[sub_resource type="RectangleShape2D" id="Crate"]
+size = Vector2(12, 12)
+
+[sub_resource type="RectangleShape2D" id="CrateSmall"]
+size = Vector2(9, 8)
+
+[sub_resource type="RectangleShape2D" id="Barrel"]
+size = Vector2(8, 11)
+
+[sub_resource type="RectangleShape2D" id="Plat32"]
+size = Vector2(32, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect32"]
+size = Vector2(32, 8)
+
+[sub_resource type="RectangleShape2D" id="Plat34"]
+size = Vector2(34, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect34"]
+size = Vector2(34, 8)
+
+[sub_resource type="RectangleShape2D" id="Plat36"]
+size = Vector2(36, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect36"]
+size = Vector2(36, 8)
+
+[sub_resource type="RectangleShape2D" id="Plat80"]
+size = Vector2(80, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect80"]
+size = Vector2(80, 8)
+
+[sub_resource type="RectangleShape2D" id="Plat31"]
+size = Vector2(31, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect31"]
+size = Vector2(31, 8)
+
+[node name="LaundryAlley" type="Node2D"]
+script = ExtResource("script")
+camera_limit_left = 0
+camera_limit_right = 800
+
+[node name="Walls" type="Node2D" parent="."]
+z_index = 10
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+
+[node name="Ground" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 80)
+shape = SubResource("Boundary")
+
+[node name="LeftWall" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 0)
+rotation = 1.5707964
+shape = SubResource("Boundary")
+
+[node name="RightWall" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(800, 0)
+rotation = -1.5707964
+shape = SubResource("Boundary")
+
+[node name="Terrace" type="CollisionPolygon2D" parent="Walls/StaticBody2D"]
+polygon = PackedVector2Array(140, 80, 156, 66, 356, 66, 372, 80)
+
+[node name="Buildings" type="Node2D" parent="."]
+z_index = 2
+
+[node name="AlleyMouth" type="Sprite2D" parent="Buildings"]
+position = Vector2(20, 44)
+texture = ExtResource("alley_mouth")
+
+[node name="HouseOchre1" type="Sprite2D" parent="Buildings"]
+position = Vector2(67, 32)
+texture = ExtResource("house_ochre")
+
+[node name="Plat_Ochre1a" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre1a"]
+position = Vector2(82, 19)
+shape = SubResource("Plat32")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Ochre1a"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre1a/Area2D"]
+position = Vector2(82, 15)
+shape = SubResource("PlatDetect32")
+
+[node name="Plat_Ochre1b" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre1b"]
+position = Vector2(82, 39)
+shape = SubResource("Plat32")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Ochre1b"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre1b/Area2D"]
+position = Vector2(82, 35)
+shape = SubResource("PlatDetect32")
+
+[node name="Plat_Ochre1c" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre1c"]
+position = Vector2(82, 59)
+shape = SubResource("Plat32")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Ochre1c"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre1c/Area2D"]
+position = Vector2(82, 55)
+shape = SubResource("PlatDetect32")
+
+[node name="HouseGreen" type="Sprite2D" parent="Buildings"]
+position = Vector2(187, 14)
+texture = ExtResource("house_green")
+
+[node name="Plat_GreenAwning" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_GreenAwning"]
+position = Vector2(188, 43)
+shape = SubResource("Plat34")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_GreenAwning"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_GreenAwning/Area2D"]
+position = Vector2(188, 39)
+shape = SubResource("PlatDetect34")
+
+[node name="HouseBrick1" type="Sprite2D" parent="Buildings"]
+position = Vector2(258, 23)
+texture = ExtResource("house_brick")
+
+[node name="Plat_Brick1Balcony" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Brick1Balcony"]
+position = Vector2(258, 41)
+shape = SubResource("Plat36")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Brick1Balcony"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Brick1Balcony/Area2D"]
+position = Vector2(258, 37)
+shape = SubResource("PlatDetect36")
+
+[node name="YellowBuilding1" type="Sprite2D" parent="Buildings"]
+position = Vector2(419.5, 38.5)
+texture = ExtResource("yellow1")
+
+[node name="HouseOchre2" type="Sprite2D" parent="Buildings"]
+position = Vector2(493, 32)
+scale = Vector2(-1, 1)
+texture = ExtResource("house_ochre")
+
+[node name="Plat_Ochre2a" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre2a"]
+position = Vector2(478, 19)
+shape = SubResource("Plat32")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Ochre2a"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre2a/Area2D"]
+position = Vector2(478, 15)
+shape = SubResource("PlatDetect32")
+
+[node name="Plat_Ochre2b" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre2b"]
+position = Vector2(478, 39)
+shape = SubResource("Plat32")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Ochre2b"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre2b/Area2D"]
+position = Vector2(478, 35)
+shape = SubResource("PlatDetect32")
+
+[node name="Plat_Ochre2c" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre2c"]
+position = Vector2(478, 59)
+shape = SubResource("Plat32")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Ochre2c"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochre2c/Area2D"]
+position = Vector2(478, 55)
+shape = SubResource("PlatDetect32")
+
+[node name="HouseBrick2" type="Sprite2D" parent="Buildings"]
+position = Vector2(554, 37)
+scale = Vector2(-1, 1)
+texture = ExtResource("house_brick")
+
+[node name="Plat_Brick2Balcony" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Brick2Balcony"]
+position = Vector2(554, 55)
+shape = SubResource("Plat36")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Brick2Balcony"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Brick2Balcony/Area2D"]
+position = Vector2(554, 51)
+shape = SubResource("PlatDetect36")
+
+[node name="BlackBuilding2" type="Sprite2D" parent="Buildings"]
+position = Vector2(611.5, 24)
+texture = ExtResource("black2")
+
+[node name="DeadEnd" type="Sprite2D" parent="Buildings"]
+position = Vector2(760, 24)
+texture = ExtResource("dead_end")
+
+[node name="Plat_BigPipe" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_BigPipe"]
+position = Vector2(760, 35)
+shape = SubResource("Plat80")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_BigPipe"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_BigPipe/Area2D"]
+position = Vector2(760, 31)
+shape = SubResource("PlatDetect80")
+
+[node name="Plat_SmallPipe" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_SmallPipe"]
+position = Vector2(735.5, 13)
+shape = SubResource("Plat31")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_SmallPipe"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_SmallPipe/Area2D"]
+position = Vector2(735.5, 9)
+shape = SubResource("PlatDetect31")
+
+[node name="Props" type="Node2D" parent="."]
+z_index = 4
+
+[node name="CrateA" type="Sprite2D" parent="Props"]
+position = Vector2(110, 74)
+texture = ExtResource("crate")
+
+[node name="CrateA" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(110, 74)
+shape = SubResource("Crate")
+
+[node name="CrateB" type="Sprite2D" parent="Props"]
+position = Vector2(122, 74)
+texture = ExtResource("crate")
+
+[node name="CrateB" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(122, 74)
+shape = SubResource("Crate")
+
+[node name="CrateC" type="Sprite2D" parent="Props"]
+position = Vector2(115.5, 64)
+texture = ExtResource("crate_small")
+
+[node name="CrateC" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(115.5, 64)
+shape = SubResource("CrateSmall")
+
+[node name="Barrel1" type="Sprite2D" parent="Props"]
+position = Vector2(133, 74.5)
+texture = ExtResource("barrel")
+
+[node name="Barrel1" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(133, 74.5)
+shape = SubResource("Barrel")
+
+[node name="CrateD" type="Sprite2D" parent="Props"]
+position = Vector2(702, 74)
+texture = ExtResource("crate")
+
+[node name="CrateD" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(702, 74)
+shape = SubResource("Crate")
+
+[node name="CrateE" type="Sprite2D" parent="Props"]
+position = Vector2(714, 74)
+texture = ExtResource("crate")
+
+[node name="CrateE" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(714, 74)
+shape = SubResource("Crate")
+
+[node name="CrateF" type="Sprite2D" parent="Props"]
+position = Vector2(708, 62)
+texture = ExtResource("crate")
+
+[node name="CrateF" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(708, 62)
+shape = SubResource("Crate")
+
+[node name="Barrel2" type="Sprite2D" parent="Props"]
+position = Vector2(688, 74.5)
+texture = ExtResource("barrel")
+
+[node name="Barrel2" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(688, 74.5)
+shape = SubResource("Barrel")
+
+[node name="TerraceWall" type="Sprite2D" parent="."]
+position = Vector2(256, 75)
+texture = ExtResource("terrace")
+z_index = 9
+
+[node name="Laundry" type="Node2D" parent="."]
+z_index = 5
+
+[node name="LineA" type="Sprite2D" parent="Laundry"]
+position = Vector2(92, 4)
+texture = ExtResource("line_a")
+centered = false
+material = SubResource("ClothSwing")
+
+[node name="LineB" type="Sprite2D" parent="Laundry"]
+position = Vector2(206, 0)
+texture = ExtResource("line_b")
+centered = false
+material = SubResource("ClothSwing")
+
+[node name="LineC" type="Sprite2D" parent="Laundry"]
+position = Vector2(364, 10)
+texture = ExtResource("line_c")
+centered = false
+material = SubResource("ClothSwing")
+
+[node name="LineD" type="Sprite2D" parent="Laundry"]
+position = Vector2(522, 6)
+texture = ExtResource("line_d")
+centered = false
+material = SubResource("ClothSwing")
+
+[node name="LineA2" type="Sprite2D" parent="Laundry"]
+position = Vector2(630, -4)
+texture = ExtResource("line_a")
+centered = false
+material = SubResource("ClothSwing")
+
+[node name="Bulbs1" type="Sprite2D" parent="Laundry"]
+position = Vector2(282, 10)
+texture = ExtResource("bulbs")
+centered = false
+light_mask = 2
+
+[node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs1"]
+position = Vector2(24, 8)
+scale = Vector2(0.5, 0.5)
+color = Color(0.85, 0.55, 0.22, 1)
+energy = 3.0
+range_item_cull_mask = 3
+texture = SubResource("LampLightTex")
+
+[node name="Glow1" type="PointLight2D" parent="Laundry/Bulbs1"]
+position = Vector2(56, 8)
+scale = Vector2(0.5, 0.5)
+color = Color(0.85, 0.55, 0.22, 1)
+energy = 3.0
+range_item_cull_mask = 3
+texture = SubResource("LampLightTex")
+
+[node name="Bulbs2" type="Sprite2D" parent="Laundry"]
+position = Vector2(612, 22)
+texture = ExtResource("bulbs")
+centered = false
+light_mask = 2
+
+[node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs2"]
+position = Vector2(24, 8)
+scale = Vector2(0.5, 0.5)
+color = Color(0.85, 0.55, 0.22, 1)
+energy = 3.0
+range_item_cull_mask = 3
+texture = SubResource("LampLightTex")
+
+[node name="Glow1" type="PointLight2D" parent="Laundry/Bulbs2"]
+position = Vector2(56, 8)
+scale = Vector2(0.5, 0.5)
+color = Color(0.85, 0.55, 0.22, 1)
+energy = 3.0
+range_item_cull_mask = 3
+texture = SubResource("LampLightTex")
+
+[node name="Lamp1" type="Sprite2D" parent="Buildings"]
+light_mask = 2
+z_index = 9
+position = Vector2(94, 64)
+texture = ExtResource("lamp")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/Lamp1"]
+position = Vector2(0, -7.5)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("LampLightTex")
+
+[node name="Lamp2" type="Sprite2D" parent="Buildings"]
+light_mask = 2
+z_index = 9
+position = Vector2(318, 50)
+texture = ExtResource("lamp")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/Lamp2"]
+position = Vector2(0, -7.5)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("LampLightTex")
+
+[node name="Lamp3" type="Sprite2D" parent="Buildings"]
+light_mask = 2
+z_index = 9
+position = Vector2(456, 64)
+texture = ExtResource("lamp")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/Lamp3"]
+position = Vector2(0, -7.5)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("LampLightTex")
+
+[node name="Lamp4" type="Sprite2D" parent="Buildings"]
+light_mask = 2
+z_index = 9
+position = Vector2(650, 64)
+texture = ExtResource("lamp")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/Lamp4"]
+position = Vector2(0, -7.5)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("LampLightTex")
+
+[node name="DoorBulb" type="PointLight2D" parent="Buildings"]
+position = Vector2(760, 63)
+scale = Vector2(0.45, 0.45)
+color = Color(0.85, 0.6, 0.3, 1)
+energy = 3.5
+range_item_cull_mask = 3
+texture = SubResource("LampLightTex")
+
+[node name="Player" parent="." instance=ExtResource("player")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+position = Vector2(22, 70)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player"]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("PlayerLightTex")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.5370987, 0.5370987, 0.5370987, 1)
+
+[node name="ToMainStreet" parent="." instance=ExtResource("teleport")]
+position = Vector2(20, 76)
+scene_path = "res://levels/rust_arena/rust_city.tscn"
+teleport_id = 1
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToMainStreet"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("hint")
+
+[node name="0point0xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0, 0)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+light_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="0point0xMoving"]
+light_mask = 0
+texture = ExtResource("sky")
+centered = false
+
+[node name="0point2xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.2, 0.2)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+light_mask = 2
+visibility_layer = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving"]
+light_mask = 0
+texture = ExtResource("bg")
+centered = false
+
+[node name="0point4xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.4, 0.4)
+repeat_size = Vector2(160, 0)
+repeat_times = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving"]
+modulate = Color(0.2809047, 0.29556337, 0.29849514, 1)
+material = SubResource("FarMat")
+texture = ExtResource("city1")
+centered = false
+
+[node name="0point6xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.6, 0.6)
+repeat_size = Vector2(160, 0)
+repeat_times = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="0point6xMoving"]
+texture = ExtResource("city2")
+centered = false
+
+[node name="0point8xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.8)
+repeat_size = Vector2(320, 0)
+repeat_times = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="0point8xMoving"]
+modulate = Color(0.7, 0.7, 0.72, 1)
+light_mask = 3
+texture = ExtResource("alley_back")
+centered = false
+
+[node name="1point0xMoving" type="Parallax2D" parent="."]
+z_index = 10
+repeat_size = Vector2(160, 0)
+repeat_times = 8
+
+[node name="Ground" type="Sprite2D" parent="1point0xMoving"]
+light_mask = 3
+position = Vector2(-160, 0)
+texture = ExtResource("ground")
+centered = false
+
+[node name="1point2xMoving" type="Parallax2D" parent="."]
+z_index = 11
+scroll_scale = Vector2(1.2, 1.2)
+
+[node name="FrontCloth0" type="Sprite2D" parent="1point2xMoving"]
+modulate = Color(0.05, 0.05, 0.06, 1)
+light_mask = 0
+position = Vector2(60, -8)
+texture = ExtResource("line_c")
+centered = false
+material = SubResource("ClothSwingFront")
+
+[node name="FrontCloth1" type="Sprite2D" parent="1point2xMoving"]
+modulate = Color(0.05, 0.05, 0.06, 1)
+light_mask = 0
+position = Vector2(380, -6)
+texture = ExtResource("line_a")
+centered = false
+material = SubResource("ClothSwingFront")
+
+[node name="FrontCloth2" type="Sprite2D" parent="1point2xMoving"]
+modulate = Color(0.05, 0.05, 0.06, 1)
+light_mask = 0
+position = Vector2(640, -7)
+texture = ExtResource("line_b")
+centered = false
+material = SubResource("ClothSwingFront")
+
+[node name="FrontCloth3" type="Sprite2D" parent="1point2xMoving"]
+modulate = Color(0.05, 0.05, 0.06, 1)
+light_mask = 0
+position = Vector2(860, -5)
+texture = ExtResource("line_d")
+centered = false
+material = SubResource("ClothSwingFront")
+
+[node name="BackGroundSmoke" parent="." instance=ExtResource("smoke")]
+light_mask = 0
+z_index = 11

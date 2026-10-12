@@ -8,6 +8,8 @@ extends Marker2D
 ## 默认是否激活。Boss 房里设为 false:未激活时不显示文字、无法交互,
 ## 直到 Boss 被击败后由外部调用 activate() 打开。
 @export var active: bool = true
+## 只是走进隔壁的街巷(不是进新梦/存档点):主角护盾/技能运行态原样继承,不重置。
+@export var preserve_player_state: bool = false
 
 var _player_inside: bool = false
 var _tracked_player: Player = null
@@ -60,7 +62,7 @@ func _process(_delta: float) -> void:
 	# 触屏模式下没有 Q 键,攻击键也能确认传送
 	if Input.is_action_just_pressed("Select") \
 			or (TouchControls.enabled and Input.is_action_just_pressed("Attack1")):
-		Game.change_scene(scene_path, teleport_id, player_light)
+		Game.change_scene(scene_path, teleport_id, player_light, preserve_player_state)
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is Player:

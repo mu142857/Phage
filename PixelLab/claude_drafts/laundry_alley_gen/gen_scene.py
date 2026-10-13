@@ -24,13 +24,13 @@ def size(name):
     return Image.open(PROJ + D + name + ".png").size
 
 for n in ["house_ochre", "house_green", "house_brick", "dead_end", "terrace", "crate", "crate_small",
-          "barrel", "line_a", "line_b", "line_c", "line_d", "bulbs", "alley_mouth", "alley_back"]:
+          "barrel", "line_a", "line_b", "line_c", "line_d", "bulbs", "arch_house", "alley_back"]:
     tex(n)
 res("player", "PackedScene", "res://entities/player/player.tscn")
 res("script", "Script", "res://levels/rust_arena/rust_city.gd")
 res("drop", "Script", "res://interactive/Platform/drop_through_platform.gd")
 res("teleport", "PackedScene", "res://interactive/Teleport/teleport.tscn")
-res("hint", "Texture2D", "res://interactive/Teleport/enter_hint.png")
+res("hint", "Texture2D", "res://interactive/Teleport/key_q.png")
 res("silk", "Shader", "res://asstes/shaders/silk_swing.gdshader")
 res("smoke", "PackedScene", "res://asstes/shaders/smokes/back_ground_smoke.tscn")
 res("lamp", "Texture2D", "res://levels/rust_city/rust_city_light.png")
@@ -131,7 +131,7 @@ GR_W, GR_H = size("house_green")
 BR_W, BR_H = size("house_brick")
 DE_W, DE_H = size("dead_end")
 
-sprite(B, "AlleyMouth", "alley_mouth", 2, GROUND)
+sprite(B, "AlleyMouth", "arch_house", -7, GROUND)   # 过街楼,拱门中心在 x≈22
 # 1 赭黄公寓(消防梯在右)
 OX = 36
 sprite(B, "HouseOchre1", "house_ochre", OX, GROUND)
@@ -218,9 +218,9 @@ node("PointLight2D", "PointLight2D", "Player", position=V(0, -7), scale=V(3.0664
 node("CanvasModulate", "CanvasModulate", color="Color(0.5370987, 0.5370987, 0.5370987, 1)")
 
 # ---------------- 回主街的口子 ----------------
-node("ToMainStreet", None, ".", inst="teleport", position=V(20, 76),
+node("ToMainStreet", None, ".", inst="teleport", position=V(22, 76),
      scene_path='"res://levels/rust_arena/rust_city.tscn"', teleport_id="1", preserve_player_state="true")
-node("Hint", "Sprite2D", "ToMainStreet", z_index="100", position=V(0, -22), texture=E("hint"))
+node("Hint", "Sprite2D", "ToMainStreet", modulate="Color(1.8, 1.8, 1.8, 1)", light_mask="0", z_index="100", position=V(0, -22), texture=E("hint"))
 
 # ---------------- 视差 ----------------
 def para(name, s, repeat_w, times, z=None, **p):

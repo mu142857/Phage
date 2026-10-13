@@ -13,13 +13,13 @@
 [ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line_c.png" id="line_c"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line_d.png" id="line_d"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/bulbs.png" id="bulbs"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/alley_mouth.png" id="alley_mouth"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/arch_house.png" id="alley_mouth"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/alley_back.png" id="alley_back"]
 [ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="player"]
 [ext_resource type="Script" path="res://levels/rust_arena/rust_city.gd" id="script"]
 [ext_resource type="Script" path="res://interactive/Platform/drop_through_platform.gd" id="drop"]
 [ext_resource type="PackedScene" path="res://interactive/Teleport/teleport.tscn" id="teleport"]
-[ext_resource type="Texture2D" path="res://interactive/Teleport/enter_hint.png" id="hint"]
+[ext_resource type="Texture2D" path="res://interactive/Teleport/key_q.png" id="hint"]
 [ext_resource type="Shader" path="res://asstes/shaders/silk_swing.gdshader" id="silk"]
 [ext_resource type="PackedScene" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="smoke"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_light.png" id="lamp"]
@@ -135,7 +135,7 @@ polygon = PackedVector2Array(140, 80, 156, 66, 356, 66, 372, 80)
 z_index = 2
 
 [node name="AlleyMouth" type="Sprite2D" parent="Buildings"]
-position = Vector2(20, 44)
+position = Vector2(23, 39)
 texture = ExtResource("alley_mouth")
 
 [node name="HouseOchre1" type="Sprite2D" parent="Buildings"]
@@ -585,7 +585,7 @@ texture = SubResource("PlayerLightTex")
 color = Color(0.5370987, 0.5370987, 0.5370987, 1)
 
 [node name="ToMainStreet" parent="." instance=ExtResource("teleport")]
-position = Vector2(20, 76)
+position = Vector2(22, 76)
 scene_path = "res://levels/rust_arena/rust_city.tscn"
 teleport_id = 1
 preserve_player_state = true

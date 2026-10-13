@@ -29,9 +29,11 @@
 [ext_resource type="Texture2D" path="res://entities/rust_npcs/manhole.png" id="206_manhole"]
 [ext_resource type="Texture2D" path="res://entities/rust_npcs/roadblock.png" id="207_roadblock"]
 
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/alley_mouth.png" id="210_alleymouth"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/arch_house.png" id="210_alleymouth"]
 [ext_resource type="PackedScene" path="res://interactive/Teleport/teleport.tscn" id="211_teleport"]
-[ext_resource type="Texture2D" path="res://interactive/Teleport/enter_hint.png" id="212_enterhint"]
+[ext_resource type="Texture2D" path="res://interactive/Teleport/key_q.png" id="212_enterhint"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/goblins/goblin_beam_pair.png" id="230_goblin_pair"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/goblins/goblin_flag.png" id="231_goblin_flag"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tlm15"]
 
@@ -949,7 +951,7 @@ region_enabled = true
 region_rect = Rect2(0, 58, 66, 28)
 
 [node name="AlleyMouth" type="Sprite2D" parent="Buildings"]
-position = Vector2(741, 44)
+position = Vector2(753, 39)
 texture = ExtResource("210_alleymouth")
 
 [node name="Bush1" type="Sprite2D" parent="Buildings" unique_id=845881457]
@@ -1124,6 +1126,25 @@ position = Vector2(1530, 80)
 display_name = "修路工"
 texture = ExtResource("205_worker")
 
+[node name="GoblinPairA" parent="Npcs" instance=ExtResource("200_npc")]
+position = Vector2(1488, 80)
+display_name = "建筑地精"
+texture = ExtResource("230_goblin_pair")
+talkable = false
+
+[node name="GoblinPairB" parent="Npcs" instance=ExtResource("200_npc")]
+position = Vector2(1522, 80)
+display_name = "建筑地精"
+texture = ExtResource("230_goblin_pair")
+talkable = false
+
+[node name="GoblinFlag" parent="Npcs" instance=ExtResource("200_npc")]
+position = Vector2(1541, 80)
+display_name = "建筑地精"
+texture = ExtResource("231_goblin_flag")
+flip = true
+talkable = false
+
 [node name="Props" type="Node2D" parent="."]
 
 [node name="Manhole" type="Sprite2D" parent="Props"]
@@ -1150,7 +1171,7 @@ position = Vector2(-10, -60)
 shape = SubResource("RoadBlockShape")
 
 [node name="ToLaundryAlley" parent="." instance=ExtResource("211_teleport")]
-position = Vector2(741, 76)
+position = Vector2(753, 76)
 scene_path = "res://levels/rust_city/laundry_alley/laundry_alley.tscn"
 teleport_id = 1
 preserve_player_state = true

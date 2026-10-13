@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buj5657ih0ne3"
-path="res://.godot/imported/enter_hint.png-d1c122abbec77776330abbeab2868404.ctex"
+uid="uid://y4rr68nnxqkk"
+path="res://.godot/imported/bird_dreamcatcher.png-ce327475f41ae8b66df9a256a54e353c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://interactive/Teleport/enter_hint.png"
-dest_files=["res://.godot/imported/enter_hint.png-d1c122abbec77776330abbeab2868404.ctex"]
+source_file="res://entities/rust_npcs/sheep/bird_dreamcatcher.png"
+dest_files=["res://.godot/imported/bird_dreamcatcher.png-ce327475f41ae8b66df9a256a54e353c.ctex"]
 
 [params]
 

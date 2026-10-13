@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkbxebnobb1xi"
-path="res://.godot/imported/alley_mouth.png-a04e941aca65a91fed855600a2cc6cd2.ctex"
+uid="uid://kj0gkcswkip7"
+path="res://.godot/imported/goblin_flag.png-d53d4b6a3d2a40df2a2eb0543072ce76.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://levels/rust_city/laundry_alley/alley_mouth.png"
-dest_files=["res://.godot/imported/alley_mouth.png-a04e941aca65a91fed855600a2cc6cd2.ctex"]
+source_file="res://entities/rust_npcs/goblins/goblin_flag.png"
+dest_files=["res://.godot/imported/goblin_flag.png-d53d4b6a3d2a40df2a2eb0543072ce76.ctex"]
 
 [params]
 

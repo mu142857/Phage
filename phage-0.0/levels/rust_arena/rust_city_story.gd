@@ -32,6 +32,9 @@ const CPS_SLOW := 9.0
 @onready var _lamplighter: Npc = $"../Npcs/Lamplighter"
 @onready var _worker: Npc = $"../Npcs/RoadWorker"
 @onready var _toll: Npc = $"../Npcs/TollCollector"
+# 建筑地精(梧桐画的小个子):两组抬钢梁来回搬,工头举旗站在路障前。场景里没摆就跳过
+@onready var _goblin_pairs: Array = [get_node_or_null("../Npcs/GoblinPairA"), get_node_or_null("../Npcs/GoblinPairB")]
+@onready var _goblin_flag: Npc = get_node_or_null("../Npcs/GoblinFlag") as Npc
 
 var _player: Node2D = null
 var _hud: CoinHud = null
@@ -88,6 +91,12 @@ func _restore_npcs() -> void:
 	_worker.talkable = road_seen
 	_toll.talkable = road_seen
 	_dig_loop()
+	for i in _goblin_pairs.size():
+		var pair := _goblin_pairs[i] as Npc
+		if pair != null:
+			_carry_loop(pair, pair.global_position.x, pair.global_position.x + (14.0 if i == 0 else -14.0), i * 0.9)
+	if _goblin_flag != null:
+		_flag_loop()
 
 
 # 修路工一直在挖:一下一下往下砸
@@ -96,6 +105,27 @@ func _dig_loop() -> void:
 		if not Talk.busy():
 			await _worker.hop(-1.0, 0.25)
 		await get_tree().create_timer(0.55).timeout
+
+
+# 抬钢梁的地精:慢吞吞地在两点之间来回搬(有人说话时停下)
+func _carry_loop(pair: Npc, a: float, b: float, delay: float) -> void:
+	await get_tree().create_timer(delay).timeout
+	var to_b := true
+	while is_inside_tree():
+		if Talk.busy():
+			await get_tree().create_timer(0.3).timeout
+			continue
+		await pair.walk_to(b if to_b else a, 12.0)
+		to_b = not to_b
+		await get_tree().create_timer(0.8).timeout
+
+
+# 举旗的工头:隔一会儿蹦一下,挥挥旗
+func _flag_loop() -> void:
+	while is_inside_tree():
+		await get_tree().create_timer(randf_range(1.0, 2.2)).timeout
+		if not Talk.busy():
+			await _goblin_flag.hop(2.0, 0.2)
 
 
 # ============================================================

@@ -8,6 +8,9 @@
 [ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="91_dreamintro"]
 [ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="92_bossintro"]
 [ext_resource type="PackedScene" path="res://interactive/Teleport/teleport.tscn" id="93_teleport"]
+[ext_resource type="Script" path="res://levels/rust_arena/rust_arena.gd" id="94_arena"]
+[ext_resource type="Script" path="res://levels/rust_arena/crowd/arena_crowd.gd" id="95_crowd"]
+[ext_resource type="Texture2D" path="res://interactive/Teleport/key_q.png" id="96_keyq"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1c05a"]
 
@@ -16,6 +19,7 @@
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_b06ws"]
 
 [node name="RustArena" type="Node2D" unique_id=931264449 groups=["camera_fixed"]]
+script = ExtResource("94_arena")
 
 [node name="Environment" type="Node2D" parent="." unique_id=1023337210]
 
@@ -40,11 +44,21 @@ position = Vector2(160, 80)
 rotation = -1.5707964
 shape = SubResource("WorldBoundaryShape2D_b06ws")
 
+[node name="Crowd" type="Node2D" parent="."]
+script = ExtResource("95_crowd")
+
 [node name="FromArenaStreet" parent="." instance=ExtResource("93_teleport")]
 position = Vector2(24, 76)
+scene_path = "res://levels/rust_city/arena_street/arena_street.tscn"
 teleport_id = 7
 active = false
-editor_description = "竞技场街大门进来的落脚点(只当落点,不能按 Q 出去)。"
+editor_description = "竞技场街大门进来的落脚点;打完老大史莱姆才打开,按 Q 回竞技场街。"
+
+[node name="Hint" type="Sprite2D" parent="FromArenaStreet"]
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("96_keyq")
 
 [node name="RustGOAT" parent="." unique_id=2060703585 instance=ExtResource("3_8cwx5")]
 position = Vector2(86, 80)
@@ -67,5 +81,6 @@ title_color = Color(0.84, 0.66, 0.47, 1)
 
 [node name="BossIntro" parent="." unique_id=588714817 instance=ExtResource("92_bossintro")]
 boss_path = NodePath("../RustGOAT")
+auto_start = false
 title_text = "锈都拳王"
 boss_name_text = "老大史莱姆"

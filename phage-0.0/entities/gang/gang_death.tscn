@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/gang/gang_death.gd" id="1"]
+
+[sub_resource type="Gradient" id="Col"]
+offsets = PackedFloat32Array(0.000, 0.333, 0.667, 1.000)
+colors = PackedColorArray(0.165, 0.165, 0.133, 1, 0.345, 0.345, 0.290, 1, 0.353, 0.376, 0.314, 1, 0.737, 0.275, 0.322, 1)
+
+[sub_resource type="GradientTexture1D" id="ColTex"]
+gradient = SubResource("Col")
+
+[sub_resource type="Gradient" id="Alpha"]
+offsets = PackedFloat32Array(0, 0.2, 0.82, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="AlphaTex"]
+gradient = SubResource("Alpha")
+
+[sub_resource type="Curve" id="Scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="ScaleTex"]
+curve = SubResource("Scale")
+
+[sub_resource type="ParticleProcessMaterial" id="Mat"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(5, 10, 1)
+emission_shape_offset = Vector3(0, -10, 0)
+direction = Vector3(0, -1, 0)
+spread = 45.0
+initial_velocity_min = 50
+initial_velocity_max = 200
+gravity = Vector3(0, 300, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("ScaleTex")
+color_ramp = SubResource("AlphaTex")
+color_initial_ramp = SubResource("ColTex")
+
+[node name="FX" type="GPUParticles2D"]
+z_index = 20
+emitting = false
+amount = 18
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("Mat")
+script = ExtResource("1")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.1
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

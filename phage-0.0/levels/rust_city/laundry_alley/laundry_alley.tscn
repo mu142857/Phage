@@ -1,26 +1,12 @@
-[gd_scene load_steps=52 format=3]
+[gd_scene format=3]
 
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_ochre.png" id="house_ochre"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_green.png" id="house_green"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_brick.png" id="house_brick"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/dead_end.png" id="dead_end"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/terrace.png" id="terrace"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/crate.png" id="crate"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/crate_small.png" id="crate_small"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/barrel.png" id="barrel"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line_a.png" id="line_a"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line_b.png" id="line_b"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line_c.png" id="line_c"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line_d.png" id="line_d"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/bulbs.png" id="bulbs"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/arch_house.png" id="alley_mouth"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/alley_back.png" id="alley_back"]
 [ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="player"]
 [ext_resource type="Script" path="res://levels/rust_arena/rust_city.gd" id="script"]
 [ext_resource type="Script" path="res://interactive/Platform/drop_through_platform.gd" id="drop"]
 [ext_resource type="PackedScene" path="res://interactive/Teleport/teleport.tscn" id="teleport"]
-[ext_resource type="Texture2D" path="res://interactive/Teleport/key_q.png" id="hint"]
+[ext_resource type="Texture2D" path="res://interactive/Teleport/key_q.png" id="keyq"]
 [ext_resource type="Shader" path="res://asstes/shaders/silk_swing.gdshader" id="silk"]
+[ext_resource type="Shader" path="res://asstes/shaders/swing.tres" id="treeswing"]
 [ext_resource type="PackedScene" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="smoke"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_light.png" id="lamp"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_sky.png" id="sky"]
@@ -28,8 +14,32 @@
 [ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_1.png" id="city1"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_2.png" id="city2"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_ground.png" id="ground"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/alley_back.png" id="alley_back"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_ochre.png" id="house_ochre"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_green.png" id="house_green"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_brick.png" id="house_brick"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/dead_end.png" id="dead_end"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/arch_house.png" id="arch_house"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/yellow_building_1.png" id="yellow1"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/black_building_2.png" id="black2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/crate_slat.png" id="crate_slat"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/crate_slat2.png" id="crate_slat2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/crate_green.png" id="crate_green"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/box_small.png" id="box_small"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/barrel_teal.png" id="barrel_teal"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/terracewall.png" id="terracewall"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line1.png" id="line1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line2.png" id="line2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line3.png" id="line3"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/bulbs4.png" id="bulbs4"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line5.png" id="line5"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line6.png" id="line6"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/line7.png" id="line7"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/bulbs8.png" id="bulbs8"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/front_line0.png" id="front_line0"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/front_line1.png" id="front_line1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/front_line2.png" id="front_line2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/front_line3.png" id="front_line3"]
 
 [sub_resource type="WorldBoundaryShape2D" id="Boundary"]
 
@@ -59,19 +69,15 @@ shader = ExtResource("silk")
 shader_parameter/Strength = 0.6
 shader_parameter/Speed = 1.3
 
+[sub_resource type="ShaderMaterial" id="TreeSwing"]
+shader = ExtResource("treeswing")
+shader_parameter/Strength = 1.0
+shader_parameter/Speed = 2.0
+
 [sub_resource type="ShaderMaterial" id="ClothSwingFront"]
 shader = ExtResource("silk")
 shader_parameter/Strength = 1.4
 shader_parameter/Speed = 1.0
-
-[sub_resource type="RectangleShape2D" id="Crate"]
-size = Vector2(12, 12)
-
-[sub_resource type="RectangleShape2D" id="CrateSmall"]
-size = Vector2(9, 8)
-
-[sub_resource type="RectangleShape2D" id="Barrel"]
-size = Vector2(8, 11)
 
 [sub_resource type="RectangleShape2D" id="Plat32"]
 size = Vector2(32, 2)
@@ -103,6 +109,18 @@ size = Vector2(31, 2)
 [sub_resource type="RectangleShape2D" id="PlatDetect31"]
 size = Vector2(31, 8)
 
+[sub_resource type="RectangleShape2D" id="Rect12x12"]
+size = Vector2(12, 12)
+
+[sub_resource type="RectangleShape2D" id="Rect12x11"]
+size = Vector2(12, 11)
+
+[sub_resource type="RectangleShape2D" id="Rect9x8"]
+size = Vector2(9, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect8x11"]
+size = Vector2(8, 11)
+
 [node name="LaundryAlley" type="Node2D"]
 script = ExtResource("script")
 camera_limit_left = 0
@@ -128,15 +146,18 @@ position = Vector2(800, 0)
 rotation = -1.5707964
 shape = SubResource("Boundary")
 
-[node name="Terrace" type="CollisionPolygon2D" parent="Walls/StaticBody2D"]
-polygon = PackedVector2Array(140, 80, 156, 66, 356, 66, 372, 80)
-
 [node name="Buildings" type="Node2D" parent="."]
 z_index = 2
 
+[node name="Props" type="Node2D" parent="."]
+z_index = 4
+
+[node name="Laundry" type="Node2D" parent="."]
+z_index = 5
+
 [node name="AlleyMouth" type="Sprite2D" parent="Buildings"]
 position = Vector2(23, 39)
-texture = ExtResource("alley_mouth")
+texture = ExtResource("arch_house")
 
 [node name="HouseOchre1" type="Sprite2D" parent="Buildings"]
 position = Vector2(67, 32)
@@ -359,153 +380,158 @@ collision_mask = 2
 position = Vector2(735.5, 9)
 shape = SubResource("PlatDetect31")
 
-[node name="Props" type="Node2D" parent="."]
-z_index = 4
+[node name="TerraceWall" type="Sprite2D" parent="."]
+position = Vector2(256, 73.5)
+texture = ExtResource("terracewall")
+z_index = 9
+
+[node name="TerraceWallCol" type="CollisionPolygon2D" parent="Walls/StaticBody2D"]
+polygon = PackedVector2Array(140, 80, 156, 66, 356, 66, 372, 80)
 
 [node name="CrateA" type="Sprite2D" parent="Props"]
 position = Vector2(110, 74)
-texture = ExtResource("crate")
+texture = ExtResource("crate_slat")
 
 [node name="CrateA" type="CollisionShape2D" parent="Walls/StaticBody2D"]
 position = Vector2(110, 74)
-shape = SubResource("Crate")
+shape = SubResource("Rect12x12")
 
 [node name="CrateB" type="Sprite2D" parent="Props"]
-position = Vector2(122, 74)
-texture = ExtResource("crate")
+position = Vector2(122, 74.5)
+texture = ExtResource("crate_green")
 
 [node name="CrateB" type="CollisionShape2D" parent="Walls/StaticBody2D"]
-position = Vector2(122, 74)
-shape = SubResource("Crate")
+position = Vector2(122, 74.5)
+shape = SubResource("Rect12x11")
 
-[node name="CrateC" type="Sprite2D" parent="Props"]
-position = Vector2(115.5, 64)
-texture = ExtResource("crate_small")
+[node name="BoxA" type="Sprite2D" parent="Props"]
+position = Vector2(109.5, 64)
+texture = ExtResource("box_small")
 
-[node name="CrateC" type="CollisionShape2D" parent="Walls/StaticBody2D"]
-position = Vector2(115.5, 64)
-shape = SubResource("CrateSmall")
+[node name="BoxA" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(109.5, 64)
+shape = SubResource("Rect9x8")
 
 [node name="Barrel1" type="Sprite2D" parent="Props"]
 position = Vector2(133, 74.5)
-texture = ExtResource("barrel")
+texture = ExtResource("barrel_teal")
 
 [node name="Barrel1" type="CollisionShape2D" parent="Walls/StaticBody2D"]
 position = Vector2(133, 74.5)
-shape = SubResource("Barrel")
-
-[node name="CrateD" type="Sprite2D" parent="Props"]
-position = Vector2(702, 74)
-texture = ExtResource("crate")
-
-[node name="CrateD" type="CollisionShape2D" parent="Walls/StaticBody2D"]
-position = Vector2(702, 74)
-shape = SubResource("Crate")
-
-[node name="CrateE" type="Sprite2D" parent="Props"]
-position = Vector2(714, 74)
-texture = ExtResource("crate")
-
-[node name="CrateE" type="CollisionShape2D" parent="Walls/StaticBody2D"]
-position = Vector2(714, 74)
-shape = SubResource("Crate")
-
-[node name="CrateF" type="Sprite2D" parent="Props"]
-position = Vector2(708, 62)
-texture = ExtResource("crate")
-
-[node name="CrateF" type="CollisionShape2D" parent="Walls/StaticBody2D"]
-position = Vector2(708, 62)
-shape = SubResource("Crate")
+shape = SubResource("Rect8x11")
 
 [node name="Barrel2" type="Sprite2D" parent="Props"]
 position = Vector2(688, 74.5)
-texture = ExtResource("barrel")
+scale = Vector2(-1, 1)
+texture = ExtResource("barrel_teal")
 
 [node name="Barrel2" type="CollisionShape2D" parent="Walls/StaticBody2D"]
 position = Vector2(688, 74.5)
-shape = SubResource("Barrel")
+shape = SubResource("Rect8x11")
 
-[node name="TerraceWall" type="Sprite2D" parent="."]
-position = Vector2(256, 75)
-texture = ExtResource("terrace")
-z_index = 9
+[node name="CrateD" type="Sprite2D" parent="Props"]
+position = Vector2(702, 74)
+texture = ExtResource("crate_slat2")
 
-[node name="Laundry" type="Node2D" parent="."]
-z_index = 5
+[node name="CrateD" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(702, 74)
+shape = SubResource("Rect12x12")
 
-[node name="LineA" type="Sprite2D" parent="Laundry"]
-position = Vector2(92, 4)
-texture = ExtResource("line_a")
+[node name="CrateE" type="Sprite2D" parent="Props"]
+position = Vector2(714, 74)
+scale = Vector2(-1, 1)
+texture = ExtResource("crate_slat")
+
+[node name="CrateE" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(714, 74)
+shape = SubResource("Rect12x12")
+
+[node name="CrateF" type="Sprite2D" parent="Props"]
+position = Vector2(708, 62.5)
+texture = ExtResource("crate_green")
+
+[node name="CrateF" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(708, 62.5)
+shape = SubResource("Rect12x11")
+
+[node name="Line1" type="Sprite2D" parent="Laundry"]
+position = Vector2(96, 2)
+texture = ExtResource("line1")
 centered = false
 material = SubResource("ClothSwing")
 
-[node name="LineB" type="Sprite2D" parent="Laundry"]
-position = Vector2(206, 0)
-texture = ExtResource("line_b")
+[node name="Line2" type="Sprite2D" parent="Laundry"]
+position = Vector2(96, 22)
+texture = ExtResource("line2")
 centered = false
 material = SubResource("ClothSwing")
 
-[node name="LineC" type="Sprite2D" parent="Laundry"]
-position = Vector2(364, 10)
-texture = ExtResource("line_c")
+[node name="Line3" type="Sprite2D" parent="Laundry"]
+position = Vector2(212, 0)
+texture = ExtResource("line3")
 centered = false
 material = SubResource("ClothSwing")
 
-[node name="LineD" type="Sprite2D" parent="Laundry"]
-position = Vector2(522, 6)
-texture = ExtResource("line_d")
-centered = false
-material = SubResource("ClothSwing")
-
-[node name="LineA2" type="Sprite2D" parent="Laundry"]
-position = Vector2(630, -4)
-texture = ExtResource("line_a")
-centered = false
-material = SubResource("ClothSwing")
-
-[node name="Bulbs1" type="Sprite2D" parent="Laundry"]
-position = Vector2(282, 10)
-texture = ExtResource("bulbs")
+[node name="Bulbs4" type="Sprite2D" parent="Laundry"]
+position = Vector2(278, 8)
+texture = ExtResource("bulbs4")
 centered = false
 light_mask = 2
 
-[node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs1"]
-position = Vector2(24, 8)
+[node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs4"]
+position = Vector2(26, 10)
 scale = Vector2(0.5, 0.5)
 color = Color(0.85, 0.55, 0.22, 1)
 energy = 3.0
-range_item_cull_mask = 3
+range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
-[node name="Glow1" type="PointLight2D" parent="Laundry/Bulbs1"]
-position = Vector2(56, 8)
+[node name="Glow1" type="PointLight2D" parent="Laundry/Bulbs4"]
+position = Vector2(74, 11)
 scale = Vector2(0.5, 0.5)
 color = Color(0.85, 0.55, 0.22, 1)
 energy = 3.0
-range_item_cull_mask = 3
+range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
-[node name="Bulbs2" type="Sprite2D" parent="Laundry"]
-position = Vector2(612, 22)
-texture = ExtResource("bulbs")
+[node name="Line5" type="Sprite2D" parent="Laundry"]
+position = Vector2(278, 28)
+texture = ExtResource("line5")
+centered = false
+material = SubResource("ClothSwing")
+
+[node name="Line6" type="Sprite2D" parent="Laundry"]
+position = Vector2(522, 8)
+texture = ExtResource("line6")
+centered = false
+material = SubResource("ClothSwing")
+
+[node name="Line7" type="Sprite2D" parent="Laundry"]
+position = Vector2(637, 0)
+texture = ExtResource("line7")
+centered = false
+material = SubResource("ClothSwing")
+
+[node name="Bulbs8" type="Sprite2D" parent="Laundry"]
+position = Vector2(637, 20)
+texture = ExtResource("bulbs8")
 centered = false
 light_mask = 2
 
-[node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs2"]
-position = Vector2(24, 8)
+[node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs8"]
+position = Vector2(25, 9)
 scale = Vector2(0.5, 0.5)
 color = Color(0.85, 0.55, 0.22, 1)
 energy = 3.0
-range_item_cull_mask = 3
+range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
-[node name="Glow1" type="PointLight2D" parent="Laundry/Bulbs2"]
-position = Vector2(56, 8)
+[node name="Glow1" type="PointLight2D" parent="Laundry/Bulbs8"]
+position = Vector2(57, 9)
 scale = Vector2(0.5, 0.5)
 color = Color(0.85, 0.55, 0.22, 1)
 energy = 3.0
-range_item_cull_mask = 3
+range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="Lamp1" type="Sprite2D" parent="Buildings"]
@@ -569,20 +595,8 @@ position = Vector2(760, 63)
 scale = Vector2(0.45, 0.45)
 color = Color(0.85, 0.6, 0.3, 1)
 energy = 3.5
-range_item_cull_mask = 3
+range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
-
-[node name="Player" parent="." instance=ExtResource("player")]
-modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
-position = Vector2(22, 70)
-
-[node name="PointLight2D" type="PointLight2D" parent="Player"]
-position = Vector2(0, -7)
-scale = Vector2(3.0664063, 1.21875)
-texture = SubResource("PlayerLightTex")
-
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.5370987, 0.5370987, 0.5370987, 1)
 
 [node name="ToMainStreet" parent="." instance=ExtResource("teleport")]
 position = Vector2(22, 76)
@@ -595,7 +609,32 @@ modulate = Color(1.8, 1.8, 1.8, 1)
 light_mask = 0
 z_index = 100
 position = Vector2(0, -22)
-texture = ExtResource("hint")
+texture = ExtResource("keyq")
+
+[node name="ToBackAlley" parent="." instance=ExtResource("teleport")]
+position = Vector2(760, 76)
+scene_path = "res://levels/rust_city/back_alley/back_alley.tscn"
+teleport_id = 8
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToBackAlley"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("keyq")
+
+[node name="Player" parent="." instance=ExtResource("player")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+position = Vector2(22, 70)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player"]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("PlayerLightTex")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.5370987, 0.5370987, 0.5370987, 1)
 
 [node name="0point0xMoving" type="Parallax2D" parent="."]
 scroll_scale = Vector2(0, 0)
@@ -643,7 +682,7 @@ centered = false
 [node name="0point8xMoving" type="Parallax2D" parent="."]
 scroll_scale = Vector2(0.8, 0.8)
 repeat_size = Vector2(320, 0)
-repeat_times = 3
+repeat_times = 4
 
 [node name="Sprite2D" type="Sprite2D" parent="0point8xMoving"]
 modulate = Color(0.7, 0.7, 0.72, 1)
@@ -666,35 +705,35 @@ centered = false
 z_index = 11
 scroll_scale = Vector2(1.2, 1.2)
 
-[node name="FrontCloth0" type="Sprite2D" parent="1point2xMoving"]
+[node name="Front0" type="Sprite2D" parent="1point2xMoving"]
 modulate = Color(0.05, 0.05, 0.06, 1)
 light_mask = 0
-position = Vector2(60, -8)
-texture = ExtResource("line_c")
+position = Vector2(60, -10)
+texture = ExtResource("front_line0")
 centered = false
 material = SubResource("ClothSwingFront")
 
-[node name="FrontCloth1" type="Sprite2D" parent="1point2xMoving"]
+[node name="Front1" type="Sprite2D" parent="1point2xMoving"]
 modulate = Color(0.05, 0.05, 0.06, 1)
 light_mask = 0
-position = Vector2(380, -6)
-texture = ExtResource("line_a")
+position = Vector2(380, -10)
+texture = ExtResource("front_line1")
 centered = false
 material = SubResource("ClothSwingFront")
 
-[node name="FrontCloth2" type="Sprite2D" parent="1point2xMoving"]
+[node name="Front2" type="Sprite2D" parent="1point2xMoving"]
 modulate = Color(0.05, 0.05, 0.06, 1)
 light_mask = 0
-position = Vector2(640, -7)
-texture = ExtResource("line_b")
+position = Vector2(640, -10)
+texture = ExtResource("front_line2")
 centered = false
 material = SubResource("ClothSwingFront")
 
-[node name="FrontCloth3" type="Sprite2D" parent="1point2xMoving"]
+[node name="Front3" type="Sprite2D" parent="1point2xMoving"]
 modulate = Color(0.05, 0.05, 0.06, 1)
 light_mask = 0
-position = Vector2(860, -5)
-texture = ExtResource("line_d")
+position = Vector2(860, -10)
+texture = ExtResource("front_line3")
 centered = false
 material = SubResource("ClothSwingFront")
 

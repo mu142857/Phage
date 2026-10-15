@@ -1,0 +1,504 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="player"]
+[ext_resource type="Script" path="res://levels/rust_arena/rust_city.gd" id="script"]
+[ext_resource type="Script" path="res://interactive/Platform/drop_through_platform.gd" id="drop"]
+[ext_resource type="PackedScene" path="res://interactive/Teleport/teleport.tscn" id="teleport"]
+[ext_resource type="Texture2D" path="res://interactive/Teleport/key_q.png" id="keyq"]
+[ext_resource type="Shader" path="res://asstes/shaders/silk_swing.gdshader" id="silk"]
+[ext_resource type="Shader" path="res://asstes/shaders/swing.tres" id="treeswing"]
+[ext_resource type="PackedScene" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="smoke"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_light.png" id="lamp"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_sky.png" id="sky"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_background.png" id="bg"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_1.png" id="city1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_2.png" id="city2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_ground.png" id="ground"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/alley_back.png" id="far_backs"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_arena_building.png" id="arena"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/black_building_2.png" id="black2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/yellow_building_1.png" id="yellow1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_brick.png" id="house_brick"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/house_ochre.png" id="house_ochre"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/laundry_alley/dead_end.png" id="dead_end"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/manhole.png" id="manhole"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/poster0.png" id="poster0"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/poster1.png" id="poster1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/poster2.png" id="poster2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/poster3.png" id="poster3"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/poster4.png" id="poster4"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/banner_red.png" id="banner_red"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/banner_blue.png" id="banner_blue"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/ticket_booth.png" id="ticket_booth"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/rubble.png" id="rubble"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/crate_slat.png" id="crate_slat"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/arena_street/crate_dark.png" id="crate_dark"]
+
+[sub_resource type="WorldBoundaryShape2D" id="Boundary"]
+
+[sub_resource type="Gradient" id="PlayerGrad"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="PlayerLightTex"]
+gradient = SubResource("PlayerGrad")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="LampGrad"]
+offsets = PackedFloat32Array(0, 0.28960395, 0.40346536, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.07484522, 0.07484529, 0.07484522, 1, 0.12955844, 0.12955847, 0.12955841, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="LampLightTex"]
+gradient = SubResource("LampGrad")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="CanvasItemMaterial" id="FarMat"]
+
+[sub_resource type="ShaderMaterial" id="ClothSwing"]
+shader = ExtResource("silk")
+shader_parameter/Strength = 0.6
+shader_parameter/Speed = 1.3
+
+[sub_resource type="ShaderMaterial" id="TreeSwing"]
+shader = ExtResource("treeswing")
+shader_parameter/Strength = 1.0
+shader_parameter/Speed = 2.0
+
+[sub_resource type="ShaderMaterial" id="ClothSwingFront"]
+shader = ExtResource("silk")
+shader_parameter/Strength = 1.4
+shader_parameter/Speed = 1.0
+
+[sub_resource type="RectangleShape2D" id="Plat36"]
+size = Vector2(36, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect36"]
+size = Vector2(36, 8)
+
+[sub_resource type="RectangleShape2D" id="Plat32"]
+size = Vector2(32, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect32"]
+size = Vector2(32, 8)
+
+[sub_resource type="RectangleShape2D" id="Plat80"]
+size = Vector2(80, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect80"]
+size = Vector2(80, 8)
+
+[sub_resource type="RectangleShape2D" id="Plat31"]
+size = Vector2(31, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect31"]
+size = Vector2(31, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect12x12"]
+size = Vector2(12, 12)
+
+[sub_resource type="RectangleShape2D" id="Rect12x11"]
+size = Vector2(12, 11)
+
+[node name="ArenaStreet" type="Node2D"]
+script = ExtResource("script")
+camera_limit_left = 0
+camera_limit_right = 640
+
+[node name="Walls" type="Node2D" parent="."]
+z_index = 10
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+
+[node name="Ground" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 80)
+shape = SubResource("Boundary")
+
+[node name="LeftWall" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 0)
+rotation = 1.5707964
+shape = SubResource("Boundary")
+
+[node name="RightWall" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(640, 0)
+rotation = -1.5707964
+shape = SubResource("Boundary")
+
+[node name="Buildings" type="Node2D" parent="."]
+z_index = 2
+
+[node name="Props" type="Node2D" parent="."]
+z_index = 4
+
+[node name="Laundry" type="Node2D" parent="."]
+z_index = 5
+
+[node name="Manhole" type="Sprite2D" parent="."]
+position = Vector2(30, 80.5)
+texture = ExtResource("manhole")
+z_index = 11
+
+[node name="FromSewer" parent="." instance=ExtResource("teleport")]
+position = Vector2(30, 76)
+scene_path = "res://levels/rust_arena/rust_city.tscn"
+teleport_id = 6
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="FromSewer"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("keyq")
+
+[node name="Black2" type="Sprite2D" parent="Buildings"]
+position = Vector2(21.5, 24)
+texture = ExtResource("black2")
+
+[node name="Brick" type="Sprite2D" parent="Buildings"]
+position = Vector2(74, 37)
+texture = ExtResource("house_brick")
+
+[node name="Plat_BrickBalcony" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_BrickBalcony"]
+position = Vector2(74, 55)
+shape = SubResource("Plat36")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_BrickBalcony"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_BrickBalcony/Area2D"]
+position = Vector2(74, 51)
+shape = SubResource("PlatDetect36")
+
+[node name="Booth" type="Sprite2D" parent="Buildings"]
+position = Vector2(209, 62)
+texture = ExtResource("ticket_booth")
+
+[node name="Arena" type="Sprite2D" parent="Buildings"]
+position = Vector2(287.5, 44.5)
+texture = ExtResource("arena")
+
+[node name="Ochre" type="Sprite2D" parent="Buildings"]
+position = Vector2(383, 32)
+scale = Vector2(-1, 1)
+texture = ExtResource("house_ochre")
+
+[node name="Plat_Ochrea" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochrea"]
+position = Vector2(368, 19)
+shape = SubResource("Plat32")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Ochrea"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochrea/Area2D"]
+position = Vector2(368, 15)
+shape = SubResource("PlatDetect32")
+
+[node name="Plat_Ochreb" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochreb"]
+position = Vector2(368, 39)
+shape = SubResource("Plat32")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Ochreb"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochreb/Area2D"]
+position = Vector2(368, 35)
+shape = SubResource("PlatDetect32")
+
+[node name="Plat_Ochrec" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochrec"]
+position = Vector2(368, 59)
+shape = SubResource("Plat32")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_Ochrec"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Ochrec/Area2D"]
+position = Vector2(368, 55)
+shape = SubResource("PlatDetect32")
+
+[node name="Yellow1" type="Sprite2D" parent="Buildings"]
+position = Vector2(453.5, 38.5)
+texture = ExtResource("yellow1")
+
+[node name="DeadEnd" type="Sprite2D" parent="Buildings"]
+position = Vector2(600, 24)
+texture = ExtResource("dead_end")
+
+[node name="Plat_BigPipe" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_BigPipe"]
+position = Vector2(600, 35)
+shape = SubResource("Plat80")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_BigPipe"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_BigPipe/Area2D"]
+position = Vector2(600, 31)
+shape = SubResource("PlatDetect80")
+
+[node name="Plat_SmallPipe" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_SmallPipe"]
+position = Vector2(575.5, 13)
+shape = SubResource("Plat31")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_SmallPipe"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_SmallPipe/Area2D"]
+position = Vector2(575.5, 9)
+shape = SubResource("PlatDetect31")
+
+[node name="ToArena" parent="." instance=ExtResource("teleport")]
+position = Vector2(287, 76)
+scene_path = "res://levels/rust_arena/rust_arena.tscn"
+teleport_id = 7
+
+[node name="Hint" type="Sprite2D" parent="ToArena"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("keyq")
+
+[node name="ArenaTopLight" type="PointLight2D" parent="Buildings"]
+position = Vector2(287, 15)
+scale = Vector2(1.6, 1.6)
+color = Color(1, 0.75, 0.45, 1)
+energy = 3.2
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="ArenaGateLight" type="PointLight2D" parent="Buildings"]
+position = Vector2(287, 64)
+scale = Vector2(0.8, 0.8)
+color = Color(1, 0.6, 0.3, 1)
+energy = 1.6
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="DeadLamp0" type="Sprite2D" parent="Buildings"]
+z_index = 9
+position = Vector2(150, 64)
+texture = ExtResource("lamp")
+modulate = Color(0.55, 0.55, 0.6, 1)
+
+[node name="DeadLamp1" type="Sprite2D" parent="Buildings"]
+z_index = 9
+position = Vector2(214, 64)
+texture = ExtResource("lamp")
+modulate = Color(0.55, 0.55, 0.6, 1)
+
+[node name="DeadLamp2" type="Sprite2D" parent="Buildings"]
+z_index = 9
+position = Vector2(368, 64)
+texture = ExtResource("lamp")
+modulate = Color(0.55, 0.55, 0.6, 1)
+
+[node name="DeadLamp3" type="Sprite2D" parent="Buildings"]
+z_index = 9
+position = Vector2(520, 64)
+texture = ExtResource("lamp")
+modulate = Color(0.55, 0.55, 0.6, 1)
+
+[node name="Banner0" type="Sprite2D" parent="Buildings"]
+position = Vector2(210.5, 38)
+texture = ExtResource("banner_red")
+
+[node name="Banner1" type="Sprite2D" parent="Buildings"]
+position = Vector2(364.5, 38)
+texture = ExtResource("banner_blue")
+
+[node name="Poster0" type="Sprite2D" parent="Buildings"]
+position = Vector2(20, 62)
+texture = ExtResource("poster0")
+
+[node name="Poster1" type="Sprite2D" parent="Buildings"]
+position = Vector2(36, 58)
+texture = ExtResource("poster1")
+
+[node name="Poster2" type="Sprite2D" parent="Buildings"]
+position = Vector2(72, 68)
+texture = ExtResource("poster2")
+
+[node name="Poster3" type="Sprite2D" parent="Buildings"]
+position = Vector2(92, 64)
+texture = ExtResource("poster3")
+
+[node name="Poster4" type="Sprite2D" parent="Buildings"]
+position = Vector2(196, 58)
+texture = ExtResource("poster4")
+
+[node name="Poster5" type="Sprite2D" parent="Buildings"]
+position = Vector2(436, 66)
+texture = ExtResource("poster0")
+
+[node name="Poster6" type="Sprite2D" parent="Buildings"]
+position = Vector2(452, 62)
+texture = ExtResource("poster2")
+
+[node name="Poster7" type="Sprite2D" parent="Buildings"]
+position = Vector2(476, 68)
+texture = ExtResource("poster1")
+
+[node name="Poster8" type="Sprite2D" parent="Buildings"]
+position = Vector2(586, 66)
+texture = ExtResource("poster3")
+
+[node name="Poster9" type="Sprite2D" parent="Buildings"]
+position = Vector2(606, 62)
+texture = ExtResource("poster4")
+
+[node name="Rubble1" type="Sprite2D" parent="Props"]
+position = Vector2(130, 78)
+texture = ExtResource("rubble")
+
+[node name="Rubble2" type="Sprite2D" parent="Props"]
+position = Vector2(510, 78)
+scale = Vector2(-1, 1)
+texture = ExtResource("rubble")
+
+[node name="CrateA" type="Sprite2D" parent="Props"]
+position = Vector2(542, 74)
+texture = ExtResource("crate_slat")
+
+[node name="CrateA" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(542, 74)
+shape = SubResource("Rect12x12")
+
+[node name="CrateB" type="Sprite2D" parent="Props"]
+position = Vector2(552, 63.5)
+texture = ExtResource("crate_dark")
+
+[node name="CrateB" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(552, 63.5)
+shape = SubResource("Rect12x11")
+
+[node name="CrateC" type="Sprite2D" parent="Props"]
+position = Vector2(554, 74.5)
+texture = ExtResource("crate_dark")
+
+[node name="CrateC" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(554, 74.5)
+shape = SubResource("Rect12x11")
+
+[node name="Player" parent="." instance=ExtResource("player")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+position = Vector2(30, 70)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player"]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("PlayerLightTex")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.42, 0.42, 0.42, 1)
+
+[node name="0point0xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0, 0)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+light_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="0point0xMoving"]
+light_mask = 0
+texture = ExtResource("sky")
+centered = false
+
+[node name="0point2xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.2, 0.2)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+light_mask = 2
+visibility_layer = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving"]
+light_mask = 0
+texture = ExtResource("bg")
+centered = false
+
+[node name="0point4xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.4, 0.4)
+repeat_size = Vector2(160, 0)
+repeat_times = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving"]
+modulate = Color(0.2809047, 0.29556337, 0.29849514, 1)
+material = SubResource("FarMat")
+texture = ExtResource("city1")
+centered = false
+
+[node name="0point6xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.6, 0.6)
+repeat_size = Vector2(160, 0)
+repeat_times = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="0point6xMoving"]
+texture = ExtResource("city2")
+centered = false
+
+[node name="0point8xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.8)
+repeat_size = Vector2(320, 0)
+repeat_times = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="0point8xMoving"]
+modulate = Color(0.45, 0.45, 0.5, 1)
+light_mask = 3
+texture = ExtResource("far_backs")
+centered = false
+
+[node name="1point0xMoving" type="Parallax2D" parent="."]
+z_index = 10
+repeat_size = Vector2(160, 0)
+repeat_times = 7
+
+[node name="Ground" type="Sprite2D" parent="1point0xMoving"]
+light_mask = 3
+position = Vector2(-160, 0)
+texture = ExtResource("ground")
+centered = false
+
+[node name="1point2xMoving" type="Parallax2D" parent="."]
+z_index = 11
+scroll_scale = Vector2(1.2, 1.2)
+
+[node name="BackGroundSmoke" parent="." instance=ExtResource("smoke")]
+light_mask = 0
+z_index = 11

@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://systems/dream_end.tscn" id="90_dreamend"]
 [ext_resource type="PackedScene" path="res://systems/dream_intro/dream_intro.tscn" id="91_dreamintro"]
 [ext_resource type="PackedScene" path="res://systems/boss_intro/boss_intro.tscn" id="92_bossintro"]
+[ext_resource type="PackedScene" path="res://interactive/Teleport/teleport.tscn" id="93_teleport"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1c05a"]
 
@@ -38,6 +39,12 @@ shape = SubResource("WorldBoundaryShape2D_8cwx5")
 position = Vector2(160, 80)
 rotation = -1.5707964
 shape = SubResource("WorldBoundaryShape2D_b06ws")
+
+[node name="FromArenaStreet" parent="." instance=ExtResource("93_teleport")]
+position = Vector2(24, 76)
+teleport_id = 7
+active = false
+editor_description = "竞技场街大门进来的落脚点(只当落点,不能按 Q 出去)。"
 
 [node name="RustGOAT" parent="." unique_id=2060703585 instance=ExtResource("3_8cwx5")]
 position = Vector2(86, 80)

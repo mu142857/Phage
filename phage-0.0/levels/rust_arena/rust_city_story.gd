@@ -104,28 +104,45 @@ func _dig_loop() -> void:
 	while is_inside_tree():
 		if not Talk.busy():
 			await _worker.hop(-1.0, 0.25)
-		await get_tree().create_timer(0.55).timeout
+		await _wait(0.55)
 
 
 # 抬钢梁的地精:慢吞吞地在两点之间来回搬(有人说话时停下)
 func _carry_loop(pair: Npc, a: float, b: float, delay: float) -> void:
-	await get_tree().create_timer(delay).timeout
+	await _wait(delay)
 	var to_b := true
 	while is_inside_tree():
 		if Talk.busy():
-			await get_tree().create_timer(0.3).timeout
+			await _wait(0.3)
 			continue
 		await pair.walk_to(b if to_b else a, 12.0)
 		to_b = not to_b
-		await get_tree().create_timer(0.8).timeout
+		await _wait(0.8)
 
 
 # 举旗的工头:隔一会儿蹦一下,挥挥旗
 func _flag_loop() -> void:
 	while is_inside_tree():
-		await get_tree().create_timer(randf_range(1.0, 2.2)).timeout
+		await _wait(randf_range(1.0, 2.2))
 		if not Talk.busy():
 			await _goblin_flag.hop(2.0, 0.2)
+
+
+# 剧情协程统一用这两个等待。过门换场景时,本场景先被移出场景树、稍后才释放,
+# 中间那一帧协程还会醒来,这时 get_tree() 是 null。离开场景树就原地挂起
+# (等一个不会再来的 tree_entered),节点释放后这条协程随之作废,不会往下演。
+func _frame() -> void:
+	if is_inside_tree():
+		await get_tree().process_frame
+	if not is_inside_tree():
+		await tree_entered
+
+
+func _wait(seconds: float) -> void:
+	if is_inside_tree():
+		await get_tree().create_timer(seconds).timeout
+	if not is_inside_tree():
+		await tree_entered
 
 
 # ============================================================
@@ -133,7 +150,7 @@ func _flag_loop() -> void:
 # ============================================================
 
 func _run() -> void:
-	await get_tree().process_frame
+	await _frame()
 	_player = get_tree().get_first_node_in_group("player") as Node2D
 	if _player == null:
 		return
@@ -162,7 +179,7 @@ func _scene_coin() -> void:
 			called = true
 		if dx <= 3.0:
 			break
-		await get_tree().process_frame
+		await _frame()
 	_coin.hide_bark()
 	Talk.begin()
 	await Dialogue.talk([["铜板", "……你踩着我了。"]])
@@ -227,7 +244,7 @@ func _walk_up_to_player(npc: Npc, gap: float) -> void:
 		npc.face(dx)
 		npc.walking = true
 		npc.global_position.x += signf(dx) * 50.0 * get_process_delta_time()
-		await get_tree().process_frame
+		await _frame()
 	npc.walking = false
 
 
@@ -260,14 +277,14 @@ func _guide_walk_to(x: float) -> void:
 			_lamplighter.face(1)
 			_lamplighter.walking = true
 			_lamplighter.global_position.x = minf(_lamplighter.global_position.x + speed * delta, x)
-		await get_tree().process_frame
+		await _frame()
 	_lamplighter.walking = false
 
 
 # ---- 1-3 前面在修路 ----
 func _scene_road() -> void:
 	while _player.global_position.x < SITE_TRIGGER_X or not Story.flag("lamp_at_site"):
-		await get_tree().process_frame
+		await _frame()
 	Talk.begin()
 	_lamplighter.face(1)
 	await Dialogue.talk([
@@ -405,10 +422,10 @@ func _light_lamp(lamp_name: String) -> void:
 	_lamplighter.face(1)
 	for i in 3:
 		await _lamplighter.hop(2.0, 0.18)
-		await get_tree().create_timer(0.06).timeout
+		await _wait(0.06)
 	_set_lamp(lamp_name, true, true)
 	var lit := _lit_lamps()
 	if not lamp_name in lit:
 		lit.append(lamp_name)
 	Story.set_flag("lit_lamps", lit)
-	await get_tree().create_timer(0.25).timeout
+	await _wait(0.25)

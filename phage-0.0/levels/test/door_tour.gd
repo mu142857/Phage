@@ -1,5 +1,5 @@
 extends Node
-## 巡门测试(开发工具):F6 运行 door_tour.tscn,自动把 SCENES 里每扇 auto_teleport 门都传一遍,
+## 巡门测试(开发工具):F6 运行 door_tour.tscn,自动把 SCENES 里每扇门(auto_teleport / 按 Q 的 Teleport)都传一遍,
 ## 打印落点、脚下有没有地、有没有卡进墙、有没有落回门区,跑完自动退出。
 ## 也可无头跑:Godot --headless --path . res://levels/test/door_tour.tscn
 const SCENES := [
@@ -10,6 +10,15 @@ const SCENES := [
 	"res://levels/cradle_of_decay/filling_levels/cradle_of_decay_22.tscn",
 	"res://levels/cradle_of_decay/filling_levels/cradle_of_decay_23.tscn",
 	"res://levels/cradle_corridor/cradel_corridor.tscn",
+	# 铁锈城:主街 + 街巷(按 Q 的 Teleport 门)
+	"res://levels/rust_arena/rust_city.tscn",
+	"res://levels/rust_city/laundry_alley/laundry_alley.tscn",
+	"res://levels/rust_city/night_market/night_market.tscn",
+	"res://levels/rust_city/scrap_alley/scrap_alley.tscn",
+	"res://levels/rust_city/boiler_alley/boiler_alley.tscn",
+	"res://levels/rust_city/stair_alley/stair_alley.tscn",
+	"res://levels/rust_city/arena_street/arena_street.tscn",
+	"res://levels/rust_city/back_alley/back_alley.tscn",
 ]
 var _tree: SceneTree
 
@@ -45,7 +54,7 @@ func _run() -> void:
 			var stuck := player.test_move(player.global_transform, Vector2.ZERO)
 			var floor_24 := player.test_move(player.global_transform, Vector2(0, 24))
 			var dst_door := _find_door(scene, d["id"])
-			var inside := dst_door != null and dst_door.overlaps_body(player)
+			var inside := dst_door is Area2D and (dst_door as Area2D).overlaps_body(player)
 			var ok := floor_24 and not stuck and not inside and dst_door != null
 			if not ok:
 				bad += 1
@@ -56,13 +65,13 @@ func _run() -> void:
 	tree.quit()
 
 func _collect(n: Node, out: Array) -> void:
-	if n.get("teleport_id") != null and n.get("scene_path") != null:
+	if n.get("teleport_id") != null and n.get("scene_path") != null and n.scene_path != "":
 		out.append({"name": n.name, "id": n.teleport_id, "scene_path": n.scene_path})
 	for c in n.get_children():
 		_collect(c, out)
 
-func _find_door(n: Node, id: int) -> Area2D:
-	if n is Area2D and n.get("teleport_id") == id:
+func _find_door(n: Node, id: int) -> Node2D:
+	if n is Node2D and n.get("teleport_id") == id:
 		return n
 	for c in n.get_children():
 		var r := _find_door(c, id)

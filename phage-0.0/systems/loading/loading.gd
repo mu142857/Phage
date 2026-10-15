@@ -37,6 +37,8 @@ const WARM_SCENE_PATHS: Array[String] = [
 	"res://entities/cradle_mobs/splitter/splitter_bullet_explosion.tscn",
 	"res://entities/cradle_mobs/sprayer/sprayer_death.tscn",
 	"res://systems/oxygen/oxygen_overlay.tscn",
+	# 铁锈城街巷:锅/管道冒的蒸汽
+	"res://levels/rust_city/alley_fx/steam.tscn",
 	"res://entities/actinos/actinos_death_effect.tscn",
 	"res://entities/actinos/actinos_jump_effect.tscn",
 	"res://entities/octopus/octopus_bullet_land.tscn",
@@ -80,6 +82,10 @@ const WARM_SCENE_PATHS: Array[String] = [
 	"res://entities/wound_mobs/spitter_tentacle/spitter_tentacle_bullet_explosion.tscn",
 	"res://entities/wound_mobs/spitter_tentacle/spitter_tentacle_death.tscn",
 	"res://entities/wowen/wowen_death.tscn",
+	"res://entities/gang/gang_death.tscn",
+	"res://entities/gang/thrower/bottle_shatter.tscn",
+	"res://entities/gang/shield/clang_sparks.tscn",
+	"res://entities/gang/roller/barrel_break.tscn",
 	"res://levels/silvaron/leaf_1.tscn",
 	# 子弹 / 道具(内嵌粒子)
 	"res://entities/actinos/actinos_bullet.tscn",
@@ -131,6 +137,7 @@ const WARM_SCENE_PATHS: Array[String] = [
 ## 只在代码里临时 new 出来用的 shader(场景里搜不到),这里直接登记 .gdshader 路径
 const WARM_SHADER_PATHS: Array[String] = [
 	"res://levels/remi's_room/highlight.gdshader",
+	"res://asstes/shaders/silk_swing.gdshader",   # 晾衣绳/灯笼串摇摆(铁锈城街巷)
 ]
 
 @onready var _warm_lit: Node2D = $WarmLit

@@ -159,5 +159,66 @@
    300
   ],
   "note": "挂着的:画布顶上就是挂钩,摆的时候按顶对齐"
+ },
+ "leopard_cat_swordsman": {
+  "source": "豹猫剑客.gif",
+  "frame_size": [
+   24,
+   24
+  ],
+  "frames": 4,
+  "durations_ms": [
+   300,
+   300,
+   300,
+   300
+  ]
+ },
+ "mushroom_girls": {
+  "source": "两个蘑菇少女.gif",
+  "frame_size": [
+   16,
+   16
+  ],
+  "frames": 5,
+  "durations_ms": [
+   300,
+   300,
+   300,
+   300,
+   300
+  ]
+ },
+ "fire_snake_mage": {
+  "source": "火焰法师蛇蛇.gif",
+  "frame_size": [
+   16,
+   16
+  ],
+  "frames": 6,
+  "durations_ms": [
+   300,
+   300,
+   300,
+   300,
+   300,
+   300
+  ]
+ },
+ "blue_slime": {
+  "source": "蓝色史莱姆.gif",
+  "frame_size": [
+   16,
+   16
+  ],
+  "frames": 6,
+  "durations_ms": [
+   200,
+   200,
+   200,
+   200,
+   200,
+   200
+  ]
  }
 }

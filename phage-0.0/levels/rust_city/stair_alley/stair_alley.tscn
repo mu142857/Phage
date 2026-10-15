@@ -1,0 +1,578 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="player"]
+[ext_resource type="Script" path="res://levels/rust_arena/rust_city.gd" id="script"]
+[ext_resource type="Script" path="res://interactive/Platform/drop_through_platform.gd" id="drop"]
+[ext_resource type="PackedScene" path="res://interactive/Teleport/teleport.tscn" id="teleport"]
+[ext_resource type="Texture2D" path="res://interactive/Teleport/key_q.png" id="keyq"]
+[ext_resource type="Shader" path="res://asstes/shaders/silk_swing.gdshader" id="silk"]
+[ext_resource type="Shader" path="res://asstes/shaders/swing.tres" id="treeswing"]
+[ext_resource type="PackedScene" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="smoke"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_light.png" id="lamp"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_sky.png" id="sky"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_background.png" id="bg"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_1.png" id="city1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_2.png" id="city2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_ground.png" id="ground"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/stair_back.png" id="stair_back"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/stair_mouth.png" id="stair_mouth"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/hill_a_cream.png" id="hill_a_cream"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/hill_a_pink.png" id="hill_a_pink"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/hill_b_ochre.png" id="hill_b_ochre"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/hill_b_pink.png" id="hill_b_pink"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/hill_c.png" id="hill_c"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/rail12.png" id="rail12"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/bench.png" id="bench"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/telescope.png" id="telescope"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/lookout.png" id="lookout"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/pot0.png" id="pot0"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/pot1.png" id="pot1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/pot2.png" id="pot2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/pot3.png" id="pot3"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/pot4.png" id="pot4"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/terrace1.png" id="terrace1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/terrace2.png" id="terrace2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/terrace3.png" id="terrace3"]
+[ext_resource type="PackedScene" path="res://levels/rust_city/alley_fx/steam.tscn" id="fx_steam"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/cellar_door.png" id="cellar_door"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/barred_window.png" id="barred_window"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/spout.png" id="spout"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/hill_tree.png" id="hill_tree"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/moss0.png" id="moss0"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/moss1.png" id="moss1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/moss2.png" id="moss2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/moss3.png" id="moss3"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/line1.png" id="line1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/bulbs2.png" id="bulbs2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/line3.png" id="line3"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/front_vines0.png" id="front_vines0"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/front_vines1.png" id="front_vines1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/front_vines2.png" id="front_vines2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/front_vines3.png" id="front_vines3"]
+
+[sub_resource type="WorldBoundaryShape2D" id="Boundary"]
+
+[sub_resource type="Gradient" id="PlayerGrad"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="PlayerLightTex"]
+gradient = SubResource("PlayerGrad")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="LampGrad"]
+offsets = PackedFloat32Array(0, 0.28960395, 0.40346536, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.07484522, 0.07484529, 0.07484522, 1, 0.12955844, 0.12955847, 0.12955841, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="LampLightTex"]
+gradient = SubResource("LampGrad")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="CanvasItemMaterial" id="FarMat"]
+
+[sub_resource type="ShaderMaterial" id="ClothSwing"]
+shader = ExtResource("silk")
+shader_parameter/Strength = 0.6
+shader_parameter/Speed = 1.3
+
+[sub_resource type="ShaderMaterial" id="TreeSwing"]
+shader = ExtResource("treeswing")
+shader_parameter/Strength = 1.0
+shader_parameter/Speed = 2.0
+
+[sub_resource type="ShaderMaterial" id="ClothSwingFront"]
+shader = ExtResource("silk")
+shader_parameter/Strength = 1.4
+shader_parameter/Speed = 1.0
+
+[sub_resource type="RectangleShape2D" id="Plat40"]
+size = Vector2(40, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect40"]
+size = Vector2(40, 8)
+
+[node name="StairAlley" type="Node2D"]
+script = ExtResource("script")
+camera_limit_left = 0
+camera_limit_right = 720
+
+[node name="Walls" type="Node2D" parent="."]
+z_index = 10
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+
+[node name="Ground" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 80)
+shape = SubResource("Boundary")
+
+[node name="LeftWall" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 0)
+rotation = 1.5707964
+shape = SubResource("Boundary")
+
+[node name="RightWall" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(720, 0)
+rotation = -1.5707964
+shape = SubResource("Boundary")
+
+[node name="Buildings" type="Node2D" parent="."]
+z_index = 2
+
+[node name="Props" type="Node2D" parent="."]
+z_index = 4
+
+[node name="Laundry" type="Node2D" parent="."]
+z_index = 5
+
+[node name="Terrace1" type="Sprite2D" parent="."]
+position = Vector2(412, 74.5)
+texture = ExtResource("terrace1")
+z_index = 9
+
+[node name="Terrace1Col" type="CollisionPolygon2D" parent="Walls/StaticBody2D"]
+polygon = PackedVector2Array(104, 80, 122, 68, 720, 68, 720, 80)
+
+[node name="Terrace2" type="Sprite2D" parent="."]
+position = Vector2(482, 68.5)
+texture = ExtResource("terrace2")
+z_index = 9
+
+[node name="Terrace2Col" type="CollisionPolygon2D" parent="Walls/StaticBody2D"]
+polygon = PackedVector2Array(244, 80, 244, 68, 262, 56, 720, 56, 720, 80)
+
+[node name="Terrace3" type="Sprite2D" parent="."]
+position = Vector2(552, 62.5)
+texture = ExtResource("terrace3")
+z_index = 9
+
+[node name="Terrace3Col" type="CollisionPolygon2D" parent="Walls/StaticBody2D"]
+polygon = PackedVector2Array(384, 80, 384, 56, 402, 44, 720, 44, 720, 80)
+
+[node name="Rail0" type="Sprite2D" parent="."]
+position = Vector2(114, 70)
+texture = ExtResource("rail12")
+z_index = 9
+
+[node name="Rail1" type="Sprite2D" parent="."]
+position = Vector2(254, 58)
+texture = ExtResource("rail12")
+z_index = 9
+
+[node name="Rail2" type="Sprite2D" parent="."]
+position = Vector2(394, 46)
+texture = ExtResource("rail12")
+z_index = 9
+
+[node name="Mouth" type="Sprite2D" parent="Buildings"]
+position = Vector2(24, 40)
+texture = ExtResource("stair_mouth")
+
+[node name="MouthLamp" type="PointLight2D" parent="Buildings"]
+position = Vector2(31, 41)
+scale = Vector2(0.5, 0.5)
+color = Color(0.85, 0.6, 0.3, 1)
+energy = 2.6
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="HillB1" type="Sprite2D" parent="Buildings"]
+position = Vector2(76, 43)
+texture = ExtResource("hill_b_ochre")
+
+[node name="Plat_HillB1Balcony" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_HillB1Balcony"]
+position = Vector2(76, 55)
+shape = SubResource("Plat40")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_HillB1Balcony"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_HillB1Balcony/Area2D"]
+position = Vector2(76, 51)
+shape = SubResource("PlatDetect40")
+
+[node name="HillA1" type="Sprite2D" parent="Buildings"]
+position = Vector2(153, 37)
+texture = ExtResource("hill_a_cream")
+
+[node name="HillA1Lamp" type="PointLight2D" parent="Buildings"]
+position = Vector2(151, 56)
+scale = Vector2(0.45, 0.45)
+color = Color(0.85, 0.6, 0.3, 1)
+energy = 2.6
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="HillC1" type="Sprite2D" parent="Buildings"]
+position = Vector2(207, 40)
+texture = ExtResource("hill_c")
+
+[node name="HillC1Lamp" type="PointLight2D" parent="Buildings"]
+position = Vector2(213, 41)
+scale = Vector2(0.45, 0.45)
+color = Color(0.85, 0.6, 0.3, 1)
+energy = 2.6
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="ChimneySmoke1" parent="." instance=ExtResource("fx_steam")]
+position = Vector2(196, 18)
+
+[node name="HillB2" type="Sprite2D" parent="Buildings"]
+position = Vector2(288, 19)
+scale = Vector2(-1, 1)
+texture = ExtResource("hill_b_pink")
+
+[node name="Plat_HillB2Balcony" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+script = ExtResource("drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_HillB2Balcony"]
+position = Vector2(288, 31)
+shape = SubResource("Plat40")
+one_way_collision = true
+
+[node name="Area2D" type="Area2D" parent="Walls/Plat_HillB2Balcony"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_HillB2Balcony/Area2D"]
+position = Vector2(288, 27)
+shape = SubResource("PlatDetect40")
+
+[node name="HillA2" type="Sprite2D" parent="Buildings"]
+position = Vector2(335, 25)
+texture = ExtResource("hill_a_pink")
+
+[node name="HillA2Lamp" type="PointLight2D" parent="Buildings"]
+position = Vector2(333, 44)
+scale = Vector2(0.45, 0.45)
+color = Color(0.85, 0.6, 0.3, 1)
+energy = 2.6
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="HillC2" type="Sprite2D" parent="Buildings"]
+position = Vector2(435, 16)
+scale = Vector2(-1, 1)
+texture = ExtResource("hill_c")
+
+[node name="ChimneySmoke2" parent="." instance=ExtResource("fx_steam")]
+position = Vector2(445, -6)
+
+[node name="HillA3" type="Sprite2D" parent="Buildings"]
+position = Vector2(487, 13)
+scale = Vector2(-1, 1)
+texture = ExtResource("hill_a_cream")
+
+[node name="HillA3Lamp" type="PointLight2D" parent="Buildings"]
+position = Vector2(488, 32)
+scale = Vector2(0.45, 0.45)
+color = Color(0.85, 0.6, 0.3, 1)
+energy = 2.6
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="Bench" type="Sprite2D" parent="Props"]
+position = Vector2(568, 40.5)
+texture = ExtResource("bench")
+
+[node name="Telescope" type="Sprite2D" parent="Props"]
+position = Vector2(646, 36)
+texture = ExtResource("telescope")
+
+[node name="Lookout" type="Sprite2D" parent="Props"]
+position = Vector2(694, 40)
+texture = ExtResource("lookout")
+
+[node name="PlazaLamp" type="Sprite2D" parent="Buildings"]
+light_mask = 2
+z_index = 9
+position = Vector2(600, 28)
+texture = ExtResource("lamp")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/PlazaLamp"]
+position = Vector2(0, -7.5)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("LampLightTex")
+
+[node name="Lamp1" type="Sprite2D" parent="Buildings"]
+light_mask = 2
+z_index = 9
+position = Vector2(238, 52)
+texture = ExtResource("lamp")
+
+[node name="PointLight2D" type="PointLight2D" parent="Buildings/Lamp1"]
+position = Vector2(0, -7.5)
+scale = Vector2(0.640625, 0.640625)
+color = Color(0.70145446, 0.41482437, 0.10370845, 1)
+energy = 7.6
+range_item_cull_mask = 2
+texture = SubResource("LampLightTex")
+
+[node name="Pot0" type="Sprite2D" parent="Props"]
+position = Vector2(49.5, 75.5)
+texture = ExtResource("pot0")
+
+[node name="Pot1" type="Sprite2D" parent="Props"]
+position = Vector2(127.5, 65)
+texture = ExtResource("pot1")
+
+[node name="Pot2" type="Sprite2D" parent="Props"]
+position = Vector2(179.5, 63.5)
+texture = ExtResource("pot2")
+
+[node name="Pot3" type="Sprite2D" parent="Props"]
+position = Vector2(265.5, 53)
+texture = ExtResource("pot3")
+
+[node name="Pot4" type="Sprite2D" parent="Props"]
+position = Vector2(407.5, 39.5)
+texture = ExtResource("pot4")
+
+[node name="Pot5" type="Sprite2D" parent="Props"]
+position = Vector2(523.5, 39.5)
+texture = ExtResource("pot0")
+
+[node name="Pot6" type="Sprite2D" parent="Props"]
+position = Vector2(533.5, 41)
+texture = ExtResource("pot1")
+
+[node name="WallDeco0" type="Sprite2D" parent="."]
+position = Vector2(154, 74.5)
+texture = ExtResource("barred_window")
+z_index = 9
+
+[node name="WallDeco1" type="Sprite2D" parent="."]
+position = Vector2(201, 73)
+texture = ExtResource("moss0")
+z_index = 9
+
+[node name="WallDeco2" type="Sprite2D" parent="."]
+position = Vector2(294, 72.5)
+texture = ExtResource("cellar_door")
+z_index = 9
+
+[node name="WallDeco3" type="Sprite2D" parent="."]
+position = Vector2(346, 68)
+texture = ExtResource("spout")
+z_index = 9
+
+[node name="WallDeco4" type="Sprite2D" parent="."]
+position = Vector2(274.5, 62)
+texture = ExtResource("moss1")
+z_index = 9
+
+[node name="WallDeco5" type="Sprite2D" parent="."]
+position = Vector2(436, 72.5)
+texture = ExtResource("cellar_door")
+z_index = 9
+
+[node name="WallDeco6" type="Sprite2D" parent="."]
+position = Vector2(474, 62.5)
+texture = ExtResource("barred_window")
+z_index = 9
+
+[node name="WallDeco7" type="Sprite2D" parent="."]
+position = Vector2(508, 53)
+texture = ExtResource("moss2")
+z_index = 9
+
+[node name="WallDeco8" type="Sprite2D" parent="."]
+position = Vector2(562, 68)
+texture = ExtResource("spout")
+z_index = 9
+
+[node name="WallDeco9" type="Sprite2D" parent="."]
+position = Vector2(614, 60.5)
+texture = ExtResource("barred_window")
+z_index = 9
+
+[node name="WallDeco10" type="Sprite2D" parent="."]
+position = Vector2(649.5, 54)
+texture = ExtResource("moss3")
+z_index = 9
+
+[node name="WallDeco11" type="Sprite2D" parent="."]
+position = Vector2(696, 72.5)
+texture = ExtResource("cellar_door")
+z_index = 9
+
+[node name="WallDeco12" type="Sprite2D" parent="."]
+position = Vector2(426.5, 50)
+texture = ExtResource("moss1")
+z_index = 9
+
+[node name="Tree" type="Sprite2D" parent="Props"]
+position = Vector2(532, 25)
+texture = ExtResource("hill_tree")
+material = SubResource("TreeSwing")
+modulate = Color(0.72, 0.72, 0.72, 1)
+
+[node name="Line1" type="Sprite2D" parent="Laundry"]
+position = Vector2(95, 32)
+texture = ExtResource("line1")
+centered = false
+material = SubResource("ClothSwing")
+
+[node name="Bulbs2" type="Sprite2D" parent="Laundry"]
+position = Vector2(229, 38)
+texture = ExtResource("bulbs2")
+centered = false
+light_mask = 2
+
+[node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs2"]
+position = Vector2(28, 7)
+scale = Vector2(0.5, 0.5)
+color = Color(0.85, 0.55, 0.22, 1)
+energy = 3.0
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="Line3" type="Sprite2D" parent="Laundry"]
+position = Vector2(355, 20)
+texture = ExtResource("line3")
+centered = false
+material = SubResource("ClothSwing")
+
+[node name="ToMainStreet" parent="." instance=ExtResource("teleport")]
+position = Vector2(24, 76)
+scene_path = "res://levels/rust_arena/rust_city.tscn"
+teleport_id = 5
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToMainStreet"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("keyq")
+
+[node name="Player" parent="." instance=ExtResource("player")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+position = Vector2(24, 70)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player"]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("PlayerLightTex")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.5370987, 0.5370987, 0.5370987, 1)
+
+[node name="0point0xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0, 0)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+light_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="0point0xMoving"]
+light_mask = 0
+texture = ExtResource("sky")
+centered = false
+
+[node name="0point2xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.2, 0.2)
+repeat_size = Vector2(160, 0)
+repeat_times = 2
+light_mask = 2
+visibility_layer = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="0point2xMoving"]
+light_mask = 0
+texture = ExtResource("bg")
+centered = false
+
+[node name="0point4xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.4, 0.4)
+repeat_size = Vector2(160, 0)
+repeat_times = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="0point4xMoving"]
+modulate = Color(0.2809047, 0.29556337, 0.29849514, 1)
+material = SubResource("FarMat")
+texture = ExtResource("city1")
+centered = false
+
+[node name="0point6xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.6, 0.6)
+repeat_size = Vector2(160, 0)
+repeat_times = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="0point6xMoving"]
+texture = ExtResource("city2")
+centered = false
+
+[node name="0point8xMoving" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.8)
+repeat_size = Vector2(320, 0)
+repeat_times = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="0point8xMoving"]
+modulate = Color(0.72, 0.72, 0.76, 1)
+light_mask = 3
+texture = ExtResource("stair_back")
+centered = false
+
+[node name="1point0xMoving" type="Parallax2D" parent="."]
+z_index = 10
+repeat_size = Vector2(160, 0)
+repeat_times = 7
+
+[node name="Ground" type="Sprite2D" parent="1point0xMoving"]
+light_mask = 3
+position = Vector2(-160, 0)
+texture = ExtResource("ground")
+centered = false
+
+[node name="1point2xMoving" type="Parallax2D" parent="."]
+z_index = 11
+scroll_scale = Vector2(1.2, 1.2)
+
+[node name="Front0" type="Sprite2D" parent="1point2xMoving"]
+modulate = Color(0.04, 0.05, 0.04, 1)
+light_mask = 0
+position = Vector2(30, -2)
+texture = ExtResource("front_vines0")
+centered = false
+material = SubResource("ClothSwingFront")
+
+[node name="Front1" type="Sprite2D" parent="1point2xMoving"]
+modulate = Color(0.04, 0.05, 0.04, 1)
+light_mask = 0
+position = Vector2(250, -2)
+texture = ExtResource("front_vines1")
+centered = false
+material = SubResource("ClothSwingFront")
+
+[node name="Front2" type="Sprite2D" parent="1point2xMoving"]
+modulate = Color(0.04, 0.05, 0.04, 1)
+light_mask = 0
+position = Vector2(520, -2)
+texture = ExtResource("front_vines2")
+centered = false
+material = SubResource("ClothSwingFront")
+
+[node name="Front3" type="Sprite2D" parent="1point2xMoving"]
+modulate = Color(0.04, 0.05, 0.04, 1)
+light_mask = 0
+position = Vector2(760, -2)
+texture = ExtResource("front_vines3")
+centered = false
+material = SubResource("ClothSwingFront")
+
+[node name="BackGroundSmoke" parent="." instance=ExtResource("smoke")]
+light_mask = 0
+z_index = 11

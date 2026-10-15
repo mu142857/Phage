@@ -75,6 +75,8 @@ A.line_between("HillC1", "HillB2", 40, kind="bulbs", lights=1)
 A.line_between("HillA2", "HillC2", 22, density=0.6)
 
 A.door("ToMainStreet", 24, "res://levels/rust_arena/rust_city.tscn", 5)
+# 后楼梯:山顶那户人家的门穿下去,出来是晾衣巷消防梯顶层
+A.door("ToLaundryTop", 496, "res://levels/rust_city/laundry_alley/laundry_alley.tscn", 26, y=40)
 
 for i, x in enumerate([30, 250, 520, 760]):
     k = f"front_vines{i}"

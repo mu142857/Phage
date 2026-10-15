@@ -10,6 +10,13 @@ extends Marker2D
 @export var active: bool = true
 ## 只是走进隔壁的街巷(不是进新梦/存档点):主角护盾/技能运行态原样继承,不重置。
 @export var preserve_player_state: bool = false
+## 不空 = 这个 Story 标记立起来之前门是锁着的:提示换成锁,按 Q 没反应。
+## (捷径门:另一边从里面拉开门闩以后才能走)
+@export var unlock_flag: String = ""
+## 不空 = 从这扇门走过去时立起这个标记(拉开门闩,另一边的门就开了)。
+@export var set_flag_on_use: String = ""
+
+const LOCK_TEX: Texture2D = preload("res://interactive/Teleport/key_lock.png")
 
 var _player_inside: bool = false
 var _tracked_player: Player = null
@@ -17,6 +24,7 @@ var _hint_visible: bool = false
 var _hint_tween: Tween = null
 var _hint_canvas_items: Array[CanvasItem] = []
 var _hint_base_modulates: Dictionary = {}
+var _hint_tex: Texture2D = null   # 提示原来的图(锁着时换成锁,开了换回来)
 
 
 func _ready() -> void:
@@ -63,10 +71,31 @@ func _process(_delta: float) -> void:
 		return
 	if not _hint_visible:
 		_set_hint_visible(true)
+	var locked := is_locked()
+	_show_lock(locked)
+	if locked:
+		return
 	# 触屏模式下没有 Q 键,攻击键也能确认传送
 	if Input.is_action_just_pressed("Select") \
 			or (TouchControls.enabled and Input.is_action_just_pressed("Attack1")):
+		if set_flag_on_use != "":
+			Story.set_flag(set_flag_on_use, true)
 		Game.change_scene(scene_path, teleport_id, player_light, preserve_player_state)
+
+
+func is_locked() -> bool:
+	return unlock_flag != "" and not Story.flag(unlock_flag, false)
+
+
+# 锁着:提示的键帽换成一把锁
+func _show_lock(locked: bool) -> void:
+	for item in _hint_canvas_items:
+		if item is Sprite2D:
+			var s := item as Sprite2D
+			if _hint_tex == null:
+				_hint_tex = s.texture
+			s.texture = LOCK_TEX if locked else _hint_tex
+			return
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is Player:

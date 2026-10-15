@@ -12,7 +12,7 @@ var _turn_timer := 0.0
 
 
 func _engage(delta: float) -> void:
-	var p := player()
+	var p := foe()
 	if p == null:
 		velocity.x = 0.0
 		play(&"Idle")

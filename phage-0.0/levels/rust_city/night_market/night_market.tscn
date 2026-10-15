@@ -637,13 +637,26 @@ energy = 3.0
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
-[node name="ToMainStreet" parent="." instance=ExtResource("teleport")]
+[node name="ToPassage" parent="." instance=ExtResource("teleport")]
 position = Vector2(19, 76)
-scene_path = "res://levels/rust_arena/rust_city.tscn"
-teleport_id = 2
+scene_path = "res://levels/rust_city/interiors/tenement_passage/tenement_passage.tscn"
+teleport_id = 21
 preserve_player_state = true
 
-[node name="Hint" type="Sprite2D" parent="ToMainStreet"]
+[node name="Hint" type="Sprite2D" parent="ToPassage"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("keyq")
+
+[node name="ToStorage" parent="." instance=ExtResource("teleport")]
+position = Vector2(592, 76)
+scene_path = "res://levels/rust_city/interiors/market_storage/market_storage.tscn"
+teleport_id = 22
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToStorage"]
 modulate = Color(1.8, 1.8, 1.8, 1)
 light_mask = 0
 z_index = 100

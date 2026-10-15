@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/rust_city/interiors/room_people.gd" id="1"]
+[ext_resource type="PackedScene" path="res://entities/gang/brute/brute.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://entities/gang/crossbow/crossbow.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://entities/gang/thug/thug.tscn" id="4"]
+
+[node name="People" type="Node2D"]
+script = ExtResource("1")
+bag_coins = 10
+room_left = 16.0
+room_right = 304.0
+
+[node name="Gang" type="Node2D" parent="."]
+
+[node name="Brute" parent="Gang" instance=ExtResource("2")]
+position = Vector2(196, 79)
+leash = 70.0
+aggro_range = 200.0
+coins = 4
+
+[node name="Crossbow" parent="Gang" instance=ExtResource("3")]
+position = Vector2(222, 35)
+leash = 15.0
+aggro_range = 220.0
+coins = 3
+
+[node name="Thug" parent="Gang" instance=ExtResource("4")]
+position = Vector2(60, 79)
+leash = 60.0
+aggro_range = 200.0
+coins = 2
+
+[node name="Stash" type="Node2D" parent="."]
+
+[node name="Coin1" type="Marker2D" parent="Stash"]
+position = Vector2(150, 33)
+
+[node name="Coin2" type="Marker2D" parent="Stash"]
+position = Vector2(119, 41)
+
+[node name="Coin3" type="Marker2D" parent="Stash"]
+position = Vector2(270, 53)

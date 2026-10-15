@@ -86,7 +86,9 @@ x, y = A.world_of("Crane", 8, 11); A.glow("CraneCab", x, y, scale=0.4, energy=2.
 A.line_between("ShedBlue", "Crane", 30, kind="bulbs", lights=1) if False else None
 A.line_at(A.edge("Workshop", 40, "right"), A.edge("ShedRust", 40, "left"), 40, kind="bulbs", lights=1) if A.edge("Workshop", 40, "right") < A.edge("ShedRust", 40, "left") else None
 
-A.door("ToMainStreet", 24, "res://levels/rust_arena/rust_city.tscn", 3)
+# 连成网(2026-10-15):主街上不再开废料巷的门。车库是从夜市后仓穿过来的出口;尽头仓库进去能穿到锅炉巷
+A.door("ToStorage", 24, "res://levels/rust_city/interiors/market_storage/market_storage.tscn", 23)
+A.door("ToWarehouse", 753, "res://levels/rust_city/interiors/scrap_warehouse/scrap_warehouse.tscn", 24)
 
 # 前景:头顶垂下来的吊链/吊钩剪影
 for i, (x, ln) in enumerate([(70, 30), (118, 44), (330, 26), (520, 50), (560, 34), (760, 40), (900, 30)]):

@@ -18,6 +18,13 @@ const SCENES := [
 	"res://levels/rust_city/boiler_alley/boiler_alley.tscn",
 	"res://levels/rust_city/stair_alley/stair_alley.tscn",
 	"res://levels/rust_city/arena_street/arena_street.tscn",
+	# 铁锈城室内(穿堂屋把巷子连成环 + 主街的帮派屋)
+	"res://levels/rust_city/interiors/tenement_passage/tenement_passage.tscn",
+	"res://levels/rust_city/interiors/market_storage/market_storage.tscn",
+	"res://levels/rust_city/interiors/scrap_warehouse/scrap_warehouse.tscn",
+	"res://levels/rust_city/interiors/home_robbed_a/home_robbed_a.tscn",
+	"res://levels/rust_city/interiors/home_robbed_b/home_robbed_b.tscn",
+	"res://levels/rust_city/interiors/gang_den/gang_den.tscn",
 	"res://levels/rust_city/back_alley/back_alley.tscn",
 ]
 var _tree: SceneTree

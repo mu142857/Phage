@@ -19,7 +19,10 @@ def V(x, y):
 
 class Alley:
     def __init__(self, dir_rel, scene_name, root_name, width, back_key=None, back_modulate="Color(0.7, 0.7, 0.72, 1)",
-                 canvas_modulate=0.5370987, player_x=30):
+                 canvas_modulate=0.42, player_x=30, interior=False, brightness=0.58, buildings_brightness=None):
+        # 2026-10-15 帮派那边把六条巷整体压暗了(CanvasModulate 0.42、楼 0.58),默认值跟着改,重跑不会亮回去
+        if buildings_brightness is not None:
+            brightness = buildings_brightness
         self.dir = dir_rel.rstrip("/") + "/"
         os.makedirs(PROJ + self.dir, exist_ok=True)
         self.scene_name = scene_name
@@ -57,7 +60,11 @@ class Alley:
             '[sub_resource type="ShaderMaterial" id="TreeSwing"]\nshader = ExtResource("treeswing")\nshader_parameter/Strength = 1.0\nshader_parameter/Speed = 2.0',
             '[sub_resource type="ShaderMaterial" id="ClothSwingFront"]\nshader = ExtResource("silk")\nshader_parameter/Strength = 1.4\nshader_parameter/Speed = 1.0',
         ]
-        self.node(root_name, "Node2D", None, script=self.E("script"), camera_limit_left="0", camera_limit_right=str(width))
+        root_props = dict(script=self.E("script"), camera_limit_left="0", camera_limit_right=str(width))
+        if brightness is not None:
+            root_props["buildings_brightness"] = str(brightness)
+        self.node(root_name, "Node2D", None, **root_props)
+        self.interior = interior
         self.node("Walls", "Node2D", z_index="10")
         self.node("StaticBody2D", "StaticBody2D", "Walls", collision_mask="0")
         self.node("Ground", "CollisionShape2D", "Walls/StaticBody2D", position=V(0, GROUND), shape='SubResource("Boundary")')
@@ -257,12 +264,18 @@ class Alley:
         return (left + lx, top + ly)
 
     # ---------------- 门 ----------------
-    def door(self, name, x, scene_path, teleport_id, y=76, preserve=True):
+    def door(self, name, x, scene_path, teleport_id, y=76, preserve=True, hint_y=-22, unlock_flag="", set_flag=""):
+        """按 Q 的门。y = 门区高度(站的表面 - 4)。unlock_flag:这个标记没立起来之前门是锁着的(提示变成锁);
+        set_flag:从这扇门走过去时立起这个标记(从里面拉开门闩 → 另一边的门就能用了)。"""
         props = dict(position=V(x, y), scene_path=f'"{scene_path}"', teleport_id=str(teleport_id))
         if preserve:
             props["preserve_player_state"] = "true"
+        if unlock_flag:
+            props["unlock_flag"] = f'"{unlock_flag}"'
+        if set_flag:
+            props["set_flag_on_use"] = f'"{set_flag}"'
         self.node(name, None, ".", inst="teleport", **props)
-        self.node("Hint", "Sprite2D", name, modulate="Color(1.8, 1.8, 1.8, 1)", light_mask="0", z_index="100", position=V(0, -22), texture=self.E("keyq"))
+        self.node("Hint", "Sprite2D", name, modulate="Color(1.8, 1.8, 1.8, 1)", light_mask="0", z_index="100", position=V(0, hint_y), texture=self.E("keyq"))
 
     def people(self):
         """这条巷子的人(NPC + 角落里的帮派)在单独的 <巷名>_people.tscn(people.py 生成),重跑布局冲不掉。"""
@@ -298,6 +311,8 @@ class Alley:
         n("PointLight2D", "PointLight2D", "Player", position=V(0, -7), scale=V(3.0664063, 1.21875), texture='SubResource("PlayerLightTex")')
         cm = self.canvas_modulate
         n("CanvasModulate", "CanvasModulate", color=f"Color({cm}, {cm}, {cm}, 1)")
+        if self.interior:      # 室内:没有天空/远景/街面,整屋的墙地板在 Buildings 里
+            return self._finish()
 
         def para(name, s, rw, times, z=None, **p):
             props = {}
@@ -329,7 +344,9 @@ class Alley:
             extra = {"material": 'SubResource("ClothSwingFront")'} if swing else {}
             n(f"Front{i}", "Sprite2D", "1point2xMoving", modulate=mod, light_mask="0", position=V(x, y), texture=self.E(key), centered="false", **extra)
         n("BackGroundSmoke", None, ".", inst="smoke", light_mask="0", z_index="11")
+        return self._finish()
 
+    def _finish(self):
         out = [f"[gd_scene format=3]", ""]
         for k, (t, p) in self.ext.items():
             out.append(f'[ext_resource type="{t}" path="{p}" id="{k}"]')

@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/rust_city/interiors/room_people.gd" id="1"]
+[ext_resource type="PackedScene" path="res://entities/gang/knife/knife.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://entities/gang/thrower/thrower.tscn" id="3"]
+
+[node name="People" type="Node2D"]
+script = ExtResource("1")
+bag_coins = 10
+room_left = 16.0
+room_right = 144.0
+
+[node name="Gang" type="Node2D" parent="."]
+
+[node name="Knife" parent="Gang" instance=ExtResource("2")]
+position = Vector2(56, 79)
+leash = 60.0
+aggro_range = 200.0
+coins = 2
+
+[node name="Thrower" parent="Gang" instance=ExtResource("3")]
+position = Vector2(30, 79)
+leash = 60.0
+aggro_range = 200.0
+coins = 2
+
+[node name="Stash" type="Node2D" parent="."]
+
+[node name="Coin1" type="Marker2D" parent="Stash"]
+position = Vector2(72, 36)

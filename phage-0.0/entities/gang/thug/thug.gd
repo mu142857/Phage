@@ -15,7 +15,7 @@ func _after_land() -> void:
 
 func _engage(delta: float) -> void:
 	if not _shouted:
-		var p := player()
+		var p := foe()
 		if p != null and absf(p.global_position.x - global_position.x) < 110.0:
 			_shout(false)
 			return
@@ -28,7 +28,7 @@ func _shout(quiet: bool) -> void:
 	_spotted = true
 	state = S.CUSTOM
 	velocity.x = 0.0
-	var p := player()
+	var p := foe()
 	if p != null:
 		face(signf(p.global_position.x - global_position.x))
 	if not quiet:

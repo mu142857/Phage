@@ -462,6 +462,20 @@ z_index = 100
 position = Vector2(0, -22)
 texture = ExtResource("keyq")
 
+[node name="ToWarehouse" parent="." instance=ExtResource("teleport")]
+position = Vector2(467, 76)
+scene_path = "res://levels/rust_city/interiors/scrap_warehouse/scrap_warehouse.tscn"
+teleport_id = 25
+preserve_player_state = true
+unlock_flag = "shortcut_warehouse_boiler"
+
+[node name="Hint" type="Sprite2D" parent="ToWarehouse"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("keyq")
+
 [node name="People" parent="." instance=ExtResource("people")]
 
 [node name="Player" parent="." instance=ExtResource("player")]

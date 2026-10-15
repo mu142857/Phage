@@ -90,7 +90,9 @@ x, y = A.world_of("HouseA1", *ha_h[1]); A.glow("HouseA1Glow", x, y, scale=0.6, e
 x, y = A.world_of("HallDoor" if False else "Hall", 47, 60); A.glow("HallGlow", x, y, scale=0.8, energy=3.0)
 
 # ---- 回主街 ----
-A.door("ToMainStreet", 19, "res://levels/rust_arena/rust_city.tscn", 2)
+# 连成网(2026-10-15):主街上不再开夜市的门。牌楼底下是从晾衣巷筒子楼穿过来的出口;水泥楼的门进市场后仓
+A.door("ToPassage", 19, "res://levels/rust_city/interiors/tenement_passage/tenement_passage.tscn", 21)
+A.door("ToStorage", 592, "res://levels/rust_city/interiors/market_storage/market_storage.tscn", 22)
 
 # ---- 前景:头顶垂下的灯笼串剪影 ----
 for i, (x, w) in enumerate([(90, 110), (470, 90), (820, 100)]):

@@ -6,6 +6,8 @@
 # 状态:FALL(从天上掉下来)→ LAND(落地蹲一下)→ ENGAGE(各怪自己的打法,_engage 里写)
 #      ATTACK(播一段攻击动画,hit_frames 那几帧用 AttackCheck 判定一次)/ CUSTOM(子类自己管)。
 # 动画都是 10 帧/秒等长(奥斯卡的节奏),没导帧的动画名一律跳过不报错。
+# 阵营:奥斯卡帮(gang)和管道局(bureau,BureauMob 从这儿派生)水火不容——foe() 在主角和对面阵营的人里
+# 挑最近的打;近战砍到对面的人走 take_hit,对面的投射物打到也走 take_hit(不算队友伤害)。
 class_name GangMob
 extends CharacterBody2D
 
@@ -27,6 +29,7 @@ const COMMON_LINES := {
 	"friendly_hit": ["喂！看着点！", "打我干嘛？！", "瞎了啊？！", "自己人！"],
 	"friendly_reply": ["让开！", "谁让你站那！", "……手滑。", "活该。"],
 	"chat": ["好无聊……", "钱真难收。", "哈——欠", "下雨了？", "黑衣服显脏。"],
+	"foe_spot": ["铁罐头！", "管道局的狗！", "砸罐头！", "是管道局！"],
 }
 # 两个黑衣人蹲在一起时的闲聊(甲说一句,乙接一句)。主角走到看得见、还没惊动他们的距离就能听到。
 const CHATS := [
@@ -74,6 +77,8 @@ static var _talking := {}   # 正在说话的:实例 id → 说到什么时候(�
 @export var leash: float = 0.0
 ## 死了掉几个铜板
 @export var coins: int = 0
+## 近战砍到对面阵营的人扣多少血(打主角永远是 1 下)
+@export var mob_damage: int = 50
 
 enum S { FALL, LAND, ENGAGE, ATTACK, CUSTOM }
 
@@ -96,6 +101,8 @@ var home_x: float = 0.0
 var _shout_cd := 0.0
 var _chat_cd := 0.0
 var _spotted := false
+var _foe: Node2D = null
+var _foe_hold := 0.0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hit_player: AnimationPlayer = get_node_or_null("HitEffectPlayer") as AnimationPlayer
@@ -105,7 +112,7 @@ var _spotted := false
 
 func _ready() -> void:
 	add_to_group("monster")
-	add_to_group("gang")
+	add_to_group(faction())
 	health = max_health
 	home_x = global_position.x
 	if sprite.material != null:
@@ -169,6 +176,7 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y = minf(velocity.y + gravity * delta, 420.0)
 	cooldown = maxf(0.0, cooldown - delta)
+	_foe_hold = maxf(0.0, _foe_hold - delta)
 	if _knock_left > 0.0:
 		_knock_left = maxf(0.0, _knock_left - delta)
 		velocity.x = _knock_vx
@@ -189,7 +197,7 @@ func _physics_process(delta: float) -> void:
 				else:
 					if not _spotted:
 						_spotted = true
-						shout("spot", 0.85)
+						_on_spotted()
 					_engage(delta)
 			S.ATTACK:
 				_attack_tick(delta)
@@ -201,6 +209,11 @@ func _physics_process(delta: float) -> void:
 		if (off > leash and velocity.x > 0.0) or (off < -leash and velocity.x < 0.0):
 			velocity.x = 0.0
 	move_and_slide()
+
+
+## 第一次发现要打的人时喊一声
+func _on_spotted() -> void:
+	shout("spot", 0.85)
 
 
 ## 角落里的怪:主角不在跟前就不理他
@@ -267,7 +280,7 @@ func _pass_platforms(on: bool) -> void:
 # ------------------------------------------------------------------ 打法(子类覆盖)
 ## 默认:走到跟前,冷却好了就打。
 func _engage(_delta: float) -> void:
-	var p := player()
+	var p := foe()
 	if p == null:
 		velocity.x = 0.0
 		play(&"Idle")
@@ -305,7 +318,7 @@ func walk(dir: float, speed: float, anim: StringName = &"Walk") -> void:
 
 ## 正前方 gap 格以内有没有站在地上的同伙
 func buddy_ahead(dir: float, gap: float = 10.0) -> bool:
-	for n in get_tree().get_nodes_in_group("gang"):
+	for n in get_tree().get_nodes_in_group(faction()):
 		if n == self or not (n is GangMob):
 			continue
 		var m := n as GangMob
@@ -318,7 +331,7 @@ func buddy_ahead(dir: float, gap: float = 10.0) -> bool:
 ## 叠在一起(掉在同一个地方)时慢慢错开
 func _separation() -> float:
 	var push := 0.0
-	for n in get_tree().get_nodes_in_group("gang"):
+	for n in get_tree().get_nodes_in_group(faction()):
 		if n == self or not (n is Node2D):
 			continue
 		var dx := global_position.x - (n as Node2D).global_position.x
@@ -349,17 +362,25 @@ func _attack_tick(_delta: float) -> void:
 		try_hit()
 
 
-## 在 AttackCheck 里的主角挨一下(一次攻击只打一下)
+## AttackCheck 里的主角挨一下、对面阵营的人各挨一下(一次攻击只结算一次)
 func try_hit() -> bool:
 	if _hit_done or attack_check == null:
 		return false
+	var hit := false
 	for body in attack_check.get_overlapping_bodies():
-		if body != null and body.is_in_group("player") and body.has_method("take_damage"):
-			body.call("take_damage", 1)
-			_hit_done = true
-			shout("player_hit", 0.6)
-			return true
-	return false
+		if body == null or body == self:
+			continue
+		if body.is_in_group("player"):
+			if hostile_to_player() and body.has_method("take_damage"):
+				body.call("take_damage", 1)
+				hit = true
+				shout("player_hit", 0.6)
+		elif is_enemy(body):
+			(body as GangMob).take_hit(mob_damage, global_position.x, self)
+			hit = true
+	if hit:
+		_hit_done = true
+	return hit
 
 
 func _end_attack() -> void:
@@ -397,9 +418,35 @@ func _blocks_from(_from_x: float) -> bool:
 	return false
 
 
+## 被对面阵营的人砍/射/砸到(两帮打架)。挡得住就挡;被谁打了就先回头打谁。
+func take_hit(value: int, from_x: float, attacker: Node = null) -> void:
+	if health <= 0 or _blocks_from(from_x):
+		return
+	health = maxi(health - value, 0)
+	if hit_player != null:
+		if not hit_player.active:
+			hit_player.active = true
+		hit_player.play(&"HitFlash")
+	_on_hurt()
+	if health <= 0:
+		_die()
+		return
+	shout("hurt", 0.25)
+	if not heavy:
+		var dir := signf(global_position.x - from_x)
+		_knock_left = knockback_duration
+		_knock_vx = knockback_speed * (dir if dir != 0.0 else 1.0)
+	if is_instance_valid(attacker) and attacker is GangMob:
+		_foe = attacker as Node2D
+		_foe_hold = 1.5
+
+
 ## 被自己人扔的瓶子/射的箭/踹的桶/砸的震波打到。奥斯卡帮是混乱邪恶:队友伤害开着。
-## 挨打的骂一句,动手的回一句。
+## 挨打的骂一句,动手的回一句。(动手的是对面阵营的人 = 正常挨打,走 take_hit)
 func take_friendly(value: int, from_x: float, attacker: Node = null) -> void:
+	if is_instance_valid(attacker) and is_enemy(attacker):
+		take_hit(value, from_x, attacker)
+		return
 	if health <= 0 or _blocks_from(from_x):
 		return
 	health = maxi(health - value, 0)
@@ -408,7 +455,7 @@ func take_friendly(value: int, from_x: float, attacker: Node = null) -> void:
 			hit_player.active = true
 		hit_player.play(&"HitFlash")
 	if health <= 0:
-		if attacker is GangMob and is_instance_valid(attacker):
+		if is_instance_valid(attacker) and attacker is GangMob:
 			(attacker as GangMob).say_later(["……手滑。", "……", "他自己撞上来的！"][randi() % 3], 0.5)
 		_die()
 		return
@@ -417,7 +464,7 @@ func take_friendly(value: int, from_x: float, attacker: Node = null) -> void:
 		_knock_left = knockback_duration
 		_knock_vx = knockback_speed * (dir if dir != 0.0 else 1.0)
 	shout("friendly_hit", 0.85, true)
-	if attacker is GangMob and is_instance_valid(attacker) and attacker != self:
+	if is_instance_valid(attacker) and attacker is GangMob and attacker != self:
 		var a := attacker as GangMob
 		get_tree().create_timer(1.1).timeout.connect(func() -> void:
 			if is_instance_valid(a):
@@ -454,7 +501,7 @@ func _die() -> void:
 	_last_words()
 	# 旁边的同伙喊一声
 	var best: GangMob = null
-	for n in get_tree().get_nodes_in_group("gang"):
+	for n in get_tree().get_nodes_in_group(faction()):
 		if n != self and n is GangMob and (n as GangMob).health > 0:
 			var d := absf((n as Node2D).global_position.x - global_position.x)
 			if d < 110.0 and (best == null or d < absf(best.global_position.x - global_position.x)):
@@ -462,8 +509,8 @@ func _die() -> void:
 	if best != null:
 		best.shout("buddy_down", 0.75)
 	var scene := get_tree().current_scene
-	if scene != null and DEATH_SCENE != null:
-		var fx := DEATH_SCENE.instantiate() as GPUParticles2D
+	if scene != null and _death_scene() != null:
+		var fx := _death_scene().instantiate() as GPUParticles2D
 		scene.add_child(fx)
 		fx.global_position = global_position
 		fx.amount = death_amount
@@ -484,16 +531,30 @@ func _die() -> void:
 
 
 # ------------------------------------------------------------------ 喊话
-## 子类:自己的台词,{事件: [句子...]};没写的事件用 COMMON_LINES
+func _death_scene() -> PackedScene:
+	return DEATH_SCENE
+
+
+## 子类:自己的台词,{事件: [句子...]};没写的事件用 _common_lines()
 func _lines() -> Dictionary:
 	return {}
+
+
+## 阵营通用台词(管道局换一套)
+func _common_lines() -> Dictionary:
+	return COMMON_LINES
+
+
+## 两人闲聊的一问一答
+func _chats() -> Array:
+	return CHATS
 
 
 func lines_for(event: String) -> Array:
 	var own := _lines()
 	if own.has(event):
 		return own[event]
-	return COMMON_LINES.get(event, [])
+	return _common_lines().get(event, [])
 
 
 ## 按事件喊一句。chance = 这次喊不喊的概率;force = 不管冷却和"同时最多两个人说话"
@@ -527,7 +588,7 @@ func say(text: String, force := true) -> bool:
 
 # 角落里没惊动的时候:主角在看得见的地方,就听得到他们聊天
 func _chat_tick(delta: float) -> void:
-	if truce or leash <= 0.0:
+	if truce or not _can_chat():
 		return
 	var p := player()
 	if p == null:
@@ -541,15 +602,15 @@ func _chat_tick(delta: float) -> void:
 	_chat_cd = randf_range(4.5, 7.5)
 	# 旁边有同伙就俩人一问一答,没有就自己嘀咕
 	var buddy: GangMob = null
-	for n in get_tree().get_nodes_in_group("gang"):
+	for n in get_tree().get_nodes_in_group(faction()):
 		# 只找站着闲着的同伙(还装成垃圾袋的放哨的不算,一接话就露馅了)
-		if n != self and n is GangMob and (n as GangMob).health > 0 and (n as GangMob).leash > 0.0 \
+		if n != self and n is GangMob and (n as GangMob).health > 0 and (n as GangMob)._can_chat() \
 				and (n as GangMob).state == S.ENGAGE and (n as GangMob)._asleep() \
 				and absf((n as Node2D).global_position.x - global_position.x) < 50.0:
 			buddy = n
 			break
 	if buddy != null:
-		var pair: Array = CHATS[randi() % CHATS.size()]
+		var pair: Array = _chats()[randi() % _chats().size()]
 		if not say(String(pair[0]), false):
 			return
 		buddy._chat_cd = maxf(buddy._chat_cd, 3.0)
@@ -558,6 +619,11 @@ func _chat_tick(delta: float) -> void:
 				buddy.say(String(pair[1])))
 	else:
 		shout("chat", 0.8)
+
+
+## 角落里蹲着的(有 leash)才闲聊;管道局站岗的也聊
+func _can_chat() -> bool:
+	return leash > 0.0
 
 
 # 死的时候最后一句话:人没了字还在,飘一下淡掉
@@ -602,6 +668,62 @@ func _ambient_comp(target: float) -> float:
 		if c is CanvasModulate:
 			return clampf(target / maxf((c as CanvasModulate).color.r, 0.2), 1.0, 3.0)
 	return 1.0
+
+
+# ------------------------------------------------------------------ 阵营
+func faction() -> StringName:
+	return &"gang"
+
+
+func enemy_faction() -> StringName:
+	return &"bureau" if faction() == &"gang" else &"gang"
+
+
+## 主角算不算敌人(管道局交过钱就不算)
+func hostile_to_player() -> bool:
+	return true
+
+
+func is_enemy(n: Variant) -> bool:
+	return is_instance_valid(n) and n is GangMob and (n as GangMob).faction() != faction() \
+		and (n as GangMob).health > 0
+
+
+## 现在要打谁:主角或对面阵营的人,挑离得近的;选中了先盯一秒,不来回换。
+## 主角只看左右距离(和以前一样);对面阵营的人要差不多一样高才算。
+func foe() -> Node2D:
+	if _foe_hold > 0.0 and _foe_ok(_foe):
+		return _foe
+	var best: Node2D = null
+	var best_d := INF
+	var p := player()
+	if p != null and hostile_to_player():
+		var d := absf(p.global_position.x - global_position.x)
+		if d <= aggro_range:
+			best = p
+			best_d = d
+	for n in get_tree().get_nodes_in_group(enemy_faction()):
+		var m := n as GangMob
+		if m == null or m.health <= 0 or m.state == S.FALL:
+			continue
+		var d := absf(m.global_position.x - global_position.x)
+		if d > aggro_range or d >= best_d or absf(m.global_position.y - global_position.y) > 40.0:
+			continue
+		best = m
+		best_d = d
+	if best != null and best != _foe and best is GangMob:
+		shout("foe_spot", 0.5)
+	_foe = best
+	_foe_hold = 1.0
+	return best
+
+
+func _foe_ok(n: Variant) -> bool:
+	if not is_instance_valid(n):
+		return false
+	if n is GangMob:
+		return (n as GangMob).health > 0
+	return n.is_in_group("player") and hostile_to_player() and n.get("is_dying") != true
 
 
 # ------------------------------------------------------------------ 小工具

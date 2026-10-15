@@ -462,6 +462,19 @@ z_index = 100
 position = Vector2(0, -22)
 texture = ExtResource("keyq")
 
+[node name="ToLaundryTop" parent="." instance=ExtResource("teleport")]
+position = Vector2(496, 40)
+scene_path = "res://levels/rust_city/laundry_alley/laundry_alley.tscn"
+teleport_id = 26
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToLaundryTop"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("keyq")
+
 [node name="People" parent="." instance=ExtResource("people")]
 
 [node name="Player" parent="." instance=ExtResource("player")]

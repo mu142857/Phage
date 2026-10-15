@@ -70,6 +70,9 @@ A.glow("DoorBulb", 760, 63)
 A.door("ToMainStreet", 22, "res://levels/rust_arena/rust_city.tscn", 1)
 # 尽头那扇小门:走错路进后巷(伏击战)
 A.door("ToBackAlley", 760, "res://levels/rust_city/back_alley/back_alley.tscn", 8)
+# 连成网(2026-10-15):红砖楼的门进筒子楼穿过去到夜市;消防梯顶层那扇门通楼梯坡巷山顶
+A.door("ToPassage", 554, "res://levels/rust_city/interiors/tenement_passage/tenement_passage.tscn", 20)
+A.door("ToStairTop", 88, "res://levels/rust_city/stair_alley/stair_alley.tscn", 26, y=14, hint_y=-12)
 
 # ---- 前景剪影:头顶垂下来的衣服 ----
 for i, (x, w) in enumerate([(60, 96), (380, 72), (640, 60), (860, 80)]):

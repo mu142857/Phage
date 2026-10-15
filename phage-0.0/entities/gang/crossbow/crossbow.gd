@@ -34,7 +34,7 @@ func _ready() -> void:
 
 
 func _engage(_delta: float) -> void:
-	var p := player()
+	var p := foe()
 	if p == null:
 		velocity.x = 0.0
 		play(&"Idle")
@@ -70,7 +70,7 @@ func _custom_tick(delta: float) -> void:
 	if _a == A.NONE:
 		return
 	_at += delta
-	var p := player()
+	var p := foe()
 	var from := global_position + Vector2(muzzle.x * facing, muzzle.y)
 	if _a == A.AIM:
 		if p != null:
@@ -120,8 +120,7 @@ func _fire(from: Vector2) -> void:
 			state = S.ENGAGE))
 
 
-func take_damage(value: int) -> void:
-	super.take_damage(value)
+func _on_hurt() -> void:
 	# 挨一刀会打断瞄准(线没了,重新来)
 	if health > 0 and (_a == A.AIM or _a == A.LOCK) and not heavy:
 		_a = A.NONE

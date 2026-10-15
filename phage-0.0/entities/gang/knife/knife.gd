@@ -11,7 +11,7 @@ var _hopping := false
 
 
 func _engage(_delta: float) -> void:
-	var p := player()
+	var p := foe()
 	if p == null:
 		velocity.x = 0.0
 		play(&"Idle")

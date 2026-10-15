@@ -466,13 +466,26 @@ energy = 3.0
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
-[node name="ToMainStreet" parent="." instance=ExtResource("teleport")]
+[node name="ToStorage" parent="." instance=ExtResource("teleport")]
 position = Vector2(24, 76)
-scene_path = "res://levels/rust_arena/rust_city.tscn"
-teleport_id = 3
+scene_path = "res://levels/rust_city/interiors/market_storage/market_storage.tscn"
+teleport_id = 23
 preserve_player_state = true
 
-[node name="Hint" type="Sprite2D" parent="ToMainStreet"]
+[node name="Hint" type="Sprite2D" parent="ToStorage"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("keyq")
+
+[node name="ToWarehouse" parent="." instance=ExtResource("teleport")]
+position = Vector2(753, 76)
+scene_path = "res://levels/rust_city/interiors/scrap_warehouse/scrap_warehouse.tscn"
+teleport_id = 24
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToWarehouse"]
 modulate = Color(1.8, 1.8, 1.8, 1)
 light_mask = 0
 z_index = 100

@@ -130,7 +130,7 @@ def scene(name, spec, anim_names):
           f'[node name="CollisionShape2D" type="CollisionShape2D" parent="."]\nposition = Vector2(0, {fnum(-bh / 2)})\nshape = SubResource("Body")', '',
           '[node name="HitEffectPlayer" type="AnimationPlayer" parent="."]\nlibraries/ = SubResource("Lib")', '']
     if atk:
-        L += ['[node name="AttackCheck" type="Area2D" parent="."]\ncollision_layer = 0\ncollision_mask = 2', '',
+        L += ['[node name="AttackCheck" type="Area2D" parent="."]\ncollision_layer = 0\ncollision_mask = 6', '',
               f'[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackCheck"]\nposition = Vector2({atk[0]}, {atk[1]})\nshape = SubResource("Atk")\ndebug_color = Color(0.9, 0.2, 0.2, 0.3)', '']
     open(PROJ + GDIR + f"{name}/{name}.tscn", "w").write("\n".join(L))
 

@@ -14,7 +14,7 @@ var _thrown := false
 
 
 func _engage(_delta: float) -> void:
-	var p := player()
+	var p := foe()
 	if p == null:
 		velocity.x = 0.0
 		play(&"Idle")
@@ -49,7 +49,7 @@ func _attack_tick(_delta: float) -> void:
 
 
 func _throw() -> void:
-	var p := player()
+	var p := foe()
 	var scene := get_tree().current_scene
 	if p == null or scene == null:
 		return

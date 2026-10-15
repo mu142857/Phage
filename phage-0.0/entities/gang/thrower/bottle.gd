@@ -72,7 +72,7 @@ func _shatter(on_ground: bool) -> void:
 			if p is Node2D and (p as Node2D).global_position.distance_to(global_position) < splash_radius \
 					and p.has_method("take_damage"):
 				p.call("take_damage", 1)
-		for m in get_tree().get_nodes_in_group("gang"):
+		for m in get_tree().get_nodes_in_group("monster"):
 			if m != thrower and m is GangMob and (m as Node2D).global_position.distance_to(global_position) < splash_radius:
 				(m as GangMob).take_friendly(friendly_damage, global_position.x, thrower)
 	var fx := SHATTER.instantiate() as GPUParticles2D

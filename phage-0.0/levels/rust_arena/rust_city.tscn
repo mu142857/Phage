@@ -36,8 +36,6 @@
 [ext_resource type="Texture2D" path="res://entities/rust_npcs/goblins/goblin_flag.png" id="231_goblin_flag"]
 
 [ext_resource type="Texture2D" path="res://levels/rust_city/stair_alley/stair_mouth.png" id="213_stairmouth"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/night_market/market_gate.png" id="214_marketgate"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/scrap_alley/garage_rust.png" id="215_garage"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/boiler_gate.png" id="216_boilergate"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tlm15"]
@@ -963,14 +961,6 @@ texture = ExtResource("210_alleymouth")
 position = Vector2(-50, 40)
 texture = ExtResource("213_stairmouth")
 
-[node name="MarketGate" type="Sprite2D" parent="Buildings"]
-position = Vector2(815, 47)
-texture = ExtResource("214_marketgate")
-
-[node name="ScrapGarage" type="Sprite2D" parent="Buildings"]
-position = Vector2(887, 54)
-texture = ExtResource("215_garage")
-
 [node name="BoilerGate" type="Sprite2D" parent="Buildings"]
 position = Vector2(1273, 48)
 texture = ExtResource("216_boilergate")
@@ -1217,32 +1207,6 @@ z_index = 100
 position = Vector2(0, -22)
 texture = ExtResource("212_enterhint")
 
-[node name="ToNightMarket" parent="." instance=ExtResource("211_teleport")]
-position = Vector2(815, 76)
-scene_path = "res://levels/rust_city/night_market/night_market.tscn"
-teleport_id = 2
-preserve_player_state = true
-
-[node name="Hint" type="Sprite2D" parent="ToNightMarket"]
-modulate = Color(1.8, 1.8, 1.8, 1)
-light_mask = 0
-z_index = 100
-position = Vector2(0, -22)
-texture = ExtResource("212_enterhint")
-
-[node name="ToScrapAlley" parent="." instance=ExtResource("211_teleport")]
-position = Vector2(884, 76)
-scene_path = "res://levels/rust_city/scrap_alley/scrap_alley.tscn"
-teleport_id = 3
-preserve_player_state = true
-
-[node name="Hint" type="Sprite2D" parent="ToScrapAlley"]
-modulate = Color(1.8, 1.8, 1.8, 1)
-light_mask = 0
-z_index = 100
-position = Vector2(0, -22)
-texture = ExtResource("212_enterhint")
-
 [node name="ToBoilerAlley" parent="." instance=ExtResource("211_teleport")]
 position = Vector2(1273, 76)
 scene_path = "res://levels/rust_city/boiler_alley/boiler_alley.tscn"
@@ -1264,6 +1228,45 @@ preserve_player_state = true
 editor_description = "临时测试门:井盖直通竞技场街。下水道做完后删掉,改成下水道出口接过去。"
 
 [node name="Hint" type="Sprite2D" parent="TempToArenaStreet"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("212_enterhint")
+
+[node name="ToHouse3" parent="." instance=ExtResource("211_teleport")]
+position = Vector2(172, 76)
+scene_path = "res://levels/rust_city/interiors/home_robbed_a/home_robbed_a.tscn"
+teleport_id = 27
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToHouse3"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("212_enterhint")
+
+[node name="ToHouse6" parent="." instance=ExtResource("211_teleport")]
+position = Vector2(445, 76)
+scene_path = "res://levels/rust_city/interiors/gang_den/gang_den.tscn"
+teleport_id = 29
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToHouse6"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("212_enterhint")
+
+[node name="ToHouse9" parent="." instance=ExtResource("211_teleport")]
+position = Vector2(644.5, 76)
+scene_path = "res://levels/rust_city/interiors/home_robbed_b/home_robbed_b.tscn"
+teleport_id = 28
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToHouse9"]
 modulate = Color(1.8, 1.8, 1.8, 1)
 light_mask = 0
 z_index = 100

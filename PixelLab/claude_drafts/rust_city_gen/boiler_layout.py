@@ -73,6 +73,8 @@ A.lamp("Lamp1", 52 + 2)
 A.lamp("Lamp2", 416)
 
 A.door("ToMainStreet", 24, "res://levels/rust_arena/rust_city.tscn", 4)
+# 捷径门:管道楼的门通废料场仓库,门闩在仓库那边,从仓库里拉开以后这边才能走
+A.door("ToWarehouse", 467, "res://levels/rust_city/interiors/scrap_warehouse/scrap_warehouse.tscn", 25, unlock_flag="shortcut_warehouse_boiler")
 
 # 前景:头顶横过的粗管、竖管剪影
 A.save("front_pipe", B.front_pipe())

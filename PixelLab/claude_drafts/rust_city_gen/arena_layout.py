@@ -4,7 +4,7 @@ import props as P
 import arena as R
 
 A = Alley("levels/rust_city/arena_street", "arena_street", "ArenaStreet", 640, back_key="far_backs", player_x=30,
-          back_modulate="Color(0.45, 0.45, 0.5, 1)", canvas_modulate=0.42)
+          back_modulate="Color(0.45, 0.45, 0.5, 1)", canvas_modulate=0.36, buildings_brightness=0.55)
 A.tex("far_backs", "res://levels/rust_city/laundry_alley/alley_back.png")
 A.tex("arena", "res://levels/rust_city/rust_arena_building.png")
 A.tex("black2", "res://levels/rust_city/black_building_2.png")

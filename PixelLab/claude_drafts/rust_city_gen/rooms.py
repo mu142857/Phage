@@ -338,9 +338,11 @@ def stairs(run=30, rise=30, seed=523, rail=True):
     return c
 
 
-def loft(W=60, seed=524, rail=True):
-    """阁楼/走廊楼板:3 格厚木板 + 栏杆 + 两根撑木。顶面在图里 y=6。"""
-    c = Canvas(W, 14, seed)
+def loft(W=60, seed=524, rail=True, posts=()):
+    """阁楼/走廊楼板:3 格厚木板 + 栏杆 + 竖柱。顶面在图里 y=6。
+    posts=[(图里 x, 柱子往下多长)]:柱子一直落到地面或下一层阁楼上,不悬空。"""
+    down = max([ln for _, ln in posts], default=0)
+    c = Canvas(W, 14 + down, seed)
     y0 = 6
     c.rect(0, y0, W - 1, y0 + 2, PLANK[2]); c.hline(0, W - 1, y0, PLANK[5]); c.hline(0, W - 1, y0 + 2, PLANK[0])
     c.mottle(0, y0 + 1, W - 1, y0 + 2, amt=0.12, scale=3, accent=PLANK[0])
@@ -348,9 +350,10 @@ def loft(W=60, seed=524, rail=True):
         c.hline(0, W - 1, 0, PLANK[4])
         for x in range(0, W, 3):
             c.vline(x, 1, y0 - 1, PLANK[2])
-    for bx in (3, W - 5):
-        for i in range(5):
-            c.set(bx + (i if bx < W // 2 else -i), y0 + 3 + i, PLANK[1])
+    for (px_, ln) in posts:
+        c.vline(px_, y0 + 3, y0 + 2 + ln, PLANK[3]); c.vline(px_ + 1, y0 + 3, y0 + 2 + ln, PLANK[1])
+        c.hline(px_ - 1, px_ + 2, y0 + 3, PLANK[2])                       # 柱头托木
+        c.hline(px_ - 1, px_ + 2, y0 + 2 + ln, PLANK[0])                  # 柱脚
     return c
 
 

@@ -210,12 +210,12 @@ collision_mask = 2
 position = Vector2(184, 33)
 shape = SubResource("PlatDetect112")
 
-[node name="Hoist166" type="Sprite2D" parent="Props"]
-position = Vector2(169.5, 29)
+[node name="Hoist155" type="Sprite2D" parent="Props"]
+position = Vector2(158.5, 31)
 texture = ExtResource("hoist34")
 
-[node name="Hoist300" type="Sprite2D" parent="Props"]
-position = Vector2(303.5, 25)
+[node name="Hoist293" type="Sprite2D" parent="Props"]
+position = Vector2(296.5, 27)
 texture = ExtResource("hoist26")
 
 [node name="Drum10" type="Sprite2D" parent="Props"]
@@ -240,9 +240,9 @@ texture = ExtResource("bulb8")
 
 [node name="BulbGlow12" type="PointLight2D" parent="Buildings"]
 position = Vector2(60, 18)
-scale = Vector2(0.9, 0.9)
-color = Color(0.95, 0.7, 0.4, 1)
-energy = 2.6
+scale = Vector2(1.3, 1.3)
+color = Color(0.82, 0.73, 0.6, 1)
+energy = 1.4
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -252,9 +252,9 @@ texture = ExtResource("bulb6")
 
 [node name="BulbGlow13" type="PointLight2D" parent="Buildings"]
 position = Vector2(200, 16)
-scale = Vector2(0.9, 0.9)
-color = Color(0.95, 0.7, 0.4, 1)
-energy = 2.6
+scale = Vector2(1.3, 1.3)
+color = Color(0.82, 0.73, 0.6, 1)
+energy = 1.4
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -264,9 +264,9 @@ texture = ExtResource("bulb12")
 
 [node name="BulbGlow14" type="PointLight2D" parent="Buildings"]
 position = Vector2(286, 22)
-scale = Vector2(0.9, 0.9)
-color = Color(0.95, 0.7, 0.4, 1)
-energy = 2.6
+scale = Vector2(1.3, 1.3)
+color = Color(0.82, 0.73, 0.6, 1)
+energy = 1.4
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -309,4 +309,4 @@ scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("PlayerLightTex")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.42, 0.42, 0.42, 1)
+color = Color(0.5, 0.5, 0.5, 1)

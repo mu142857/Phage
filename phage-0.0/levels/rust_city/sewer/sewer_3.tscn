@@ -1,0 +1,326 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="player"]
+[ext_resource type="Script" path="res://levels/rust_arena/rust_city.gd" id="script"]
+[ext_resource type="Script" path="res://interactive/Platform/drop_through_platform.gd" id="drop"]
+[ext_resource type="PackedScene" path="res://interactive/Teleport/teleport.tscn" id="teleport"]
+[ext_resource type="Texture2D" path="res://interactive/Teleport/key_q.png" id="keyq"]
+[ext_resource type="Shader" path="res://asstes/shaders/silk_swing.gdshader" id="silk"]
+[ext_resource type="Shader" path="res://asstes/shaders/swing.tres" id="treeswing"]
+[ext_resource type="PackedScene" path="res://asstes/shaders/smokes/back_ground_smoke.tscn" id="smoke"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_light.png" id="lamp"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_sky.png" id="sky"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_background.png" id="bg"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_1.png" id="city1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_2.png" id="city2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/rust_city_ground.png" id="ground"]
+[ext_resource type="PackedScene" path="res://levels/rust_city/sewer/bureau_gate.tscn" id="gate"]
+[ext_resource type="Script" path="res://entities/bureau/bureau_squad.gd" id="squad"]
+[ext_resource type="Script" path="res://levels/rust_city/sewer/sewer_3.gd" id="room"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/wall3.png" id="wall3"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/walkway3.png" id="walkway3"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/glint3.png" id="glint3"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/ceiling_hole.png" id="ceiling_hole"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/desk.png" id="desk"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/price50.png" id="price50"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/cage_lamp8.png" id="cage_lamp8"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/cage_lamp10.png" id="cage_lamp10"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/cage_lamp6.png" id="cage_lamp6"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/banner24.png" id="banner24"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/banner28.png" id="banner28"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/bcrate1.png" id="bcrate1"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/bcrate0.png" id="bcrate0"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/bcrate2.png" id="bcrate2"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/manhole_shaft.png" id="manhole_shaft"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/ladder.png" id="ladder"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/sewer/light_shaft.png" id="light_shaft"]
+[ext_resource type="PackedScene" path="res://entities/bureau/halberdier/halberdier.tscn" id="m_halberdier"]
+[ext_resource type="PackedScene" path="res://entities/bureau/tower/tower.tscn" id="m_tower"]
+[ext_resource type="PackedScene" path="res://entities/bureau/arbalest/arbalest.tscn" id="m_arbalest"]
+[ext_resource type="PackedScene" path="res://entities/bureau/commander/commander.tscn" id="m_commander"]
+[ext_resource type="PackedScene" path="res://entities/bureau/stamper/stamper.tscn" id="m_stamper"]
+[ext_resource type="PackedScene" path="res://entities/bureau/wingblade/wingblade.tscn" id="m_wingblade"]
+
+[sub_resource type="WorldBoundaryShape2D" id="Boundary"]
+
+[sub_resource type="Gradient" id="PlayerGrad"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="PlayerLightTex"]
+gradient = SubResource("PlayerGrad")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="LampGrad"]
+offsets = PackedFloat32Array(0, 0.28960395, 0.40346536, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.07484522, 0.07484529, 0.07484522, 1, 0.12955844, 0.12955847, 0.12955841, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="LampLightTex"]
+gradient = SubResource("LampGrad")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="CanvasItemMaterial" id="FarMat"]
+
+[sub_resource type="ShaderMaterial" id="ClothSwing"]
+shader = ExtResource("silk")
+shader_parameter/Strength = 0.6
+shader_parameter/Speed = 1.3
+
+[sub_resource type="ShaderMaterial" id="TreeSwing"]
+shader = ExtResource("treeswing")
+shader_parameter/Strength = 1.0
+shader_parameter/Speed = 2.0
+
+[sub_resource type="ShaderMaterial" id="ClothSwingFront"]
+shader = ExtResource("silk")
+shader_parameter/Strength = 1.4
+shader_parameter/Speed = 1.0
+
+[sub_resource type="RectangleShape2D" id="Rect13x11"]
+size = Vector2(13, 11)
+
+[node name="Sewer3" type="Node2D"]
+script = ExtResource("script")
+camera_limit_left = 0
+camera_limit_right = 640
+buildings_brightness = 0.8
+
+[node name="Walls" type="Node2D" parent="."]
+z_index = 10
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+collision_mask = 0
+
+[node name="Ground" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 80)
+shape = SubResource("Boundary")
+
+[node name="LeftWall" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(0, 0)
+rotation = 1.5707964
+shape = SubResource("Boundary")
+
+[node name="RightWall" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(640, 0)
+rotation = -1.5707964
+shape = SubResource("Boundary")
+
+[node name="Buildings" type="Node2D" parent="."]
+z_index = 2
+
+[node name="Props" type="Node2D" parent="."]
+z_index = 4
+
+[node name="Laundry" type="Node2D" parent="."]
+z_index = 5
+
+[node name="Wall" type="Sprite2D" parent="Buildings"]
+position = Vector2(320, 45)
+texture = ExtResource("wall3")
+
+[node name="Floor" type="Node2D" parent="."]
+z_index = 10
+
+[node name="Walkway" type="Sprite2D" parent="Floor"]
+light_mask = 3
+position = Vector2(0, 80)
+texture = ExtResource("walkway3")
+centered = false
+
+[node name="Glint" type="Sprite2D" parent="Floor"]
+light_mask = 0
+modulate = Color(0.8, 0.85, 0.85, 0.7)
+position = Vector2(0, 86)
+texture = ExtResource("glint3")
+centered = false
+material = SubResource("ClothSwingFront")
+
+[node name="ToSewer2" parent="." instance=ExtResource("teleport")]
+position = Vector2(24, 76)
+scene_path = "res://levels/rust_city/sewer/sewer_2.tscn"
+teleport_id = 42
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToSewer2"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("keyq")
+
+[node name="Ceiling_hole1" type="Sprite2D" parent="Buildings"]
+position = Vector2(320, 8)
+texture = ExtResource("ceiling_hole")
+
+[node name="Desk2" type="Sprite2D" parent="Props"]
+position = Vector2(481, 72)
+texture = ExtResource("desk")
+
+[node name="Price503" type="Sprite2D" parent="Buildings"]
+position = Vector2(479, 48.5)
+texture = ExtResource("price50")
+
+[node name="Lamp4" type="Sprite2D" parent="Buildings"]
+position = Vector2(150.5, 19.5)
+texture = ExtResource("cage_lamp8")
+light_mask = 2
+
+[node name="LampGlow4" type="PointLight2D" parent="Buildings"]
+position = Vector2(150, 23)
+scale = Vector2(1.1, 1.1)
+color = Color(0.95, 0.68, 0.36, 1)
+energy = 3.0
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="Lamp5" type="Sprite2D" parent="Buildings"]
+position = Vector2(292.5, 20.5)
+texture = ExtResource("cage_lamp10")
+light_mask = 2
+
+[node name="LampGlow5" type="PointLight2D" parent="Buildings"]
+position = Vector2(292, 25)
+scale = Vector2(1.1, 1.1)
+color = Color(0.95, 0.68, 0.36, 1)
+energy = 1.6
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="Lamp6" type="Sprite2D" parent="Buildings"]
+position = Vector2(412.5, 19.5)
+texture = ExtResource("cage_lamp8")
+light_mask = 2
+
+[node name="LampGlow6" type="PointLight2D" parent="Buildings"]
+position = Vector2(412, 23)
+scale = Vector2(1.1, 1.1)
+color = Color(0.95, 0.68, 0.36, 1)
+energy = 3.0
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="Lamp7" type="Sprite2D" parent="Buildings"]
+position = Vector2(560.5, 18.5)
+texture = ExtResource("cage_lamp6")
+light_mask = 2
+
+[node name="LampGlow7" type="PointLight2D" parent="Buildings"]
+position = Vector2(560, 21)
+scale = Vector2(1.1, 1.1)
+color = Color(0.95, 0.68, 0.36, 1)
+energy = 3.0
+range_item_cull_mask = 7
+texture = SubResource("LampLightTex")
+
+[node name="Banner248" type="Sprite2D" parent="Buildings"]
+position = Vector2(441, 33)
+texture = ExtResource("banner24")
+
+[node name="Banner289" type="Sprite2D" parent="Buildings"]
+position = Vector2(545, 35)
+texture = ExtResource("banner28")
+
+[node name="Crate10" type="Sprite2D" parent="Props"]
+position = Vector2(546.5, 74.5)
+texture = ExtResource("bcrate1")
+
+[node name="Crate10" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(546.5, 74.5)
+shape = SubResource("Rect13x11")
+
+[node name="Crate11" type="Sprite2D" parent="Props"]
+position = Vector2(559.5, 74.5)
+texture = ExtResource("bcrate0")
+
+[node name="Crate11" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(559.5, 74.5)
+shape = SubResource("Rect13x11")
+
+[node name="Crate12" type="Sprite2D" parent="Props"]
+position = Vector2(552.5, 63.5)
+texture = ExtResource("bcrate2")
+
+[node name="Crate12" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(552.5, 63.5)
+shape = SubResource("Rect13x11")
+
+[node name="Gate" parent="Props" instance=ExtResource("gate")]
+position = Vector2(591, 80)
+
+[node name="Manhole_shaft13" type="Sprite2D" parent="Buildings"]
+position = Vector2(616, 6)
+texture = ExtResource("manhole_shaft")
+
+[node name="Ladder14" type="Sprite2D" parent="Buildings"]
+position = Vector2(616.5, 45.5)
+texture = ExtResource("ladder")
+
+[node name="LightShaft" type="Sprite2D" parent="."]
+z_index = 11
+light_mask = 0
+position = Vector2(610, 10)
+texture = ExtResource("light_shaft")
+centered = false
+
+[node name="ToArenaStreet" parent="." instance=ExtResource("teleport")]
+position = Vector2(616, 76)
+scene_path = "res://levels/rust_city/arena_street/arena_street.tscn"
+teleport_id = 43
+preserve_player_state = true
+
+[node name="Hint" type="Sprite2D" parent="ToArenaStreet"]
+modulate = Color(1.8, 1.8, 1.8, 1)
+light_mask = 0
+z_index = 100
+position = Vector2(0, -22)
+texture = ExtResource("keyq")
+
+[node name="Bureau" type="Node2D" parent="."]
+
+[node name="Squad" type="Node2D" parent="Bureau"]
+script = ExtResource("squad")
+facing = -1.0
+march_speed = 12.0
+
+[node name="Stamper" parent="Bureau" instance=ExtResource("m_stamper")]
+position = Vector2(500, 80)
+coins = 6
+
+[node name="Halberd1" parent="Bureau/Squad" instance=ExtResource("m_halberdier")]
+position = Vector2(410, 80)
+coins = 3
+
+[node name="Halberd2" parent="Bureau/Squad" instance=ExtResource("m_halberdier")]
+position = Vector2(434, 80)
+coins = 3
+
+[node name="Arbalest1" parent="Bureau/Squad" instance=ExtResource("m_arbalest")]
+position = Vector2(458, 80)
+coins = 2
+
+[node name="Arbalest2" parent="Bureau/Squad" instance=ExtResource("m_arbalest")]
+position = Vector2(480, 80)
+coins = 2
+
+[node name="Room" type="Node" parent="."]
+script = ExtResource("room")
+room_key = "sewer_3"
+fee = 50
+fee_name = "清场费"
+officer_path = NodePath("../Bureau/Stamper")
+gate_path = NodePath("../Props/Gate")
+
+[node name="Player" parent="." instance=ExtResource("player")]
+modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
+position = Vector2(30, 70)
+
+[node name="PointLight2D" type="PointLight2D" parent="Player"]
+position = Vector2(0, -7)
+scale = Vector2(3.0664063, 1.21875)
+texture = SubResource("PlayerLightTex")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.45, 0.45, 0.45, 1)

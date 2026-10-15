@@ -8,6 +8,8 @@
 extends Node
 
 const TOLL := 100
+## 井盖底下:管道局的下水道第一段(交了过路费才打得开,见 _setup_manhole)
+const SEWER_1 := "res://levels/rust_city/sewer/sewer_1.tscn"
 ## 开场就亮着的灯(出生点身后那盏,让开局不至于一片黑)。
 const START_LIT: Array[String] = ["Light2"]
 ## 点灯人带路要拧的灯,按从左到右的顺序。Light13 在路障那边,点不到,一直黑着。
@@ -49,6 +51,7 @@ func _ready() -> void:
 	add_child(_hud)
 	_setup_lamps()
 	_restore_npcs()
+	_setup_manhole()
 	_run()
 
 
@@ -362,11 +365,51 @@ func _talk_worker() -> void:
 
 func _talk_toll() -> void:
 	_toll.face_x(_player.global_position.x)
-	if Story.coins < TOLL:
+	if Story.flag("toll_paid"):
+		await Dialogue.say(["……下去吧。"], "收费员")
+	elif Story.coins < TOLL:
 		await Dialogue.say(["过路费，一百。", "你这儿只有 %d 个。" % Story.coins], "收费员")
 	else:
-		# 下水道还没做(第二步之后接上交钱、下井盖)
-		await Dialogue.say(["……一百。", "（下水道还在施工，下次再来。）"], "收费员")
+		await _pay_toll()
+
+
+# ---- 1-5 交过路费(剧本 1-5)----
+func _pay_toll() -> void:
+	await Dialogue.say(["一百。"], "收费员")
+	# 1-1 捡的那枚会说话的铜板还在钱包里
+	if Story.flag("talking_coin_in_wallet") and not Story.flag("talking_coin_paid"):
+		await Dialogue.say(["……别把我交出去。"], "铜板")
+		var give := true
+		if Story.coins > TOLL:
+			var keep: int = await Dialogue.ask(["（钱包里，铜板在小声说话。）"], ["把它也交了", "留着它"], "")
+			give = keep == 0
+		if give:
+			Story.set_flag("talking_coin_paid")
+			await Dialogue.say(["……好吧。", "记得来找我。"], "铜板")
+	Story.add_coins(-TOLL)
+	Story.set_flag("coin_goal", 0)
+	_hud.refresh()
+	# 听完了夜市老板的三段话(或者以后五号房买过剑):收费员问起他的老朋友
+	if int(Story.flag("warrior_part", 0)) >= 3 or Story.flag("sword_bought"):
+		await Dialogue.say(["……你那把剑，", "五号房买的？", "那家伙……还好吗？"], "收费员")
+		var ans: int = await Dialogue.ask(["……"], ["他很好", "他在等你"], "收费员")
+		if ans == 0:
+			await Dialogue.say(["……那就好。"], "收费员")
+		else:
+			await Dialogue.say(["……", "少废话。下去吧。"], "收费员")
+	Story.set_flag("toll_paid")
+	await Dialogue.say(["（井盖打开了。）"], "")
+	_lamplighter.face_x(_player.global_position.x)
+	await Dialogue.say(["咔……哒。", "到了那边，", "帮我看看灯还亮不亮。"], "点灯人", CPS_NORMAL)
+
+
+## 井盖(场景里的 TempToArenaStreet):改成通下水道第一段,交了过路费才打得开(没交 = 提示是一把锁)
+func _setup_manhole() -> void:
+	var m := get_node_or_null("../TempToArenaStreet")
+	if m == null:
+		return
+	m.set("scene_path", SEWER_1)
+	m.set("unlock_flag", "toll_paid")
 
 
 # 主角走近时,点灯人/修路工头顶冒一句(不打断操作)

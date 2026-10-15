@@ -144,9 +144,20 @@ def dead_end(seed=31):
         for x in range(x0 + 6, x1, 16):
             c.rect(x, y - 1, x + 1, y + r * 2, shade(col, 0.7)); c.vline(x, y - 1, y + r * 2, shade(col, 1.2))
         c.drips(x0, x1, y + r * 2, 10, maxlen=8, color=RUST[1])
-    pipe(66, 0, 79)
-    pipe(44, 0, 30, r=2, col=(70, 82, 80))
-    c.rect(30, 44, 33, 47, IRON_D)  # 管子拐进墙里
+    def into_wall(x, y, d, col):
+        """管子在这里拐进墙里:方管件 + 黑芯 + 墙上一圈影(和锅炉巷的一样)。"""
+        w = d + 2
+        c.rect(x - 1, y - 1, x + w - 2, y + w - 2, shade(col, 1.0))
+        c.hline(x - 1, x + w - 2, y - 1, shade(col, 1.35)); c.vline(x - 1, y - 1, y + w - 2, shade(col, 1.35))
+        c.hline(x - 1, x + w - 2, y + w - 2, shade(col, 0.55)); c.vline(x + w - 2, y - 1, y + w - 2, shade(col, 0.55))
+        c.rect(x + 1, y + 1, x + d - 2, y + d - 2, (18, 16, 15))
+        for i in range(-1, w):
+            c.darken(x + i, y + w - 1, 0.7); c.darken(x + w - 1, y + i, 0.75)
+    pipe(66, 4, 79)
+    pipe(44, 4, 30, r=2, col=(70, 82, 80))
+    into_wall(3, 66, 6, (84, 70, 58))      # 两根横管左头:在墙角拐进墙里(原来停在墙边 = 半截管子)
+    into_wall(3, 44, 4, (70, 82, 80))
+    into_wall(30, 44, 4, (70, 82, 80))     # 小管右头也拐进墙
     # 竖管
     c.drainpipe(70, 0, H - 2, c=(84, 70, 58))
     # 门 + 门上的灯泡

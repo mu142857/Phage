@@ -38,6 +38,7 @@ def banner(seed=402, col=(110, 40, 36)):
     W, H = 9, 24
     c = Canvas(W, H, seed)
     c.hline(0, W - 1, 0, IRON_L)
+    c.set(0, 0, IRON_D); c.set(W - 1, 0, IRON_D)      # 两颗钉子钉在墙上
     for y in range(1, H):
         w_off = 0 if y < H - 3 else (y - (H - 3))
         for x in range(0 + w_off // 2, W - w_off // 2):

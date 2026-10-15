@@ -15,8 +15,10 @@ import stairs as ST
 
 ROOT = "levels/rust_city/interiors/"
 MAIN = "res://levels/rust_arena/rust_city.tscn"
-WARM = "Color(0.95, 0.7, 0.4, 1)"
-FIRE = "Color(1, 0.45, 0.15, 1)"
+# 灯别太橙太亮(用户:室内对比度饱和度太高):偏灰的暖白,亮度低、范围大,洗出一片柔光而不是亮斑
+WARM = "Color(0.82, 0.73, 0.6, 1)"
+FIRE = "Color(0.9, 0.58, 0.36, 1)"
+MUTE = (0.7, 0.85, 0.36, 0.5)   # 贴图压色:饱和度×0.7(封顶0.5)、明暗往 0.36 收 15%
 G = GROUND
 
 
@@ -29,9 +31,11 @@ def alley(name):
 
 
 class Room:
-    def __init__(self, name, root, W, player_x=30, brightness=0.7, cm=0.42):
+    def __init__(self, name, root, W, player_x=30, brightness=0.7, cm=0.5):
         self.name, self.W = name, W
         self.A = Alley(ROOT + name, name, root, W, interior=True, canvas_modulate=cm, brightness=brightness, player_x=player_x)
+        self.A.mute = MUTE
+        self.A.soft_lights = False   # 屋里的灯已经按室内调好了
         self.gang, self.stash = [], []
         self.bag = 0
         self.k = 0
@@ -52,7 +56,7 @@ class Room:
         self.k += 1
         return self.A.prop(f"{key.capitalize()}{self.k}", key, left, bottom)
 
-    def bulb(self, x, cord=8, energy=2.6, scale=0.9):
+    def bulb(self, x, cord=8, energy=1.4, scale=1.3):
         c, (bx, by) = R.bulb(cord=cord)
         self.A.save("bulb%d" % cord, c)
         self.k += 1
@@ -66,12 +70,15 @@ class Room:
         self.A.sprite("Props", f"Stairs{self.k}", key, x0, base)
         self.A.poly(f"Stairs{self.k}Col", [(x0, base), (x0 + run, base - rise), (x0 + run, base)])
 
-    def loft(self, x0, x1, y, key="loft"):
-        """一段阁楼/走廊楼板(单向平台,从下面能跳穿上去)。"""
+    def loft(self, x0, x1, y, key="loft", support=(G, G)):
+        """一段阁楼/走廊楼板(单向平台,从下面能跳穿上去)。两头各一根竖柱,落到 support(左, 右)的高度
+        (地面,或者下面那层阁楼的顶面)——不悬空。"""
         W = x1 - x0 + 1
-        self.A.save(key, R.loft(W))
+        posts = [(2, support[0] - y - 2), (W - 4, support[1] - y - 2)]
+        c = R.loft(W, posts=posts)
+        self.A.save(key, c)
         self.k += 1
-        self.A.sprite("Props", f"Loft{self.k}", key, x0, y - 6 + 14)
+        self.A.sprite("Props", f"Loft{self.k}", key, x0, y - 6 + c.h)
         self.A.platform(x0, x1, y, f"Loft{self.k}")
 
     def mob(self, name, kind, x, y=G, leash=60, aggro=200, coins=2):
@@ -106,7 +113,7 @@ def write_people(room):
     if room.stash:
         nodes.append('[node name="Stash" type="Node2D" parent="."]')
         for i, (x, y) in enumerate(room.stash):
-            nodes.append(f'[node name="Coin{i + 1}" type="Marker2D" parent="Stash"]\nposition = Vector2({x}, {y - 3})')
+            nodes.append(f'[node name="Coin{i + 1}" type="Marker2D" parent="Stash"]\nposition = Vector2({x}, {y})')
     out = ["[gd_scene format=3]", ""]
     for path, (typ, i) in ext.items():
         out.append(f'[ext_resource type="{typ}" path="{path}" id="{i}"]')
@@ -131,14 +138,14 @@ def tenement_passage():
     r.deco("clock", R.clock(), 128, 32)
     r.stairs_up(64, 36, 32)
     r.loft(100, 189, 48)
-    r.loft(178, 249, 22, key="loft2")
+    r.loft(178, 249, 22, key="loft2", support=(48, G))   # 左柱落在下层走廊上
     r.solid("wardrobe", R.wardrobe(534), 266, G)
     r.deco("sacks", R.sacks(535), 22, G, parent="Props")
     r.deco("potted", ST.potted(536, big=True), 296, G, parent="Props")
     r.deco("rug", R.rug(537, 40, (60, 96, 100)), 190, G + 1, parent="Props")
     # 屋里也晾衣服:绳子拴在房梁上
-    A.line_at(24, 64, 13, density=0.8)
-    A.line_at(208, 248, 13, density=0.7)
+    A.line_at(24, 64, 8, density=0.8)       # 两头钉在房梁上(梁 18~23、64~69,伸到 y=10)
+    A.line_at(208, 248, 8, density=0.7)
     r.bulb(40); r.bulb(140, cord=10); r.bulb(290)
     r.mob("Thug", "thug", 228)
     r.mob("Lookout", "lookout", 284, leash=20, aggro=90, coins=1)
@@ -169,11 +176,11 @@ def market_storage():
     for i, (x0, x1) in enumerate([(24, 64), (116, 156), (208, 248)]):
         c, centers = M.lantern_line(x1 - x0, seed=547 + i)
         A.save(f"lanterns{i}", c)
-        A.node(f"Lanterns{i}", "Sprite2D", "Laundry", position=V(x0, 11), texture=A.E(f"lanterns{i}"), centered="false",
+        A.node(f"Lanterns{i}", "Sprite2D", "Laundry", position=V(x0, 6), texture=A.E(f"lanterns{i}"), centered="false",
                light_mask="2", material='SubResource("ClothSwing")')
         if i == 1:
             bx, by = centers[len(centers) // 2]
-            A.glow(f"LanternGlow{i}", x0 + bx, 13 + by, scale=0.7, energy=2.2, color="Color(0.95, 0.42, 0.2, 1)")
+            A.glow(f"LanternGlow{i}", x0 + bx, 6 + by, scale=1.0, energy=1.1, color="Color(0.85, 0.55, 0.42, 1)")
     r.bulb(296)
     r.mob("Knife", "knife", 180)
     r.mob("Thrower", "thrower", 212, y=44, leash=20, aggro=200, coins=2)
@@ -207,9 +214,9 @@ def scrap_warehouse():
     A.save("catwalk", c)
     A.sprite("Props", "Catwalk", "catwalk", 128, G)
     A.platform(128, 239, G - 48 + 4, "Catwalk")
-    for x, ln in [(166, 34), (300, 26)]:
+    for x, ln in [(155, 34), (293, 26)]:      # 链子(图里 x=2~4)对准梁中线
         A.save(f"hoist{ln}", R.hoist(length=ln))
-        A.sprite("Props", f"Hoist{x}", f"hoist{ln}", x, 8 + ln + 8)
+        A.sprite("Props", f"Hoist{x}", f"hoist{ln}", x, 10 + ln + 8)
     r.solid("drum", P.barrel(seed=553, col=(120, 50, 38)), 246, G)
     r.solid("drum2", P.barrel(seed=554, col=(50, 50, 52)), 254, G)
     r.bulb(60); r.bulb(200, cord=6); r.bulb(286, cord=12)
@@ -260,7 +267,7 @@ def home_robbed_b():
     A.save("stove", c)
     A.sprite("Props", "Stove", "stove", 14, G)
     A.solid("StoveCol", 15, G - 15, 12, 15)
-    A.glow("StoveFire", 14 + fire[0], G - 70 + fire[1], scale=0.7, energy=2.4, color=FIRE)
+    A.glow("StoveFire", 14 + fire[0], G - 70 + fire[1], scale=1.0, energy=1.3, color=FIRE)
     r.deco("shelf_wall", R.shelf(571, 24, 2, H=18), 60, 56)
     A.platform(60, 83, 56 - 18 + 1, "WallShelf")
     r.deco("table", R.table(572), 92, G, parent="Props")
@@ -282,7 +289,7 @@ def home_robbed_b():
 # 主街 6 号:奥斯卡帮的分赃窝
 # ============================================================
 def gang_den():
-    r = Room("gang_den", "GangDen", 240, player_x=14, brightness=0.62)
+    r = Room("gang_den", "GangDen", 240, player_x=14, brightness=0.74)
     A = r.A
     r.shell(wall=R.WALL_DIRTY, doors=[(6, "out")], windows=[])
     A.tex("scarf_flag", "res://levels/rust_city/back_alley/scarf_flag.png")
@@ -302,7 +309,7 @@ def gang_den():
     r.solid("army0", R.army_crate(586), 196, G)
     r.solid("army1", R.army_crate(587), 212, G)
     r.solid("army2", R.army_crate(588), 204, G - 12)
-    r.bulb(80, cord=14, energy=3.2, scale=1.1)
+    r.bulb(80, cord=14, energy=1.8, scale=1.6)
     r.bulb(210, cord=6)
     r.mob("Lookout", "lookout", 30, leash=15, aggro=90, coins=1)
     r.mob("Thug", "thug", 112)

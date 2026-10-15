@@ -3,9 +3,14 @@ from kit import *
 import props as P
 
 A = Alley("levels/rust_city/laundry_alley", "laundry_alley", "LaundryAlley", 800, back_key="alley_back", player_x=22)
-A.tex("alley_back")
-for k in ["house_ochre", "house_green", "house_brick", "dead_end", "arch_house"]:
-    A.tex(k)
+import assets as AS, b_ochre, arch_house as AH
+# 早期单独画的楼也在这里生成,跟着 kit 压色(2026-10-15:我的楼比用户的亮、艳)
+A.save("alley_back", AS.alley_back())
+A.save("house_ochre", b_ochre.build())
+A.save("house_green", AS.house_green())
+A.save("house_brick", AS.house_brick())
+A.save("dead_end", AS.dead_end())
+A.save("arch_house", AH.arch_house())
 A.tex("yellow1", "res://levels/rust_city/yellow_building_1.png")
 A.tex("black2", "res://levels/rust_city/black_building_2.png")
 # 道具贴图(新版)

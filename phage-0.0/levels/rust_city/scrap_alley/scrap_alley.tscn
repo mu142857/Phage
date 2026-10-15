@@ -414,41 +414,41 @@ texture = SubResource("LampLightTex")
 
 [node name="GarageBulb" type="PointLight2D" parent="Buildings"]
 position = Vector2(24, 61)
-scale = Vector2(0.6, 0.6)
-color = Color(0.85, 0.6, 0.3, 1)
-energy = 3.0
+scale = Vector2(0.78, 0.78)
+color = Color(0.850, 0.690, 0.492, 1)
+energy = 1.5
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="WorkshopBulb" type="PointLight2D" parent="Buildings"]
 position = Vector2(395, 61)
-scale = Vector2(0.6, 0.6)
-color = Color(0.85, 0.6, 0.3, 1)
-energy = 3.0
+scale = Vector2(0.78, 0.78)
+color = Color(0.850, 0.690, 0.492, 1)
+energy = 1.5
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="Floodlight" type="PointLight2D" parent="Buildings"]
 position = Vector2(710, 38)
-scale = Vector2(1.1, 1.1)
-color = Color(0.9, 0.85, 0.7, 1)
-energy = 2.2
+scale = Vector2(1.4300000000000002, 1.4300000000000002)
+color = Color(0.870, 0.790, 0.652, 1)
+energy = 1.1
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="WarehouseCrack" type="PointLight2D" parent="Buildings"]
 position = Vector2(753, 50)
-scale = Vector2(0.7, 0.7)
-color = Color(0.85, 0.6, 0.3, 1)
-energy = 2.4
+scale = Vector2(0.9099999999999999, 0.9099999999999999)
+color = Color(0.850, 0.690, 0.492, 1)
+energy = 1.2
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="CraneCab" type="PointLight2D" parent="Buildings"]
 position = Vector2(308, -13)
-scale = Vector2(0.4, 0.4)
-color = Color(0.85, 0.6, 0.3, 1)
-energy = 2.0
+scale = Vector2(0.52, 0.52)
+color = Color(0.850, 0.690, 0.492, 1)
+energy = 1.0
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -460,9 +460,9 @@ light_mask = 2
 
 [node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs1"]
 position = Vector2(89, 12)
-scale = Vector2(0.5, 0.5)
-color = Color(0.85, 0.55, 0.22, 1)
-energy = 3.0
+scale = Vector2(0.65, 0.65)
+color = Color(0.850, 0.670, 0.460, 1)
+energy = 1.5
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 

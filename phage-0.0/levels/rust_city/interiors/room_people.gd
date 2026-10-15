@@ -1,7 +1,7 @@
 # 屋里的人(继承巷子的 AlleyPeople:叫住、帮派打死本夜不复活、掉铜板、铜板 HUD 都现成)。
 # 屋里多两件事:
 #   1. 屋里的奥斯卡帮全打完 → 一袋钱从房梁上掉到主角头上(bag_coins,本夜一次)。
-#   2. 子节点 Stash 下面每个 Marker2D = 藏着的一枚铜板(柜顶、阁楼、架子上),本夜捡过不再出现。
+#   2. 子节点 Stash 下面每个 Marker2D = 藏着的一枚铜板(柜顶、阁楼、架子上,Marker 的 y = 表面),本夜捡过不再出现。
 # 挂在 <屋名>_people.tscn 的根上;屋子场景里只有一行实例(生成工具 A.people())。
 class_name RoomPeople
 extends AlleyPeople
@@ -36,6 +36,7 @@ func _setup_stash() -> void:
 			continue
 		var coin := COIN.instantiate() as Node2D
 		coin.position = (m as Marker2D).position
+		coin.set("_landed", true)   # 就搁在柜顶/阁楼上,不往下掉(掉落的铜板会穿过单向平台)
 		stash.add_child(coin)
 		# 捡走了才记(换场景时也会出树,那时 _taken 是假的)
 		coin.tree_exiting.connect(func() -> void:

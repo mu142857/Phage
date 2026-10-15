@@ -143,7 +143,7 @@ texture = ExtResource("stairs")
 polygon = PackedVector2Array(64, 80, 100, 48, 100, 80)
 
 [node name="Loft5" type="Sprite2D" parent="Props"]
-position = Vector2(145, 49)
+position = Vector2(145, 64)
 texture = ExtResource("loft")
 
 [node name="Plat_Loft5" type="StaticBody2D" parent="Walls"]
@@ -164,7 +164,7 @@ position = Vector2(145, 45)
 shape = SubResource("PlatDetect90")
 
 [node name="Loft6" type="Sprite2D" parent="Props"]
-position = Vector2(214, 23)
+position = Vector2(214, 51)
 texture = ExtResource("loft2")
 
 [node name="Plat_Loft6" type="StaticBody2D" parent="Walls"]
@@ -205,13 +205,13 @@ position = Vector2(210, 80)
 texture = ExtResource("rug")
 
 [node name="Line1" type="Sprite2D" parent="Laundry"]
-position = Vector2(24, 11)
+position = Vector2(24, 6)
 texture = ExtResource("line1")
 centered = false
 material = SubResource("ClothSwing")
 
 [node name="Line2" type="Sprite2D" parent="Laundry"]
-position = Vector2(208, 11)
+position = Vector2(208, 6)
 texture = ExtResource("line2")
 centered = false
 material = SubResource("ClothSwing")
@@ -222,9 +222,9 @@ texture = ExtResource("bulb8")
 
 [node name="BulbGlow11" type="PointLight2D" parent="Buildings"]
 position = Vector2(40, 18)
-scale = Vector2(0.9, 0.9)
-color = Color(0.95, 0.7, 0.4, 1)
-energy = 2.6
+scale = Vector2(1.3, 1.3)
+color = Color(0.82, 0.73, 0.6, 1)
+energy = 1.4
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -234,9 +234,9 @@ texture = ExtResource("bulb10")
 
 [node name="BulbGlow12" type="PointLight2D" parent="Buildings"]
 position = Vector2(140, 20)
-scale = Vector2(0.9, 0.9)
-color = Color(0.95, 0.7, 0.4, 1)
-energy = 2.6
+scale = Vector2(1.3, 1.3)
+color = Color(0.82, 0.73, 0.6, 1)
+energy = 1.4
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -246,9 +246,9 @@ texture = ExtResource("bulb8")
 
 [node name="BulbGlow13" type="PointLight2D" parent="Buildings"]
 position = Vector2(290, 18)
-scale = Vector2(0.9, 0.9)
-color = Color(0.95, 0.7, 0.4, 1)
-energy = 2.6
+scale = Vector2(1.3, 1.3)
+color = Color(0.82, 0.73, 0.6, 1)
+energy = 1.4
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -290,4 +290,4 @@ scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("PlayerLightTex")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.42, 0.42, 0.42, 1)
+color = Color(0.5, 0.5, 0.5, 1)

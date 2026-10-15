@@ -214,9 +214,9 @@ shape = SubResource("PlatDetect42")
 
 [node name="StallFishGlow" type="PointLight2D" parent="Buildings"]
 position = Vector2(148, 52)
-scale = Vector2(0.6, 0.6)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.4
+scale = Vector2(0.78, 0.78)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.2
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -334,9 +334,9 @@ shape = SubResource("PlatDetect42")
 
 [node name="StallFruitGlow" type="PointLight2D" parent="Buildings"]
 position = Vector2(342, 40)
-scale = Vector2(0.6, 0.6)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.4
+scale = Vector2(0.78, 0.78)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.2
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -419,9 +419,9 @@ shape = SubResource("PlatDetect42")
 
 [node name="StallBowls2Glow" type="PointLight2D" parent="Buildings"]
 position = Vector2(570, 52)
-scale = Vector2(0.6, 0.6)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.4
+scale = Vector2(0.78, 0.78)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.2
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -526,9 +526,9 @@ material = SubResource("ClothSwing")
 
 [node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs1"]
 position = Vector2(47, 14)
-scale = Vector2(0.75, 0.75)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.6
+scale = Vector2(0.9750000000000001, 0.9750000000000001)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.3
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -541,17 +541,17 @@ material = SubResource("ClothSwing")
 
 [node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs2"]
 position = Vector2(46, 14)
-scale = Vector2(0.75, 0.75)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.6
+scale = Vector2(0.9750000000000001, 0.9750000000000001)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.3
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="Glow1" type="PointLight2D" parent="Laundry/Bulbs2"]
 position = Vector2(118, 13)
-scale = Vector2(0.75, 0.75)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.6
+scale = Vector2(0.9750000000000001, 0.9750000000000001)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.3
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -570,9 +570,9 @@ material = SubResource("ClothSwing")
 
 [node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs4"]
 position = Vector2(34, 11)
-scale = Vector2(0.75, 0.75)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.6
+scale = Vector2(0.9750000000000001, 0.9750000000000001)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.3
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -585,9 +585,9 @@ material = SubResource("ClothSwing")
 
 [node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs5"]
 position = Vector2(43, 13)
-scale = Vector2(0.75, 0.75)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.6
+scale = Vector2(0.9750000000000001, 0.9750000000000001)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.3
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -599,41 +599,41 @@ light_mask = 2
 
 [node name="Glow0" type="PointLight2D" parent="Laundry/Bulbs6"]
 position = Vector2(56, 12)
-scale = Vector2(0.5, 0.5)
-color = Color(0.85, 0.55, 0.22, 1)
-energy = 3.0
+scale = Vector2(0.65, 0.65)
+color = Color(0.850, 0.670, 0.460, 1)
+energy = 1.5
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="GateGlow0" type="PointLight2D" parent="Buildings"]
 position = Vector2(5, 44)
-scale = Vector2(0.6, 0.6)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.2
+scale = Vector2(0.78, 0.78)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.1
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="GateGlow1" type="PointLight2D" parent="Buildings"]
 position = Vector2(21, 44)
-scale = Vector2(0.6, 0.6)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.2
+scale = Vector2(0.78, 0.78)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.1
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="HouseA1Glow" type="PointLight2D" parent="Buildings"]
 position = Vector2(88, 48)
-scale = Vector2(0.6, 0.6)
-color = Color(0.95, 0.42, 0.2, 1)
-energy = 2.4
+scale = Vector2(0.78, 0.78)
+color = Color(0.890, 0.618, 0.452, 1)
+energy = 1.2
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="HallGlow" type="PointLight2D" parent="Buildings"]
 position = Vector2(751, 50)
-scale = Vector2(0.8, 0.8)
-color = Color(0.85, 0.6, 0.3, 1)
-energy = 3.0
+scale = Vector2(1.04, 1.04)
+color = Color(0.850, 0.690, 0.492, 1)
+energy = 1.5
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 

@@ -86,6 +86,8 @@ const WARM_SCENE_PATHS: Array[String] = [
 	"res://entities/gang/thrower/bottle_shatter.tscn",
 	"res://entities/gang/shield/clang_sparks.tscn",
 	"res://entities/gang/roller/barrel_break.tscn",
+	"res://entities/bureau/bureau_death.tscn",
+	"res://entities/bureau/stamper/stamp_dust.tscn",
 	"res://levels/silvaron/leaf_1.tscn",
 	# 子弹 / 道具(内嵌粒子)
 	"res://entities/actinos/actinos_bullet.tscn",
@@ -142,6 +144,13 @@ const WARM_SCENE_PATHS: Array[String] = [
 	"res://entities/gang/brute/shockwave.tscn",
 	"res://entities/gang/coin/coin_pickup.tscn",
 	"res://entities/gang/money_bag/money_bag.tscn",
+	"res://entities/bureau/halberdier/halberdier.tscn",
+	"res://entities/bureau/tower/tower.tscn",
+	"res://entities/bureau/arbalest/arbalest.tscn",
+	"res://entities/bureau/commander/commander.tscn",
+	"res://entities/bureau/stamper/stamper.tscn",
+	"res://entities/bureau/wingblade/wingblade.tscn",
+	"res://entities/bureau/arbalest/heavy_bolt.tscn",
 	"res://entities/rust_npcs/sword/rust_worm.tscn",
 	"res://levels/rust_city/scrap_alley/wild_tire.tscn",
 	# 系统 / 屏幕效果

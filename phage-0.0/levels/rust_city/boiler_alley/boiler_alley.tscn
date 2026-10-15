@@ -196,25 +196,25 @@ position = Vector2(169, 50)
 
 [node name="Fire1_0" type="PointLight2D" parent="Buildings"]
 position = Vector2(246, 62)
-scale = Vector2(1, 1)
-color = Color(1, 0.45, 0.15, 1)
-energy = 3.0
+scale = Vector2(1.3, 1.3)
+color = Color(0.910, 0.630, 0.432, 1)
+energy = 1.5
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="Fire1_1" type="PointLight2D" parent="Buildings"]
 position = Vector2(227, 20)
-scale = Vector2(0.6, 0.6)
-color = Color(1, 0.45, 0.15, 1)
-energy = 1.8
+scale = Vector2(0.78, 0.78)
+color = Color(0.910, 0.630, 0.432, 1)
+energy = 1.0
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="Fire1_2" type="PointLight2D" parent="Buildings"]
 position = Vector2(263, 20)
-scale = Vector2(0.6, 0.6)
-color = Color(1, 0.45, 0.15, 1)
-energy = 1.8
+scale = Vector2(0.78, 0.78)
+color = Color(0.910, 0.630, 0.432, 1)
+energy = 1.0
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -338,9 +338,9 @@ texture = ExtResource("boiler_house")
 
 [node name="Fire2" type="PointLight2D" parent="Buildings"]
 position = Vector2(687, 62)
-scale = Vector2(1, 1)
-color = Color(1, 0.45, 0.15, 1)
-energy = 3.0
+scale = Vector2(1.3, 1.3)
+color = Color(0.910, 0.630, 0.432, 1)
+energy = 1.5
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -412,9 +412,9 @@ shape = SubResource("PlatDetect31")
 
 [node name="BigFire" type="PointLight2D" parent="Buildings"]
 position = Vector2(760, 72)
-scale = Vector2(1.1, 1.1)
-color = Color(1, 0.45, 0.15, 1)
-energy = 3.2
+scale = Vector2(1.4300000000000002, 1.4300000000000002)
+color = Color(0.910, 0.630, 0.432, 1)
+energy = 1.6
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 

@@ -72,12 +72,21 @@ func step_frame() -> int:
 func _physics_process(delta: float) -> void:
 	if broken or _members.is_empty():
 		return
+	# 这一夜早先打死过的人(重进房间时被删掉了):队长没了 = 队伍本来就是散的
+	if commander != null and not is_instance_valid(commander):
+		commander = null
+		broken = true
+		for o in _members:
+			if is_instance_valid(o):
+				(o as BureauMob).break_rank(true)
+		return
+	_members = _members.filter(func(m: Variant) -> bool: return is_instance_valid(m))
 	_turn_cd = maxf(0.0, _turn_cd - delta)
 	var foe := _squad_foe()
 	if foe != null:
 		if not _in_fight:
 			_in_fight = true
-			if commander != null:
+			if commander != null and is_instance_valid(commander):
 				commander.shout("form_up", 1.0, true)
 		var rel := (foe.global_position.x - anchor_x) * facing
 		if rel < -_depth - 6.0:

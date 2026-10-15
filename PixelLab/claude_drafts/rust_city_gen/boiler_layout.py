@@ -34,7 +34,7 @@ def bridge(name, key, wall_a, wall_b, H, seed, ramp=B.COPPER):
 
 
 A.building("Gate", "boiler_gate", -4, G)
-x, y = A.world_of("Gate", *gate_lamp); A.glow("GateRedLight", x, y, scale=0.35, energy=2.5, color="Color(1, 0.2, 0.15, 1)")
+x, y = A.world_of("Gate", *gate_lamp); A.glow("GateRedLight", x, y, scale=0.35, energy=2.5, color="Color(1, 0.2, 0.15, 1)", keep=True)   # 警示灯就是要红
 A.building("PipeHouse1", "pipe_house", 54, G)
 for i, (vx, vy) in enumerate(ph_vents):
     x, y = A.world_of("PipeHouse1", vx, vy); A.fx(f"Steam_PH1_{i}", STEAM, x, y)

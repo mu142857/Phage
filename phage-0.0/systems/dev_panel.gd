@@ -302,6 +302,9 @@ func _build_progress_column(col: VBoxContainer) -> void:
 	_button(col, "回到房间", _goto_room)
 	_button(col, "重载当前场景", _reload_scene)
 	_button(col, "清空进度 (F12)", _reset_progress)
+	_button(col, "铜板 +100(测试过路费)", func() -> void:
+		Story.add_coins(100)
+		_refresh())
 
 
 func _build_jump_column(col: VBoxContainer) -> void:

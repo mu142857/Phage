@@ -165,9 +165,9 @@ texture = ExtResource("bulb8")
 
 [node name="BulbGlow11" type="PointLight2D" parent="Buildings"]
 position = Vector2(80, 18)
-scale = Vector2(0.9, 0.9)
-color = Color(0.95, 0.7, 0.4, 1)
-energy = 2.6
+scale = Vector2(1.3, 1.3)
+color = Color(0.82, 0.73, 0.6, 1)
+energy = 1.4
 range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
@@ -196,4 +196,4 @@ scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("PlayerLightTex")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.42, 0.42, 0.42, 1)
+color = Color(0.5, 0.5, 0.5, 1)

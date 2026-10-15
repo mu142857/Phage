@@ -25,7 +25,8 @@ G = GROUND
 
 # 井盖:从下水道爬上来的地方(暂时从主街井盖直通过来)
 A.sprite(".", "Manhole", "manhole", 24, G + 2, z_index="11")
-A.door("FromSewer", 30, "res://levels/rust_arena/rust_city.tscn", 6)
+# 井盖底下是下水道第三段的出口(门 id 43);下水道没做之前这里临时直通主街(id 6)
+A.door("FromSewer", 30, "res://levels/rust_city/sewer/sewer_3.tscn", 43)
 
 A.building("Black2", "black2", -6, G)
 A.building("Brick", "house_brick", 52, G)
@@ -42,15 +43,16 @@ A.platform(560, 590, G - 112 + 44, "SmallPipe")
 # 竞技场大门 → 竞技场
 A.door("ToArena", 228 + 59, "res://levels/rust_arena/rust_arena.tscn", 7, preserve=False)
 # 竞技场顶上那盏灯(整条街唯一亮着的灯)
-A.glow("ArenaTopLight", 228 + 59, G - 71 + 6, scale=1.6, energy=3.2, color="Color(1, 0.75, 0.45, 1)")
+A.glow("ArenaTopLight", 228 + 59, G - 71 + 6, scale=1.6, energy=2.6, color="Color(1, 0.8, 0.55, 1)", keep=True)   # 整条街唯一亮着的灯,保留
 A.glow("ArenaGateLight", 228 + 59, G - 16, scale=0.8, energy=1.6, color="Color(1, 0.6, 0.3, 1)")
 # 灭着的路灯(只有灯杆,没有光)+ 挂的拳赛旗
 for i, x in enumerate([150, 214, 368, 520]):
     A.node(f"DeadLamp{i}", "Sprite2D", "Buildings", z_index="7", position=V(x, G - 16), texture=A.E("lamp"), modulate="Color(0.55, 0.55, 0.6, 1)")
-for i, (x, k) in enumerate([(206, "banner_red"), (360, "banner_blue")]):
-    A.sprite("Buildings", f"Banner{i}", k, x, G - 30)
+# 两面拳赛旗钉在楼墙上(原来红旗挂在半空,什么都没挂住)
+for i, (x, bottom, k) in enumerate([(71, 52, "banner_red"), (360, G - 30, "banner_blue")]):
+    A.sprite("Buildings", f"Banner{i}", k, x, bottom)
 # 墙上的海报
-for i, (x, y, k) in enumerate([(14, 70, 0), (30, 66, 1), (66, 76, 2), (86, 72, 3), (190, 66, 4), (430, 74, 0), (446, 70, 2), (470, 76, 1), (580, 74, 3), (600, 70, 4)]):
+for i, (x, y, k) in enumerate([(14, 70, 0), (30, 66, 1), (66, 76, 2), (86, 72, 3), (616, 62, 4), (430, 74, 0), (446, 70, 2), (470, 76, 1), (580, 74, 3), (600, 70, 4)]):
     A.sprite("Buildings", f"Poster{i}", f"poster{k}", x, y)
 A.prop("Rubble1", "rubble", 120, G + 1, solid=False)
 A.prop("Rubble2", "rubble", 500, G + 1, solid=False, flip=True)

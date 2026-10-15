@@ -35,8 +35,10 @@ const BUREAU_CHATS := [
 	["头盔里好闷。", "规定要戴。"],
 ]
 
-## 交了过路费/过段费:不把主角当敌人。主角一动手就没了(见 provoke)。房间脚本进场时按标记设。
+## 不把主角当敌人(交了钱;或者检查站还没开口收钱)。主角一动手就没了(见 provoke)。房间脚本进场时按标记设。
 static var pass_ok := false
+## 交过钱了:主角路过要敬礼(还没收钱的时候只是盯着他)
+static var waved_through := false
 
 var squad: BureauSquad = null
 var _saluted := false
@@ -117,9 +119,9 @@ func buddy_ahead(dir: float, gap: float = 10.0) -> bool:
 	return super.buddy_ahead(dir, gap)
 
 
-## 交过钱的主角走过身边:敬个礼(走远了再回来再敬一次)
+## 交过钱的主角走过身边:敬个礼(走远了再回来再敬一次);还没交钱就只盯着他
 func _salute_tick() -> void:
-	if not pass_ok or state != S.ENGAGE:
+	if not pass_ok or state != S.ENGAGE or Talk.busy():
 		return
 	var p := player()
 	if p == null:
@@ -127,12 +129,14 @@ func _salute_tick() -> void:
 	var d := absf(p.global_position.x - global_position.x)
 	if d > 70.0:
 		_saluted = false
-	elif d < 26.0 and not _saluted and absf(p.global_position.y - global_position.y) < 30.0:
+	elif d < 50.0 and not waved_through and velocity.x == 0.0:
+		face(signf(p.global_position.x - global_position.x))
+	elif d < 26.0 and not _saluted and waved_through and absf(p.global_position.y - global_position.y) < 30.0:
 		_saluted = true
 		face(signf(p.global_position.x - global_position.x))
 		state = S.CUSTOM
 		velocity.x = 0.0
-		shout("salute", 0.8, true)
+		shout("salute", 0.7)
 		play_once(&"Salute", func() -> void:
 			if state == S.CUSTOM:
 				state = S.ENGAGE)
@@ -216,17 +220,18 @@ static func provoke(by: BureauMob) -> void:
 	if not pass_ok:
 		return
 	pass_ok = false
+	waved_through = false
 	by.shout("provoked", 1.0, true)
 	by.get_tree().call_group("bureau_listener", "on_bureau_provoked")
 
 
 ## 队伍散了(队长死了):各打各的,出手慢一点
-func break_rank() -> void:
+func break_rank(quiet := false) -> void:
 	if _broken or health <= 0:
 		return
 	_broken = true
 	attack_cooldown *= 1.4
-	if randf() < 0.6:
+	if not quiet and randf() < 0.6:
 		say_later(String(BUREAU_LINES["broken"][randi() % BUREAU_LINES["broken"].size()]), randf_range(0.2, 1.0))
 
 

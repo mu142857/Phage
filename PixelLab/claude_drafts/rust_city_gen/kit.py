@@ -17,6 +17,34 @@ def V(x, y):
     return f"Vector2({f(x)}, {f(y)})"
 
 
+def mute_image(im, sat=0.7, contrast=0.85, mid=0.36, sat_cap=0.5, target_v=None):
+    """压色:饱和度打折(再封顶)、明暗往中间收。用户嫌"对比度饱和度太高,不是场景该有的"。
+    target_v:整张图平均亮度比它高就整体压暗到它(用户的楼平均亮度 ~0.30),本来就暗的不动。"""
+    import colorsys
+    out = im.convert("RGBA").copy()
+    px = out.load()
+    gain = 1.0
+    if target_v:
+        vs = [max(px[x, y][:3]) / 255 for y in range(out.height) for x in range(out.width) if px[x, y][3] > 0]
+        if vs:
+            mean_v = sum(vs) / len(vs)
+            if mean_v > target_v:
+                gain = max(0.72, target_v / mean_v)
+    for y in range(out.height):
+        for x in range(out.width):
+            r, g, b, a = px[x, y]
+            if a == 0:
+                continue
+            h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+            s = min(s * sat, sat_cap)
+            v = v * gain
+            v = mid + (v - mid) * contrast
+            v = max(0.0, min(1.0, v))
+            r2, g2, b2 = colorsys.hsv_to_rgb(h, s, v)
+            px[x, y] = (int(round(r2 * 255)), int(round(g2 * 255)), int(round(b2 * 255)), a)
+    return out
+
+
 class Alley:
     def __init__(self, dir_rel, scene_name, root_name, width, back_key=None, back_modulate="Color(0.7, 0.7, 0.72, 1)",
                  canvas_modulate=0.42, player_x=30, interior=False, brightness=0.58, buildings_brightness=None):
@@ -65,6 +93,8 @@ class Alley:
             root_props["buildings_brightness"] = str(brightness)
         self.node(root_name, "Node2D", None, **root_props)
         self.interior = interior
+        # 我画的街巷素材统一压色(用户的楼不经过 save,不受影响):饱和×0.75 封顶0.55、明暗收 10%、平均亮度压到 0.34
+        self.mute = (0.75, 0.9, 0.34, 0.55, 0.34)
         self.node("Walls", "Node2D", z_index="10")
         self.node("StaticBody2D", "StaticBody2D", "Walls", collision_mask="0")
         self.node("Ground", "CollisionShape2D", "Walls/StaticBody2D", position=V(0, GROUND), shape='SubResource("Boundary")')
@@ -108,6 +138,8 @@ class Alley:
 
     def save(self, key, canvas):
         im = canvas.im if isinstance(canvas, Canvas) else canvas
+        if getattr(self, "mute", None):
+            im = mute_image(im, *self.mute)
         im.save(PROJ + self.dir + key + ".png")
         return self.tex(key)
 
@@ -231,8 +263,9 @@ class Alley:
             if lights and centers:
                 step = max(1, len(centers) // lights)
                 for i, (bx, by) in enumerate(centers[step // 2::step][:lights]):
-                    self.node(f"Glow{i}", "PointLight2D", f"Laundry/{name}", position=V(bx, by), scale=V(0.75, 0.75),
-                              color="Color(0.95, 0.42, 0.2, 1)", energy="2.6", range_item_cull_mask="7", texture='SubResource("LampLightTex")')
+                    e, col, sc = self._soft(2.6, "Color(0.95, 0.42, 0.2, 1)", 0.75)
+                    self.node(f"Glow{i}", "PointLight2D", f"Laundry/{name}", position=V(bx, by), scale=V(sc, sc),
+                              color=col, energy=str(e), range_item_cull_mask="7", texture='SubResource("LampLightTex")')
         else:
             c, bulbs = P.bulb_line(w, sag, seed=seed)
             self.save(key, c)
@@ -240,8 +273,9 @@ class Alley:
             if lights and bulbs:
                 step = max(1, len(bulbs) // lights)
                 for i, (bx, by) in enumerate(bulbs[step // 2::step][:lights]):
-                    self.node(f"Glow{i}", "PointLight2D", f"Laundry/{name}", position=V(bx, by), scale=V(0.5, 0.5),
-                              color="Color(0.85, 0.55, 0.22, 1)", energy="3.0", range_item_cull_mask="7", texture='SubResource("LampLightTex")')
+                    e, col, sc = self._soft(3.0, "Color(0.85, 0.55, 0.22, 1)", 0.5)
+                    self.node(f"Glow{i}", "PointLight2D", f"Laundry/{name}", position=V(bx, by), scale=V(sc, sc),
+                              color=col, energy=str(e), range_item_cull_mask="7", texture='SubResource("LampLightTex")')
         return name
 
     def lamp(self, name, x, bottom=GROUND):
@@ -249,7 +283,21 @@ class Alley:
         self.node("PointLight2D", "PointLight2D", f"Buildings/{name}", position=V(0, -7.5), scale=V(0.640625, 0.640625),
                   color="Color(0.70145446, 0.41482437, 0.10370845, 1)", energy="7.6", range_item_cull_mask="2", texture='SubResource("LampLightTex")')
 
-    def glow(self, name, x, y, scale=0.45, energy=3.5, color="Color(0.85, 0.6, 0.3, 1)", mask=7):
+    def _soft(self, energy, color, scale):
+        """街巷里我加的照墙暖光统一变淡(2026-10-15 用户:对比度饱和度太高;灯下橙红灯外死黑)。
+        亮度减半并夹在 1.0~1.6,颜色往偏灰的暖白拉 60%,范围放大 1.3 倍。室内 Room 自己调好了,soft_lights=False。"""
+        if not getattr(self, "soft_lights", True):
+            return energy, color, scale
+        import re as _re
+        r, g, b, a = [float(v) for v in _re.findall(r"[-\d.]+", color)]
+        w = (0.85, 0.75, 0.62)
+        r, g, b = [c + (wc - c) * 0.6 for c, wc in zip((r, g, b), w)]
+        return max(1.0, min(1.6, energy * 0.5)), f"Color({r:.3f}, {g:.3f}, {b:.3f}, {a:g})", scale * 1.3
+
+    def glow(self, name, x, y, scale=0.45, energy=3.5, color="Color(0.85, 0.6, 0.3, 1)", mask=7, keep=False):
+        """keep=True:不做变淡处理(锅炉巷门口的红警示灯、竞技场顶上那盏灯)。"""
+        if not keep:
+            energy, color, scale = self._soft(energy, color, scale)
         self.node(name, "PointLight2D", "Buildings", position=V(x, y), scale=V(scale, scale), color=color,
                   energy=str(energy), range_item_cull_mask=str(mask), texture='SubResource("LampLightTex")')
 

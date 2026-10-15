@@ -27,13 +27,13 @@ coins = 1
 [node name="Stash" type="Node2D" parent="."]
 
 [node name="Coin1" type="Marker2D" parent="Stash"]
-position = Vector2(200, 19)
+position = Vector2(200, 22)
 
 [node name="Coin2" type="Marker2D" parent="Stash"]
-position = Vector2(236, 19)
+position = Vector2(236, 22)
 
 [node name="Coin3" type="Marker2D" parent="Stash"]
-position = Vector2(274, 47)
+position = Vector2(274, 50)
 
 [node name="Coin4" type="Marker2D" parent="Stash"]
-position = Vector2(120, 45)
+position = Vector2(120, 48)

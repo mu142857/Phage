@@ -526,7 +526,8 @@ func _die() -> void:
 			var c := COIN_SCENE.instantiate() as Node2D
 			c.position = global_position + Vector2(0.0, -8.0)
 			c.set("velocity", Vector2(randf_range(-45.0, 45.0), randf_range(-150.0, -90.0)))
-			scene.add_child(c)
+			# 可能是在物理回调里死的(被弩箭/瓶子打死):铜板是 Area2D,下一帧再放进场景
+			scene.add_child.call_deferred(c)
 	queue_free()
 
 
@@ -569,8 +570,10 @@ func shout(event: String, chance := 1.0, force := false) -> bool:
 	return say(String(pool[randi() % pool.size()]), force)
 
 
-## 直接喊这句(受"同时最多两个人说话"管,force 除外)
+## 直接喊这句(受"同时最多两个人说话"管,force 除外)。对话框开着的时候谁都不喊(字会叠在对话框上)
 func say(text: String, force := true) -> bool:
+	if Dialogue.is_open:
+		return false
 	var now := Time.get_ticks_msec()
 	var busy := 0
 	for k in _talking.keys():

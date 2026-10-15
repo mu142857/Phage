@@ -4,7 +4,7 @@ import props as P
 import arena as R
 
 A = Alley("levels/rust_city/arena_street", "arena_street", "ArenaStreet", 640, back_key="far_backs", player_x=30,
-          back_modulate="Color(0.45, 0.45, 0.5, 1)", canvas_modulate=0.36, buildings_brightness=0.55)
+          back_modulate="Color(0.45, 0.45, 0.5, 1)", canvas_modulate=0.42)
 A.tex("far_backs", "res://levels/rust_city/laundry_alley/alley_back.png")
 A.tex("arena", "res://levels/rust_city/rust_arena_building.png")
 A.tex("black2", "res://levels/rust_city/black_building_2.png")
@@ -46,7 +46,7 @@ A.glow("ArenaTopLight", 228 + 59, G - 71 + 6, scale=1.6, energy=3.2, color="Colo
 A.glow("ArenaGateLight", 228 + 59, G - 16, scale=0.8, energy=1.6, color="Color(1, 0.6, 0.3, 1)")
 # 灭着的路灯(只有灯杆,没有光)+ 挂的拳赛旗
 for i, x in enumerate([150, 214, 368, 520]):
-    A.node(f"DeadLamp{i}", "Sprite2D", "Buildings", z_index="9", position=V(x, G - 16), texture=A.E("lamp"), modulate="Color(0.55, 0.55, 0.6, 1)")
+    A.node(f"DeadLamp{i}", "Sprite2D", "Buildings", z_index="7", position=V(x, G - 16), texture=A.E("lamp"), modulate="Color(0.55, 0.55, 0.6, 1)")
 for i, (x, k) in enumerate([(206, "banner_red"), (360, "banner_blue")]):
     A.sprite("Buildings", f"Banner{i}", k, x, G - 30)
 # 墙上的海报

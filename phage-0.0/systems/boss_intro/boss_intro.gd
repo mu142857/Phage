@@ -97,6 +97,13 @@ func _change_boss_state(id: int) -> void:
 		sm.call("change_state", id)
 
 
+## auto_start=false 但填了 boss_path 的:boss 照样先藏好,关卡准备好了(比如竞技场先打几轮小怪)再调这个开演。
+func start() -> void:
+	if _boss == null or _finished:
+		return
+	_run()
+
+
 func _run() -> void:
 	await get_tree().process_frame
 	# 入梦字卡在播时等它演完(它结束会 queue_free 自己)

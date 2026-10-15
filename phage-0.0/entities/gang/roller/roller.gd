@@ -48,6 +48,7 @@ func _attack_tick(_delta: float) -> void:
 		if scene != null:
 			var b := BARREL.instantiate() as Node2D
 			b.position = global_position + Vector2(facing * 16.0, 0.0)
+			b.set("kicker", self)
 			scene.add_child(b)
 			b.call("roll", facing * barrel_speed)
 

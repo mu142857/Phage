@@ -1,8 +1,12 @@
 # 弩箭:直线飞,碰到主角算一下;扎到墙/地上就钉在那儿,过一会儿淡掉。
+# 射穿路上的同伙也算(奥斯卡帮不管队友),射的那个自己除外。
 extends Area2D
 
 @export var stick_time: float = 0.6
 @export var max_life: float = 2.0
+@export var friendly_damage: int = 100
+
+var shooter: Node = null
 
 var _v := Vector2.ZERO
 var _life := 0.0
@@ -40,7 +44,13 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_body(body: Node2D) -> void:
-	if _stuck or not body.is_in_group("player"):
+	if _stuck:
+		return
+	if body is GangMob and body != shooter:
+		(body as GangMob).take_friendly(friendly_damage, global_position.x - signf(_v.x) * 4.0, shooter)
+		queue_free()
+		return
+	if not body.is_in_group("player"):
 		return
 	if body.has_method("take_damage"):
 		body.call("take_damage", 1)

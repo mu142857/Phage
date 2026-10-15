@@ -298,7 +298,7 @@ texture = ExtResource("lookout")
 
 [node name="PlazaLamp" type="Sprite2D" parent="Buildings"]
 light_mask = 2
-z_index = 9
+z_index = 7
 position = Vector2(600, 28)
 texture = ExtResource("lamp")
 
@@ -312,7 +312,7 @@ texture = SubResource("LampLightTex")
 
 [node name="Lamp1" type="Sprite2D" parent="Buildings"]
 light_mask = 2
-z_index = 9
+z_index = 7
 position = Vector2(238, 52)
 texture = ExtResource("lamp")
 

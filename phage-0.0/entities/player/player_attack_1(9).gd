@@ -217,6 +217,9 @@ func _play_attack_glow(player: Player) -> void:
 func _check_attack_hitbox(hitbox: Area2D, damage: int) -> bool:
 	if not is_instance_valid(hitbox):
 		return false
+	# 判定框已经被关掉(这一帧刚被锁住/定身/开新一刀)就当没打到,不去查重叠(会报错)
+	if not hitbox.monitoring:
+		return false
 
 	# Range attack: damage every valid target overlapping the hitbox, not just the first.
 	var hit_any := false

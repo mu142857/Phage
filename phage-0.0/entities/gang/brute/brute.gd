@@ -31,6 +31,7 @@ func _attack_tick(_delta: float) -> void:
 		if scene != null:
 			for dir in [-1.0, 1.0]:
 				var w := SHOCKWAVE.instantiate()
+				w.set("brute", self)
 				scene.add_child(w)
 				w.global_position = global_position + Vector2(facing * wave_offset, 0.0)
 				w.call("go", dir)
@@ -42,4 +43,5 @@ func _lines() -> Dictionary:
 		"attack": ["嗯——！", "……"],
 		"hurt": ["……痒。", "……"],
 		"die": ["……"],
+		"chat": ["……", "……饿。", "……困。"],
 	}

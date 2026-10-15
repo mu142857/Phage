@@ -1,4 +1,5 @@
 # 大块头砸地的震波:贴着地面往一边跑,碰到主角算一下(跳起来就躲开)。
+# 路上的同伙也被震(大块头自己除外)。
 # 画法:几根随机高低的土块方柱 + 火星,一边跑一边掉渣,跑完淡掉。
 extends Area2D
 
@@ -11,6 +12,9 @@ var _dir := 1.0
 var _t := 0.0
 var _hit := false
 var _cols: Array = []
+var brute: Node = null
+var _hit_mobs: Array = []
+@export var friendly_damage: int = 150
 
 
 func go(dir: float) -> void:
@@ -56,6 +60,10 @@ func _draw() -> void:
 
 
 func _on_body(body: Node2D) -> void:
+	if body is GangMob and body != brute and not (body in _hit_mobs):
+		_hit_mobs.append(body)
+		(body as GangMob).take_friendly(friendly_damage, global_position.x - _dir * 4.0, brute)
+		return
 	if _hit or not body.is_in_group("player"):
 		return
 	_hit = true

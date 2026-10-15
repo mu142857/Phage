@@ -316,25 +316,25 @@ range_item_cull_mask = 7
 texture = SubResource("LampLightTex")
 
 [node name="DeadLamp0" type="Sprite2D" parent="Buildings"]
-z_index = 9
+z_index = 7
 position = Vector2(150, 64)
 texture = ExtResource("lamp")
 modulate = Color(0.55, 0.55, 0.6, 1)
 
 [node name="DeadLamp1" type="Sprite2D" parent="Buildings"]
-z_index = 9
+z_index = 7
 position = Vector2(214, 64)
 texture = ExtResource("lamp")
 modulate = Color(0.55, 0.55, 0.6, 1)
 
 [node name="DeadLamp2" type="Sprite2D" parent="Buildings"]
-z_index = 9
+z_index = 7
 position = Vector2(368, 64)
 texture = ExtResource("lamp")
 modulate = Color(0.55, 0.55, 0.6, 1)
 
 [node name="DeadLamp3" type="Sprite2D" parent="Buildings"]
-z_index = 9
+z_index = 7
 position = Vector2(520, 64)
 texture = ExtResource("lamp")
 modulate = Color(0.55, 0.55, 0.6, 1)

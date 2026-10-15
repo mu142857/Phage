@@ -65,6 +65,7 @@ func _throw() -> void:
 	var b := BOTTLE.instantiate()
 	scene.add_child(b)
 	b.global_position = from
+	b.set("thrower", self)
 	b.call("launch", v, bottle_gravity)
 
 

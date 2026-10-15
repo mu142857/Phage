@@ -40,6 +40,6 @@ func _shout(quiet: bool) -> void:
 
 func _lines() -> Dictionary:
 	return {
-		"spot": ["交钱！", "过路费！", "站住！", "钱拿来！", "奥斯卡帮收钱！"],
+		"spot": ["交钱！", "打劫！", "站住！", "钱拿来！", "奥斯卡帮收钱！"],
 		"attack": ["吃我一管！", "嘿——！"],
 	}

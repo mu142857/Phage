@@ -19,7 +19,7 @@ def V(x, y):
 
 class Alley:
     def __init__(self, dir_rel, scene_name, root_name, width, back_key=None, back_modulate="Color(0.7, 0.7, 0.72, 1)",
-                 canvas_modulate=0.42, player_x=30, buildings_brightness=0.58):
+                 canvas_modulate=0.5370987, player_x=30):
         self.dir = dir_rel.rstrip("/") + "/"
         os.makedirs(PROJ + self.dir, exist_ok=True)
         self.scene_name = scene_name
@@ -57,9 +57,7 @@ class Alley:
             '[sub_resource type="ShaderMaterial" id="TreeSwing"]\nshader = ExtResource("treeswing")\nshader_parameter/Strength = 1.0\nshader_parameter/Speed = 2.0',
             '[sub_resource type="ShaderMaterial" id="ClothSwingFront"]\nshader = ExtResource("silk")\nshader_parameter/Strength = 1.4\nshader_parameter/Speed = 1.0',
         ]
-        # 2026-10-15 用户嫌巷子太亮、黑衣人不显眼:整体压暗(原来 0.537 / 楼 0.72)
-        self.node(root_name, "Node2D", None, script=self.E("script"), camera_limit_left="0", camera_limit_right=str(width),
-                  buildings_brightness=str(buildings_brightness))
+        self.node(root_name, "Node2D", None, script=self.E("script"), camera_limit_left="0", camera_limit_right=str(width))
         self.node("Walls", "Node2D", z_index="10")
         self.node("StaticBody2D", "StaticBody2D", "Walls", collision_mask="0")
         self.node("Ground", "CollisionShape2D", "Walls/StaticBody2D", position=V(0, GROUND), shape='SubResource("Boundary")')
@@ -240,7 +238,7 @@ class Alley:
         return name
 
     def lamp(self, name, x, bottom=GROUND):
-        self.node(name, "Sprite2D", "Buildings", light_mask="2", z_index="9", position=V(x, bottom - 16), texture=self.E("lamp"))
+        self.node(name, "Sprite2D", "Buildings", light_mask="2", z_index="7", position=V(x, bottom - 16), texture=self.E("lamp"))   # 楼 z2 + 7 = 9,排在地面(10)和人物后面
         self.node("PointLight2D", "PointLight2D", f"Buildings/{name}", position=V(0, -7.5), scale=V(0.640625, 0.640625),
                   color="Color(0.70145446, 0.41482437, 0.10370845, 1)", energy="7.6", range_item_cull_mask="2", texture='SubResource("LampLightTex")')
 

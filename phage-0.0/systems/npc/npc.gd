@@ -24,6 +24,8 @@ const PLAYER_LIGHT_PEAK := 1.0   # 主角的灯贴脸时最多加亮多少
 const HIGHLIGHT_PERCENTILE := 0.95  # 取贴图亮度的这个分位当"最亮那批"(灯芯、高光这种几个像素的点允许发一点光)
 const UI_BRIGHTNESS := 0.9       # 头顶"…"和冒的话:不吃灯光,补偿压暗后显示到这个亮度
 static var _highlight_cache: Dictionary = {}
+const BARK_LINE := 12.0          # 冒的话一行占多高(互相让位时按这个往上叠)
+static var _bark_counter := 0    # 冒话的先后(后冒的给先冒的让位)
 
 ## 对话里显示的名字。
 @export var display_name := ""
@@ -63,10 +65,12 @@ var _bark: Label = null
 var _bark_tween: Tween = null
 var _bob_time := 0.0
 var _hop_tween: Tween = null
+var _bark_seq := 0
 
 
 func _ready() -> void:
 	add_to_group("npc")
+	add_to_group(InteractFocus.GROUP)
 	if frames != null:
 		sprite = AnimatedSprite2D.new()
 		sprite.sprite_frames = frames
@@ -261,30 +265,71 @@ func _process(delta: float) -> void:
 		_bob_time = 0.0
 	var can_talk := _can_talk_now()
 	_hint.visible = can_talk
+	if _bark.visible:
+		_layout_bark()
 	if can_talk and _confirm_pressed():
 		_start_talk()
 
 
+# 能不能按 Q:够得着,而且是所有可交互的东西(别的 NPC、按 Q 的门)里离主角最近的那个
 func _can_talk_now() -> bool:
-	if not talkable or Talk.busy() or Dialogue.is_open:
-		return false
 	var player := get_tree().get_first_node_in_group("player") as Node2D
-	if player == null or player.get("input_locked"):
-		return false
+	return player != null and InteractFocus.is_focused(self, player)
+
+
+## InteractFocus 用:够得着返回水平距离,够不着返回 INF。
+func interact_distance(player: Node2D) -> float:
+	if not talkable or Talk.busy() or Dialogue.is_open or not is_visible_in_tree():
+		return INF
+	if player.get("input_locked"):
+		return INF
 	if absf(player.global_position.y - global_position.y) > 24.0:
-		return false
+		return INF
 	var dist := absf(player.global_position.x - global_position.x)
-	if dist > talk_radius:
-		return false
-	# 几个 NPC 挨着站时,只有最近的那个冒提示、接这次按键
+	return dist if dist <= talk_radius else INF
+
+
+## InteractFocus 用:头顶"…"提示的框(世界坐标)。
+func prompt_rect() -> Rect2:
+	if not _hint.visible:
+		return Rect2()
+	return Rect2(_hint.global_position, HINT_TEX.get_size())
+
+
+## 正在冒的话的框(世界坐标),没在冒返回空 Rect2。
+func bark_rect() -> Rect2:
+	if not _bark.visible or _bark.modulate.a <= 0.01:
+		return Rect2()
+	var w := _bark_width()
+	return Rect2(global_position.x - w / 2.0, _bark.global_position.y, w, BARK_LINE)
+
+
+func _bark_width() -> float:
+	return FONT.get_string_size(_bark.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x + 2.0
+
+
+# 冒的话不和别的字叠:自己头顶有"…"就先抬一行;再躲开所有可交互提示和比自己先冒的话,
+# 撞上了就叠到它上面一行。
+func _layout_bark() -> void:
+	var top := global_position.y - _head - (20.0 if _hint.visible else 14.0)
+	var w := _bark_width()
+	var x0 := global_position.x - w / 2.0
+	var blockers := InteractFocus.prompt_rects(get_tree())
 	for other in get_tree().get_nodes_in_group("npc"):
-		if other == self or not (other is Npc) or not other.talkable:
-			continue
-		var d := absf(player.global_position.x - (other as Node2D).global_position.x)
-		if d < dist or (d == dist and other.get_instance_id() < get_instance_id()):
-			if d <= (other as Npc).talk_radius:
-				return false
-	return true
+		if other != self and other is Npc and (other as Npc)._bark_seq < _bark_seq:
+			var r := (other as Npc).bark_rect()
+			if r.has_area():
+				blockers.append(r)
+	for _i in 8:
+		var mine := Rect2(x0, top, w, BARK_LINE)
+		var hit := false
+		for r in blockers:
+			if mine.intersects(r):
+				top = minf(top, r.position.y - BARK_LINE)
+				hit = true
+		if not hit:
+			break
+	_bark.position.y = top - global_position.y
 
 
 func _confirm_pressed() -> bool:
@@ -326,6 +371,9 @@ func bark(text: String, duration := 2.0) -> void:
 	_bark.text = text
 	_bark.modulate.a = 1.0
 	_bark.visible = true
+	_bark_counter += 1
+	_bark_seq = _bark_counter
+	_layout_bark()
 	if duration > 0.0:
 		_bark_tween = create_tween()
 		_bark_tween.tween_interval(duration)

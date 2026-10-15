@@ -52,6 +52,21 @@ def fnum(v):
     return str(v)
 
 
+GLOW_HEX = ('#bc4652', '#88303c', '#ff4a40')
+
+
+def glow_only(img):
+    keep = {tuple(int(h[i:i + 2], 16) for i in (1, 3, 5)) for h in GLOW_HEX}
+    out = Image.new("RGBA", img.size)
+    px, po = img.load(), out.load()
+    for y in range(img.height):
+        for x in range(img.width):
+            p = px[x, y]
+            if p[3] and p[:3] in keep:
+                po[x, y] = p
+    return out
+
+
 def export(name):
     spec = GA.SPECS[name]()
     anims = spec.anims()
@@ -67,6 +82,7 @@ def export(name):
             strip.alpha_composite(f, (k * W, 0))
         png = f"{name}_{an.lower()}.png"
         strip.save(d + png)
+        glow_only(strip).save(d + f"{name}_{an.lower()}_glow.png")
         eid = f"{i + 1}"
         exts.append(f'[ext_resource type="Texture2D" path="res://{GDIR}{name}/{png}" id="{eid}"]')
         ids = []
@@ -83,6 +99,9 @@ def export(name):
         tres += [s, ""]
     tres += ["[resource]", "animations = [" + ", ".join(animtxt) + "]", ""]
     open(d + f"{name}_frames.tres", "w").write("\n".join(tres))
+    # 发光层的 SpriteFrames:同样的动画名/帧,贴图换成 _glow
+    gt = "\n".join(tres).replace(".png\"", "_glow.png\"")
+    open(d + f"{name}_glow.tres", "w").write(gt)
     return spec, list(anims.keys())
 
 
@@ -95,7 +114,8 @@ def scene(name, spec, anim_names):
     L = ['[gd_scene format=3]', '',
          f'[ext_resource type="Script" path="res://{GDIR}{name}/{name}.gd" id="1"]',
          '[ext_resource type="Shader" path="res://asstes/shaders/hurt.tres" id="2"]',
-         f'[ext_resource type="SpriteFrames" path="res://{GDIR}{name}/{name}_frames.tres" id="3"]', '',
+         f'[ext_resource type="SpriteFrames" path="res://{GDIR}{name}/{name}_frames.tres" id="3"]',
+         f'[ext_resource type="SpriteFrames" path="res://{GDIR}{name}/{name}_glow.tres" id="4"]', '',
          '[sub_resource type="ShaderMaterial" id="Hurt"]\nresource_local_to_scene = true\nshader = ExtResource("2")\nshader_parameter/Enabled = false\nshader_parameter/Tint = Color(1, 0.95, 0.9, 1)', '',
          f'[sub_resource type="RectangleShape2D" id="Body"]\nsize = Vector2({bw}, {bh})', '']
     if atk:
@@ -106,6 +126,7 @@ def scene(name, spec, anim_names):
     props = "\n".join(f"{k} = {fnum(v)}" for k, v in exports.items())
     L += [f'[node name="{root}" type="CharacterBody2D"]\nz_index = 10\ncollision_layer = 4\ncollision_mask = 1\nfloor_snap_length = 2.0\nscript = ExtResource("1")\n{props}', '',
           f'[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]\nmaterial = SubResource("Hurt")\nsprite_frames = ExtResource("3")\nanimation = &"{first}"\noffset = Vector2({fnum(float(ox))}, {fnum(float(oy))})', '',
+          f'[node name="Glow" type="AnimatedSprite2D" parent="."]\nlight_mask = 0\nsprite_frames = ExtResource("4")\nanimation = &"{first}"\noffset = Vector2({fnum(float(ox))}, {fnum(float(oy))})', '',
           f'[node name="CollisionShape2D" type="CollisionShape2D" parent="."]\nposition = Vector2(0, {fnum(-bh / 2)})\nshape = SubResource("Body")', '',
           '[node name="HitEffectPlayer" type="AnimationPlayer" parent="."]\nlibraries/ = SubResource("Lib")', '']
     if atk:
@@ -210,7 +231,7 @@ size = Vector2(4, 4)
 [node name="Bottle" type="Area2D"]
 z_index = 12
 collision_layer = 0
-collision_mask = 3
+collision_mask = 7
 script = ExtResource("1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -238,7 +259,7 @@ size = Vector2(5, 2)
 [node name="Bolt" type="Area2D"]
 z_index = 12
 collision_layer = 0
-collision_mask = 2
+collision_mask = 6
 script = ExtResource("1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -266,7 +287,7 @@ size = Vector2(9, 8)
 [node name="RollingBarrel" type="Area2D"]
 z_index = 10
 collision_layer = 4
-collision_mask = 2
+collision_mask = 6
 script = ExtResource("1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -289,7 +310,7 @@ size = Vector2(6, 5)
 
 [node name="Shockwave" type="Area2D"]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 6
 script = ExtResource("1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

@@ -21,8 +21,12 @@ var _hint_base_modulates: Dictionary = {}
 
 func _ready() -> void:
 	add_to_group("teleport")
+	add_to_group(InteractFocus.GROUP)
 	_cache_hint_nodes()
 	_set_hint_visible(false)
+	if is_instance_valid(_hint_tween):   # 开场直接藏好,别让提示淡出那一下闪出来
+		_hint_tween.kill()
+	_set_hint_nodes_hidden()
 	set_process(false)
 
 
@@ -31,10 +35,9 @@ func activate() -> void:
 	if active:
 		return
 	active = true
-	# 若玩家此刻正站在传送点内且可交互,立即显示提示。
-	if _player_inside and is_instance_valid(_tracked_player) and not _tracked_player.input_locked:
+	# 玩家此刻正站在传送点内:交给 _process 判断要不要冒提示
+	if _player_inside and is_instance_valid(_tracked_player):
 		set_process(true)
-		_set_hint_visible(true)
 
 
 ## Boss 开打时由 BossIntro 调用,关闭传送点(不可交互并收起提示)。
@@ -53,7 +56,8 @@ func _process(_delta: float) -> void:
 		return
 	if not is_instance_valid(_tracked_player):
 		return
-	if _tracked_player.input_locked:
+	# 门口还站着会说话的 NPC 时,只有离主角最近的那个冒提示、接 Q(见 InteractFocus)
+	if not InteractFocus.is_focused(self, _tracked_player):
 		if _hint_visible:
 			_set_hint_visible(false)
 		return
@@ -68,9 +72,29 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is Player:
 		_tracked_player = body
 		_player_inside = true
-		set_process(true)
-		if active and not body.input_locked:
-			_set_hint_visible(true)
+		set_process(true)   # 冒不冒提示由 _process 判断
+
+## InteractFocus 用:主角站在门区里、能按的时候返回水平距离,否则 INF。
+func interact_distance(player: Node2D) -> float:
+	if not active or not _player_inside or not is_instance_valid(_tracked_player):
+		return INF
+	if _tracked_player.input_locked or Talk.busy() or Dialogue.is_open:
+		return INF
+	return absf(player.global_position.x - global_position.x)
+
+
+## InteractFocus 用:提示(键帽贴图或文字)的框,世界坐标。
+func prompt_rect() -> Rect2:
+	if not _hint_visible:
+		return Rect2()
+	for item in _hint_canvas_items:
+		if item is Sprite2D:
+			var r := (item as Sprite2D).get_rect()
+			return Rect2((item as Sprite2D).global_position + r.position, r.size)
+		if item is Control:
+			return Rect2((item as Control).global_position, (item as Control).size)
+	return Rect2()
+
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body is Player:
@@ -84,6 +108,9 @@ func _set_hint_visible(visible: bool) -> void:
 	if is_instance_valid(_hint_tween):
 		_hint_tween.kill()
 	_hint_visible = visible
+	# 没挂提示气泡的门(比如只当落脚点的 FromArenaStreet):没东西可淡入淡出,别建空补间(会报错)
+	if _hint_canvas_items.is_empty():
+		return
 	if visible:
 		for canvas_item in _hint_canvas_items:
 			if is_instance_valid(canvas_item):

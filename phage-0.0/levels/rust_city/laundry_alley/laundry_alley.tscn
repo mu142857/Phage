@@ -538,7 +538,7 @@ texture = SubResource("LampLightTex")
 
 [node name="Lamp1" type="Sprite2D" parent="Buildings"]
 light_mask = 2
-z_index = 9
+z_index = 7
 position = Vector2(94, 64)
 texture = ExtResource("lamp")
 
@@ -552,7 +552,7 @@ texture = SubResource("LampLightTex")
 
 [node name="Lamp2" type="Sprite2D" parent="Buildings"]
 light_mask = 2
-z_index = 9
+z_index = 7
 position = Vector2(318, 50)
 texture = ExtResource("lamp")
 
@@ -566,7 +566,7 @@ texture = SubResource("LampLightTex")
 
 [node name="Lamp3" type="Sprite2D" parent="Buildings"]
 light_mask = 2
-z_index = 9
+z_index = 7
 position = Vector2(456, 64)
 texture = ExtResource("lamp")
 
@@ -580,7 +580,7 @@ texture = SubResource("LampLightTex")
 
 [node name="Lamp4" type="Sprite2D" parent="Buildings"]
 light_mask = 2
-z_index = 9
+z_index = 7
 position = Vector2(650, 64)
 texture = ExtResource("lamp")
 

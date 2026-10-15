@@ -59,6 +59,16 @@ func _blocks(_value: int) -> bool:
 	return true
 
 
+func _blocks_from(from_x: float) -> bool:
+	if (from_x - global_position.x) * facing <= 0.0:
+		return false
+	shout("block", 0.5)
+	var fx := CLANG_SPARKS.instantiate() as Node2D
+	get_tree().current_scene.add_child(fx)
+	fx.global_position = global_position + Vector2(facing * 10.0, -14.0)
+	return true
+
+
 func _lines() -> Dictionary:
 	return {
 		"spot": ["盾在人在！", "来啊！"],

@@ -65,6 +65,10 @@ func _ready() -> void:
 	var key: String = level.scene_file_path if level != null else "?"
 	if Story.in_dream and Story.current_dream_night > 0:
 		key = "night_%d" % Story.current_dream_night
+	# 从隔壁走门进来的(Game.change_scene 过门中):已经在梦里走了半天,不是入梦,不播。
+	# 记一笔,免得 F6 单跑时在这儿死了重载又播出来(铁锈城主街 → 竞技场街 → 竞技场)。
+	if Game.teleport_transition_active:
+		_played[key] = true
 	if _played.get(key, false):
 		Game.buff_hold.fade_in(0.35)
 		queue_free()

@@ -1,10 +1,14 @@
 # 滚过来的油桶:贴地滚,撞到主角算一下然后碎;撞墙/箱子碎;主角一刀也能砍碎(在 monster 组)。
+# 撞到路上的同伙也碎、也算(踢它的那个除外)。
 # 4 帧滚动(箍往后挪),碎的时候锈渣方块粒子。
 extends Area2D
 
 const BREAK: PackedScene = preload("res://entities/gang/roller/barrel_break.tscn")
 
 @export var life: float = 5.0
+@export var friendly_damage: int = 120
+
+var kicker: Node = null
 
 var _vx := 0.0
 var _vy := 0.0
@@ -51,7 +55,13 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_body(body: Node2D) -> void:
-	if _done or not body.is_in_group("player"):
+	if _done:
+		return
+	if body is GangMob and body != kicker:
+		(body as GangMob).take_friendly(friendly_damage, global_position.x - signf(_vx) * 4.0, kicker)
+		_break()
+		return
+	if not body.is_in_group("player"):
 		return
 	if body.has_method("take_damage"):
 		body.call("take_damage", 1)

@@ -24,6 +24,8 @@ const COMMON_LINES := {
 	"die": ["呃啊——", "记住你了……", "告诉老大……", "我的钱……"],
 	"buddy_down": ["兄弟！", "你完了！", "给我上！"],
 	"player_hit": ["交不交？", "服不服？", "哈！"],
+	"friendly_hit": ["喂！看着点！", "打我干嘛？！", "瞎了啊？！", "自己人！"],
+	"friendly_reply": ["让开！", "谁让你站那！", "……手滑。", "活该。"],
 	"chat": ["好无聊……", "钱真难收。", "哈——欠", "下雨了？", "黑衣服显脏。"],
 }
 # 两个黑衣人蹲在一起时的闲聊(甲说一句,乙接一句)。主角走到看得见、还没惊动他们的距离就能听到。
@@ -35,6 +37,9 @@ const CHATS := [
 	["为啥穿黑的？", "显瘦。"],
 	["围巾歪了。", "……谢了。"],
 	["那边有人。", "……别看他。"],
+	["下水道那帮又涨价了。", "一群死板的。"],
+	["那帮人走路一个步子。", "……怪吓人的。"],
+	["他们老大是粉头发？", "别提她。"],
 ]
 const MAX_TALKING := 2
 static var _talking := {}   # 正在说话的:实例 id → 说到什么时候(毫秒)
@@ -139,6 +144,23 @@ func _process(delta: float) -> void:
 		glow.scale = sprite.scale
 		glow.visible = sprite.visible
 	_shout_cd = maxf(0.0, _shout_cd - delta)
+	if _bark != null and _bark.visible:
+		_keep_bark_on_screen()
+
+
+# 人在屏幕外说话:字贴着屏幕边出来(像拐角那边有人在聊天),不会被切掉
+func _keep_bark_on_screen() -> void:
+	var vp := get_viewport()
+	if vp == null:
+		return
+	var inv := vp.get_canvas_transform().affine_inverse()
+	var left := (inv * Vector2.ZERO).x + 1.0
+	var right := (inv * vp.get_visible_rect().size).x - 1.0
+	var w := FONT.get_string_size(_bark.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x
+	var cx := global_position.x
+	var half := w / 2.0
+	cx = clampf(cx, left + half, right - half)
+	_bark.global_position.x = roundf(cx - 40.0)
 
 
 func _physics_process(delta: float) -> void:
@@ -370,6 +392,45 @@ func _blocks(_value: int) -> bool:
 	return false
 
 
+## 子类:从 from_x 那边打过来的东西挡不挡得住(队友伤害用)
+func _blocks_from(_from_x: float) -> bool:
+	return false
+
+
+## 被自己人扔的瓶子/射的箭/踹的桶/砸的震波打到。奥斯卡帮是混乱邪恶:队友伤害开着。
+## 挨打的骂一句,动手的回一句。
+func take_friendly(value: int, from_x: float, attacker: Node = null) -> void:
+	if health <= 0 or _blocks_from(from_x):
+		return
+	health = maxi(health - value, 0)
+	if hit_player != null:
+		if not hit_player.active:
+			hit_player.active = true
+		hit_player.play(&"HitFlash")
+	if health <= 0:
+		if attacker is GangMob and is_instance_valid(attacker):
+			(attacker as GangMob).say_later(["……手滑。", "……", "他自己撞上来的！"][randi() % 3], 0.5)
+		_die()
+		return
+	if not heavy:
+		var dir := signf(global_position.x - from_x)
+		_knock_left = knockback_duration
+		_knock_vx = knockback_speed * (dir if dir != 0.0 else 1.0)
+	shout("friendly_hit", 0.85, true)
+	if attacker is GangMob and is_instance_valid(attacker) and attacker != self:
+		var a := attacker as GangMob
+		get_tree().create_timer(1.1).timeout.connect(func() -> void:
+			if is_instance_valid(a):
+				a.shout("friendly_reply", 0.7))
+
+
+## 隔一会儿再说(死人的同伙接话之类)
+func say_later(text: String, delay: float) -> void:
+	get_tree().create_timer(delay).timeout.connect(func() -> void:
+		if is_instance_valid(self) and health > 0:
+			say(text))
+
+
 func _on_hurt() -> void:
 	pass
 
@@ -483,7 +544,7 @@ func _chat_tick(delta: float) -> void:
 	for n in get_tree().get_nodes_in_group("gang"):
 		# 只找站着闲着的同伙(还装成垃圾袋的放哨的不算,一接话就露馅了)
 		if n != self and n is GangMob and (n as GangMob).health > 0 and (n as GangMob).leash > 0.0 \
-				and (n as GangMob).state == S.ENGAGE \
+				and (n as GangMob).state == S.ENGAGE and (n as GangMob)._asleep() \
 				and absf((n as Node2D).global_position.x - global_position.x) < 50.0:
 			buddy = n
 			break
@@ -496,7 +557,7 @@ func _chat_tick(delta: float) -> void:
 			if is_instance_valid(buddy) and buddy.health > 0 and buddy.state != S.ATTACK:
 				buddy.say(String(pair[1])))
 	else:
-		shout("chat", 0.5)
+		shout("chat", 0.8)
 
 
 # 死的时候最后一句话:人没了字还在,飘一下淡掉
@@ -524,7 +585,8 @@ func _last_words() -> void:
 	var k := _ambient_comp(0.9)
 	l.modulate = Color(k, k, k, 1.0)
 	parent.add_child(l)
-	l.global_position = global_position + Vector2(-40, -bark_height - 13.0)
+	# 比头顶的话高一截,不和别人正在喊的叠在一起
+	l.global_position = global_position + Vector2(-40, -bark_height - 24.0)
 	var tw := l.create_tween()
 	tw.tween_property(l, "position:y", l.position.y - 6.0, 1.2)
 	tw.parallel().tween_property(l, "modulate:a", 0.0, 0.5).set_delay(0.8)

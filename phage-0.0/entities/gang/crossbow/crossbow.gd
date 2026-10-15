@@ -111,6 +111,7 @@ func _fire(from: Vector2) -> void:
 		var b := BOLT.instantiate() as Node2D
 		scene.add_child(b)
 		b.global_position = from
+		b.set("shooter", self)
 		b.call("launch", _dir * bolt_speed)
 	play_once(&"Shoot", func() -> void:
 		play_once(&"Reload", func() -> void:

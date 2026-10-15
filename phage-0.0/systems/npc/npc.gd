@@ -208,6 +208,13 @@ func _scene_ambient() -> float:
 	if root == null:
 		return 1.0
 	var found := root.find_children("*", "CanvasModulate", true, false)
+	# NPC 放在单独的子场景里(巷子的 *_people.tscn)时 owner 是那个子场景,往上找整个关卡
+	if found.is_empty():
+		var top: Node = self
+		while top.get_parent() != null and top.get_parent() != get_tree().root:
+			top = top.get_parent()
+		if top != root:
+			found = top.find_children("*", "CanvasModulate", true, false)
 	if found.is_empty():
 		return 1.0
 	var c: Color = (found[0] as CanvasModulate).color

@@ -57,6 +57,7 @@ func _engage(_delta: float) -> void:
 
 
 func _start_aim() -> void:
+	shout("aim", 0.6)
 	state = S.CUSTOM
 	_a = A.AIM
 	_at = 0.0
@@ -126,3 +127,10 @@ func take_damage(value: int) -> void:
 		_line.visible = false
 		cooldown = 0.6
 		state = S.ENGAGE
+
+
+func _lines() -> Dictionary:
+	return {
+		"spot": ["我看见你了。", "别乱跑。"],
+		"aim": ["别动……", "瞄准了。"],
+	}

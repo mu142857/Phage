@@ -34,6 +34,7 @@ const LAMP_ATTACK_SPEED_BONUS: float = 0.3  # 城市的心跳:火光期攻速+30
 const WINDOW_RAMP_RATE: float = 0.05        # 窗边的晨光:持盾时每秒+5%攻速
 const WINDOW_RAMP_MAX_TIME: float = 4.0     # 窗边的晨光:4秒到顶(+20%)
 const TIDE_DAMAGE_BONUS: float = 0.2        # 珊瑚潮汐:冲刺后下一击+20%(加法叠加)
+const WHETSTONE_BONUS: float = 0.15         # 铁锈城剑中石的磨刀石:这一夜攻击+15%(Story 标记 whetstone)
 const TIDE_SPIKE_DAMAGE: int = 40           # 珊瑚潮汐:水刺单发伤害(开盾也放后从60下调)
 const TIDE_SPIKE_SCALE: float = 1.5         # 珊瑚潮汐:水刺整体放大(更显眼)
 const TIDE_RING_BONUS_HITS: int = 4         # 珊瑚潮汐:命中≥这么多根触发下一击强化
@@ -657,6 +658,8 @@ func attack_damage_bonus() -> float:
 		bonus += TIDE_DAMAGE_BONUS
 	if tide_ring_bonus:
 		bonus += TIDE_ALL_HIT_BONUS
+	if Story.flag("whetstone", false):
+		bonus += WHETSTONE_BONUS
 	return bonus
 
 

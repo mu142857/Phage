@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/rust_city/night_market/night_market_people.gd" id="1"]
+[ext_resource type="PackedScene" path="res://systems/npc/npc.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/old_warrior.png" id="3"]
+[ext_resource type="SpriteFrames" path="res://entities/rust_npcs/sheep/sheep.tres" id="4"]
+[ext_resource type="SpriteFrames" path="res://entities/rust_npcs/sheep/bird_dreamcatcher.tres" id="5"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/bowling_pin.png" id="6"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/bowler.png" id="7"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/fox_graffiti.png" id="8"]
+[ext_resource type="PackedScene" path="res://entities/gang/knife/knife.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://entities/gang/thrower/thrower.tscn" id="10"]
+
+[node name="People" type="Node2D"]
+script = ExtResource("1")
+goose_spots = PackedVector2Array(40, 80, 420, 68, 660, 80)
+
+[node name="Warrior" parent="." instance=ExtResource("2")]
+position = Vector2(560, 80)
+display_name = "老板"
+texture = ExtResource("3")
+flip = true
+
+[node name="Sheep" parent="." instance=ExtResource("2")]
+position = Vector2(372, 68)
+display_name = "羊"
+frames = ExtResource("4")
+art_faces_left = true
+flip = true
+
+[node name="Bird" parent="." instance=ExtResource("2")]
+position = Vector2(398, 51)
+frames = ExtResource("5")
+talkable = false
+
+[node name="BowlingPin" parent="." instance=ExtResource("2")]
+position = Vector2(724, 80)
+display_name = "球瓶"
+texture = ExtResource("6")
+talkable = false
+
+[node name="Bowler" parent="." instance=ExtResource("2")]
+position = Vector2(736, 80)
+display_name = "保龄球先生"
+texture = ExtResource("7")
+flip = true
+
+[node name="FoxTail" parent="." instance=ExtResource("2")]
+position = Vector2(70, 72)
+texture = ExtResource("8")
+
+[node name="Gang" type="Node2D" parent="."]
+
+[node name="Knife" parent="Gang" instance=ExtResource("9")]
+position = Vector2(250, 79)
+leash = 35.0
+aggro_range = 70.0
+coins = 2
+
+[node name="Thrower" parent="Gang" instance=ExtResource("10")]
+position = Vector2(241, 31)
+leash = 6.0
+aggro_range = 120.0
+coins = 2

@@ -42,6 +42,8 @@ func reveal() -> void:
 	if not in_bag:
 		return
 	in_bag = false
+	_spotted = true
+	say(["！", "谁？！"][randi() % 2])
 	var p := player()
 	if p != null:
 		face(signf(p.global_position.x - global_position.x))
@@ -53,7 +55,7 @@ func _whistle() -> void:
 	state = S.CUSTOM
 	_blew = false
 	_whistle_cd = whistle_again
-	bark("哔——！", 0.9)
+	say(["哔——！", "来人啊！", "有人闹事！"][randi() % 3])
 	play_once(&"Whistle", func() -> void: state = S.ENGAGE)
 
 
@@ -82,3 +84,10 @@ func _engage(delta: float) -> void:
 		face(signf(dx))
 		velocity.x = 0.0
 		play(&"Idle")
+
+
+func _lines() -> Dictionary:
+	return {
+		"spot": ["来人啊！"],
+		"hurt": ["别打我！", "救命！"],
+	}

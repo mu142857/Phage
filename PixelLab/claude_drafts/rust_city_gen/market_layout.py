@@ -97,4 +97,6 @@ for i, (x, w) in enumerate([(90, 110), (470, 90), (820, 100)]):
     k = f"front_lanterns{i}"
     A.save(k, M.lantern_line(w, seed=700 + i)[0])
     A.front_item(k, x, -9)
+# 巷子里的人(NPC + 角落里的帮派),见 people.py
+A.people()
 A.write()

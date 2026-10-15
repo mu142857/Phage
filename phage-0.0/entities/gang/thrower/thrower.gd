@@ -53,6 +53,7 @@ func _throw() -> void:
 	var scene := get_tree().current_scene
 	if p == null or scene == null:
 		return
+	shout("throw", 0.5)
 	var from := global_position + Vector2(facing * 7.0, -22.0)
 	# 落点:主角现在站的地方,稍微往他跑的方向提前一点
 	var target := p.global_position
@@ -65,3 +66,10 @@ func _throw() -> void:
 	scene.add_child(b)
 	b.global_position = from
 	b.call("launch", v, bottle_gravity)
+
+
+func _lines() -> Dictionary:
+	return {
+		"spot": ["瓶子管够！", "站那别动！"],
+		"throw": ["接着！", "尝尝！"],
+	}

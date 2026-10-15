@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/rust_city/arena_street/arena_street_people.gd" id="1"]
+[ext_resource type="PackedScene" path="res://systems/npc/npc.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/muscle.png" id="3"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/fox_graffiti.png" id="4"]
+[ext_resource type="PackedScene" path="res://entities/gang/brute/brute.tscn" id="5"]
+
+[node name="People" type="Node2D"]
+script = ExtResource("1")
+goose_spots = PackedVector2Array(100, 80, 400, 80)
+
+[node name="Muscle" parent="." instance=ExtResource("2")]
+position = Vector2(470, 80)
+display_name = "肌肉哥"
+texture = ExtResource("3")
+flip = true
+
+[node name="FoxTail" parent="." instance=ExtResource("2")]
+position = Vector2(432, 72)
+texture = ExtResource("4")
+
+[node name="Gang" type="Node2D" parent="."]
+
+[node name="Brute" parent="Gang" instance=ExtResource("5")]
+position = Vector2(604, 79)
+leash = 20.0
+aggro_range = 80.0
+coins = 6

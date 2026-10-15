@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/rust_city/scrap_alley/wild_tire.gd" id="1"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/race/wild_tire.png" id="2"]
+
+[sub_resource type="CircleShape2D" id="Shape"]
+radius = 4.0
+
+[node name="WildTire" type="Area2D"]
+z_index = 10
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -5)
+texture = ExtResource("2")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -5)
+shape = SubResource("Shape")

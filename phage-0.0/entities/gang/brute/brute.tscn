@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://entities/gang/brute/brute.gd" id="1"]
 [ext_resource type="Shader" path="res://asstes/shaders/hurt.tres" id="2"]
 [ext_resource type="SpriteFrames" path="res://entities/gang/brute/brute_frames.tres" id="3"]
+[ext_resource type="SpriteFrames" path="res://entities/gang/brute/brute_glow.tres" id="4"]
 
 [sub_resource type="ShaderMaterial" id="Hurt"]
 resource_local_to_scene = true
@@ -73,6 +74,12 @@ edge_probe_distance = 12.0
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("Hurt")
 sprite_frames = ExtResource("3")
+animation = &"Idle"
+offset = Vector2(5.0, -19.0)
+
+[node name="Glow" type="AnimatedSprite2D" parent="."]
+light_mask = 0
+sprite_frames = ExtResource("4")
 animation = &"Idle"
 offset = Vector2(5.0, -19.0)
 

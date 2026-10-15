@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://entities/gang/thug/thug.gd" id="1"]
 [ext_resource type="Shader" path="res://asstes/shaders/hurt.tres" id="2"]
 [ext_resource type="SpriteFrames" path="res://entities/gang/thug/thug_frames.tres" id="3"]
+[ext_resource type="SpriteFrames" path="res://entities/gang/thug/thug_glow.tres" id="4"]
 
 [sub_resource type="ShaderMaterial" id="Hurt"]
 resource_local_to_scene = true
@@ -71,6 +72,12 @@ bark_height = 24.0
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("Hurt")
 sprite_frames = ExtResource("3")
+animation = &"Idle"
+offset = Vector2(3.0, -14.0)
+
+[node name="Glow" type="AnimatedSprite2D" parent="."]
+light_mask = 0
+sprite_frames = ExtResource("4")
 animation = &"Idle"
 offset = Vector2(3.0, -14.0)
 

@@ -76,4 +76,6 @@ for i, (x, w) in enumerate([(60, 96), (380, 72), (640, 60), (860, 80)]):
     k = f"front_line{i}"
     A.save(k, P.laundry_line(w, seed=900 + i, density=0.9))
     A.front_item(k, x, -10)
+# 巷子里的人(NPC + 角落里的帮派),见 people.py
+A.people()
 A.write()

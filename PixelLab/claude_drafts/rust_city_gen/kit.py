@@ -19,7 +19,7 @@ def V(x, y):
 
 class Alley:
     def __init__(self, dir_rel, scene_name, root_name, width, back_key=None, back_modulate="Color(0.7, 0.7, 0.72, 1)",
-                 canvas_modulate=0.5370987, player_x=30):
+                 canvas_modulate=0.42, player_x=30, buildings_brightness=0.58):
         self.dir = dir_rel.rstrip("/") + "/"
         os.makedirs(PROJ + self.dir, exist_ok=True)
         self.scene_name = scene_name
@@ -57,7 +57,9 @@ class Alley:
             '[sub_resource type="ShaderMaterial" id="TreeSwing"]\nshader = ExtResource("treeswing")\nshader_parameter/Strength = 1.0\nshader_parameter/Speed = 2.0',
             '[sub_resource type="ShaderMaterial" id="ClothSwingFront"]\nshader = ExtResource("silk")\nshader_parameter/Strength = 1.4\nshader_parameter/Speed = 1.0',
         ]
-        self.node(root_name, "Node2D", None, script=self.E("script"), camera_limit_left="0", camera_limit_right=str(width))
+        # 2026-10-15 用户嫌巷子太亮、黑衣人不显眼:整体压暗(原来 0.537 / 楼 0.72)
+        self.node(root_name, "Node2D", None, script=self.E("script"), camera_limit_left="0", camera_limit_right=str(width),
+                  buildings_brightness=str(buildings_brightness))
         self.node("Walls", "Node2D", z_index="10")
         self.node("StaticBody2D", "StaticBody2D", "Walls", collision_mask="0")
         self.node("Ground", "CollisionShape2D", "Walls/StaticBody2D", position=V(0, GROUND), shape='SubResource("Boundary")')
@@ -263,6 +265,11 @@ class Alley:
             props["preserve_player_state"] = "true"
         self.node(name, None, ".", inst="teleport", **props)
         self.node("Hint", "Sprite2D", name, modulate="Color(1.8, 1.8, 1.8, 1)", light_mask="0", z_index="100", position=V(0, -22), texture=self.E("keyq"))
+
+    def people(self):
+        """这条巷子的人(NPC + 角落里的帮派)在单独的 <巷名>_people.tscn(people.py 生成),重跑布局冲不掉。"""
+        self.ext["people"] = ("PackedScene", f"res://{self.dir}{self.scene_name}_people.tscn")
+        self.node("People", None, ".", inst="people")
 
     def front_item(self, key, x, y, swing=True, modulate="Color(0.05, 0.05, 0.06, 1)"):
         self.front.append((key, x, y, swing, modulate))

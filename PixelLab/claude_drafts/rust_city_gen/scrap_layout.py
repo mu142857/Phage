@@ -93,4 +93,6 @@ for i, (x, ln) in enumerate([(70, 30), (118, 44), (330, 26), (520, 50), (560, 34
     k = f"front_chain{i}"
     A.save(k, S.chain(ln, seed=150 + i, hook=(i % 2 == 0)))
     A.front_item(k, x, -4)
+# 巷子里的人(NPC + 角落里的帮派),见 people.py
+A.people()
 A.write()

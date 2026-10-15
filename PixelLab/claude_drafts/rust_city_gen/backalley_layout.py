@@ -9,7 +9,7 @@ from pxlib import CONCRETE, BRICK, GREENGRAY
 
 W = 480
 A = Alley("levels/rust_city/back_alley", "back_alley", "BackAlley", W, back_key="back_far", player_x=25,
-          back_modulate="Color(0.62, 0.62, 0.66, 1)", canvas_modulate=0.46)
+          back_modulate="Color(0.62, 0.62, 0.66, 1)", canvas_modulate=0.36, buildings_brightness=0.55)
 A.save("back_far", BA.back_far())
 A.save("entry_back", BA.entry_back())
 A.save("tenement_a", BA.tenement(411, 100, 124, CONCRETE, ac=2, tally=12))

@@ -30,6 +30,49 @@ def vpipe(c, x, y0, y1, d=4, ramp=COPPER, flange=16):
         c.hline(x - 1, x + d, y, ramp[1]); c.hline(x - 1, x + d, y + 1, ramp[3])
 
 
+# ---- 管子的每一头都要有去处:拐弯(弯头)、拐进墙里(插墙接头)、顶在墙上(法兰)、落地(底座) ----
+def fitting(c, x, y, w, h, ramp):
+    """方形管件(弯头/三通都用它):上左亮、下右暗、四角螺栓。x,y=左上。"""
+    c.rect(x, y, x + w - 1, y + h - 1, ramp[2])
+    c.hline(x, x + w - 1, y, ramp[3]); c.vline(x, y, y + h - 1, ramp[3])
+    c.hline(x, x + w - 1, y + h - 1, ramp[0]); c.vline(x + w - 1, y, y + h - 1, ramp[0])
+    for (bx, by) in [(x + 1, y + 1), (x + w - 2, y + 1), (x + 1, y + h - 2), (x + w - 2, y + h - 2)]:
+        c.set(bx, by, ramp[1])
+
+
+def elbow(c, px, py, dh, dv, ramp):
+    """横管(管顶 py,粗 dh)和竖管(左边 px,粗 dv)在这里拐弯/相交:盖一个管件。"""
+    fitting(c, px - 1, py - 1, dv + 2, dh + 2, ramp)
+
+
+def into_wall(c, x, y, d, ramp, horizontal=True):
+    """管子在这里拐进墙里:一个管件,中间一块黑(管口朝墙里去),旁边墙上一圈影子。"""
+    w = d + 2
+    fitting(c, x - 1, y - 1, w, w, ramp)
+    c.rect(x + 1, y + 1, x + d - 2, y + d - 2, (18, 16, 15))
+    c.set(x + 1, y + 1, ramp[0])
+    for i in range(-2, w):
+        c.darken(x - 2, y + i, 0.7); c.darken(x + w - 1, y + i, 0.75)
+    for i in range(-2, w):
+        c.darken(x + i, y + w - 1, 0.7)
+
+
+def flange_end(c, x, y, d, ramp, side):
+    """横管顶在墙上的那一头:两列宽的法兰圈,比管子上下各多出一格。side=+1 墙在右,-1 墙在左。"""
+    c.vline(x, y - 1, y + d, ramp[0] if side > 0 else ramp[3])
+    c.vline(x - side, y - 1, y + d, ramp[3] if side > 0 else ramp[1])
+    c.set(x - side, y - 1, ramp[3]); c.set(x - side, y + d, ramp[1])
+    c.set(x - side, y + d // 2, ramp[1])
+
+
+def base_plate(c, x, y_bottom, d, ramp=None):
+    """竖管落地:底下一块方底座。"""
+    ramp = ramp or IRONP
+    c.rect(x - 2, y_bottom - 1, x + d + 1, y_bottom, ramp[1])
+    c.hline(x - 2, x + d + 1, y_bottom - 1, ramp[3])
+    c.set(x - 2, y_bottom, ramp[0]); c.set(x + d + 1, y_bottom, ramp[0])
+
+
 def valve(c, x, y, r=3, col=(150, 50, 40)):
     """阀门手轮:一个圈 + 十字辐条。"""
     for a in range(0, 360, 20):
@@ -109,7 +152,11 @@ def boiler_house(seed=201):
         c.set(fx0 - 4, y, IRON_D)
     # 墙上的管子、表、阀
     hpipe(c, 46, R, 66, d=4, ramp=VERDI, flange=10)
-    vpipe(c, 52, 66, H - 1, d=4, ramp=VERDI)
+    vpipe(c, 54, 66, H - 1, d=4, ramp=VERDI)
+    into_wall(c, 45, 66, 4, VERDI)                      # 左头:从墙里出来
+    flange_end(c, R, 66, 4, VERDI, +1)                  # 右头:顶进烟囱柱
+    elbow(c, 54, 66, 4, 4, VERDI)                       # 三通
+    base_plate(c, 54, H - 1, 4)
     gauge(c, 62, 76); valve(c, 60, 88, 3)
     c.grime_bottom(L, R, H - 1, 8, k=0.5)
     for y in range(TOP, H):
@@ -128,25 +175,39 @@ def pipe_house(seed=202):
     c.wall(L, TOP, R, H - 1, CONCRETE, base=2.7, spread=2.6, scale=9)
     c.stains(L, TOP, R, H - 1, 18, (40, 34, 24), r=5, t=0.5)
     c.hline(L - 1, R + 1, TOP - 1, CONCRETE[5]); c.hline(L - 1, R + 1, TOP, CONCRETE[1])
-    c.rect(40, 0, 52, TOP - 2, IRONP[1]); c.hline(40, 52, 0, IRONP[3])        # 屋顶风机房
-    for x in range(42, 51, 2):
+    c.rect(40, 0, 54, TOP - 2, IRONP[1]); c.hline(40, 54, 0, IRONP[3])        # 屋顶风机房
+    for x in range(42, 53, 2):
         c.vline(x, 2, TOP - 3, IRONP[0])
     for y in (34, 58):
         c.ledge(L, R, y, light=CONCRETE[5])
     for (x, y, lit) in [(8, 16, True), (24, 16, False), (8, 40, False), (24, 40, True), (8, 64, True)]:
         c.window(x, y, 6, 9, lit=lit)
     # 竖管三根 + 横管两根 + 阀门表
-    vpipe(c, 36, TOP, H - 1, d=5, ramp=COPPER)
-    vpipe(c, 44, 20, H - 1, d=3, ramp=VERDI)
-    vpipe(c, 52, TOP, H - 1, d=4, ramp=IRONP)
-    hpipe(c, L, 56, 28, d=4, ramp=VERDI, flange=12)
-    hpipe(c, 30, R, 74, d=5, ramp=COPPER, flange=12)
-    valve(c, 38, 52, 3); valve(c, 46, 84, 2, (60, 120, 100)); gauge(c, 54, 44); gauge(c, 22, 82)
+    # 铜管:从地里上来,一直爬到屋顶,拐弯钻进风机房
+    vpipe(c, 34, 4, H - 1, d=5, ramp=COPPER)
+    hpipe(c, 34, 40, 2, d=5, ramp=COPPER, flange=99, rust=False)
+    elbow(c, 34, 2, 5, 5, COPPER)
+    flange_end(c, 40, 2, 5, COPPER, +1)
+    base_plate(c, 34, H - 1, 5)
+    # 铁管:风机房底下出来,直下到地
+    vpipe(c, 49, TOP - 1, H - 1, d=4, ramp=IRONP)
+    c.hline(48, 54, TOP - 1, IRONP[0]); c.hline(48, 54, TOP, IRONP[3])
+    base_plate(c, 49, H - 1, 4)
+    # 绿管:从两扇窗中间的墙里出来,横走,拐弯往下落地
+    vpipe(c, 43, 29, H - 1, d=3, ramp=VERDI)
+    hpipe(c, 16, 45, 26, d=4, ramp=VERDI, flange=12)
+    into_wall(c, 15, 26, 4, VERDI)
+    elbow(c, 43, 26, 4, 3, VERDI)
+    base_plate(c, 43, H - 1, 3)
+    # 铜横管:从铜竖管分出来(三通),往右走到墙角拐过去
+    hpipe(c, 34, R + 1, 74, d=5, ramp=COPPER, flange=12)
+    elbow(c, 34, 74, 5, 5, COPPER)
+    valve(c, 36, 52, 3); valve(c, 44, 86, 2, (60, 120, 100)); gauge(c, 55, 44); gauge(c, 22, 82)
     c.door(10, H - 14, 8, 14, color=IRONP[1], knob=True, step=False)
     c.grime_bottom(L, R, H - 1, 10, k=0.45)
     for y in range(TOP, H):
         c.darken(R, y, 0.6); c.darken(R - 1, y, 0.8)
-    vents = [(38, 52), (55, 74)]
+    vents = [(36, 52), (56, 74)]
     return c, vents
 
 
@@ -166,8 +227,10 @@ def pipe_bridge(W=96, top=0, H=None, seed=203, ramp=COPPER, second=True):
         for i in range(8):     # 斜撑
             c.set(lx + 4 + i, top + 8 + i, IRONP[1]) if lx < W // 2 else c.set(lx - 1 - i, top + 8 + i, IRONP[1])
     hpipe(c, 0, W - 1, top, d=7, ramp=ramp, flange=16)
+    flange_end(c, 0, top, 7, ramp, -1); flange_end(c, W - 1, top, 7, ramp, +1)
     if second:
         hpipe(c, 0, W - 1, top + 9, d=4, ramp=VERDI, flange=12)
+        flange_end(c, 0, top + 9, 4, VERDI, -1); flange_end(c, W - 1, top + 9, 4, VERDI, +1)
     return c
 
 
@@ -266,6 +329,8 @@ def big_boiler(seed=206):
     vpipe(c, 12, 0, BY0, d=7, ramp=COPPER)
     vpipe(c, 58, 0, BY0, d=5, ramp=VERDI)
     hpipe(c, 0, 12, 16, d=5, ramp=COPPER)
+    elbow(c, 12, 16, 5, 7, COPPER)
+    flange_end(c, 0, 16, 5, COPPER, -1)
     # 筒顶可站(检修台)
     c.railing(20, 50, BY0 - 1, h=4, top=IRONP[3], post_a=IRONP[3], post_b=IRONP[1], base=IRONP[2])
     return c, (40, 88), BY0 - 1
@@ -281,8 +346,13 @@ def boiler_gate(seed=207):
     c.bricks(0, 12, W - 1, H - 1, BRICK)
     c.stains(0, 12, W - 1, H - 1, 12, (30, 22, 18), r=5, t=0.5)
     c.hline(0, W - 1, 12, STONE[5]); c.hline(0, W - 1, 13, STONE[3])
-    hpipe(c, 0, W - 1, 4, d=6, ramp=COPPER, flange=12)
-    vpipe(c, 2, 10, H - 1, d=4, ramp=VERDI)
+    vpipe(c, 2, 6, H - 1, d=5, ramp=COPPER)
+    hpipe(c, 2, W - 8, 4, d=6, ramp=COPPER, flange=12)
+    vpipe(c, W - 9, 6, 12, d=5, ramp=COPPER, flange=99)
+    elbow(c, 2, 4, 6, 5, COPPER)
+    elbow(c, W - 9, 4, 6, 5, COPPER)
+    c.hline(W - 11, W - 3, 12, COPPER[0]); c.hline(W - 11, W - 3, 11, COPPER[3])   # 插进门房顶的法兰
+    base_plate(c, 2, H - 1, 5)
     # 门洞
     DX0, DX1, DY = 12, 45, 24
     c.rect(DX0 - 2, DY - 2, DX1 + 2, H - 1, STONE[3]); c.hline(DX0 - 2, DX1 + 2, DY - 2, STONE[5])
@@ -345,7 +415,7 @@ def boiler_back(W=320, H=90, seed=208):
     return c
 
 
-def front_pipe(W=200, d=8, seed=209):
+def front_pipe(W=1100, d=8, seed=209):
     c = Canvas(W, d + 6, seed)
     hpipe(c, 0, W - 1, 3, d=d, ramp=IRONP, flange=24, rust=False)
     for x in range(20, W, 60):      # 吊卡
@@ -353,7 +423,7 @@ def front_pipe(W=200, d=8, seed=209):
     return c
 
 
-def front_vpipe(H=100, d=7, seed=210):
+def front_vpipe(H=116, d=7, seed=210):
     c = Canvas(d + 2, H, seed)
     vpipe(c, 1, 0, H - 1, d=d, ramp=IRONP, flange=20)
     return c

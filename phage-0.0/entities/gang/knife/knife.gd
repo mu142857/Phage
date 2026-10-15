@@ -67,3 +67,12 @@ func _custom_tick(_delta: float) -> void:
 			velocity.x = 0.0
 	else:
 		velocity.x = 0.0
+
+
+func _lines() -> Dictionary:
+	return {
+		"spot": ["嘻嘻。", "新面孔。", "奥斯卡帮的。"],
+		"attack": ["看刀！", "嗖！"],
+		"player_hit": ["快不快？", "嘻嘻嘻。"],
+		"hurt": ["哎呀！", "有两下。"],
+	}

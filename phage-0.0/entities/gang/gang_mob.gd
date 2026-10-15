@@ -1,4 +1,6 @@
-# 下水道帮小怪的公共底子(收钱小弟/刀仔/井盖盾兵/扔瓶子的/大块头/放哨的都从这儿派生)。
+# 奥斯卡帮(黑衣人)小怪的公共底子(收钱小弟/刀仔/井盖盾兵/扔瓶子的/大块头/放哨的都从这儿派生)。
+# 红眼睛和红围巾在单独的 Glow 层(不吃灯光、按场景压暗补亮),黑的地方也一眼看得见。
+# 喊话:shout(事件) 从 _lines() / COMMON_LINES 里挑一句,同时最多两个人在说话,字不叠在一起。
 # 贴图朝右画,翻面 = AnimatedSprite2D 和 AttackCheck 的 scale.x 一起取反(判定跟着镜像)。
 # 原点在脚底,贴图最后一行落在地面线上面一行。
 # 状态:FALL(从天上掉下来)→ LAND(落地蹲一下)→ ENGAGE(各怪自己的打法,_engage 里写)
@@ -10,8 +12,32 @@ extends CharacterBody2D
 signal died(mob: GangMob)
 
 const DEATH_SCENE: PackedScene = preload("res://entities/gang/gang_death.tscn")
+const COIN_SCENE: PackedScene = preload("res://entities/gang/coin/coin_pickup.tscn")
 const FONT: FontFile = preload("res://asstes/fonts/PixelFont.ttf")
 const BARK_COLOR := Color(0.95, 0.86, 0.78)
+
+# 所有黑衣人都会说的;子类 _lines() 里同名的事件会盖掉这里的
+const COMMON_LINES := {
+	"spot": ["站住！", "交钱！", "奥斯卡帮！", "哪来的？"],
+	"attack": ["看招！", "嘿！"],
+	"hurt": ["哎哟！", "敢打我？", "疼！"],
+	"die": ["呃啊——", "记住你了……", "告诉老大……", "我的钱……"],
+	"buddy_down": ["兄弟！", "你完了！", "给我上！"],
+	"player_hit": ["交不交？", "服不服？", "哈！"],
+	"chat": ["好无聊……", "钱真难收。", "哈——欠", "下雨了？", "黑衣服显脏。"],
+}
+# 两个黑衣人蹲在一起时的闲聊(甲说一句,乙接一句)。主角走到看得见、还没惊动他们的距离就能听到。
+const CHATS := [
+	["今天收了几个？", "一个都没。"],
+	["老大说加班。", "又加班……"],
+	["这袍子好热。", "帅就行。"],
+	["我们叫啥来着？", "奥斯卡帮。"],
+	["为啥穿黑的？", "显瘦。"],
+	["围巾歪了。", "……谢了。"],
+	["那边有人。", "……别看他。"],
+]
+const MAX_TALKING := 2
+static var _talking := {}   # 正在说话的:实例 id → 说到什么时候(毫秒)
 
 @export var max_health: int = 300
 @export var gravity: float = 850.0
@@ -39,8 +65,15 @@ const BARK_COLOR := Color(0.95, 0.86, 0.78)
 @export var death_height: float = 10.0
 ## 头顶冒字的高度
 @export var bark_height: float = 26.0
+## 蹲在巷子角落的:只在出生点左右这么远里活动,主角走出 aggro_range 就回原地(0 = 不管,伏击战用)
+@export var leash: float = 0.0
+## 死了掉几个铜板
+@export var coins: int = 0
 
 enum S { FALL, LAND, ENGAGE, ATTACK, CUSTOM }
+
+## 小游戏进行时(赛跑/陪练…)角落里的怪全都不理人,免得半路杀出来
+static var truce := false
 
 var state: S = S.ENGAGE
 var health: int = 0
@@ -54,22 +87,32 @@ var _once_then: Callable = Callable()
 var _bark: Label = null
 var _bark_tween: Tween = null
 var _passed_platforms: Array = []
+var home_x: float = 0.0
+var _shout_cd := 0.0
+var _chat_cd := 0.0
+var _spotted := false
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hit_player: AnimationPlayer = get_node_or_null("HitEffectPlayer") as AnimationPlayer
 @onready var attack_check: Area2D = get_node_or_null("AttackCheck") as Area2D
+@onready var glow: AnimatedSprite2D = get_node_or_null("Glow") as AnimatedSprite2D
 
 
 func _ready() -> void:
 	add_to_group("monster")
 	add_to_group("gang")
 	health = max_health
+	home_x = global_position.x
 	if sprite.material != null:
 		sprite.material = sprite.material.duplicate()
 		if sprite.material is ShaderMaterial:
 			(sprite.material as ShaderMaterial).set_shader_parameter("Enabled", false)
 	sprite.animation_finished.connect(_on_animation_finished)
 	_make_bark()
+	if glow != null:
+		glow.stop()
+		glow.modulate = Color(_ambient_comp(0.95), _ambient_comp(0.95), _ambient_comp(0.95), 1.0)
+	_chat_cd = randf_range(1.0, 4.0)
 	var p := player()
 	if p != null:
 		face(signf(p.global_position.x - global_position.x))
@@ -85,6 +128,17 @@ func _ready() -> void:
 ## 子类:不是空降时一开场干什么(默认直接开打)
 func _start() -> void:
 	state = S.ENGAGE
+
+
+func _process(delta: float) -> void:
+	# 发光层跟着本体的动画/帧/朝向走
+	if glow != null:
+		if glow.animation != sprite.animation:
+			glow.animation = sprite.animation
+		glow.frame = sprite.frame
+		glow.scale = sprite.scale
+		glow.visible = sprite.visible
+	_shout_cd = maxf(0.0, _shout_cd - delta)
 
 
 func _physics_process(delta: float) -> void:
@@ -107,18 +161,56 @@ func _physics_process(delta: float) -> void:
 			S.LAND:
 				velocity.x = 0.0
 			S.ENGAGE:
-				_engage(delta)
+				if _asleep():
+					_go_home()
+					_chat_tick(delta)
+				else:
+					if not _spotted:
+						_spotted = true
+						shout("spot", 0.85)
+					_engage(delta)
 			S.ATTACK:
 				_attack_tick(delta)
 			S.CUSTOM:
 				_custom_tick(delta)
+	# 角落里的怪不离开自己那一块
+	if leash > 0.0 and state != S.FALL:
+		var off := global_position.x - home_x
+		if (off > leash and velocity.x > 0.0) or (off < -leash and velocity.x < 0.0):
+			velocity.x = 0.0
 	move_and_slide()
+
+
+## 角落里的怪:主角不在跟前就不理他
+func _asleep() -> bool:
+	if leash <= 0.0:
+		return false
+	if truce:
+		return true
+	var p := player()
+	if p == null:
+		return true
+	return absf(p.global_position.x - home_x) > aggro_range or absf(p.global_position.y - global_position.y) > 40.0
+
+
+func _go_home() -> void:
+	var dx := home_x - global_position.x
+	if absf(dx) > 3.0:
+		face(signf(dx))
+		walk(facing, move_speed)
+	else:
+		velocity.x = 0.0
+		play(&"Idle")
 
 
 # ------------------------------------------------------------------ 出场
 func _land() -> void:
 	_pass_platforms(false)
 	state = S.LAND
+	# 伏击战每波第一个落地的喊一句(back_alley_ambush 设的)
+	if has_meta("entry_line"):
+		_spotted = true
+		say(String(get_meta("entry_line")))
 	_on_landed()
 	play_once(&"Land", _after_land)
 
@@ -220,6 +312,7 @@ func start_attack(anim: StringName = &"") -> void:
 	state = S.ATTACK
 	_hit_done = false
 	velocity.x = 0.0
+	shout("attack", 0.35)
 	_on_attack_started()
 	play_once(anim, _end_attack)
 
@@ -242,6 +335,7 @@ func try_hit() -> bool:
 		if body != null and body.is_in_group("player") and body.has_method("take_damage"):
 			body.call("take_damage", 1)
 			_hit_done = true
+			shout("player_hit", 0.6)
 			return true
 	return false
 
@@ -266,6 +360,7 @@ func take_damage(value: int) -> void:
 	if health <= 0:
 		_die()
 		return
+	shout("hurt", 0.3)
 	if not heavy:
 		_knockback()
 
@@ -294,6 +389,17 @@ func _knockback() -> void:
 
 func _die() -> void:
 	died.emit(self)
+	_talking.erase(get_instance_id())
+	_last_words()
+	# 旁边的同伙喊一声
+	var best: GangMob = null
+	for n in get_tree().get_nodes_in_group("gang"):
+		if n != self and n is GangMob and (n as GangMob).health > 0:
+			var d := absf((n as Node2D).global_position.x - global_position.x)
+			if d < 110.0 and (best == null or d < absf(best.global_position.x - global_position.x)):
+				best = n
+	if best != null:
+		best.shout("buddy_down", 0.75)
 	var scene := get_tree().current_scene
 	if scene != null and DEATH_SCENE != null:
 		var fx := DEATH_SCENE.instantiate() as GPUParticles2D
@@ -307,7 +413,133 @@ func _die() -> void:
 			mat.emission_box_extents = Vector3(death_height * 0.5, death_height, 1.0)
 			fx.process_material = mat
 		fx.emitting = true
+	if scene != null and coins > 0:
+		for i in coins:
+			var c := COIN_SCENE.instantiate() as Node2D
+			c.position = global_position + Vector2(0.0, -8.0)
+			c.set("velocity", Vector2(randf_range(-45.0, 45.0), randf_range(-150.0, -90.0)))
+			scene.add_child(c)
 	queue_free()
+
+
+# ------------------------------------------------------------------ 喊话
+## 子类:自己的台词,{事件: [句子...]};没写的事件用 COMMON_LINES
+func _lines() -> Dictionary:
+	return {}
+
+
+func lines_for(event: String) -> Array:
+	var own := _lines()
+	if own.has(event):
+		return own[event]
+	return COMMON_LINES.get(event, [])
+
+
+## 按事件喊一句。chance = 这次喊不喊的概率;force = 不管冷却和"同时最多两个人说话"
+func shout(event: String, chance := 1.0, force := false) -> bool:
+	if health <= 0:
+		return false
+	if not force and (_shout_cd > 0.0 or randf() > chance):
+		return false
+	var pool := lines_for(event)
+	if pool.is_empty():
+		return false
+	return say(String(pool[randi() % pool.size()]), force)
+
+
+## 直接喊这句(受"同时最多两个人说话"管,force 除外)
+func say(text: String, force := true) -> bool:
+	var now := Time.get_ticks_msec()
+	var busy := 0
+	for k in _talking.keys():
+		if int(_talking[k]) > now and k != get_instance_id():
+			busy += 1
+		elif int(_talking[k]) <= now:
+			_talking.erase(k)
+	if busy >= MAX_TALKING and not force:
+		return false
+	bark(text, 1.1)
+	_talking[get_instance_id()] = now + 1400
+	_shout_cd = 2.2
+	return true
+
+
+# 角落里没惊动的时候:主角在看得见的地方,就听得到他们聊天
+func _chat_tick(delta: float) -> void:
+	if truce or leash <= 0.0:
+		return
+	var p := player()
+	if p == null:
+		return
+	var dx := absf(p.global_position.x - global_position.x)
+	if dx > 150.0 or dx < aggro_range * 0.6:
+		return
+	_chat_cd -= delta
+	if _chat_cd > 0.0:
+		return
+	_chat_cd = randf_range(4.5, 7.5)
+	# 旁边有同伙就俩人一问一答,没有就自己嘀咕
+	var buddy: GangMob = null
+	for n in get_tree().get_nodes_in_group("gang"):
+		# 只找站着闲着的同伙(还装成垃圾袋的放哨的不算,一接话就露馅了)
+		if n != self and n is GangMob and (n as GangMob).health > 0 and (n as GangMob).leash > 0.0 \
+				and (n as GangMob).state == S.ENGAGE \
+				and absf((n as Node2D).global_position.x - global_position.x) < 50.0:
+			buddy = n
+			break
+	if buddy != null:
+		var pair: Array = CHATS[randi() % CHATS.size()]
+		if not say(String(pair[0]), false):
+			return
+		buddy._chat_cd = maxf(buddy._chat_cd, 3.0)
+		get_tree().create_timer(1.4).timeout.connect(func() -> void:
+			if is_instance_valid(buddy) and buddy.health > 0 and buddy.state != S.ATTACK:
+				buddy.say(String(pair[1])))
+	else:
+		shout("chat", 0.5)
+
+
+# 死的时候最后一句话:人没了字还在,飘一下淡掉
+func _last_words() -> void:
+	if randf() > 0.6:
+		return
+	var pool := lines_for("die")
+	if pool.is_empty():
+		return
+	var parent := get_parent()
+	if parent == null:
+		return
+	var l := Label.new()
+	l.text = String(pool[randi() % pool.size()])
+	l.add_theme_font_override("font", FONT)
+	l.add_theme_font_size_override("font_size", 11)
+	l.add_theme_color_override("font_color", BARK_COLOR)
+	l.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
+	l.add_theme_constant_override("shadow_offset_x", 1)
+	l.add_theme_constant_override("shadow_offset_y", 1)
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.size = Vector2(80, 12)
+	l.z_index = 30
+	l.light_mask = 0
+	var k := _ambient_comp(0.9)
+	l.modulate = Color(k, k, k, 1.0)
+	parent.add_child(l)
+	l.global_position = global_position + Vector2(-40, -bark_height - 13.0)
+	var tw := l.create_tween()
+	tw.tween_property(l, "position:y", l.position.y - 6.0, 1.2)
+	tw.parallel().tween_property(l, "modulate:a", 0.0, 0.5).set_delay(0.8)
+	tw.tween_callback(l.queue_free)
+
+
+## 场景压暗(CanvasModulate)补偿:让不吃灯光的东西(字、红眼睛)最后亮到 target 左右
+func _ambient_comp(target: float) -> float:
+	var scene: Node = self
+	while scene.get_parent() != null and scene.get_parent() != get_tree().root:
+		scene = scene.get_parent()
+	for c in scene.get_children():
+		if c is CanvasModulate:
+			return clampf(target / maxf((c as CanvasModulate).color.r, 0.2), 1.0, 3.0)
+	return 1.0
 
 
 # ------------------------------------------------------------------ 小工具
@@ -396,12 +628,7 @@ func _make_bark() -> void:
 	_bark.z_index = 30
 	_bark.light_mask = 0
 	# 字不吃灯光,场景压暗(CanvasModulate)会把它压成灰的:按压暗程度补回来,补到 0.9 左右不发光
-	var k := 1.0
-	var scene := get_tree().current_scene
-	if scene != null:
-		for c in scene.get_children():
-			if c is CanvasModulate:
-				k = clampf(0.9 / maxf((c as CanvasModulate).color.r, 0.2), 1.0, 3.0)
+	var k := _ambient_comp(0.9)
 	_bark.modulate = Color(k, k, k, 1.0)
 	add_child(_bark)
 

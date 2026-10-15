@@ -42,6 +42,14 @@ var waves: Array = [
 	[["brute", 66], ["knife", -48]],
 ]
 
+# 每波落地时喊的开场白:[这一波第几个人喊, 喊什么]
+var wave_lines: Array = [
+	[0, "奥斯卡帮到！"],
+	[0, "兄弟们上！"],
+	[0, "围住他！"],
+	[1, "大哥来了！"],
+]
+
 enum P { WAIT, DELAY, SPAWN, FIGHT, DONE }
 
 var phase: P = P.WAIT
@@ -50,6 +58,7 @@ var _wave := -1
 var _queue: Array = []
 var _alive: Array = []
 var _lookout_blew := false
+var _wave_index := 0   # 这一波已经放下来几个
 var _gate: Node2D = null
 var _gate_shape: CollisionShape2D = null
 var _gate_sprite: Node2D = null
@@ -128,6 +137,7 @@ func _begin() -> void:
 func _next_wave() -> void:
 	_wave += 1
 	_queue = waves[_wave].duplicate()
+	_wave_index = 0
 	phase = P.SPAWN
 	_t = 0.0
 
@@ -164,6 +174,9 @@ func _spawn(entry: Array) -> void:
 				x = r.x - 4.0 if absf(x - r.x) < absf(x - r.y) else r.y + 4.0
 		x = clampf(x, arena_left + 10.0, arena_right - 10.0)
 	var mob := (SCENES[kind] as PackedScene).instantiate() as Node2D
+	if _wave >= 0 and _wave < wave_lines.size() and int(wave_lines[_wave][0]) == _wave_index:
+		mob.set_meta("entry_line", String(wave_lines[_wave][1]))
+	_wave_index += 1
 	mob.set("drop_in", true)
 	mob.set("land_on_platforms", typeof(entry[1]) == TYPE_STRING and entry[1] == "perch")
 	mob.position = Vector2(x, drop_y)

@@ -18,8 +18,6 @@
 [ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/boiler_gate.png" id="boiler_gate"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/pipe_house.png" id="pipe_house"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/boiler_house.png" id="boiler_house"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/pipe_bridge30.png" id="pipe_bridge30"]
-[ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/pipe_bridge40.png" id="pipe_bridge40"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/water_tank.png" id="water_tank"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/catwalk.png" id="catwalk"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/big_boiler.png" id="big_boiler"]
@@ -28,8 +26,11 @@
 [ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/barrel_oil.png" id="barrel_oil"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/black_building_1.png" id="black1"]
 [ext_resource type="PackedScene" path="res://levels/rust_city/alley_fx/steam.tscn" id="fx_steam"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/pipe_bridge30.png" id="pipe_bridge30"]
+[ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/pipe_bridge40.png" id="pipe_bridge40"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/front_pipe.png" id="front_pipe"]
 [ext_resource type="Texture2D" path="res://levels/rust_city/boiler_alley/front_vpipe.png" id="front_vpipe"]
+[ext_resource type="PackedScene" path="res://levels/rust_city/boiler_alley/boiler_alley_people.tscn" id="people"]
 
 [sub_resource type="WorldBoundaryShape2D" id="Boundary"]
 
@@ -69,11 +70,11 @@ shader = ExtResource("silk")
 shader_parameter/Strength = 1.4
 shader_parameter/Speed = 1.0
 
-[sub_resource type="RectangleShape2D" id="Plat96"]
-size = Vector2(96, 2)
+[sub_resource type="RectangleShape2D" id="Plat104"]
+size = Vector2(104, 2)
 
-[sub_resource type="RectangleShape2D" id="PlatDetect96"]
-size = Vector2(96, 8)
+[sub_resource type="RectangleShape2D" id="PlatDetect104"]
+size = Vector2(104, 8)
 
 [sub_resource type="RectangleShape2D" id="Plat37"]
 size = Vector2(37, 2)
@@ -93,6 +94,12 @@ size = Vector2(12, 11)
 [sub_resource type="RectangleShape2D" id="Rect12x12"]
 size = Vector2(12, 12)
 
+[sub_resource type="RectangleShape2D" id="Plat120"]
+size = Vector2(120, 2)
+
+[sub_resource type="RectangleShape2D" id="PlatDetect120"]
+size = Vector2(120, 8)
+
 [sub_resource type="RectangleShape2D" id="Rect8x11"]
 size = Vector2(8, 11)
 
@@ -106,6 +113,7 @@ size = Vector2(31, 8)
 script = ExtResource("script")
 camera_limit_left = 0
 camera_limit_right = 800
+buildings_brightness = 0.58
 
 [node name="Walls" type="Node2D" parent="."]
 z_index = 10
@@ -153,13 +161,17 @@ position = Vector2(85, 32)
 texture = ExtResource("pipe_house")
 
 [node name="Steam_PH1_0" parent="." instance=ExtResource("fx_steam")]
-position = Vector2(92, 36)
+position = Vector2(90, 36)
 
 [node name="Steam_PH1_1" parent="." instance=ExtResource("fx_steam")]
-position = Vector2(109, 58)
+position = Vector2(110, 58)
+
+[node name="BoilerHouse1" type="Sprite2D" parent="Buildings"]
+position = Vector2(254, 28)
+texture = ExtResource("boiler_house")
 
 [node name="Bridge1" type="Sprite2D" parent="Props"]
-position = Vector2(164, 65)
+position = Vector2(165, 65)
 texture = ExtResource("pipe_bridge30")
 
 [node name="Plat_Bridge1" type="StaticBody2D" parent="Walls"]
@@ -167,8 +179,8 @@ collision_mask = 0
 script = ExtResource("drop")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Bridge1"]
-position = Vector2(164, 51)
-shape = SubResource("Plat96")
+position = Vector2(165, 51)
+shape = SubResource("Plat104")
 one_way_collision = true
 
 [node name="Area2D" type="Area2D" parent="Walls/Plat_Bridge1"]
@@ -176,15 +188,11 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Bridge1/Area2D"]
-position = Vector2(164, 47)
-shape = SubResource("PlatDetect96")
+position = Vector2(165, 47)
+shape = SubResource("PlatDetect104")
 
 [node name="Steam_B1" parent="." instance=ExtResource("fx_steam")]
-position = Vector2(168, 50)
-
-[node name="BoilerHouse1" type="Sprite2D" parent="Buildings"]
-position = Vector2(254, 28)
-texture = ExtResource("boiler_house")
+position = Vector2(169, 50)
 
 [node name="Fire1_0" type="PointLight2D" parent="Buildings"]
 position = Vector2(246, 62)
@@ -274,10 +282,10 @@ scale = Vector2(-1, 1)
 texture = ExtResource("pipe_house")
 
 [node name="Steam_PH2_0" parent="." instance=ExtResource("fx_steam")]
-position = Vector2(443, 36)
+position = Vector2(445, 36)
 
 [node name="Steam_PH2_1" parent="." instance=ExtResource("fx_steam")]
-position = Vector2(426, 58)
+position = Vector2(425, 58)
 
 [node name="CrateS3" type="Sprite2D" parent="Props"]
 position = Vector2(492, 74.5)
@@ -295,8 +303,12 @@ texture = ExtResource("crate_steel2")
 position = Vector2(494, 63)
 shape = SubResource("Rect12x12")
 
+[node name="Black1" type="Sprite2D" parent="Buildings"]
+position = Vector2(627.5, 15.5)
+texture = ExtResource("black1")
+
 [node name="Bridge2" type="Sprite2D" parent="Props"]
-position = Vector2(548, 60)
+position = Vector2(540, 60)
 texture = ExtResource("pipe_bridge40")
 
 [node name="Plat_Bridge2" type="StaticBody2D" parent="Walls"]
@@ -304,8 +316,8 @@ collision_mask = 0
 script = ExtResource("drop")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Bridge2"]
-position = Vector2(548, 41)
-shape = SubResource("Plat96")
+position = Vector2(540, 41)
+shape = SubResource("Plat120")
 one_way_collision = true
 
 [node name="Area2D" type="Area2D" parent="Walls/Plat_Bridge2"]
@@ -313,15 +325,11 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Plat_Bridge2/Area2D"]
-position = Vector2(548, 37)
-shape = SubResource("PlatDetect96")
+position = Vector2(540, 37)
+shape = SubResource("PlatDetect120")
 
 [node name="Steam_B2" parent="." instance=ExtResource("fx_steam")]
-position = Vector2(536, 40)
-
-[node name="Black1" type="Sprite2D" parent="Buildings"]
-position = Vector2(627.5, 15.5)
-texture = ExtResource("black1")
+position = Vector2(520, 40)
 
 [node name="BoilerHouse2" type="Sprite2D" parent="Buildings"]
 position = Vector2(680, 28)
@@ -454,6 +462,8 @@ z_index = 100
 position = Vector2(0, -22)
 texture = ExtResource("keyq")
 
+[node name="People" parent="." instance=ExtResource("people")]
+
 [node name="Player" parent="." instance=ExtResource("player")]
 modulate = Color(0.68512195, 0.68512195, 0.68512195, 1)
 position = Vector2(24, 70)
@@ -464,7 +474,7 @@ scale = Vector2(3.0664063, 1.21875)
 texture = SubResource("PlayerLightTex")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.5370987, 0.5370987, 0.5370987, 1)
+color = Color(0.42, 0.42, 0.42, 1)
 
 [node name="0point0xMoving" type="Parallax2D" parent="."]
 scroll_scale = Vector2(0, 0)
@@ -538,28 +548,21 @@ scroll_scale = Vector2(1.2, 1.2)
 [node name="Front0" type="Sprite2D" parent="1point2xMoving"]
 modulate = Color(0.05, 0.05, 0.06, 1)
 light_mask = 0
-position = Vector2(40, -2)
+position = Vector2(-80, -2)
 texture = ExtResource("front_pipe")
 centered = false
 
 [node name="Front1" type="Sprite2D" parent="1point2xMoving"]
 modulate = Color(0.05, 0.05, 0.06, 1)
 light_mask = 0
-position = Vector2(520, 4)
-texture = ExtResource("front_pipe")
+position = Vector2(300, -14)
+texture = ExtResource("front_vpipe")
 centered = false
 
 [node name="Front2" type="Sprite2D" parent="1point2xMoving"]
 modulate = Color(0.05, 0.05, 0.06, 1)
 light_mask = 0
-position = Vector2(300, -10)
-texture = ExtResource("front_vpipe")
-centered = false
-
-[node name="Front3" type="Sprite2D" parent="1point2xMoving"]
-modulate = Color(0.05, 0.05, 0.06, 1)
-light_mask = 0
-position = Vector2(840, -10)
+position = Vector2(840, -14)
 texture = ExtResource("front_vpipe")
 centered = false
 

@@ -80,4 +80,6 @@ for i, x in enumerate([30, 250, 520, 760]):
     k = f"front_vines{i}"
     A.save(k, S.front_vines(seed=360 + i))
     A.front_item(k, x, -2, modulate="Color(0.04, 0.05, 0.04, 1)")
+# 巷子里的人(NPC + 角落里的帮派),见 people.py
+A.people()
 A.write()

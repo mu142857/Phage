@@ -38,7 +38,8 @@ i = s.index("[sub_resource") if "[sub_resource" in s else s.index("[node")
 s = s[:i] + '[ext_resource type="Script" path="res://levels/test/_tmp_render/drv.gd" id="999_r"]\n\n' + s[i:]
 s += '\n[node name="Drv" type="Node" parent="."]\nscript = ExtResource("999_r")\nxs = [%s]\npy = %s\n' % (", ".join(str(x) for x in xs), py)
 open(TMP + "r.tscn", "w").write(s)
-fr_dir = S + "/_frames"
+import tempfile
+fr_dir = os.path.join(tempfile.gettempdir(), "phage_render_frames")   # 别写进仓库(之前写在 _frames/ 被一起提交了)
 for attempt in range(4):
     shutil.rmtree(fr_dir, ignore_errors=True); os.makedirs(fr_dir)
     subprocess.run(["/Applications/Godot.app/Contents/MacOS/Godot", "--path", PROJ, "res://levels/test/_tmp_render/r.tscn", "-t",

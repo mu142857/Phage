@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/rust_city/boiler_alley/boiler_alley_people.gd" id="1"]
+[ext_resource type="PackedScene" path="res://systems/npc/npc.tscn" id="2"]
+[ext_resource type="SpriteFrames" path="res://entities/rust_npcs/blue_slime/blue_slime.tres" id="3"]
+[ext_resource type="SpriteFrames" path="res://entities/talktive_npc/blue_dragon/blue_dragon.tres" id="4"]
+[ext_resource type="Texture2D" path="res://entities/rust_npcs/fox_graffiti.png" id="5"]
+[ext_resource type="PackedScene" path="res://entities/gang/shield/shield.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://entities/gang/thrower/thrower.tscn" id="7"]
+
+[node name="People" type="Node2D"]
+script = ExtResource("1")
+goose_spots = PackedVector2Array(40, 80, 470, 80, 630, 80)
+
+[node name="Slime" parent="." instance=ExtResource("2")]
+position = Vector2(250, 80)
+display_name = "蓝史莱姆"
+frames = ExtResource("3")
+
+[node name="Dragon" parent="." instance=ExtResource("2")]
+position = Vector2(704, 34)
+frames = ExtResource("4")
+art_faces_left = true
+talkable = false
+
+[node name="FoxTail" parent="." instance=ExtResource("2")]
+position = Vector2(80, 72)
+texture = ExtResource("5")
+
+[node name="Gang" type="Node2D" parent="."]
+
+[node name="ShieldGuy" parent="Gang" instance=ExtResource("6")]
+position = Vector2(378, 79)
+leash = 25.0
+aggro_range = 100.0
+coins = 3
+
+[node name="Thrower" parent="Gang" instance=ExtResource("7")]
+position = Vector2(372, 43)
+leash = 25.0
+aggro_range = 110.0
+coins = 2

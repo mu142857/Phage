@@ -57,3 +57,10 @@ func _end_attack() -> void:
 	play_once(&"Fetch", func() -> void:
 		cooldown = attack_cooldown
 		state = S.ENGAGE)
+
+
+func _lines() -> Dictionary:
+	return {
+		"spot": ["让开让开！", "桶来了！"],
+		"attack": ["滚过去！", "让开！"],
+	}

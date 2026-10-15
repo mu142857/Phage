@@ -48,6 +48,7 @@ func _blocks(_value: int) -> bool:
 	if not in_front or from_above:
 		return false
 	# 挡住:火星 + 往后一顿,攻击动作不打断
+	shout("block", 0.7)
 	var fx := CLANG_SPARKS.instantiate() as Node2D
 	get_tree().current_scene.add_child(fx)
 	fx.global_position = global_position + Vector2(facing * 10.0, -14.0)
@@ -56,3 +57,11 @@ func _blocks(_value: int) -> bool:
 		state = S.CUSTOM
 		play_once(&"Block", func() -> void: state = S.ENGAGE)
 	return true
+
+
+func _lines() -> Dictionary:
+	return {
+		"spot": ["盾在人在！", "来啊！"],
+		"attack": ["捅！"],
+		"block": ["当！", "没用的！", "打不动吧？"],
+	}

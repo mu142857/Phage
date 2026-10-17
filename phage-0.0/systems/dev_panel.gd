@@ -231,7 +231,7 @@ func _build_ui() -> void:
 	panel.size = DESIGN
 	var theme := Theme.new()
 	theme.default_font = FONT
-	theme.default_font_size = 14
+	theme.default_font_size = 12
 	panel.theme = theme
 	add_child(panel)
 

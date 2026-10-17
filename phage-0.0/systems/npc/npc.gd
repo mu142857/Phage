@@ -87,7 +87,7 @@ func _ready() -> void:
 	add_child(_hint)
 	_bark = Label.new()
 	_bark.add_theme_font_override("font", FONT)
-	_bark.add_theme_font_size_override("font_size", 11)
+	_bark.add_theme_font_size_override("font_size", 12)
 	_bark.add_theme_color_override("font_color", BARK_COLOR)
 	_bark.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	_bark.add_theme_constant_override("shadow_offset_x", 1)
@@ -305,7 +305,7 @@ func bark_rect() -> Rect2:
 
 
 func _bark_width() -> float:
-	return FONT.get_string_size(_bark.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x + 2.0
+	return FONT.get_string_size(_bark.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x + 2.0
 
 
 # 冒的话不和别的字叠:自己头顶有"…"就先抬一行;再躲开所有可交互提示和比自己先冒的话,

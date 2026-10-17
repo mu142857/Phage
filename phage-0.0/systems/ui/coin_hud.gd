@@ -31,7 +31,7 @@ func _ready() -> void:
 	_label.offset_bottom = TOP + 11.0
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_label.add_theme_font_override("font", FONT)
-	_label.add_theme_font_size_override("font_size", 11)
+	_label.add_theme_font_size_override("font_size", 12)
 	_label.add_theme_color_override("font_color", TEXT_COLOR)
 	_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	_label.add_theme_constant_override("shadow_offset_x", 1)
@@ -56,7 +56,7 @@ func refresh() -> void:
 	var goal: int = int(Story.flag("coin_goal", 0))
 	_label.text = "%d/%d" % [Story.coins, goal] if goal > 0 else str(Story.coins)
 	# 图标贴在数字左边
-	var width := FONT.get_string_size(_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x
+	var width := FONT.get_string_size(_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x
 	var vp := get_viewport().get_visible_rect().size
 	_icon.position = Vector2(roundf(vp.x - RIGHT_MARGIN - width - ICON.get_width() - 2.0), TOP + 3.0)
 	if _shown_coins >= 0 and Story.coins != _shown_coins:

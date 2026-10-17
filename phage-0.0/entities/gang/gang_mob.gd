@@ -163,7 +163,7 @@ func _keep_bark_on_screen() -> void:
 	var inv := vp.get_canvas_transform().affine_inverse()
 	var left := (inv * Vector2.ZERO).x + 1.0
 	var right := (inv * vp.get_visible_rect().size).x - 1.0
-	var w := FONT.get_string_size(_bark.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x
+	var w := FONT.get_string_size(_bark.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x
 	var cx := global_position.x
 	var half := w / 2.0
 	cx = clampf(cx, left + half, right - half)
@@ -642,7 +642,7 @@ func _last_words() -> void:
 	var l := Label.new()
 	l.text = String(pool[randi() % pool.size()])
 	l.add_theme_font_override("font", FONT)
-	l.add_theme_font_size_override("font_size", 11)
+	l.add_theme_font_size_override("font_size", 12)
 	l.add_theme_color_override("font_color", BARK_COLOR)
 	l.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	l.add_theme_constant_override("shadow_offset_x", 1)
@@ -803,7 +803,7 @@ func _on_animation_finished() -> void:
 func _make_bark() -> void:
 	_bark = Label.new()
 	_bark.add_theme_font_override("font", FONT)
-	_bark.add_theme_font_size_override("font_size", 11)
+	_bark.add_theme_font_size_override("font_size", 12)
 	_bark.add_theme_color_override("font_color", BARK_COLOR)
 	_bark.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	_bark.add_theme_constant_override("shadow_offset_x", 1)

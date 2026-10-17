@@ -46,7 +46,7 @@ func _ready() -> void:
 	add_child(_root)
 	_banner = _label(Vector2(0, 3), Vector2(W, 12))
 	_big = _label(Vector2(0, 28), Vector2(W, 24))
-	_big.add_theme_font_size_override("font_size", 22)
+	_big.add_theme_font_size_override("font_size", 24)
 	_big.pivot_offset = Vector2(W / 2.0, 12)
 	_big.visible = false
 	# 底下:按键帽 + 提示
@@ -119,7 +119,7 @@ func countdown(go_text: String) -> void:
 func prompt(action: StringName, text: String) -> void:
 	_keycap.set_action(action)
 	_prompt_label.text = text
-	var font_w := FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x
+	var font_w := FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x
 	var total := _keycap.size.x + 3.0 + font_w
 	var x0 := floorf((W - total) / 2.0)
 	_keycap.position = Vector2(x0, 0)
@@ -218,7 +218,7 @@ static func float_text(parent: Node, pos: Vector2, text: String, color := GOLD) 
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_override("font", FONT)
-	l.add_theme_font_size_override("font_size", 11)
+	l.add_theme_font_size_override("font_size", 12)
 	l.add_theme_color_override("font_color", color)
 	l.add_theme_color_override("font_shadow_color", SHADOW)
 	l.add_theme_constant_override("shadow_offset_x", 1)
@@ -260,7 +260,7 @@ static func knock(player: Node2D, dir: float, dist := 14.0, stun := 0.4) -> void
 func _label(pos: Vector2, size: Vector2, parent: Control = null) -> Label:
 	var l := Label.new()
 	l.add_theme_font_override("font", FONT)
-	l.add_theme_font_size_override("font_size", 11)
+	l.add_theme_font_size_override("font_size", 12)
 	l.add_theme_color_override("font_color", TEXT)
 	l.add_theme_color_override("font_shadow_color", SHADOW)
 	l.add_theme_constant_override("shadow_offset_x", 1)

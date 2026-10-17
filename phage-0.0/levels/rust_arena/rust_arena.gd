@@ -181,7 +181,7 @@ func _make_banner() -> void:
 	add_child(layer)
 	_banner = Label.new()
 	_banner.add_theme_font_override("font", FONT)
-	_banner.add_theme_font_size_override("font_size", 14)
+	_banner.add_theme_font_size_override("font_size", 12)
 	_banner.add_theme_color_override("font_color", Color(0.86, 0.66, 0.47))
 	_banner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_banner.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

@@ -132,9 +132,9 @@ func _setup(level: Node) -> void:
 	# 这套像素字的设计格是 14(em=1024,笔画全在 1024/14 网格上,fontTools 实测)。
 	# 字号必须是 14 的整倍数,否则设计像素被渲成不等宽碎块,镂空边缘就脏了。
 	# 从 56 起按 14 一档往下降,直到整行宽度(汉字=方块,宽≈字号)不超过 150,保证不出屏。
-	var title_size := 56
-	while title_size > 14 and title_size * title_text.length() > 150:
-		title_size -= 14
+	var title_size := 48
+	while title_size > 12 and title_size * title_text.length() > 150:
+		title_size -= 12
 	_title.add_theme_font_size_override("font_size", title_size)
 	_weekday.text = weekday_text
 	_weekday.visible = false
@@ -210,6 +210,7 @@ func _type_text(text: String) -> void:
 	if text.is_empty():
 		return
 	_advance = false
+	text = _break_at_punct(text)
 	_story.text = text
 	_story.visible_characters = 0
 	var acc := 0.0
@@ -224,6 +225,27 @@ func _type_text(text: String) -> void:
 		await get_tree().process_frame
 	_story.visible_characters = -1
 	await _wait(1.4)
+
+
+# 一行放不下时,在最靠中间的标点后面换行(自动换行会把最后一两个字甩到第二行,很难看)
+func _break_at_punct(text: String) -> String:
+	if text.contains("\n"):
+		return text
+	var per_line := int(_story.size.x / 12.0)
+	if text.length() <= per_line:
+		return text
+	var best := -1
+	for i in text.length() - 1:
+		if not "，。！？、；：…".contains(text[i]):
+			continue
+		var a := i + 1
+		if a > per_line or text.length() - a > per_line:
+			continue
+		if best < 0 or absi(a * 2 - text.length()) < absi(best * 2 - text.length()):
+			best = a
+	if best < 0:
+		return text
+	return text.substr(0, best) + "\n" + text.substr(best)
 
 
 # 标题卡专用:前 title_hold 秒无视一切按键(不可跳过),

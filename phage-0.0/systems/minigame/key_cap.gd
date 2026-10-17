@@ -15,8 +15,8 @@ var _down := 0.0
 
 func set_action(action: StringName) -> void:
 	label = _label_for(action)
-	var w := FONT.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x
-	size = Vector2(maxf(9.0, w + 4.0), 11.0)
+	var w := FONT.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x
+	size = Vector2(maxf(10.0, w + 4.0), 13.0)
 	queue_redraw()
 
 
@@ -36,7 +36,7 @@ func _draw() -> void:
 	var dy := 1.0 if _down > 0.0 else 0.0
 	draw_rect(Rect2(0, 1, size.x, size.y - 1), SIDE)
 	draw_rect(Rect2(0, dy, size.x, size.y - 2), FACE)
-	draw_string(FONT, Vector2(2, 9 + dy), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, INK)
+	draw_string(FONT, Vector2(2, 10 + dy), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, INK)
 
 
 static func _label_for(action: StringName) -> String:

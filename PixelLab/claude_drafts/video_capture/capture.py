@@ -29,7 +29,7 @@ def strip_intro(res_path):
     return "res://levels/test/_tmp_capture/" + name
 
 
-def frozen(frames_dir, n):
+def frozen(frames_dir, n, limit=1.5):
     """连续 1.5 秒以上完全相同的帧 = 冻了(镜头本身静止的段落用 allow_still 跳过检查)。"""
     run, last = 0, None
     for i in range(n):
@@ -39,7 +39,7 @@ def frozen(frames_dir, n):
         h = hashlib.md5(open(f, "rb").read()).hexdigest()
         run = run + 1 if h == last else 0
         last = h
-        if run > FPS * 1.5:
+        if run > FPS * limit:
             return True
     return False
 
@@ -62,6 +62,11 @@ def capture(name):
     fr = os.path.join(tempfile.gettempdir(), "phage_cap_" + name)
     max_frames = int(shot["max_sec"] * FPS)
     ok = False
+    # 录像分辨率 = 项目窗口尺寸(逻辑点)。临时 override.cfg 把窗口改成 960×540:canvas_items 下字按 6 倍渲染才清楚
+    # (1920×1080 点的窗口比 Retina 屏 1512×982 点大,macOS 不画,全是冻帧;960×540 再最近邻 ×2 到 1080p)
+    # (160×90 录再放大,中文字是在 160×90 里光栅化的,糊成一团)。录完马上删。
+    ovr = PROJ + "override.cfg"
+    open(ovr, "w").write("[display]\n\nwindow/size/window_width_override=960\nwindow/size/window_height_override=540\nwindow/size/mode=0\nwindow/dpi/allow_hidpi=true\n")
     for attempt in range(4):
         shutil.rmtree(fr, ignore_errors=True)
         os.makedirs(fr)
@@ -69,10 +74,11 @@ def capture(name):
                         "--write-movie", fr + "/f.png", "--fixed-fps", str(FPS), "--quit-after", str(max_frames)],
                        stdout=open(fr + "/log.txt", "w"), stderr=subprocess.STDOUT)
         n = len([f for f in os.listdir(fr) if f.endswith(".png")])
-        if shot.get("allow_still") or not frozen(fr, n):
+        if not frozen(fr, n, 4.0 if shot.get("allow_still") else 1.5):
             ok = True
             break
         print(name, "冻帧,重录", attempt + 1)
+    os.remove(ovr)
     os.makedirs(OUT, exist_ok=True)
     out = OUT + name + ".mp4"
     wav = [f for f in os.listdir(fr) if f.endswith(".wav")]

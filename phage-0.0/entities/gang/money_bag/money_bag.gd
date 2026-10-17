@@ -59,7 +59,7 @@ func _on_body(body: Node2D) -> void:
 	var label := Label.new()
 	label.text = "+%d" % coins
 	label.add_theme_font_override("font", FONT)
-	label.add_theme_font_size_override("font_size", 11)
+	label.add_theme_font_size_override("font_size", 12)
 	label.add_theme_color_override("font_color", Color(0.98, 0.86, 0.5))
 	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	label.add_theme_constant_override("shadow_offset_x", 1)

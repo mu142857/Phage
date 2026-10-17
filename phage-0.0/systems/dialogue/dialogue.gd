@@ -55,7 +55,7 @@ func _ready() -> void:
 	# 居中+逐字显示必须用 CHARS_AFTER_SHAPING,否则整行随出字抖动(DreamIntro 同款坑)
 	_label.visible_characters_behavior = TextServer.VC_CHARS_AFTER_SHAPING
 	_label.add_theme_font_override("font", FONT)
-	_label.add_theme_font_size_override("font_size", 11)
+	_label.add_theme_font_size_override("font_size", 12)
 	_label.add_theme_color_override("font_color", TEXT_COLOR)
 	_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	_label.add_theme_constant_override("shadow_offset_x", 1)
@@ -71,7 +71,7 @@ func _ready() -> void:
 	_name_label.offset_bottom = 24.0
 	_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_name_label.add_theme_font_override("font", FONT)
-	_name_label.add_theme_font_size_override("font_size", 11)
+	_name_label.add_theme_font_size_override("font_size", 12)
 	_name_label.add_theme_color_override("font_color", NAME_COLOR)
 	_name_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	_name_label.add_theme_constant_override("shadow_offset_x", 1)
@@ -301,7 +301,7 @@ func _show_options(options: Array) -> void:
 		option.text = "· " + str(options[i])
 		option.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 		option.add_theme_font_override("font", FONT)
-		option.add_theme_font_size_override("font_size", 11)
+		option.add_theme_font_size_override("font_size", 12)
 		option.add_theme_color_override("font_color", OPTION_COLOR)
 		option.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 		option.add_theme_constant_override("shadow_offset_x", 1)

@@ -11,6 +11,7 @@ extends Node
 ##   ["talk", 每句停几秒, [第1次选项, 第2次...]]  对话开着就自动推进,弹选项就按顺序选
 ##   ["move", 节点名, x, y]       把场景里某个节点挪到指定位置
 ##   ["follow", 节点名, 跟在它后面几格, 秒]  跟着某个 NPC 走(点灯人带路)
+##   ["god"]                      主角无敌
 ##   ["flag", 名, 值]
 ##   ["end"]
 
@@ -99,6 +100,11 @@ func _run() -> void:
 					n.global_position = Vector2(step[2], step[3])
 			"flag":
 				Story.set_flag(step[1], step[2])
+			"god":
+				# 主角无敌(混剪镜头里被管道局打两下没关系,别死)
+				var gp := _player()
+				if gp != null:
+					gp.set("dev_god_mode", true)
 			"follow":
 				await _follow(step[1], float(step[2]), float(step[3]))
 			"end":

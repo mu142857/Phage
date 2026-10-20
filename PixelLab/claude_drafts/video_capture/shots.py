@@ -17,6 +17,11 @@ def mont(scene, x0, x1):
         ["scene", scene, x0, 70], ["god"], ["wait", 0.4], ["walk", x1], ["end"]]}
 
 
+def npc(scene, x0, x1, wait=3.5):
+    return {"max_sec": 12, "flags": LIT, "allow_still": True, "steps": [
+        ["scene", scene, x0, 70], ["move", "Goose", 0, -100], ["wait", 0.4], ["walk", x1], ["wait", wait], ["end"]]}
+
+
 SHOTS = {
     # ---- 逛街:每条街从头走到尾 ----
     "01_主街_全程": {"flags": LIT, "max_sec": 26, "steps": [
@@ -87,4 +92,28 @@ SHOTS = {
     "M15_下水道三段": mont(A + "sewer/sewer_3.tscn", 30, 250),
     "M16_点灯人点灯": {"flags": COIN, "max_sec": 10, "allow_still": True, "steps": [
         ["scene", CITY, 150, 70], ["wait", 9.0], ["end"]]},
+
+    # ---- 定稿后补的:NPC 快速罗列(每条站在 NPC 跟前等它冒话) ----
+    "N03_轮胎_瘪了": npc(A + "scrap_alley/scrap_alley.tscn", 330, 375),
+    "N07_保龄球先生": npc(A + "night_market/night_market.tscn", 670, 712),
+    "N08_摆烂仔": npc(A + "laundry_alley/laundry_alley.tscn", 235, 284, 5),
+    "N10_蓝史莱姆": npc(A + "boiler_alley/boiler_alley.tscn", 180, 228),
+    "N11_紫色的狼": npc(A + "stair_alley/stair_alley.tscn", 120, 186, 5),
+    "N12_蓝龙": npc(A + "boiler_alley/boiler_alley.tscn", 620, 680, 5),
+
+    # ---- 奥斯卡帮 / 管道局 ----
+    "G1_后巷伏击": {"flags": LIT, "truce": False, "max_sec": 40, "allow_still": True, "steps": [
+        ["scene", A + "back_alley/back_alley.tscn", 25, 70], ["god"], ["wait", 0.5],
+        ["walk", 200], ["fight", 32], ["end"]]},
+    "G2_下水道_管道局收费": {"flags": LIT, "truce": False, "max_sec": 40, "allow_still": True, "steps": [
+        ["story", "coins", 300], ["scene", A + "sewer/sewer_2.tscn", 30, 70], ["god"], ["wait", 0.5],
+        ["walk", 140], ["talk", 1.4, [0]], ["wait", 0.8], ["walk", 250], ["wait", 14], ["end"]]},
+    "G3_下水道_两帮混战": {"flags": LIT, "truce": False, "max_sec": 40, "allow_still": True, "steps": [
+        ["story", "coins", 300], ["scene", A + "sewer/sewer_3.tscn", 30, 70], ["god"], ["wait", 0.5],
+        ["walk", 290], ["wait", 30], ["end"]]},
+
+    # ---- 结尾:房间醒来(七夜全通,纪念品都在) ----
+    "R1_房间醒来": {"flags": {}, "max_sec": 16, "allow_still": True, "steps": [
+        ["story", "nights_completed", 7], ["story", "is_night", False], ["story", "wake_kind", "morning"],
+        ["scene", "res://levels/remi's_room/remi's_room.tscn"], ["wait", 15], ["end"]]},
 }

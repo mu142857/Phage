@@ -12,6 +12,8 @@ extends Node
 ##   ["move", 节点名, x, y]       把场景里某个节点挪到指定位置
 ##   ["follow", 节点名, 跟在它后面几格, 秒]  跟着某个 NPC 走(点灯人带路)
 ##   ["god"]                      主角无敌
+##   ["story", 变量, 值]          直接改 Story 的变量(nights_completed/wake_kind/coins…)
+##   ["fight", 秒]                朝最近的怪走过去砍(配合 god)
 ##   ["flag", 名, 值]
 ##   ["end"]
 
@@ -57,13 +59,16 @@ func _run() -> void:
 			"scene":
 				tree.change_scene_to_file(step[1])
 				await _frames(2)
-				while _player() == null:
+				var wait_p := 0
+				while _player() == null and wait_p < 60:
 					await tree.process_frame
+					wait_p += 1
 				var p := _player()
-				p.global_position = Vector2(step[2], step[3])
-				p.velocity = Vector2.ZERO
-				if p.has_method("set_lock"):
-					p.set_lock(false)
+				if p != null and step.size() > 3:
+					p.global_position = Vector2(step[2], step[3])
+					p.velocity = Vector2.ZERO
+					if p.has_method("set_lock"):
+						p.set_lock(false)
 				await _frames(1)
 			"wait":
 				await _secs(step[1])
@@ -107,6 +112,10 @@ func _run() -> void:
 					gp.set("dev_god_mode", true)
 			"follow":
 				await _follow(step[1], float(step[2]), float(step[3]))
+			"story":
+				Story.set(step[1], step[2])
+			"fight":
+				await _fight(float(step[1]))
 			"end":
 				tree.quit()
 				return
@@ -123,6 +132,8 @@ func _walk(tx: float, sprint: bool) -> void:
 	var sprint_cd := 0
 	while (tx - p.global_position.x) * sgn > 1.0:
 		await get_tree().process_frame
+		if Dialogue.is_open:
+			break   # NPC 自己开口了(稽查员/叫住),交给后面的 talk
 		p = _player()
 		if p == null:
 			break
@@ -189,6 +200,56 @@ func _follow(node_name: String, gap: float, t: float) -> void:
 			a = "move_right"
 		elif dx < -12.0:
 			a = "move_left"
+		if a != held:
+			if held != "":
+				Input.action_release(held)
+			if a != "":
+				Input.action_press(a)
+			held = a
+		await get_tree().process_frame
+	if held != "":
+		Input.action_release(held)
+
+
+func _nearest_mob(p: Node2D) -> Node2D:
+	var best: Node2D = null
+	var bd := INF
+	for n in get_tree().get_nodes_in_group("monster"):
+		var m := n as Node2D
+		if m == null or not m.is_inside_tree() or not m.visible:
+			continue
+		var d := absf(m.global_position.x - p.global_position.x)
+		if d < bd:
+			bd = d
+			best = m
+	return best
+
+
+func _fight(t: float) -> void:
+	var frames := int(t * 60.0)
+	var held := ""
+	var cd := 0
+	for i in frames:
+		var p := _player()
+		if p == null:
+			break
+		var m := _nearest_mob(p)
+		var a := ""
+		if m != null:
+			var dx := m.global_position.x - p.global_position.x
+			if absf(dx) > 18.0:
+				a = "move_right" if dx > 0.0 else "move_left"
+			else:
+				cd -= 1
+				if cd <= 0:
+					var face := "move_right" if dx > 0.0 else "move_left"
+					Input.action_press(face)
+					await get_tree().process_frame
+					Input.action_release(face)
+					Input.action_press("Attack1")
+					await _frames(2)
+					Input.action_release("Attack1")
+					cd = 20
 		if a != held:
 			if held != "":
 				Input.action_release(held)
